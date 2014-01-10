@@ -1,18 +1,43 @@
 Features:
 
 -Temperature sensor (KT-junction)
+	-
+	-
+	-
 -Solid state relay
+	-	
+	-
+	-
 -Display time, temp, reflow
+	- 
+	-
+	-
 -Start/stop
+	-
+	-
+	-
 -Beepers
+	-
+	-
+	-
 -Serial output display
+	-
+	-
+	-
 -Serial output to logger (MAX)
+	-
+	-
+	-
 
 Extra
 -Farenheit conversion
+	-look up table conversion
+	-toggle switch?
 -Keyboard input (MAX)
+	
 -Open/closed buzzer
 -LCD
 -Fancy LED thermo display
+	-Red LED's scale based on temperature of oven
 -Thermo
 -Clap on
