@@ -1,0 +1,18 @@
+Features:
+
+-Temperature sensor (KT-junction)
+-Solid state relay
+-Display time, temp, reflow
+-Start/stop
+-Beepers
+-Serial output display
+-Serial output to logger (MAX)
+
+Extra
+-Farenheit conversion
+-Keyboard input (MAX)
+-Open/closed buzzer
+-LCD
+-Fancy LED thermo display
+-Thermo
+-Clap on
