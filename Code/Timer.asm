@@ -31,22 +31,18 @@ Initialize_Timer:
 ;  Handles Rollover of time as well
 ;---------------------------------------
 Timer0_Interupt:
-	;Reload Timer
-	mov TH0, #0
+	mov TH0, #0                       	;Reload Timer
 	mov TL0, #0
-	;Save Used Registers
-	push acc
-	;Count Overflow (43 times = 1s)
-	mov a, Overflow
+	push acc                            ;Save Used Registers
+
+	mov a, Overflow                     ;Count Overflow (43 times = 1s)
 	inc acc 
 	cjne a, #43, Return_Interupt
 	mov OverFlow, #0
-	;Flicker LEDG.0
-	cpl LEDG.0
+
+	cpl LEDG.0                          ;Count Overflow (43 times = 1s)
 	
 Return_Interupt:
-	;restore used registers
-	pop acc
-	reti	
-	
+	pop acc                           	;restore used registers
+	reti		
 END	
