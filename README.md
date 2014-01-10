@@ -1,5 +1,5 @@
 Projects
 ========
-Captain: Nolan Ramsden
+Captain: Brad
 Assistant Captain: Up for Grabs
-Minions: charlie Clayton, Addayson
+Minions: charlie Clayton, Addayson, Nolan
