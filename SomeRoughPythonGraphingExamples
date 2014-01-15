@@ -1,0 +1,123 @@
+import turtle
+from turtle import *
+
+
+from random import randint
+
+color('white', 'white')
+left(90)
+forward(180)
+right(90)
+color('black', 'black')
+backward(300)
+left(90)
+
+turtle.hideturtle()
+
+def barplot(pixelsHigh):
+    begin_fill()
+    forward(pixelsHigh)
+    right(90)
+    forward(10)
+    right(90)
+    forward(pixelsHigh)
+    left(90)
+    forward(5)
+    left(90)
+    end_fill()
+        
+for i in range(20): #graphing random integers (red for 75+, blue for 25-)
+    random = randint(1,100)
+    if random > 75:
+        color('red', 'red')
+    elif random < 30:
+        color('blue', 'blue')
+    else: color('black', 'black')
+    barplot(random)
+
+color('white', 'white') #moving it below to make a new graph
+backward(130)
+right(90)
+color('white', 'white') #just to underline the graph in black
+backward(300)
+left(90)
+
+turtle.speed(5)
+
+for i in range(10): #graphing incrementing up
+    random = i*10 + 3
+    if random > 70:
+        color('white', 'red')
+    elif random < 30:
+        color('white', 'blue')
+    else: color('white', 'black')
+    barplot(random)
+    
+for i in range(10): #graphing incrementing up
+    random = 100 - i*9
+    if random > 70:
+        color('white', 'red')
+    elif random < 30:
+        color('white', 'blue')
+    else: color('white', 'black')
+    barplot(random)
+
+color('white', 'white') #moving it below to make a new graph
+backward(130)
+right(90)
+color('white', 'white') #just to underline the graph in black
+backward(300)
+left(90)
+
+turtle.speed(0)
+
+for i in range(20): #graphing incrementing up
+    random = randint(1, 100)
+    if random > 70:
+        color('white', 'red')
+    elif random < 30:
+        color('white', 'blue')
+    else: color('white', 'black')
+    barplot(random)
+
+color('white', 'white') #moving it below to make a new graph
+backward(130)
+right(90)
+color('white', 'white') #just to underline the graph in black
+backward(300)
+left(90)
+
+turtle.speed(0)
+
+for i in range(20): #graphing incrementing up
+    random = i * 5 + 5
+    if random > 70:
+        color('white', 'red')
+    elif random < 30:
+        color('white', 'blue')
+    else: color('white', 'black')
+    barplot(random)
+
+backward(50)
+right(90)
+backward(220)
+color('black', 'black')
+turtle.write("Super awesome coding skillz.", font=("Arial", 10, "normal"))
+color('white', 'white')
+forward(500)
+left(90)
+forward(300)
+
+turtle.speed(10)
+
+color('green', 'green')
+while True:
+    forward(200)
+    left(170)
+    if abs(pos()) < 1:
+        break
+
+color('black', 'black')
+
+end_fill()
+done()
