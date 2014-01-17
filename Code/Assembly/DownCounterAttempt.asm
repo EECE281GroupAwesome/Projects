@@ -6,8 +6,13 @@ TIMER0_RELOAD  EQU 65538-(XTAL/(12*FREQ))
 ;-----------------------
 ;Kill this later
 ;----------------------
-org 0000H
-ljmp MyProgram
+
+
+org 000BH
+ljmp Interupt0
+
+BSEG
+finished: db 1
 
 DSEG at 30H
 count10ms: ds 1
@@ -15,10 +20,12 @@ seconds:   ds 1
 minutes:   ds 1
 hours:     ds 1
 CSEG
+
 ;------------------------------
 ; Set up timer to interupt 10ms
 ;------------------------------
 InitializeTimer:
+	clr LEDRA.0
 	mov TMOD,  #00000001B ; GATE=0, C/T*=0, M1=0, M0=1: 16-bit timer
 	clr TR0 ; Disable timer 0
 	clr TF0
@@ -30,7 +37,7 @@ InitializeTimer:
 ;--------------------------------
 ;Decrements Timer Every 1 second
 ;--------------------------------
-Interupt1:    
+Interupt0:    
 	; Reload the timer
     mov TH0, #high(TIMER0_RELOAD)
     mov TL0, #low(TIMER0_RELOAD)
@@ -50,55 +57,77 @@ Interupt1:
     mov a, seconds
     dec a
     mov seconds, a
-    cjne A, #0, Return_int
-    mov seconds, #60
+    cjne A, #0FFH, Return_int ;FFH is -1 in two's complement
+    mov seconds, #59
 
     mov a, minutes
     dec a
     mov minutes, a
-    cjne A, #0, Return_int
-    mov minutes, #60
+    cjne A, #0FFH, Return_int
+    mov minutes, #59
     
     mov a, hours
     dec a
     mov hours, a
-    cjne A, #0H, Return_int
+    cjne A, #0FFH, Return_int
     ;Timer Done
-    sjmp Done
+    setb finished
+
 Return_int:
 	pop dpl
     pop dph
     pop acc
     pop psw    
  	reti
-;---------------------
-;Test Part Loops
-;---------------------
-MyProgram:
-	lcall InitializeTimer
-	setb EA
-	lcall Display
-	sjmp Myprogram	
-Done:
-	clr ET0
-	mov LEDG, #0		
-	sjmp done
-;----------------------------------
-;Display onto Hex displays 0 and 1
-;----------------------------------
-Display:
-mov dptr, #Size60LookUp
-; Display Digit 0
-    mov A, seconds
-    rl a
-    movc A, @A+dptr
-    mov HEX0, A
+
+
+display2 mac
+	mov dptr, #Size60LookUp
 ; Display Digit 1
-    mov a, seconds
-    rl a
+    mov A, %0
+    mov b, #2
+    mul ab  
+    movc A, @A+dptr
+    mov HEX1, A
+; Display Digit 0
+    mov a, %0
+    mov b, #2
+    mul ab
     inc a
     movc A, @A+dptr
-    mov	 HEX1, A
-    ret
+    mov	 HEX0, A
+    
+    mov A, %1
+    mov b, #2
+    mul ab  
+    movc A, @A+dptr
+    mov HEX3, A
+; Display Digit 0
+    mov a, %1
+    mov b, #2
+    mul ab
+    inc a
+    movc A, @A+dptr
+    mov	 HEX2, A
+    
+    
+    mov A, %2
+    mov b, #2
+    mul ab  
+    movc A, @A+dptr
+    mov HEX5, A
+; Display Digit 0
+    mov a, %2
+    mov b, #2
+    mul ab
+    inc a
+    movc A, @A+dptr
+    mov	 HEX4, A
+
+endmac
+
+	
+    
+   
 end
 	 	
