@@ -38,7 +38,7 @@ InitializeTimer:
 ;Decrements Timer Every 1 second
 ;--------------------------------
 Interupt0:    
-	; Reload the timer
+    ; Reload the timer
     mov TH0, #high(TIMER0_RELOAD)
     mov TL0, #low(TIMER0_RELOAD)
  
@@ -71,6 +71,7 @@ Interupt0:
     mov hours, a
     cjne A, #0FFH, Return_int
     ;Timer Done
+    mov hours, #0
     setb finished
 
 Return_int:
