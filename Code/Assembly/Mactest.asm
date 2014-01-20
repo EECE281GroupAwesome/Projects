@@ -9,11 +9,15 @@
 ;
 ; USAGE: include(logic_macs.asm) in cseg
 ;
-; FUNCTION CALL EXAMPLES
-; if_(swa, equal_to, swb, do_thing)
-; if_(swa, not_equal_to, swb, do_other_thing)
-; if_(swa, greater_than, swb, do_a_naughty_thing)
-; if_(swa, less_than, swb, do_the_wrong_thing)
+; IF FUNCTIONS
+; equal_to
+; not_equal_to
+; greater_than
+; less_than
+;
+; FUNCTION CALL EXAMPLE
+; if_(swa, equal_to, swb, lcall, do_thing)
+
 
 $MODDE2
 

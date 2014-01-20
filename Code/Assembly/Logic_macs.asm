@@ -5,6 +5,20 @@ $NOLIST
 ; Some fun macro and function stuff
 ; Assumes a, b, and c are not important
 ; max.prokopenko@gmail.com
+;
+; Any questions ask me here
+; ISSUE: each invocation of the if_ macro must be unique!
+;
+; USAGE: include(logic_macs.asm) in cseg
+;
+; IF FUNCTIONS
+; equal_to
+; not_equal_to
+; greater_than
+; less_than
+;
+; FUNCTION CALL EXAMPLE
+; if_(swa, equal_to, swb, lcall, do_thing)
 
 equal_to:
 	mov a, R0
