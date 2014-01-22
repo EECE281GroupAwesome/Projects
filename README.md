@@ -1,6 +1,7 @@
 Projects
 ========
-Members:
+Members
+-------
 Nolan Ramsden 
 Adayson Gross
 Max Prokopenko
