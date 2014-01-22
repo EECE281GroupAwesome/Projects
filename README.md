@@ -2,7 +2,7 @@ Projects
 ========
 Members
 -------
-Nolan Ramsden \n
+Nolan Ramsden 
 Adayson Gross
 Max Prokopenko
 Brad Macneil
