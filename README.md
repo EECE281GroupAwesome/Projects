@@ -1,5 +1,5 @@
-Projects
-========
+Project 1
+=========
 Goal
 -----
 To build a robot capable of orbiting earth and taking high resolution pictures
