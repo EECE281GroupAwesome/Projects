@@ -46,12 +46,13 @@ CSEG
 
 ;Stops Everything until switch 1 is turned back on (Not Done)
 PowerOff:
+	mov SP, #7FH
 	mov P0MOD, #0xFF
 	;Reset standard times
-	mov Reflow_Temp, #ReflowConst
-	mov Reflow_Time, #4
-	mov Soak_Temp,   #SoakConst
-	mov Soak_Time,	 #6
+	mov Reflow_Temp, #210 ;#ReflowConst
+	mov Reflow_Time, #200
+	mov Soak_Temp,   #150 ;#SoakConst
+	mov Soak_Time,	 #75
 	mov a, SWC
 	setb EA	
 	jnb acc.1, PowerOff
@@ -73,9 +74,7 @@ Idle:
 	mov Target_Temp, #0
 	clr timing
 	setb ET0
-	;mov Target_Temp, #0
 	setb LEDG.1
-	clr Timing
 	;Stop Timer
 	;set things while switch is up, return by flicking down
 	jb SWA.1, Set_Reflow_Time
@@ -86,29 +85,52 @@ Idle:
 	;ready to start process
 	lcall beep
 	clr Ready
+	setb LEDRA.0
 	ljmp Preheat_Soak
+	
 ;------------------------------------------------------------------	
 ;Setting Times and Temperatures (Not Done)
 ;   -had thought maybe macro for time and temp, that takes bounds 
 ;   so the time or temp is within reason
 ;------------------------------------------------------------------
 Set_Soak_Temp:
-	;lcall Set_Temp(Soak_Temp, lowerbound, upperbound)
-	jnb SWA.4, Idle
-	sjmp Set_Soak_Temp
+	lcall Set_Soak_Temp_Relay
+	jb SWA.4, Set_Soak_Temp
+	lcall clear_hex
+	sjmp Idle
 Set_Soak_Time:
-	;lcall Set_Time(Soak_Time, lowerbound, upperbound)
-	jnb SWA.3, Idle
-	sjmp Set_Soak_Time
+	lcall Set_Soak_Time_Relay
+	jb SWA.3, Set_Soak_Time
+	lcall clear_hex
+	Sjmp Idle
 Set_Reflow_Temp:
-	;lcall Set_Temp(Reflow_Temp, lowerbound, upperbound)
-	jnb SWA.2, Idle
-	sjmp Set_Reflow_Temp
+	lcall Set_Reflow_Temp_Relay
+	jb SWA.2, Set_Reflow_Temp
+	lcall clear_hex
+	Sjmp Idle
 Set_Reflow_Time:
-	;lcall Set_Temp(Reflow_Time, lowerbound, upperbound)
-	jnb SWA.1, Idle
-	sjmp Set_Reflow_Time
+	lcall Set_Reflow_Time_Relay	
+	jb SWA.1, Set_Reflow_Time
+	lcall clear_hex
+	Sjmp Idle
 	
+Set_Soak_Temp_Relay:	
+	Set_Any(Soak_Temp, #85, #105)
+	Display_Any(Soak_Temp)
+	ret	
+Set_Soak_Time_Relay:
+	Set_Any(Soak_Time, #59, #91)
+	Display_Any(Soak_Time)
+	ret
+Set_Reflow_Temp_Relay:
+	;Set_Any(Reflow_Temp, #199, #231)
+	;Display_Any(Reflow_Temp)
+	ret
+Set_Reflow_Time_Relay:
+	;Set_Any(Reflow_Time, #29, #46)
+	;Display_Any(Reflow_Time)
+	ret
+
 ;------------------------------------------------------------------	
 ;Actual Progression Through Phases
 ;PRE-HEAT
@@ -174,5 +196,4 @@ Done:
 	jb Key.1, Done
 	mov LEDG, #0
 	ljmp Idle	
-
 END

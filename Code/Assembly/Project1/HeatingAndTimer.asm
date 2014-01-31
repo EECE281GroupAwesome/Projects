@@ -58,7 +58,6 @@ Interupt0:
     push acc
     push dph
     push dpl
-   	lcall display_temp
    	inc count5ms
    	mov a, count5ms
    	cjne a, #SerialRate, NoSend
