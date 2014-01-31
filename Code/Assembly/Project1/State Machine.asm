@@ -115,7 +115,7 @@ Set_Reflow_Time:
 	Sjmp Idle
 	
 Set_Soak_Temp_Relay:	
-	Set_Any(Soak_Temp, #85, #105)
+	Set_Any(Soak_Temp, #135, #165)
 	Display_Any(Soak_Temp)
 	ret	
 Set_Soak_Time_Relay:
