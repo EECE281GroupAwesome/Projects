@@ -1,24 +1,10 @@
-$NOLIST
-
 ; logic_macs.asm
 ; January 19th,2014
 ; Some fun macro and function stuff
 ; Assumes a, b, and c are not important
 ; max.prokopenko@gmail.com
-;
-; Any questions ask me here
-; ISSUE: each invocation of the if_ macro must be unique!
-;
-; USAGE: include(logic_macs.asm) in cseg
-;
-; IF FUNCTIONS
-; equal_to
-; not_equal_to
-; greater_than
-; less_than
-;
-; FUNCTION CALL EXAMPLE
-; if_(swa, equal_to, swb, lcall, do_thing)
+
+$NOLIST
 
 equal_to:
 	mov a, R0
@@ -63,21 +49,21 @@ lt0:clr c
 lt1:ret
 
 if_ mac
-	mov R0, a
-	push acc
-	mov R1, a
-	push acc
 	mov R0, %0
 	mov R1, %2
-	lcall %1
-	clr a	
-	jc %0%1%2%3%4
+	lcall %1	
+	jc %0%1%2%3%4%5
 	%3 %4
-%0%1%2%3%4:
-	pop acc
-	mov a, R1
-	pop acc
-	mov a, R0
+%0%1%2%3%4%58:
+endmac
+
+if_imd_ mac
+	mov R0, %0
+	mov R1, #%2
+	lcall %1	
+	jc %0%1%2%3%4%5
+	%3 %4
+%0%1%2%3%4%5:
 endmac
 
 end
