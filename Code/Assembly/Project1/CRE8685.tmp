@@ -1,0 +1,114 @@
+$MODDE2
+org 0000H
+	ljmp PowerOn
+
+org 000BH
+	ljmp Interupt0
+org 001BH
+	ljmp Interupt1
+
+$include(DownCounter.asm)		
+CSEG
+	;clock
+	count10ms: db 1
+	seconds:   db 1
+	minutes:   db 1
+	hours:     db 1
+	;Oven Settables
+	Reflow_Temp: DB 1
+	Reflow_Time: DB 3
+	Soak_Temp:   DB 1
+	Soak_Time:	 DB 3
+	;Universal
+	Target_Temp: DB 1
+	;Enviroment
+	Oven_Temp:   DB 1
+BSEG
+	;booleans
+	Ready:       Dbit 1
+	Finished:    dbit 1
+CSEG
+
+;Checking oven temperature every second and handling heating process	
+
+;Kill switch monitor	
+Interupt1:
+	push acc
+	mov TH1, #high(TIMER0_RELOAD)
+    mov TL1, #low(TIMER0_RELOAD)
+	mov a, SWC 
+	;jnb acc.1, PowerOff
+	pop acc
+	reti
+	
+;Shut off Oven Completely
+PowerOff:
+	mov a, SWC
+	jnb acc.1, PowerOff
+;Initial Set up	on reboot
+PowerOn:
+	lcall Initialize_Timer
+	mov Reflow_Temp, #240
+	mov Reflow_Time, #30
+	mov Soak_Temp,   #150
+	mov Soak_Time,	 #90
+;awaiting process loop		
+Idle:	
+	jb SWA.1, Set_Reflow_Time
+	jb SWA.2, Set_Reflow_Temp
+	jb SWA.3, Set_Soak_Time
+	jb SWA.4, Set_Soak_Temp
+	jb Key.0, Idle
+	mov Target_Temp, Reflow_Temp
+	ljmp Preheat_Reflow
+	
+;Setting Times and Temperatures
+Set_Soak_Temp:
+	;lcall Set_Temp(Soak_Temp, lowerbound, upperbound)
+	jnb SWA.4, Idle
+	sjmp Set_Soak_Temp
+Set_Soak_Time:
+	;lcall Set_Time(Soak_Time, lowerbound, upperbound)
+	jnb SWA.3, Idle
+	sjmp Set_Soak_Time
+Set_Reflow_Temp:
+	;lcall Set_Temp(Reflow_Temp, lowerbound, upperbound)
+	jnb SWA.2, Idle
+	sjmp Set_Reflow_Temp
+Set_Reflow_Time:
+	;lcall Set_Temp(Reflow_Time, lowerbound, upperbound)
+	jnb SWA.1, Idle
+	sjmp Set_Reflow_Time
+	
+;Actual Progression Through Phases
+
+;Reflow Portion
+Preheat_Reflow:
+	jnb Ready, PreHeat_Reflow
+Reflow:
+	mov seconds, Reflow_Time+0
+	mov minutes, Reflow_Time+1
+	mov hours, Reflow_Time+2
+Wait1:	
+	jnb finished, Wait1
+	;buzzer
+	mov Target_Temp, Soak_Temp
+;Soak Portion
+Preheat_Soak:
+	jnb Ready, PreHeat_Soak
+Soak:	
+	mov seconds, Soak_Time+0
+	mov minutes, Soak_Time+1
+	mov hours, Soak_Time+2	 
+Wait2:	
+	jnb finished, Wait2
+	;buzzer
+;Process Finished, Wait for it to cool
+Cooling:
+	mov Target_Temp, #60
+	jb Ready, Cooling
+Done:
+	;Buzzer Beeps
+	ljmp Idle
+	
+END
