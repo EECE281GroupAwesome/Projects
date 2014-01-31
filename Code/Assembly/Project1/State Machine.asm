@@ -59,7 +59,7 @@ PowerOff:
 ;Initial Set up	on reboot
 PowerOn:
 	lcall Initialize_Timer
-	mov Oven_Temp, #25
+	mov Oven_Temp, #140
 	;Turn off LED's
 	mov LEDRA, #0
 	mov LEDRB, #0

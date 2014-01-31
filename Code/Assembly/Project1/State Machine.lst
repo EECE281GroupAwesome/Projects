@@ -301,7 +301,7 @@
 00DE 400A        79       jc NoHeat
 00E0 6008        80       jz NoHeat
 00E2             81       ;activate oven
-00E2 D280        82       setb TurnOnOven
+00E2 C280        82       clr TurnOnOven
 00E4             83   ;--------------------------------------------    
 00E4 0542        84       inc Oven_Temp
 00E6             85   ;-----------------------------------------------    
@@ -310,7 +310,7 @@
 00EA             88   NoHeat:    
 00EA D200        89            setb Ready  
 00EC             90            ;turn off oven
-00EC C280        91            clr TurnOnOven
+00EC D280        91            setb TurnOnOven
 00EE             92   ;-----------------------------------------       
 00EE 1542        93       dec Oven_Temp
 00F0             94   ;-------------------------------------------
@@ -407,7 +407,7 @@
 0331             59   ;Initial Set up  on reboot
 0331             60   PowerOn:
 0331 12007C      61            lcall Initialize_Timer
-0334 75423C      62            mov Oven_Temp, #60
+0334 75428C      62            mov Oven_Temp, #140
 0337             63            ;Turn off LED's
 0337 75E800      64            mov LEDRA, #0
 033A 759500      65            mov LEDRB, #0

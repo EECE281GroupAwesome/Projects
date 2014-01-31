@@ -79,7 +79,7 @@ NoSend:
     jc NoHeat
     jz NoHeat
     ;activate oven
-    setb TurnOnOven
+    clr TurnOnOven
 ;--------------------------------------------    
     inc Oven_Temp
 ;-----------------------------------------------    
@@ -88,7 +88,7 @@ NoSend:
 NoHeat:    
 	setb Ready  
 	;turn off oven
-	clr TurnOnOven
+	setb TurnOnOven
 ;-----------------------------------------  	
     dec Oven_Temp
 ;-------------------------------------------
