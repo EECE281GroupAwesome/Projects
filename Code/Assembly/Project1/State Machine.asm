@@ -1,5 +1,6 @@
 $MODDE2
 org 0000H
+	mov SP, #7FH
 	ljmp PowerOff
 org 000BH
 	ljmp Interupt0
@@ -9,6 +10,7 @@ org 001BH
 CoolConst   EQU 60
 ReflowConst EQU 220
 SoakConst   EQU 150
+CSEG
 
 $include(DisplayandMacros.asm)	
 $include(HeatingandTimer.asm)
@@ -24,8 +26,8 @@ DSEG at 30H
 	minutes:   ds 1
 	hours:     ds 1
 	;math variables
-	x: 		   ds 2
-	y:         ds 2
+	x: 		   ds 4
+	y:         ds 4
 	bcd:       ds 4
 	;Oven Settables
 	Reflow_Temp: Ds 1
@@ -46,12 +48,11 @@ CSEG
 
 ;Stops Everything until switch 1 is turned back on (Not Done)
 PowerOff:
-	mov SP, #7FH
 	mov P0MOD, #0xFF
 	;Reset standard times
-	mov Reflow_Temp, #210 ;#ReflowConst
-	mov Reflow_Time, #200
-	mov Soak_Temp,   #150 ;#SoakConst
+	mov Reflow_Temp, #ReflowConst
+	mov Reflow_Time, #30
+	mov Soak_Temp,   #SoakConst
 	mov Soak_Time,	 #75
 	mov a, SWC
 	setb EA	
@@ -85,7 +86,6 @@ Idle:
 	;ready to start process
 	lcall beep
 	clr Ready
-	setb LEDRA.0
 	ljmp Preheat_Soak
 	
 ;------------------------------------------------------------------	
@@ -113,23 +113,6 @@ Set_Reflow_Time:
 	jb SWA.1, Set_Reflow_Time
 	lcall clear_hex
 	Sjmp Idle
-	
-Set_Soak_Temp_Relay:	
-	Set_Any(Soak_Temp, #135, #165)
-	Display_Any(Soak_Temp)
-	ret	
-Set_Soak_Time_Relay:
-	Set_Any(Soak_Time, #59, #91)
-	Display_Any(Soak_Time)
-	ret
-Set_Reflow_Temp_Relay:
-	;Set_Any(Reflow_Temp, #199, #231)
-	;Display_Any(Reflow_Temp)
-	ret
-Set_Reflow_Time_Relay:
-	;Set_Any(Reflow_Time, #29, #46)
-	;Display_Any(Reflow_Time)
-	ret
 
 ;------------------------------------------------------------------	
 ;Actual Progression Through Phases
@@ -147,16 +130,15 @@ Preheat_Soak:
 	mov Target_Temp, Soak_Temp
 	jnb Ready, PreHeat_Soak
 	lcall beep
-;passes time
-Soak_Init:	
+;Initialize for holding constant
 	setb LEDG.3
 	mov seconds, Soak_Time+0
 	clr finished	 
 WaitSoak:
 	lcall display_time	
 	jnb finished, WaitSoak
-;Time is up	
-	lcall display_time
+;Initilize for ramp to Reflow
+	lcall clear_hex
 	setb LEDG.4
 	lcall beep
 	mov Target_Temp, Reflow_Temp
@@ -165,14 +147,13 @@ Preheat_Reflow:
 	jnb Ready, PreHeat_Reflow
 	lcall beep
 ;Pass Reflow Time, wait for time to expire	
-Reflow_Init:
 	setb LEDG.5
 	mov seconds, Reflow_Time+0
 	clr finished
 WaitReflow:
 	lcall display_time	
 	jnb finished, WaitReflow
-	lcall display_time
+	lcall clear_hex
 	lcall beep
 ;Process Finished, Wait for it to cool
 Cooling:
@@ -195,5 +176,23 @@ Done:
 	setb LEDG.7
 	jb Key.1, Done
 	mov LEDG, #0
-	ljmp Idle	
+	ljmp Idle
+		
+Set_Reflow_Time_Relay:
+	Set_Any(Reflow_Time, #29, #46)
+	Display_Any(Reflow_Time)
+	ret	
+Set_Reflow_Temp_Relay:
+	Set_Any(Reflow_Temp, #199, #231)
+	Display_Any(Reflow_Temp)
+	ret	
+Set_Soak_Temp_Relay:	
+	Set_Any(Soak_Temp, #134, #165)
+	Display_Any(Soak_Temp)
+	ret	
+Set_Soak_Time_Relay:
+	Set_Any(Soak_Time, #59, #91)
+	Display_Any(Soak_Time)
+	ret
+		
 END
