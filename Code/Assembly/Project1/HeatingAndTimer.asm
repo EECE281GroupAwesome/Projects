@@ -1,4 +1,3 @@
-
 XTAL           EQU 33333333                     ;Clock Frequency
 FREQ           EQU 100                          
 HERTZ          EQU 2000                         ;Buzzer Frequency
@@ -58,19 +57,15 @@ Interupt0:
     push acc
     push dph
     push dpl
-   	inc count5ms
-   	mov a, count5ms
-   	cjne a, #SerialRate, NoSend
-   	mov count5ms, #0
-    lcall SendTemp	
-NoSend:   	
    	; Increment the counter and check if a second has passed
     inc count10ms
     mov a, count10ms 
     cjne A, #100, Return_int
     mov count10ms, #0
+    ;send the info through serial port
     get_oven_temp(Oven_Temp) 
-    ;seconds has passed
+    lcall SendTemp
+    ;second has passed
     
     ;checks if oven is greater or equal to target (can be moved to adjust rate)
     clr c
