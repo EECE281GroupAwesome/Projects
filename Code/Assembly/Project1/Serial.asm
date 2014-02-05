@@ -23,9 +23,9 @@ SendTemp:
     anl a, #0fh
     add a, #48
     lcall putchar
-    ;Sends a break marker
-    mov a, #':'
-    lcall putchar
+    ;Sends a break marker				;;;;;;;;;;;;;;;;;;;;;;;;;;
+    ;mov a, #'\n'
+    ;lcall putchar
 	;Sends the goal temperature
 	mov x, Target_Temp
 	mov x+1, #0
@@ -45,8 +45,8 @@ SendTemp:
     lcall putchar
     mov a, #'\n'
     lcall putchar
-    mov a, #'\r'
-    lcall putchar
+    ;mov a, #'\r'
+    ;lcall putchar
     mov x, R7
     pop acc
 	ret	
