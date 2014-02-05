@@ -12,12 +12,17 @@ ReflowConst EQU 220
 SoakConst   EQU 150
 CSEG
 
+$include(math16.asm)
 $include(DisplayandMacros.asm)	
+$include(adc_functions.asm)
 $include(HeatingandTimer.asm)
 $include(serial.asm)
-$include(math16.asm)
 		
 DSEG at 30H
+	;ADC STUFF
+	ADC_out_buffer: ds 1
+	ADC_in_buffer: ds 2
+	last_reading: ds 2
 	;Overflow Counter
 	count10ms: ds 1
 	count5ms: ds 1
@@ -55,12 +60,14 @@ PowerOff:
 	mov Soak_Temp,   #SoakConst
 	mov Soak_Time,	 #75
 	mov a, SWC
-	setb EA	
+	clr EA	
 	jnb acc.1, PowerOff
 	ljmp PowerOn
 ;Initial Set up	on reboot
 PowerOn:
+	lcall ADC_Init
 	lcall Initialize_Timer
+	setb EA
 	mov Oven_Temp, #140
 	;Turn off LED's
 	mov LEDRA, #0

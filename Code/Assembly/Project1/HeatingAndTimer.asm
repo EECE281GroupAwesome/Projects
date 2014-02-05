@@ -68,29 +68,24 @@ NoSend:
     inc count10ms
     mov a, count10ms 
     cjne A, #100, Return_int
-    mov count10ms, #0 
-    clr c
+    mov count10ms, #0
+    get_oven_temp(Oven_Temp) 
     ;seconds has passed
     
     ;checks if oven is greater or equal to target (can be moved to adjust rate)
+    clr c
     mov a, Target_Temp
     Subb a, Oven_Temp        
     jc NoHeat
     jz NoHeat
     ;activate oven
-    clr TurnOnOven
-;--------------------------------------------    
-    inc Oven_Temp
-;-----------------------------------------------    
+    clr TurnOnOven   
     clr Ready
     sjmp Heat
 NoHeat:    
 	setb Ready  
 	;turn off oven
 	setb TurnOnOven
-;-----------------------------------------  	
-    dec Oven_Temp
-;-------------------------------------------
 Heat:
 	;if timer is active    
 	jb finished, Return_int
