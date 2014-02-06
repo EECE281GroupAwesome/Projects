@@ -32,9 +32,9 @@ DSEG at 30H
 	minutes:   ds 1
 	hours:     ds 1
 	;math variables
-	x: 		   ds 4
-	y:         ds 4
-	bcd:       ds 4
+	x: 		   ds 2
+	y:         ds 2
+	bcd:       ds 3
 	;Oven Settables
 	Reflow_Temp: Ds 1
 	Reflow_Time: Ds 1
@@ -50,6 +50,7 @@ DSEG at 30H
 	Thermo_cursor: DS 1
 	Thermo_segment: DS 1
 	Thermo_inc: ds 1
+	LCD_state: ds 1
 BSEG
 	;booleans
 	Ready:       Dbit 1
@@ -63,9 +64,9 @@ PowerOff:
 	mov P0MOD, #0xFF
 	;Reset standard times
 	mov Reflow_Temp, #ReflowConst
-	mov Reflow_Time, #30
+	mov Reflow_Time, #30  ;30 real value
 	mov Soak_Temp,   #SoakConst
-	mov Soak_Time,	 #75
+	mov Soak_Time,	 #75 ; 75 real value
 	mov a, SWC
 	clr EA	
 	jnb acc.1, PowerOff
@@ -82,14 +83,13 @@ PowerOn:
 	mov LEDRB, #0
 	mov LEDRC, #0
 	mov LEDG, #0
+	mov LCD_state, #1
 	setb TR2
 	ljmp Idle	
 	
 ;awaiting process loop
 Idle:
-	lcall idle_display	
-Idle0:
-
+	mov LCD_state, #1
 	mov Target_Temp, #0
 	clr timing
 	setb ET0
@@ -100,7 +100,7 @@ Idle0:
 	jb SWA.2, Set_Reflow_Temp
 	jb SWA.3, Set_Soak_Time
 	jb SWA.4, Set_Soak_Temp
-	jb Key.1, Idle0
+	jb Key.1, Idle
 	;ready to start process
 	lcall beep
 	clr Ready
@@ -112,21 +112,25 @@ Idle0:
 ;   so the time or temp is within reason
 ;------------------------------------------------------------------
 Set_Soak_Temp:
+	mov LCD_state, #8
 	lcall Set_Soak_Temp_Relay
 	jb SWA.4, Set_Soak_Temp
 	lcall clear_hex
 	sjmp Idle
 Set_Soak_Time:
+	mov LCD_state, #5
 	lcall Set_Soak_Time_Relay
 	jb SWA.3, Set_Soak_Time
 	lcall clear_hex
 	Sjmp Idle
 Set_Reflow_Temp:
+		mov LCD_state, #7
 	lcall Set_Reflow_Temp_Relay
 	jb SWA.2, Set_Reflow_Temp
 	lcall clear_hex
 	Sjmp Idle
 Set_Reflow_Time:
+		mov LCD_state, #6
 	lcall Set_Reflow_Time_Relay	
 	jb SWA.1, Set_Reflow_Time
 	lcall clear_hex
@@ -144,34 +148,40 @@ Set_Reflow_Time:
 
 ;Waits for temperature to get above soak temp
 Preheat_Soak:
-	lcall preheat_display
-Preheat_Soak0:
+	mov LCD_state, #2 ; preheat
 	setb LEDG.2
 	mov Target_Temp, Soak_Temp
-	jnb Ready, PreHeat_Soak0
+	jnb Ready, PreHeat_Soak
 	lcall beep
 ;Initialize for holding constant
 	setb LEDG.3
 	mov seconds, Soak_Time+0
-	lcall soak_display
+		mov LCD_state, #4 ;soak 
+	
 	clr finished	 
 WaitSoak:
-	lcall display_time	
+
+	lcall display_time
+		
 	jnb finished, WaitSoak
+
 ;Initilize for ramp to Reflow
+	
 	lcall clear_hex
 	setb LEDG.4
 	lcall beep
+	
 	mov Target_Temp, Reflow_Temp
-	lcall preheat_display
+	mov LCD_state, #2 ; preheat
 	clr ready
+	
 Preheat_Reflow:
 	jnb Ready, PreHeat_Reflow
 	lcall beep
 ;Pass Reflow Time, wait for time to expire	
 	setb LEDG.5
 	mov seconds, Reflow_Time+0
-	lcall reflow_display
+		mov LCD_state, #3 ;reflow
 	clr finished
 WaitReflow:
 	lcall display_time	
@@ -180,7 +190,7 @@ WaitReflow:
 	lcall beep
 ;Process Finished, Wait for it to cool
 Cooling:
-	lcall cooling_display
+		mov LCD_state, #9
 	mov Target_Temp, #CoolConst
 	setb ready	
 WaitCool:	
@@ -196,7 +206,7 @@ WaitCool:
 	lcall wait
 	lcall beep
 ;Cool Enough (just waits PB)
-	lcall done_display	
+		mov LCD_state, #10	
 Done:
 	setb LEDG.7
 	jb Key.1, Done

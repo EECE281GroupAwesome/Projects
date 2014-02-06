@@ -10,7 +10,6 @@ $NOLIST
 
 
 
-
 CSEG
 
 Line1 EQU #080h
@@ -203,7 +202,44 @@ State11_LUT:
 State12_LUT:
 	DB '           ', 10H	
 
+State_disp:
+	
+	mov a, LCD_state
+	cjne a, #1, not_idle
+	lcall Idle_Display
+Not_Idle:
+	cjne a, #2, not_preheat
+	lcall Preheat_Display
+not_preheat:
+	cjne a, #3, not_reflow
+	lcall Reflow_Display
+not_reflow:
+	cjne a, #4, not_soak
+	lcall Soak_Display
+not_soak:
+	cjne a, #5, not_SetSoakTime
+	lcall SetSoakTime_Display
+not_SetSoakTime:
+	cjne a, #6, not_SetReflowTime
+	lcall SetReflowTime_Display
+not_SetReflowTime:
+	cjne a, #7, not_SetReflowTemp
+	lcall SetReflowTemp_Display
+not_SetReflowTemp:
+	cjne a, #8, not_setsoaktemp
+	lcall SetsoakTemp_Display
+not_setsoaktemp:
+	cjne a, #9, not_cooling
+	lcall Cooling_Display
+not_cooling:
+	cjne a, #10, not_done
+	lcall Done_Display
+not_done:
+	cjne a, #11, not_poweroff
+	lcall PowerOff_Display
+not_poweroff:
 
+ret	
 	
 Idle_Display:
 	push acc
@@ -227,8 +263,10 @@ Reflow_Display:
 	
 Soak_Display:
 	push acc
+	
 	mov dptr, #State4_LUT
 	lcall State_Display
+	
 	pop acc
 	ret
 	
@@ -313,7 +351,7 @@ Temp_display:
 	push acc
 	push psw
 
-	mov x+0, oven_temp
+	mov x+0, target_temp
 
 	LCD_cursor(Line2+11)
 	
@@ -327,8 +365,7 @@ Temp_display:
 	LCD_write(LCD+1)
 	LCD_write(LCD+0)
 	LCD_Write(Degree)
-	LCD_Write(#'C')
-	lcall thermo_update	
+	LCD_Write(#'C')	
 
 	pop psw
 	pop acc
@@ -338,7 +375,7 @@ Thermo_update:
 
 	mov dptr, #Thermo_LUT
 	LCD_cursor(line2)
-	mov x+0, oven_temp
+	mov x+0, target_temp
 	load_y(24)
 	lcall x_lt_y
 	jb mf, toosmall

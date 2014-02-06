@@ -78,29 +78,6 @@ Beep:
 	clr Et1
 	ret
 
-
-
-Set_Any MAC
-	Inc_%0:
-		mov A, %0
-	
-		jb KEY.2, Dec_%0
-    	jnb KEY.2, $
-		inc A
-		cjne A, %2, Done_%0
-		dec A
-	Dec_%0:	
-   	    jb KEY.3, Done_%0
-   	    jnb KEY.3, $
-		dec A
-	    cjne A, %1, Done_%0
-        inc A
-	Done_%0:
-		mov %0, A
-endmac
-
-END	
-
 display_Temp:
 	mov x, Oven_Temp
 	mov x+1, #0
@@ -123,3 +100,25 @@ display_Temp:
     movc A, @A+dptr
     mov HEX2, A  
     ret 
+
+Set_Any MAC
+	Inc_%0:
+		mov A, %0
+	
+		jb KEY.2, Dec_%0
+    	jnb KEY.2, $
+		inc A
+		cjne A, %2, Done_%0
+		dec A
+	Dec_%0:	
+   	    jb KEY.3, Done_%0
+   	    jnb KEY.3, $
+		dec A
+	    cjne A, %1, Done_%0
+        inc A
+	Done_%0:
+		mov %0, A
+endmac
+
+END	
+

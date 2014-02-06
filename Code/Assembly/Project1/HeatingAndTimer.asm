@@ -63,9 +63,13 @@ Interupt0:
     cjne A, #100, Return_int
     mov count10ms, #0
     ;send the info through serial port
-    ;lcall temp_display
-    get_oven_temp(Oven_Temp) 
+    
+    get_oven_temp(Oven_Temp)
+    ;lcall temp_display 
+    lcall State_disp
     lcall SendTemp
+    
+    ;lcall display_temp
     ;second has passed
     
     ;checks if oven is greater or equal to target (can be moved to adjust rate)
