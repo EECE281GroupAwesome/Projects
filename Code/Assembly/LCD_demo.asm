@@ -4,54 +4,33 @@ org 0000H
 
 
 dseg at 30h
-LCD: ds 10
-bcd: ds 5
-x:	 ds 4
-y:	 ds 4
-Thermo_cursor: DS 1
+
+bcd: ds 3
+x:	 ds 2
+y:	 ds 2
+
 State_Num: DS 1
 
 
 bseg
 mf:	dbit 1
 
-Line1 EQU #080h
-Line2 EQU #0A8h
-Degree EQU #0DFH
 
+$include(math16.asm)
 $include(LCDlib.asm)
-$include(math32.asm)
+
+
 
 CSEG
 
 
-;State Display LUTs	
 
-
-
+		 
 
 		
-;Find_State:
-;	clr a
-;	mov a, state_lut_position
-;	movc a, @a+dptr
-;	inc dptr
-;	inc State_LUT_Position
-;	cjne a, #10h, Find_State
-;	inc R2
-;	mov a, R2
-;	cjne a, State_num, find_state	
-	
-
-
-
-;Converting hex to ascii for temperature and 
-;time variables
-	
-
-
 
 	
+
 	
 	
 MyProgram:
@@ -61,46 +40,102 @@ MyProgram:
 	mov LEDRA, a
 	mov LEDRB, a
 	mov LEDRC, a
-
+	mov LCD_temperature, a
 	mov x+0, a
 	mov x+1, a
 	mov x+2, a
 	mov x+3, a
 	lcall Init_LCD
 	
-	mov x+0, #230
+	mov LCD_temperature, #50
+
 	ljmp forever
 
 
 
 
-
-		
 	
 forever:
-	LCD_cursor(Line1)
-	lcall SetSoakTime_Display
-	lcall wait1s
-;	LCD_cursor(Line2+12)
-;	lcall Idle_Display
-;	lcall wait1s
-;	lcall Thermometer_demo
-	lcall wait1s
 
-	lcall room_temp
-	LCD_cursor(Line2+11)
-	lcall hex2bcd
-	lcall ascii_display
+	;lcall SetSoakTime_Display
+	;lcall thermo_update
+
+
+	;lcall Reflow_Display
+
+
+	;lcall temp_display
 	
-	LCD_write(LCD+2)
-	LCD_write(LCD+1)
-	LCD_write(LCD+0)
-	LCD_Write(Degree)
-	LCD_Write(#'C')
-	;lcall Thermometer_demo
-	dec x+0
+	
+	
+	
+	;lcall thermo_update
+	mov r4, #200
+up_temp1:
+	lcall preheat_display
+	inc LCD_temperature
+	lcall wait1s
+	djnz r4, up_temp1
+
+	mov r4, #100
+	;lcall wait1s
+	
+down_temp1:
+	lcall soak_display
+	dec LCD_temperature
+	lcall wait1s
+	djnz r4, down_temp1
+
+	mov r4, #50
+up_temp:
+	lcall soak_display
+	inc LCD_temperature
+	lcall wait1s
+	djnz r4, up_temp
+	
+	mov r4, #150
+	;lcall wait1s
+	
+down_temp:
+	lcall Cooling_Display
+	dec LCD_temperature
+	lcall wait1s
+	djnz r4, down_temp
+	
 	sjmp Forever
 	
 end
 
 
+Thermo_update:
+	lcall room_temp ;initializes empty thermometer
+	LCD_cursor(line2)
+	LCD_write(#00H)
+	load_x(LCD_temperature) ;loads with oven temp 
+	load_y(20) ;Oven temp - room temp value = temp
+	lcall sub16
+	load_y(5) ; temp / deg per seg = thermometer in 
+	lcall div16
+	mov Thermo_inc, x+0 ; thermometer increment value 
+	load_y(6) ; thermometer inc / inc per seg = segment
+	lcall div16
+	mov Thermo_segment, x+0 ;turns all segments on until this segment
+	;mov r6, #1
+	LCD_cursor(line2+1) ; moves to first segment
+	mov r7, Thermo_segment 
+Thermo_L1:
+	LCD_write(#06H) ;fills in thermometer untul segment is reached 
+	inc r6
+	djnz r7, Thermo_L1
+	
+	load_x(thermo_segment) 
+	load_y(6)
+	lcall mul16
+	lcall xchg_xy
+	load_x(Thermo_inc) ; fills in the partial segment 
+	lcall sub16 
+	inc x+0
+	LCD_write(x+0)
+	; rest of thermometer should remain unchanged
+	ret
+	 

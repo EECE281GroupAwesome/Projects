@@ -8,7 +8,32 @@
 $NOLIST
 
 
+
+dseg
+LCD_Temperature: ds 1
+LCD: ds 3
+Thermo_cursor: DS 1
+Thermo_segment: DS 1
+Thermo_inc: ds 1
+
 CSEG
+
+Line1 EQU #080h
+Line2 EQU #0A8h
+Degree EQU #0DFH
+
+$include(Thermo_LUT.asm)
+
+LCD_cursor mac
+	mov LCD_DATA, %0
+	lcall LCD_command
+	lcall wait2ms
+endmac
+
+LCD_write mac
+	mov LCD_DATA, %0
+	lcall LCD_put
+endmac
 
 delay100us:
 	push AR0
@@ -49,6 +74,15 @@ J1:
 	pop AR0
 	ret
 
+Clear_LCD:
+	
+	mov LCD_DATA, #01H ; Clear screen (Warning, very slow command!)
+	lcall LCD_command
+	
+	lcall wait2ms ; delay needed for clear cmd
+	LCD_cursor(line1)
+
+	ret
 ;This subroutine initiates the LCD to display 2 lines
 ;8 bit interface, 5x8 characters and clear the screen and move the 
 ;cursor to the start position
@@ -76,7 +110,7 @@ Init_LCD:
 	lcall LCD_command
 	
 	lcall wait2ms ; delay needed for clear cmd
-	mov LCD_DATA, #80H ;moves cursor to start of first line 
+	mov LCD_DATA, Line1 ;moves cursor to start of first line 
 	lcall LCD_command 
 	lcall wait1s
 	ret	
@@ -121,22 +155,21 @@ LCD_put:
 Ascii_LUT:
     DB 030H, 031H, 032H, 033H, 034H        ; 0 TO 4
     DB 035H, 036H, 037H, 038H, 039H        ; 4 TO 9
-    DB 021H, 022H, 0FFH, 024H, 025H, 026H
+    DB 010H, 022H, 0FFH, 024H, 025H, 026H
     
 Ascii_display:
 	mov dptr, #Ascii_LUT
 	
-;	mov a, bcd+1
-;	swap a
-;	anl a, #0fH
-;	movc a, @a+dptr
-;	mov LCD+3, a
 	
 	mov a, bcd+1
+	jz Kill_leading_zero
 	anl a, #0fH
 	movc a, @a+dptr
 	mov LCD+2, a
-
+	sjmp digit
+Kill_leading_zero:
+	mov LCD+2, #' '
+DIgit:
 	mov a, bcd+0
 	swap a
 	anl a, #0fH
@@ -173,9 +206,10 @@ State10_LUT:
 State11_LUT:
 	DB 'Power Off', 10H	
 State12_LUT:
-	DB 'State 4', 10H	
+	DB '           ', 10H	
 
 
+	
 Idle_Display:
 	push acc
 	mov dptr, #State1_LUT
@@ -259,22 +293,102 @@ State_12:
 	pop acc
 	ret
 
+
 State_Display:
-	
+	push acc
+	push psw
+	lcall clear_lcd
 		
 State_Display_Loop:
 	clr a
-
-;	mov a, state_lut_position
 	movc a, @a+dptr
 	mov LCD_DATA, a
 	lcall LCD_put
 	inc dptr
-	;inc r0
 	cjne a, #10h, State_Display_Loop
 
+	lcall thermo_update
+	lcall Temp_display
+	
+	pop psw
+	pop acc
 	ret	
+	
+Temp_display:
+	push acc
+	push psw
 
+	mov x+0, LCD_temperature
+
+	LCD_cursor(Line2+11)
+	
+	lcall hex2bcd
+	
+
+
+	lcall ascii_display
+
+	LCD_write(LCD+2)
+	LCD_write(LCD+1)
+	LCD_write(LCD+0)
+	LCD_Write(Degree)
+	LCD_Write(#'C')	
+
+	pop psw
+	pop acc
+	ret
+
+Thermo_update:
+
+	mov dptr, #Thermo_LUT
+	LCD_cursor(line2)
+	mov x+0, LCD_Temperature
+	load_y(24)
+	lcall x_lt_y
+	jb mf, toosmall
+	
+	load_y(20)
+	lcall sub16
+	load_y(5)
+	lcall div16
+
+	sjmp justright
+TooSmall:
+	mov x+0, #0
+TooBig:
+
+JustRight:
+	
+	lcall Thermo_display
+	ret
+
+Thermo_Display:
+
+	Push ar1
+	push ar2
+	mov a, x+0
+	jz Thermo_Display_Loop
+	mov r1, x+0
+Check:
+	mov r2, #10
+	
+
+Check_L1:
+	inc dptr
+	djnz r2, Check_L1
+	djnz r1, check
+
+Thermo_Display_Loop:
+	clr a
+	movc a, @a+dptr
+	mov LCD_DATA, a
+	lcall LCD_put
+	inc dptr
+	cjne a, #07h, Thermo_Display_Loop
+
+	pop ar2
+	pop ar2
+	ret		
 	
 Make_char:
 	mov LCD_DATA, #040H
@@ -427,7 +541,9 @@ Make_char:
 
 ;Thermometer Demo subroutine that runs the 
 ;LCD Thermometer through its full range
-;	
+;
+
+	
 Thermometer_demo:
 	lcall room_temp
 	
@@ -480,15 +596,7 @@ loop_temp:
 	cjne R6, #07H, loop_temp
 	ret
 	
-LCD_cursor mac
-	mov LCD_DATA, %0
-	lcall LCD_command
-endmac
 
-LCD_write mac
-	mov LCD_DATA, %0
-	lcall LCD_put
-endmac
 
 $LIST
 
