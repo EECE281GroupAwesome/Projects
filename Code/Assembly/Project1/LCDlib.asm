@@ -9,12 +9,7 @@ $NOLIST
 
 
 
-dseg
-LCD_Temperature: ds 1
-LCD: ds 3
-Thermo_cursor: DS 1
-Thermo_segment: DS 1
-Thermo_inc: ds 1
+
 
 CSEG
 
@@ -39,9 +34,9 @@ delay100us:
 	push AR0
 	push AR1
 	mov R1, #10
-L0: mov R0, #111
-L1: djnz R0, L1 ; 111*30ns*3=10us
-	djnz R1, L0 ; 10*10us=100us, approximately
+L0_: mov R0, #111
+L1_: djnz R0, L1_ ; 111*30ns*3=10us
+	djnz R1, L0_ ; 10*10us=100us, approximately
 	pop AR1
 	pop AR0
 	ret
@@ -318,7 +313,7 @@ Temp_display:
 	push acc
 	push psw
 
-	mov x+0, LCD_temperature
+	mov x+0, oven_temp
 
 	LCD_cursor(Line2+11)
 	
@@ -332,7 +327,8 @@ Temp_display:
 	LCD_write(LCD+1)
 	LCD_write(LCD+0)
 	LCD_Write(Degree)
-	LCD_Write(#'C')	
+	LCD_Write(#'C')
+	lcall thermo_update	
 
 	pop psw
 	pop acc
@@ -342,7 +338,7 @@ Thermo_update:
 
 	mov dptr, #Thermo_LUT
 	LCD_cursor(line2)
-	mov x+0, LCD_Temperature
+	mov x+0, oven_temp
 	load_y(24)
 	lcall x_lt_y
 	jb mf, toosmall

@@ -13,6 +13,7 @@ SoakConst   EQU 150
 CSEG
 
 $include(math16.asm)
+$include(LCDlib.asm)
 $include(DisplayandMacros.asm)	
 $include(adc_functions.asm)
 $include(HeatingandTimer.asm)
@@ -43,6 +44,12 @@ DSEG at 30H
 	Target_Temp: Ds 1
 	;Enviroment
 	Oven_Temp:   Ds 1
+	;LCD Variables
+	;LCD_Temperature: ds 1
+	LCD: ds 3
+	Thermo_cursor: DS 1
+	Thermo_segment: DS 1
+	Thermo_inc: ds 1
 BSEG
 	;booleans
 	Ready:       Dbit 1
@@ -62,6 +69,7 @@ PowerOff:
 	mov a, SWC
 	clr EA	
 	jnb acc.1, PowerOff
+	lcall init_lcd
 	ljmp PowerOn
 ;Initial Set up	on reboot
 PowerOn:
@@ -77,8 +85,11 @@ PowerOn:
 	setb TR2
 	ljmp Idle	
 	
-;awaiting process loop	
+;awaiting process loop
 Idle:
+	lcall idle_display	
+Idle0:
+
 	mov Target_Temp, #0
 	clr timing
 	setb ET0
@@ -89,7 +100,7 @@ Idle:
 	jb SWA.2, Set_Reflow_Temp
 	jb SWA.3, Set_Soak_Time
 	jb SWA.4, Set_Soak_Temp
-	jb Key.1, Idle
+	jb Key.1, Idle0
 	;ready to start process
 	lcall beep
 	clr Ready
@@ -133,13 +144,16 @@ Set_Reflow_Time:
 
 ;Waits for temperature to get above soak temp
 Preheat_Soak:
+	lcall preheat_display
+Preheat_Soak0:
 	setb LEDG.2
 	mov Target_Temp, Soak_Temp
-	jnb Ready, PreHeat_Soak
+	jnb Ready, PreHeat_Soak0
 	lcall beep
 ;Initialize for holding constant
 	setb LEDG.3
 	mov seconds, Soak_Time+0
+	lcall soak_display
 	clr finished	 
 WaitSoak:
 	lcall display_time	
@@ -149,6 +163,7 @@ WaitSoak:
 	setb LEDG.4
 	lcall beep
 	mov Target_Temp, Reflow_Temp
+	lcall preheat_display
 	clr ready
 Preheat_Reflow:
 	jnb Ready, PreHeat_Reflow
@@ -156,6 +171,7 @@ Preheat_Reflow:
 ;Pass Reflow Time, wait for time to expire	
 	setb LEDG.5
 	mov seconds, Reflow_Time+0
+	lcall reflow_display
 	clr finished
 WaitReflow:
 	lcall display_time	
@@ -164,6 +180,7 @@ WaitReflow:
 	lcall beep
 ;Process Finished, Wait for it to cool
 Cooling:
+	lcall cooling_display
 	mov Target_Temp, #CoolConst
 	setb ready	
 WaitCool:	
@@ -178,7 +195,8 @@ WaitCool:
 	lcall beep
 	lcall wait
 	lcall beep
-;Cool Enough (just waits PB)	
+;Cool Enough (just waits PB)
+	lcall done_display	
 Done:
 	setb LEDG.7
 	jb Key.1, Done

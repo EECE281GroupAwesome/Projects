@@ -63,28 +63,7 @@ display_Time:
     movc A, @A+dptr
     mov HEX6, A
     ret   
-display_Temp:
-	mov x, Oven_Temp
-	mov x+1, #0
-	lcall hex2bcd
-	mov dptr, #myLUT
-	; Display Digit 0
-    mov A, bcd+0
-    anl a, #0fh
-    movc A, @A+dptr
-    mov HEX0, A
-	; Display Digit 1
-    mov A, bcd+0
-    swap a
-    anl a, #0fh
-    movc A, @A+dptr
-    mov HEX1, A
-    ; Display Digit 2
-    mov A, bcd+1
-    anl a, #0fh
-    movc A, @A+dptr
-    mov HEX2, A  
-    ret   
+  
 Wait:
 	mov R3, #100
 L3:	mov R2, #250
@@ -121,3 +100,26 @@ Set_Any MAC
 endmac
 
 END	
+
+display_Temp:
+	mov x, Oven_Temp
+	mov x+1, #0
+	lcall hex2bcd
+	mov dptr, #myLUT
+	; Display Digit 0
+    mov A, bcd+0
+    anl a, #0fh
+    movc A, @A+dptr
+    mov HEX0, A
+	; Display Digit 1
+    mov A, bcd+0
+    swap a
+    anl a, #0fh
+    movc A, @A+dptr
+    mov HEX1, A
+    ; Display Digit 2
+    mov A, bcd+1
+    anl a, #0fh
+    movc A, @A+dptr
+    mov HEX2, A  
+    ret 
