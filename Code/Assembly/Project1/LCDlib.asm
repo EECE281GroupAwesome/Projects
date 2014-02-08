@@ -351,7 +351,7 @@ Temp_display:
 	push acc
 	push psw
 
-	mov x+0, target_temp
+	mov x+0, Oven_temp
 
 	LCD_cursor(Line2+11)
 	
@@ -375,7 +375,7 @@ Thermo_update:
 
 	mov dptr, #Thermo_LUT
 	LCD_cursor(line2)
-	mov x+0, target_temp
+	mov x+0, Oven_temp
 	load_y(24)
 	lcall x_lt_y
 	jb mf, toosmall

@@ -81,9 +81,11 @@ Interupt0:
     ;activate oven
     clr TurnOnOven   
     clr Ready
+    setb LEDRA.0
     sjmp Heat
 NoHeat:    
 	setb Ready  
+	clr LEDRA.0
 	;turn off oven
 	setb TurnOnOven
 Heat:

@@ -77,7 +77,6 @@ PowerOn:
 	lcall ADC_Init
 	lcall Initialize_Timer
 	setb EA
-	mov Oven_Temp, #140
 	;Turn off LED's
 	mov LEDRA, #0
 	mov LEDRB, #0
@@ -104,6 +103,10 @@ Idle:
 	;ready to start process
 	lcall beep
 	clr Ready
+	clr c
+	mov a, Soak_Temp
+	subb a, #25
+	mov Soak_Temp, a
 	ljmp Preheat_Soak
 	
 ;------------------------------------------------------------------	
@@ -152,17 +155,28 @@ Preheat_Soak:
 	setb LEDG.2
 	mov Target_Temp, Soak_Temp
 	jnb Ready, PreHeat_Soak
+	clr Ready
+	mov R5, #50
+X6:	lcall Wait
+	cpl LEDRA.5
+	djnz R5, X6
+	mov a, Target_Temp
+	Add a, #25
+	mov Target_Temp, a
+Preheat_Soak0:	
+	jnb Ready, PreHeat_Soak0
 	lcall beep
 ;Initialize for holding constant
 	setb LEDG.3
 	mov seconds, Soak_Time+0
-		mov LCD_state, #4 ;soak 
-	
+	mov LCD_state, #4 ;soak 
 	clr finished	 
 WaitSoak:
-
 	lcall display_time
-		
+	mov a, seconds
+	cjne a, #5, NotFive
+	mov target_Temp, Reflow_Temp
+NotFive:	
 	jnb finished, WaitSoak
 
 ;Initilize for ramp to Reflow
@@ -170,8 +184,6 @@ WaitSoak:
 	lcall clear_hex
 	setb LEDG.4
 	lcall beep
-	
-	mov Target_Temp, Reflow_Temp
 	mov LCD_state, #2 ; preheat
 	clr ready
 	
@@ -181,7 +193,7 @@ Preheat_Reflow:
 ;Pass Reflow Time, wait for time to expire	
 	setb LEDG.5
 	mov seconds, Reflow_Time+0
-		mov LCD_state, #3 ;reflow
+	mov LCD_state, #3 ;reflow
 	clr finished
 WaitReflow:
 	lcall display_time	
@@ -190,7 +202,7 @@ WaitReflow:
 	lcall beep
 ;Process Finished, Wait for it to cool
 Cooling:
-		mov LCD_state, #9
+	mov LCD_state, #9
 	mov Target_Temp, #CoolConst
 	setb ready	
 WaitCool:	
