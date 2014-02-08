@@ -304,7 +304,7 @@ SetsoakTemp_Display:
 Cooling_Display:
 	push acc
 	mov dptr, #State9_LUT
-	lcall State_Display\
+	lcall State_Display
 	lcall Target_Temp_display
 	pop acc
 	ret
@@ -355,11 +355,8 @@ Temp_display:
 	push acc
 	push psw
 
-<<<<<<< HEAD
 	mov x+0, Oven_temp
-=======
 	mov x+0, oven_temp
->>>>>>> bc051e436cc49834f6c17e532a2c24668e1ccbe4
 
 	LCD_cursor(Line2+11)
 	
@@ -405,11 +402,8 @@ Thermo_update:
 
 	mov dptr, #Thermo_LUT
 	LCD_cursor(line2)
-<<<<<<< HEAD
 	mov x+0, Oven_temp
-=======
 	mov x+0, oven_temp
->>>>>>> bc051e436cc49834f6c17e532a2c24668e1ccbe4
 	load_y(24)
 	lcall x_lt_y
 	jb mf, toosmall

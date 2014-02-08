@@ -5,8 +5,8 @@ BAUD   		   EQU 115200                       ;Baud Rate
 T2LOAD 		   EQU 65536-(XTAL/(32*BAUD))
 TIMER0_RELOAD  EQU 65538-(XTAL/(12*FREQ))
 BUZZER_RELOAD  EQU 65538-(XTAL/(12*HERTZ))       
-TURNONOVEN     EQU P0.0                         ;Controls oven
-BUZZER         EQU P0.3                          ; buzzer pin
+TURNONOVEN     EQU P3.4                         ;Controls oven
+BUZZER         EQU P0.2                          ; buzzer pin
 SERIALRATE     EQU 10                            ; Readings sent to comp per second
 
 myLUT:
