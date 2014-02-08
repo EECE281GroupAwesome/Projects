@@ -1,6 +1,6 @@
 $MODDE2
 org 0000H
-	mov SP, #7FH
+	;mov SP, #7FH
 	ljmp PowerOff
 org 000BH
 	ljmp Interupt0
@@ -57,10 +57,12 @@ BSEG
 	Finished:    dbit 1
 	Timing:      dbit 1
 	mf:          dbit 1
+	killBit:     dbit 1
 CSEG
 
 ;Stops Everything until switch 1 is turned back on (Not Done)
 PowerOff:
+	mov SP, #7FH
 	mov P0MOD, #0xFF
 	mov P3MOD, #0xFF
 	;Reset standard times
@@ -68,16 +70,20 @@ PowerOff:
 	mov Reflow_Time, #30  ;30 real value
 	mov Soak_Temp,   #SoakConst
 	mov Soak_Time,	 #75 ; 75 real value
+	lcall Clear_Hex
+	mov LCD_State, #11   ; poweroff state
+	mov Target_Temp, #0
 	mov a, SWC
-	clr EA	
 	jnb acc.1, PowerOff
+	setb EA
+	setb Finished	
 	lcall init_lcd
 	ljmp PowerOn
 ;Initial Set up	on reboot
 PowerOn:
 	lcall ADC_Init
 	lcall Initialize_Timer
-	setb EA
+	;setb EA
 	;Turn off LED's
 	mov LEDRA, #0
 	mov LEDRB, #0
@@ -122,6 +128,7 @@ Set_Soak_Temp:
 	lcall clear_hex
 	sjmp Idle
 Set_Soak_Time:
+	mov HEX7, #0FFH
 	mov LCD_state, #5
 	lcall Set_Soak_Time_Relay
 	jb SWA.3, Set_Soak_Time
@@ -152,6 +159,9 @@ Set_Reflow_Time:
 
 ;Waits for temperature to get above soak temp
 Preheat_Soak:
+	jnb killBit, Preheat_Soak_
+	ljmp PowerOff
+Preheat_Soak_:
 	mov LCD_state, #2 ; preheat
 	setb LEDG.2
 	mov Target_Temp, Soak_Temp
@@ -159,12 +169,18 @@ Preheat_Soak:
 	clr Ready
 	mov R5, #45
 X6:	lcall Wait
+	jnb killBit, X6_
+	ljmp PowerOff
+X6_:
 	cpl LEDRA.5
 	djnz R5, X6
 	mov a, Target_Temp
 	Add a, #31
 	mov Target_Temp, a
-Preheat_Soak0:	
+Preheat_Soak0:
+	jnb killBit, Preheat_Soak0_
+	ljmp PowerOff
+Preheat_Soak0_:	
 	jnb Ready, PreHeat_Soak0
 	lcall beep
 ;Initialize for holding constant
@@ -173,6 +189,9 @@ Preheat_Soak0:
 	mov LCD_state, #4 ;soak 
 	clr finished	 
 WaitSoak:
+	jnb killBit, WaitSoak_
+	ljmp PowerOff
+WaitSoak_:
 	lcall display_time
 	mov a, seconds
 	cjne a, #7, NotFive
@@ -189,6 +208,9 @@ NotFive:
 	clr ready
 	
 Preheat_Reflow:
+	jnb killBit, Preheat_Reflow_
+	ljmp PowerOff
+Preheat_Reflow_:
 	jnb Ready, PreHeat_Reflow
 	lcall beep
 ;Pass Reflow Time, wait for time to expire	
@@ -197,6 +219,9 @@ Preheat_Reflow:
 	mov LCD_state, #3 ;reflow
 	clr finished
 WaitReflow:
+	jnb killBit, WaitReflow_
+	ljmp PowerOff
+WaitReflow_:
 	lcall display_time	
 	jnb finished, WaitReflow
 	lcall clear_hex
@@ -206,7 +231,10 @@ Cooling:
 	mov LCD_state, #9
 	mov Target_Temp, #CoolConst
 	setb ready	
-WaitCool:	
+WaitCool:
+	jnb killBit, WaitCool_
+	ljmp PowerOff
+WaitCool_:	
 	setb LEDG.6
 	;wait for temp to dip below 60 Celcius (Cool Constant)
 	jb Ready, WaitCool

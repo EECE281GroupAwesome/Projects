@@ -57,6 +57,11 @@ Interupt0:
     push acc
     push dph
     push dpl
+    
+    mov A, SWC
+    jb ACC.1, Continue
+    setb killBit 
+Continue:    
    	; Increment the counter and check if a second has passed
     inc count10ms
     mov a, count10ms 
