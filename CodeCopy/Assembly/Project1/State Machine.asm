@@ -62,6 +62,7 @@ CSEG
 ;Stops Everything until switch 1 is turned back on (Not Done)
 PowerOff:
 	mov P0MOD, #0xFF
+	mov P3MOD, #0xFF
 	;Reset standard times
 	mov Reflow_Temp, #ReflowConst
 	mov Reflow_Time, #30  ;30 real value
@@ -105,7 +106,7 @@ Idle:
 	clr Ready
 	clr c
 	mov a, Soak_Temp
-	subb a, #25
+	subb a, #32
 	mov Soak_Temp, a
 	ljmp Preheat_Soak
 	
@@ -161,7 +162,7 @@ X6:	lcall Wait
 	cpl LEDRA.5
 	djnz R5, X6
 	mov a, Target_Temp
-	Add a, #25
+	Add a, #32
 	mov Target_Temp, a
 Preheat_Soak0:	
 	jnb Ready, PreHeat_Soak0

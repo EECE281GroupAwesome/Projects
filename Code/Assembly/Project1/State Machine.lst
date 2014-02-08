@@ -146,11 +146,11 @@
 0000            145   
 0000              2   org 0000H
 0000 75817F       3            mov SP, #7FH
-0003 020A90       4            ljmp PowerOff
+0003 020A75       4            ljmp PowerOff
 000B              5   org 000BH
-000B 0209D9       6            ljmp Interupt0
+000B 0209DF       6            ljmp Interupt0
 001B              7   org 001BH
-001B 0209D0       8            ljmp Interupt1
+001B 0209D6       8            ljmp Interupt1
 001E              9   
 001E             10   CoolConst   EQU 60
 001E             11   ReflowConst EQU 220
@@ -220,7 +220,7 @@
 089E 85373A      45            mov x, seconds
 08A1 753B00      46            mov x+1, #0
 08A4 12001E      47            lcall hex2bcd
-08A7 90099A      48            mov dptr, #myLUT
+08A7 9009A0      48            mov dptr, #myLUT
 08AA             49            ; Display Digit 0
 08AA E53E        50       mov A, bcd+0
 08AC 540F        51       anl a, #0fh
@@ -235,237 +235,243 @@
 08B9             60       ; Display Digit 2
 08B9 E53F        61       mov A, bcd+1
 08BB 540F        62       anl a, #0fh
-08BD 93          63       movc A, @A+dptr
-08BE F596        64       mov HEX6, A
-08C0 22          65       ret   
-08C1             66     
-08C1             67   Wait:
-08C1 7B64        68            mov R3, #100
-08C3 7AFA        69   L3:      mov R2, #250
-08C5 79FA        70   L2:      mov R1, #250
-08C7 D9FE        71   L1: djnz R1, L1
-08C9 DAFA        72            djnz R2, L2
-08CB DBF6        73            djnz R3, L3
-08CD 22          74            ret             
-08CE             75   Beep:
-08CE D2AB        76            setb ET1
-08D0 1208C1      77            lcall wait
-08D3 C2AB        78            clr Et1
-08D5 22          79            ret
-08D6             80   
-08D6             81   display_Temp:
-08D6 85463A      82            mov x, Oven_Temp
-08D9 753B00      83            mov x+1, #0
-08DC 12001E      84            lcall hex2bcd
-08DF 90099A      85            mov dptr, #myLUT
-08E2             86            ; Display Digit 0
-08E2 E53E        87       mov A, bcd+0
-08E4 540F        88       anl a, #0fh
-08E6 93          89       movc A, @A+dptr
-08E7 F591        90       mov HEX0, A
-08E9             91            ; Display Digit 1
-08E9 E53E        92       mov A, bcd+0
-08EB C4          93       swap a
-08EC 540F        94       anl a, #0fh
-08EE 93          95       movc A, @A+dptr
-08EF F592        96       mov HEX1, A
-08F1             97       ; Display Digit 2
-08F1 E53F        98       mov A, bcd+1
-08F3 540F        99       anl a, #0fh
-08F5 93         100       movc A, @A+dptr
-08F6 F593       101       mov HEX2, A  
-08F8 22         102       ret 
-08F9            103   
-                104   Set_Any MAC
-                105   	Inc_%0:
-                106   		mov A, %0
-                107   	
-                108   		jb KEY.2, Dec_%0
-                109       	jnb KEY.2, $
-                110   		inc A
-                111   		cjne A, %2, Done_%0
-                112   		dec A
-                113   	Dec_%0:	
-                114      	    jb KEY.3, Done_%0
-                115      	    jnb KEY.3, $
+08BD 6004        63       jz X7
+08BF 93          64       movc A, @A+dptr
+08C0 F596        65       mov HEX6, A
+08C2 22          66       ret   
+08C3             67   X7:
+08C3 7596FF      68       mov HEX6, #0xFF
+08C6 22          69       ret
+08C7             70     
+08C7             71   Wait:
+08C7 7B64        72            mov R3, #100
+08C9 7AFA        73   L3:      mov R2, #250
+08CB 79FA        74   L2:      mov R1, #250
+08CD D9FE        75   L1: djnz R1, L1
+08CF DAFA        76            djnz R2, L2
+08D1 DBF6        77            djnz R3, L3
+08D3 22          78            ret             
+08D4             79   Beep:
+08D4 D2AB        80            setb ET1
+08D6 1208C7      81            lcall wait
+08D9 C2AB        82            clr Et1
+08DB 22          83            ret
+08DC             84   
+08DC             85   display_Temp:
+08DC 85463A      86            mov x, Oven_Temp
+08DF 753B00      87            mov x+1, #0
+08E2 12001E      88            lcall hex2bcd
+08E5 9009A0      89            mov dptr, #myLUT
+08E8             90            ; Display Digit 0
+08E8 E53E        91       mov A, bcd+0
+08EA 540F        92       anl a, #0fh
+08EC 93          93       movc A, @A+dptr
+08ED F591        94       mov HEX0, A
+08EF             95            ; Display Digit 1
+08EF E53E        96       mov A, bcd+0
+08F1 C4          97       swap a
+08F2 540F        98       anl a, #0fh
+08F4 93          99       movc A, @A+dptr
+08F5 F592       100       mov HEX1, A
+08F7            101       ; Display Digit 2
+08F7 E53F       102       mov A, bcd+1
+08F9 540F       103       anl a, #0fh
+08FB 93         104       movc A, @A+dptr
+08FC F593       105       mov HEX2, A  
+08FE 22         106       ret 
+08FF            107   
+                108   Set_Any MAC
+                109   	Inc_%0:
+                110   		mov A, %0
+                111   	
+                112   		jb KEY.2, Dec_%0
+                113       	jnb KEY.2, $
+                114   		inc A
+                115   		cjne A, %2, Done_%0
                 116   		dec A
-                117   	    cjne A, %1, Done_%0
-                118           inc A
-                119   	Done_%0:
-                120   		mov %0, A
-                121   endmac
-08F9            122   
-08F9            123   END      
+                117   	Dec_%0:	
+                118      	    jb KEY.3, Done_%0
+                119      	    jnb KEY.3, $
+                120   		dec A
+                121   	    cjne A, %1, Done_%0
+                122           inc A
+                123   	Done_%0:
+                124   		mov %0, A
+                125   endmac
+08FF            126   
+08FF            127   END      
                  -1   $include(adc_functions.asm)
                  -1   $include(HeatingandTimer.asm)
-099A              1   XTAL           EQU 33333333                     ;Clock Frequency
-099A              2   FREQ           EQU 100                          
-099A              3   HERTZ          EQU 2000                         ;Buzzer Frequency
-099A              4   BAUD                EQU 115200                       ;Baud Rate
-099A              5   T2LOAD              EQU 65536-(XTAL/(32*BAUD))
-099A              6   TIMER0_RELOAD  EQU 65538-(XTAL/(12*FREQ))
-099A              7   BUZZER_RELOAD  EQU 65538-(XTAL/(12*HERTZ))       
-099A              8   TURNONOVEN     EQU P0.0                         ;Controls oven
-099A              9   BUZZER         EQU P0.3                          ; buzzer pin
-099A             10   SERIALRATE     EQU 10                            ; Readings sent to comp per second
-099A             11   
-099A             12   myLUT:
-099A C0F9A4B0    13       DB 0C0H, 0F9H, 0A4H, 0B0H, 099H        ; 0 TO 4
+09A0              1   XTAL           EQU 33333333                     ;Clock Frequency
+09A0              2   FREQ           EQU 100                          
+09A0              3   HERTZ          EQU 2000                         ;Buzzer Frequency
+09A0              4   BAUD                EQU 115200                       ;Baud Rate
+09A0              5   T2LOAD              EQU 65536-(XTAL/(32*BAUD))
+09A0              6   TIMER0_RELOAD  EQU 65538-(XTAL/(12*FREQ))
+09A0              7   BUZZER_RELOAD  EQU 65538-(XTAL/(12*HERTZ))       
+09A0              8   TURNONOVEN     EQU P0.0                         ;Controls oven
+09A0              9   BUZZER         EQU P0.3                          ; buzzer pin
+09A0             10   SERIALRATE     EQU 10                            ; Readings sent to comp per second
+09A0             11   
+09A0             12   myLUT:
+09A0 C0F9A4B0    13       DB 0C0H, 0F9H, 0A4H, 0B0H, 099H        ; 0 TO 4
      99
-099F 9282F880    14       DB 092H, 082H, 0F8H, 080H, 090H        ; 4 TO 9
+09A5 9282F880    14       DB 092H, 082H, 0F8H, 080H, 090H        ; 4 TO 9
      90
-09A4             15   ;------------------------------
-09A4             16   ; Set up timers, 
-09A4             17   ; Does not start them or enable INT
-09A4             18   ;------------------------------
-09A4             19   Initialize_Timer:
-09A4 758911      20            mov TMOD,  #00010001B ; 16-bit timers
-09A7 C28C        21            clr TR0
-09A9 C28E        22            clr TR1
-09AB C28D        23            clr TF0
-09AD C28F        24            clr TF1
-09AF C2CA        25            clr TR2 ; Disable timer 2
-09B1 75C830      26            mov T2CON, #30H ; RCLK=1, TCLK=1 
-09B4 75CBFF      27            mov RCAP2H, #high(T2LOAD)  
-09B7 75CAF7      28            mov RCAP2L, #low(T2LOAD)
-09BA D2CA        29            setb TR2 ; Enable timer 2
-09BC 759852      30            mov SCON, #52H
-09BF 758C93      31       mov TH0, #high(TIMER0_RELOAD)
-09C2 758A81      32       mov TL0, #low(TIMER0_RELOAD)
-09C5 758DFA      33       mov TH1, #high(BUZZER_RELOAD)
-09C8 758B96      34       mov TL1, #low(BUZZER_RELOAD)
-09CB D28C        35       setb TR0
-09CD D28E        36       Setb TR1
-09CF 22          37       ret
-09D0             38   ;Buzzer Noise    
-09D0             39   Interupt1:
-09D0 758DFA      40            mov TH1, #high(BUZZER_RELOAD)
-09D3 758B96      41       mov TL1, #low(BUZZER_RELOAD)
-09D6 B283        42       cpl BUZZER
-09D8 32          43            reti    
-09D9             44    
-09D9             45   
-09D9             46         
-09D9             47   ;--------------------------------
-09D9             48   ;Decrements Timer Every 1 second
-09D9             49   ;Checks Oven Temperature ever 1s
-09D9             50   ;--------------------------------
-09D9             51   Interupt0:    
-09D9             52       ; Reload the timer
-09D9 758C93      53       mov TH0, #high(TIMER0_RELOAD)
-09DC 758A81      54       mov TL0, #low(TIMER0_RELOAD)
-09DF             55       ; Save used register into the stack
-09DF C0D0        56       push psw
-09E1 C0E0        57       push acc
-09E3 C083        58       push dph
-09E5 C082        59       push dpl
-09E7             60            ; Increment the counter and check if a second has passed
-09E7 0535        61       inc count10ms
-09E9 E535        62       mov a, count10ms 
-09EB B46439      63       cjne A, #100, Return_int
-09EE 753500      64       mov count10ms, #0
-09F1             65       ;send the info through serial port
-09F1             66       
-09F1 1208F9      67            lcall room_convert
-09F4 F8          67            mov R0, a
-09F5 88F0        67            mov b, R0
-09F7 12092E      67            lcall oven_convert
-09FA 25F0        67            add a, b
-09FC F546        67            mov Oven_Temp, a
-09FE             68       ;lcall temp_display 
-09FE 120520      69       lcall State_disp
-0A01 120A38      70       lcall SendTemp
-0A04             71       
-0A04             72       ;lcall display_temp
-0A04             73       ;second has passed
-0A04             74       
-0A04             75       ;checks if oven is greater or equal to target (can be moved to adjust rate)
-0A04 C3          76       clr c
-0A05 E545        77       mov a, Target_Temp
-0A07 9546        78       Subb a, Oven_Temp        
-0A09 4008        79       jc NoHeat
-0A0B 6006        80       jz NoHeat
-0A0D             81       ;activate oven
-0A0D C280        82       clr TurnOnOven   
-0A0F C200        83       clr Ready
-0A11 8004        84       sjmp Heat
-0A13             85   NoHeat:    
-0A13 D200        86            setb Ready  
-0A15             87            ;turn off oven
-0A15 D280        88            setb TurnOnOven
-0A17             89   Heat:
-0A17             90            ;if timer is active    
-0A17 20010D      91            jb finished, Return_int
-0A1A E537        92       mov a, seconds
-0A1C 14          93       dec a
-0A1D F537        94       mov seconds, a
-0A1F B40005      95       cjne A, #00, Return_int ;FFH is -1 in two's complement
-0A22 753700      96       mov seconds, #00
-0A25 D201        97       setb finished
-0A27             98   Return_int:
-0A27 D082        99            pop dpl
-0A29 D083       100       pop dph
-0A2B D0E0       101       pop acc
-0A2D D0D0       102       pop psw    
-0A2F 32         103            reti
-0A30            104      
-0A30            105   end
+09AA             15   ;------------------------------
+09AA             16   ; Set up timers, 
+09AA             17   ; Does not start them or enable INT
+09AA             18   ;------------------------------
+09AA             19   Initialize_Timer:
+09AA 758911      20            mov TMOD,  #00010001B ; 16-bit timers
+09AD C28C        21            clr TR0
+09AF C28E        22            clr TR1
+09B1 C28D        23            clr TF0
+09B3 C28F        24            clr TF1
+09B5 C2CA        25            clr TR2 ; Disable timer 2
+09B7 75C830      26            mov T2CON, #30H ; RCLK=1, TCLK=1 
+09BA 75CBFF      27            mov RCAP2H, #high(T2LOAD)  
+09BD 75CAF7      28            mov RCAP2L, #low(T2LOAD)
+09C0 D2CA        29            setb TR2 ; Enable timer 2
+09C2 759852      30            mov SCON, #52H
+09C5 758C93      31       mov TH0, #high(TIMER0_RELOAD)
+09C8 758A81      32       mov TL0, #low(TIMER0_RELOAD)
+09CB 758DFA      33       mov TH1, #high(BUZZER_RELOAD)
+09CE 758B96      34       mov TL1, #low(BUZZER_RELOAD)
+09D1 D28C        35       setb TR0
+09D3 D28E        36       Setb TR1
+09D5 22          37       ret
+09D6             38   ;Buzzer Noise    
+09D6             39   Interupt1:
+09D6 758DFA      40            mov TH1, #high(BUZZER_RELOAD)
+09D9 758B96      41       mov TL1, #low(BUZZER_RELOAD)
+09DC B283        42       cpl BUZZER
+09DE 32          43            reti    
+09DF             44    
+09DF             45   
+09DF             46         
+09DF             47   ;--------------------------------
+09DF             48   ;Decrements Timer Every 1 second
+09DF             49   ;Checks Oven Temperature ever 1s
+09DF             50   ;--------------------------------
+09DF             51   Interupt0:    
+09DF             52       ; Reload the timer
+09DF 758C93      53       mov TH0, #high(TIMER0_RELOAD)
+09E2 758A81      54       mov TL0, #low(TIMER0_RELOAD)
+09E5             55       ; Save used register into the stack
+09E5 C0D0        56       push psw
+09E7 C0E0        57       push acc
+09E9 C083        58       push dph
+09EB C082        59       push dpl
+09ED             60            ; Increment the counter and check if a second has passed
+09ED 0535        61       inc count10ms
+09EF E535        62       mov a, count10ms 
+09F1 B4643D      63       cjne A, #100, Return_int
+09F4 753500      64       mov count10ms, #0
+09F7             65       ;send the info through serial port
+09F7             66       
+09F7 1208FF      67            lcall room_convert
+09FA F8          67            mov R0, a
+09FB 88F0        67            mov b, R0
+09FD 120934      67            lcall oven_convert
+0A00 25F0        67            add a, b
+0A02 F546        67            mov Oven_Temp, a
+0A04             68       ;lcall temp_display 
+0A04 120520      69       lcall State_disp
+0A07 120A42      70       lcall SendTemp
+0A0A             71       
+0A0A             72       ;lcall display_temp
+0A0A             73       ;second has passed
+0A0A             74       
+0A0A             75       ;checks if oven is greater or equal to target (can be moved to adjust rate)
+0A0A C3          76       clr c
+0A0B E545        77       mov a, Target_Temp
+0A0D 9546        78       Subb a, Oven_Temp        
+0A0F 400A        79       jc NoHeat
+0A11 6008        80       jz NoHeat
+0A13             81       ;activate oven
+0A13 C280        82       clr TurnOnOven   
+0A15 C200        83       clr Ready
+0A17 D2E8        84       setb LEDRA.0
+0A19 8006        85       sjmp Heat
+0A1B             86   NoHeat:    
+0A1B D200        87            setb Ready  
+0A1D C2E8        88            clr LEDRA.0
+0A1F             89            ;turn off oven
+0A1F D280        90            setb TurnOnOven
+0A21             91   Heat:
+0A21             92            ;if timer is active    
+0A21 20010D      93            jb finished, Return_int
+0A24 E537        94       mov a, seconds
+0A26 14          95       dec a
+0A27 F537        96       mov seconds, a
+0A29 B40005      97       cjne A, #00, Return_int ;FFH is -1 in two's complement
+0A2C 753700      98       mov seconds, #00
+0A2F D201        99       setb finished
+0A31            100   Return_int:
+0A31 D082       101            pop dpl
+0A33 D083       102       pop dph
+0A35 D0E0       103       pop acc
+0A37 D0D0       104       pop psw    
+0A39 32         105            reti
+0A3A            106      
+0A3A            107   end
                  -1   $include(serial.asm)
-0A30              1   putchar:
-0A30 3099FD       2       JNB TI, putchar
-0A33 C299         3       CLR TI
-0A35 F599         4       MOV SBUF, a
-0A37 22           5       RET
-0A38              6   SendTemp:
-0A38 C0E0         7            push acc
-0A3A AF3A         8            mov R7, x
-0A3C              9            ;Sends the oven's temperature
-0A3C 85463A      10            mov x, Oven_Temp
-0A3F 753B00      11            mov x+1, #0
-0A42 12001E      12            lcall Hex2Bcd
-0A45 E53F        13            mov A, bcd+1
-0A47 540F        14       anl a, #0fh
-0A49 2430        15       add a, #48  
-0A4B 120A30      16       lcall putchar         
-0A4E E53E        17            mov A, bcd+0
-0A50 C4          18            swap a
-0A51 540F        19       anl a, #0fh
-0A53 2430        20       add a, #48
-0A55 120A30      21       lcall putchar
-0A58 E53E        22       mov A, bcd+0
-0A5A 540F        23       anl a, #0fh
-0A5C 2430        24       add a, #48
-0A5E 120A30      25       lcall putchar
-0A61             26       ;Sends a break marker                                ;;;;;;;;;;;;;;;;;;;;;;;;;;
-0A61             27       ;mov a, #'\n'
-0A61             28       ;lcall putchar
-0A61             29            ;Sends the goal temperature
-0A61 85453A      30            mov x, Target_Temp
-0A64 753B00      31            mov x+1, #0
-0A67 12001E      32            lcall Hex2Bcd
-0A6A E53F        33            mov A, bcd+1
-0A6C 540F        34       anl a, #0fh
-0A6E 2430        35       add a, #48  
-0A70 120A30      36       lcall putchar         
-0A73 E53E        37            mov A, bcd+0
-0A75 C4          38            swap a
-0A76 540F        39       anl a, #0fh
-0A78 2430        40       add a, #48
-0A7A 120A30      41       lcall putchar
-0A7D E53E        42       mov A, bcd+0
-0A7F 540F        43       anl a, #0fh
-0A81 2430        44       add a, #48
-0A83 120A30      45       lcall putchar
-0A86 740A        46       mov a, #'\n'
-0A88 120A30      47       lcall putchar
-0A8B             48       ;mov a, #'\r'
-0A8B             49       ;lcall putchar
-0A8B 8F3A        50       mov x, R7
-0A8D D0E0        51       pop acc
-0A8F 22          52            ret     
-0A90             53            
-0A90             54   END      
-0A90             21                    
+0A3A              1   putchar:
+0A3A 3099FD       2       JNB TI, putchar
+0A3D C299         3       CLR TI
+0A3F F599         4       MOV SBUF, a
+0A41 22           5       RET
+0A42              6   SendTemp:
+0A42 C0E0         7            push acc
+0A44 AF3A         8            mov R7, x
+0A46              9            ;Sends the oven's temperature
+0A46 85463A      10            mov x, Oven_Temp
+0A49 753B00      11            mov x+1, #0
+0A4C 12001E      12            lcall Hex2Bcd
+0A4F E53F        13            mov A, bcd+1
+0A51 540F        14       anl a, #0fh
+0A53 2430        15       add a, #48  
+0A55 120A3A      16       lcall putchar         
+0A58 E53E        17            mov A, bcd+0
+0A5A C4          18            swap a
+0A5B 540F        19       anl a, #0fh
+0A5D 2430        20       add a, #48
+0A5F 120A3A      21       lcall putchar
+0A62 E53E        22       mov A, bcd+0
+0A64 540F        23       anl a, #0fh
+0A66 2430        24       add a, #48
+0A68 120A3A      25       lcall putchar
+0A6B             26       ;Sends a break marker                                ;;;;;;;;;;;;;;;;;;;;;;;;;;
+0A6B             27       ;mov a, #'\n'
+0A6B             28       ;lcall putchar
+0A6B             29            ;Sends the goal temperature
+0A6B             30            ;mov x, Target_Temp
+0A6B             31            ;mov x+1, #0
+0A6B             32            ;lcall Hex2Bcd
+0A6B             33            ;mov A, bcd+1
+0A6B             34       ;anl a, #0fh
+0A6B             35       ;add a, #48  
+0A6B             36       ;lcall putchar        
+0A6B             37            ;mov A, bcd+0
+0A6B             38            ;swap a
+0A6B             39      ; anl a, #0fh
+0A6B             40       ;add a, #48
+0A6B             41       ;lcall putchar
+0A6B             42       ;mov A, bcd+0
+0A6B             43       ;anl a, #0fh
+0A6B             44       ;add a, #48
+0A6B             45       ;lcall putchar
+0A6B 740A        46       mov a, #'\n'
+0A6D 120A3A      47       lcall putchar
+0A70             48       ;mov a, #'\r'
+0A70             49       ;lcall putchar
+0A70 8F3A        50       mov x, R7
+0A72 D0E0        51       pop acc
+0A74 22          52            ret     
+0A75             53            
+0A75             54   END      
+0A75             21                    
 0030             22   DSEG at 30H
 0030             23            ;ADC STUFF
 0030             24            ADC_out_buffer: ds 1
@@ -504,6 +510,350 @@
 0001             57            Finished:    dbit 1
 0002             58            Timing:      dbit 1
 0003             59            mf:          dbit 1
+<<<<<<< HEAD
+0A75             60   CSEG
+0A75             61   
+0A75             62   ;Stops Everything until switch 1 is turned back on (Not Done)
+0A75             63   PowerOff:
+0A75 759AFF      64            mov P0MOD, #0xFF
+0A78             65            ;Reset standard times
+0A78 7541DC      66            mov Reflow_Temp, #ReflowConst
+0A7B 75421E      67            mov Reflow_Time, #30  ;30 real value
+0A7E 754396      68            mov Soak_Temp,   #SoakConst
+0A81 75444B      69            mov Soak_Time,   #75 ; 75 real value
+0A84 E59E        70            mov a, SWC
+0A86 C2AF        71            clr EA  
+0A88 30E1EA      72            jnb acc.1, PowerOff
+0A8B 120422      73            lcall init_lcd
+0A8E 020A91      74            ljmp PowerOn
+0A91             75   ;Initial Set up  on reboot
+0A91             76   PowerOn:
+0A91 120965      77            lcall ADC_Init
+0A94 1209AA      78            lcall Initialize_Timer
+0A97 D2AF        79            setb EA
+0A99             80            ;Turn off LED's
+0A99 75E800      81            mov LEDRA, #0
+0A9C 759500      82            mov LEDRB, #0
+0A9F 759E00      83            mov LEDRC, #0
+0AA2 75F800      84            mov LEDG, #0
+0AA5 754D01      85            mov LCD_state, #1
+0AA8 D2CA        86            setb TR2
+0AAA 020AAD      87            ljmp Idle       
+0AAD             88            
+0AAD             89   ;awaiting process loop
+0AAD             90   Idle:
+0AAD 754D01      91            mov LCD_state, #1
+0AB0 754500      92            mov Target_Temp, #0
+0AB3 C202        93            clr timing
+0AB5 D2A9        94            setb ET0
+0AB7 D2F9        95            setb LEDG.1
+0AB9             96            ;Stop Timer
+0AB9             97            ;set things while switch is up, return by flicking down
+0AB9 20E945      98            jb SWA.1, Set_Reflow_Time
+0ABC 20EA34      99            jb SWA.2, Set_Reflow_Temp
+0ABF 20EB23     100            jb SWA.3, Set_Soak_Time
+0AC2 20EC12     101            jb SWA.4, Set_Soak_Temp
+0AC5 20F9E5     102            jb Key.1, Idle
+0AC8            103            ;ready to start process
+0AC8 1208D4     104            lcall beep
+0ACB C200       105            clr Ready
+0ACD C3         106            clr c
+0ACE E543       107            mov a, Soak_Temp
+0AD0 9419       108            subb a, #25
+0AD2 F543       109            mov Soak_Temp, a
+0AD4 020B0F     110            ljmp Preheat_Soak
+0AD7            111            
+0AD7            112   ;------------------------------------------------------------------      
+0AD7            113   ;Setting Times and Temperatures (Not Done)
+0AD7            114   ;   -had thought maybe macro for time and temp, that takes bounds 
+0AD7            115   ;   so the time or temp is within reason
+0AD7            116   ;------------------------------------------------------------------
+0AD7            117   Set_Soak_Temp:
+0AD7 754D08     118            mov LCD_state, #8
+0ADA 120C29     119            lcall Set_Soak_Temp_Relay
+0ADD 20ECF7     120            jb SWA.4, Set_Soak_Temp
+0AE0 120891     121            lcall clear_hex
+0AE3 80C8       122            sjmp Idle
+0AE5            123   Set_Soak_Time:
+0AE5 754D05     124            mov LCD_state, #5
+0AE8 120C6E     125            lcall Set_Soak_Time_Relay
+0AEB 20EBF7     126            jb SWA.3, Set_Soak_Time
+0AEE 120891     127            lcall clear_hex
+0AF1 80BA       128            Sjmp Idle
+0AF3            129   Set_Reflow_Temp:
+0AF3 754D07     130                    mov LCD_state, #7
+0AF6 120BE4     131            lcall Set_Reflow_Temp_Relay
+0AF9 20EAF7     132            jb SWA.2, Set_Reflow_Temp
+0AFC 120891     133            lcall clear_hex
+0AFF 80AC       134            Sjmp Idle
+0B01            135   Set_Reflow_Time:
+0B01 754D06     136                    mov LCD_state, #6
+0B04 120B9F     137            lcall Set_Reflow_Time_Relay     
+0B07 20E9F7     138            jb SWA.1, Set_Reflow_Time
+0B0A 120891     139            lcall clear_hex
+0B0D 809E       140            Sjmp Idle
+0B0F            141   
+0B0F            142   ;------------------------------------------------------------------      
+0B0F            143   ;Actual Progression Through Phases
+0B0F            144   ;PRE-HEAT
+0B0F            145   ;SOAK
+0B0F            146   ;PRE-HEAT
+0B0F            147   ;REFLOW
+0B0F            148   ;COOLING
+0B0F            149   ;DONE
+0B0F            150   ;------------------------------------------------------------------
+0B0F            151   
+0B0F            152   ;Waits for temperature to get above soak temp
+0B0F            153   Preheat_Soak:
+0B0F 754D02     154            mov LCD_state, #2 ; preheat
+0B12 D2FA       155            setb LEDG.2
+0B14 854345     156            mov Target_Temp, Soak_Temp
+0B17 3000F5     157            jnb Ready, PreHeat_Soak
+0B1A C200       158            clr Ready
+0B1C 7D32       159            mov R5, #50
+0B1E 1208C7     160   X6:      lcall Wait
+0B21 B2ED       161            cpl LEDRA.5
+0B23 DDF9       162            djnz R5, X6
+0B25 E545       163            mov a, Target_Temp
+0B27 2419       164            Add a, #25
+0B29 F545       165            mov Target_Temp, a
+0B2B            166   Preheat_Soak0:   
+0B2B 3000FD     167            jnb Ready, PreHeat_Soak0
+0B2E 1208D4     168            lcall beep
+0B31            169   ;Initialize for holding constant
+0B31 D2FB       170            setb LEDG.3
+0B33 854437     171            mov seconds, Soak_Time+0
+0B36 754D04     172            mov LCD_state, #4 ;soak 
+0B39 C201       173            clr finished     
+0B3B            174   WaitSoak:
+0B3B 12089E     175            lcall display_time
+0B3E E537       176            mov a, seconds
+0B40 B40503     177            cjne a, #5, NotFive
+0B43 854145     178            mov target_Temp, Reflow_Temp
+0B46            179   NotFive:         
+0B46 3001F2     180            jnb finished, WaitSoak
+0B49            181   
+0B49            182   ;Initilize for ramp to Reflow
+0B49            183            
+0B49 120891     184            lcall clear_hex
+0B4C D2FC       185            setb LEDG.4
+0B4E 1208D4     186            lcall beep
+0B51 754D02     187            mov LCD_state, #2 ; preheat
+0B54 C200       188            clr ready
+0B56            189            
+0B56            190   Preheat_Reflow:
+0B56 3000FD     191            jnb Ready, PreHeat_Reflow
+0B59 1208D4     192            lcall beep
+0B5C            193   ;Pass Reflow Time, wait for time to expire       
+0B5C D2FD       194            setb LEDG.5
+0B5E 854237     195            mov seconds, Reflow_Time+0
+0B61 754D03     196            mov LCD_state, #3 ;reflow
+0B64 C201       197            clr finished
+0B66            198   WaitReflow:
+0B66 12089E     199            lcall display_time      
+0B69 3001FA     200            jnb finished, WaitReflow
+0B6C 120891     201            lcall clear_hex
+0B6F 1208D4     202            lcall beep
+0B72            203   ;Process Finished, Wait for it to cool
+0B72            204   Cooling:
+0B72 754D09     205            mov LCD_state, #9
+0B75 75453C     206            mov Target_Temp, #CoolConst
+0B78 D200       207            setb ready      
+0B7A            208   WaitCool:        
+0B7A D2FE       209            setb LEDG.6
+0B7C            210            ;wait for temp to dip below 60 Celcius (Cool Constant)
+0B7C 2000FB     211            jb Ready, WaitCool
+0B7F            212            ;set temp to zero
+0B7F 754500     213            mov Target_Temp, #0
+0B82            214            ;triple beep
+0B82 1208D4     215            lcall beep
+0B85 1208C7     216            lcall wait
+0B88 1208D4     217            lcall beep
+0B8B 1208C7     218            lcall wait
+0B8E 1208D4     219            lcall beep
+0B91            220   ;Cool Enough (just waits PB)
+0B91 754D0A     221                    mov LCD_state, #10      
+0B94            222   Done:
+0B94 D2FF       223            setb LEDG.7
+0B96 20F9FB     224            jb Key.1, Done
+0B99 75F800     225            mov LEDG, #0
+0B9C 020AAD     226            ljmp Idle
+0B9F            227                    
+0B9F            228   Set_Reflow_Time_Relay:
+0B9F            229            Inc_Reflow_Time:
+0B9F E542       229                    mov A, Reflow_Time
+0BA1            229            
+0BA1 20FA08     229                    jb KEY.2, Dec_Reflow_Time
+0BA4 30FAFD     229            jnb KEY.2, $
+0BA7 04         229                    inc A
+0BA8 B42E0C     229                    cjne A, #46, Done_Reflow_Time
+0BAB 14         229                    dec A
+0BAC            229            Dec_Reflow_Time:        
+0BAC 20FB08     229                jb KEY.3, Done_Reflow_Time
+0BAF 30FBFD     229                jnb KEY.3, $
+0BB2 14         229                    dec A
+0BB3 B41D01     229                cjne A, #29, Done_Reflow_Time
+0BB6 04         229           inc A
+0BB7            229            Done_Reflow_Time:
+0BB7 F542       229                    mov Reflow_Time, A
+0BB9 85423A     230            mov x, Reflow_Time
+0BBC 753B00     230            mov x+1, #0
+0BBF 12001E     230            lcall hex2bcd
+0BC2 9009A0     230            mov dptr, #myLUT
+0BC5            230            ; Display Digit 0
+0BC5 E53E       230       mov A, bcd+0
+0BC7 540F       230       anl a, #0fh
+0BC9 93         230       movc A, @A+dptr
+0BCA F58E       230       mov HEX4, A
+0BCC            230            ; Display Digit 1
+0BCC E53E       230       mov A, bcd+0
+0BCE C4         230       swap a
+0BCF 540F       230       anl a, #0fh
+0BD1 93         230       movc A, @A+dptr
+0BD2 F58F       230       mov HEX5, A    
+0BD4            230       ; Display Digit 2
+0BD4 E53F       230       mov A, bcd+1
+0BD6 540F       230       anl a, #0fh
+0BD8 6006       230       jz Ender_Reflow_Time
+0BDA 93         230       movc A, @A+dptr
+0BDB F596       230       mov HEX6, A
+0BDD 020BE3     230       jmp Exit_Reflow_Time
+0BE0            230       Ender_Reflow_Time:
+0BE0 7596FF     230       mov HEX6, #0FFH
+0BE3            230       Exit_Reflow_Time:
+0BE3 22         231            ret     
+0BE4            232   Set_Reflow_Temp_Relay:
+0BE4            233            Inc_Reflow_Temp:
+0BE4 E541       233                    mov A, Reflow_Temp
+0BE6            233            
+0BE6 20FA08     233                    jb KEY.2, Dec_Reflow_Temp
+0BE9 30FAFD     233            jnb KEY.2, $
+0BEC 04         233                    inc A
+0BED B4E70C     233                    cjne A, #231, Done_Reflow_Temp
+0BF0 14         233                    dec A
+0BF1            233            Dec_Reflow_Temp:        
+0BF1 20FB08     233                jb KEY.3, Done_Reflow_Temp
+0BF4 30FBFD     233                jnb KEY.3, $
+0BF7 14         233                    dec A
+0BF8 B4C701     233                cjne A, #199, Done_Reflow_Temp
+0BFB 04         233           inc A
+0BFC            233            Done_Reflow_Temp:
+0BFC F541       233                    mov Reflow_Temp, A
+0BFE 85413A     234            mov x, Reflow_Temp
+0C01 753B00     234            mov x+1, #0
+0C04 12001E     234            lcall hex2bcd
+0C07 9009A0     234            mov dptr, #myLUT
+0C0A            234            ; Display Digit 0
+0C0A E53E       234       mov A, bcd+0
+0C0C 540F       234       anl a, #0fh
+0C0E 93         234       movc A, @A+dptr
+0C0F F58E       234       mov HEX4, A
+0C11            234            ; Display Digit 1
+0C11 E53E       234       mov A, bcd+0
+0C13 C4         234       swap a
+0C14 540F       234       anl a, #0fh
+0C16 93         234       movc A, @A+dptr
+0C17 F58F       234       mov HEX5, A    
+0C19            234       ; Display Digit 2
+0C19 E53F       234       mov A, bcd+1
+0C1B 540F       234       anl a, #0fh
+0C1D 6006       234       jz Ender_Reflow_Temp
+0C1F 93         234       movc A, @A+dptr
+0C20 F596       234       mov HEX6, A
+0C22 020C28     234       jmp Exit_Reflow_Temp
+0C25            234       Ender_Reflow_Temp:
+0C25 7596FF     234       mov HEX6, #0FFH
+0C28            234       Exit_Reflow_Temp:
+0C28 22         235            ret     
+0C29            236   Set_Soak_Temp_Relay:     
+0C29            237            Inc_Soak_Temp:
+0C29 E543       237                    mov A, Soak_Temp
+0C2B            237            
+0C2B 20FA08     237                    jb KEY.2, Dec_Soak_Temp
+0C2E 30FAFD     237            jnb KEY.2, $
+0C31 04         237                    inc A
+0C32 B4A50C     237                    cjne A, #165, Done_Soak_Temp
+0C35 14         237                    dec A
+0C36            237            Dec_Soak_Temp:  
+0C36 20FB08     237                jb KEY.3, Done_Soak_Temp
+0C39 30FBFD     237                jnb KEY.3, $
+0C3C 14         237                    dec A
+0C3D B48601     237                cjne A, #134, Done_Soak_Temp
+0C40 04         237           inc A
+0C41            237            Done_Soak_Temp:
+0C41 F543       237                    mov Soak_Temp, A
+0C43 85433A     238            mov x, Soak_Temp
+0C46 753B00     238            mov x+1, #0
+0C49 12001E     238            lcall hex2bcd
+0C4C 9009A0     238            mov dptr, #myLUT
+0C4F            238            ; Display Digit 0
+0C4F E53E       238       mov A, bcd+0
+0C51 540F       238       anl a, #0fh
+0C53 93         238       movc A, @A+dptr
+0C54 F58E       238       mov HEX4, A
+0C56            238            ; Display Digit 1
+0C56 E53E       238       mov A, bcd+0
+0C58 C4         238       swap a
+0C59 540F       238       anl a, #0fh
+0C5B 93         238       movc A, @A+dptr
+0C5C F58F       238       mov HEX5, A    
+0C5E            238       ; Display Digit 2
+0C5E E53F       238       mov A, bcd+1
+0C60 540F       238       anl a, #0fh
+0C62 6006       238       jz Ender_Soak_Temp
+0C64 93         238       movc A, @A+dptr
+0C65 F596       238       mov HEX6, A
+0C67 020C6D     238       jmp Exit_Soak_Temp
+0C6A            238       Ender_Soak_Temp:
+0C6A 7596FF     238       mov HEX6, #0FFH
+0C6D            238       Exit_Soak_Temp:
+0C6D 22         239            ret     
+0C6E            240   Set_Soak_Time_Relay:
+0C6E            241            Inc_Soak_Time:
+0C6E E544       241                    mov A, Soak_Time
+0C70            241            
+0C70 20FA08     241                    jb KEY.2, Dec_Soak_Time
+0C73 30FAFD     241            jnb KEY.2, $
+0C76 04         241                    inc A
+0C77 B45B0C     241                    cjne A, #91, Done_Soak_Time
+0C7A 14         241                    dec A
+0C7B            241            Dec_Soak_Time:  
+0C7B 20FB08     241                jb KEY.3, Done_Soak_Time
+0C7E 30FBFD     241                jnb KEY.3, $
+0C81 14         241                    dec A
+0C82 B43B01     241                cjne A, #59, Done_Soak_Time
+0C85 04         241           inc A
+0C86            241            Done_Soak_Time:
+0C86 F544       241                    mov Soak_Time, A
+0C88 85443A     242            mov x, Soak_Time
+0C8B 753B00     242            mov x+1, #0
+0C8E 12001E     242            lcall hex2bcd
+0C91 9009A0     242            mov dptr, #myLUT
+0C94            242            ; Display Digit 0
+0C94 E53E       242       mov A, bcd+0
+0C96 540F       242       anl a, #0fh
+0C98 93         242       movc A, @A+dptr
+0C99 F58E       242       mov HEX4, A
+0C9B            242            ; Display Digit 1
+0C9B E53E       242       mov A, bcd+0
+0C9D C4         242       swap a
+0C9E 540F       242       anl a, #0fh
+0CA0 93         242       movc A, @A+dptr
+0CA1 F58F       242       mov HEX5, A    
+0CA3            242       ; Display Digit 2
+0CA3 E53F       242       mov A, bcd+1
+0CA5 540F       242       anl a, #0fh
+0CA7 6006       242       jz Ender_Soak_Time
+0CA9 93         242       movc A, @A+dptr
+0CAA F596       242       mov HEX6, A
+0CAC 020CB2     242       jmp Exit_Soak_Time
+0CAF            242       Ender_Soak_Time:
+0CAF 7596FF     242       mov HEX6, #0FFH
+0CB2            242       Exit_Soak_Time:
+0CB2 22         243            ret
+0CB3            244                    
+0CB3            245   END
+=======
 0A90             60   CSEG
 0A90             61   
 0A90             62   ;Stops Everything until switch 1 is turned back on (Not Done)
@@ -834,3 +1184,4 @@
 0CB0 22         231            ret
 0CB1            232                    
 0CB1            233   END
+>>>>>>> bc051e436cc49834f6c17e532a2c24668e1ccbe4
