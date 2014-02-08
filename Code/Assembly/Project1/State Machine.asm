@@ -17,7 +17,7 @@ $include(LCDlib.asm)
 $include(DisplayandMacros.asm)	
 $include(adc_functions.asm)
 $include(HeatingandTimer.asm)
-$include(serial.asm)
+$include(Serial.asm)
 		
 DSEG at 30H
 	;ADC STUFF
@@ -105,7 +105,7 @@ Idle:
 	clr Ready
 	clr c
 	mov a, Soak_Temp
-	subb a, #25
+	subb a, #32
 	mov Soak_Temp, a
 	ljmp Preheat_Soak
 	
@@ -156,12 +156,12 @@ Preheat_Soak:
 	mov Target_Temp, Soak_Temp
 	jnb Ready, PreHeat_Soak
 	clr Ready
-	mov R5, #50
+	mov R5, #40
 X6:	lcall Wait
 	cpl LEDRA.5
 	djnz R5, X6
 	mov a, Target_Temp
-	Add a, #25
+	Add a, #32
 	mov Target_Temp, a
 Preheat_Soak0:	
 	jnb Ready, PreHeat_Soak0

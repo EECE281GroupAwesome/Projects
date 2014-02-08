@@ -11,9 +11,9 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 # Global Variables
-xsize=100
+xsize=500
 file = open('log_dump.dat', 'w')
-file.write(time.strftime("%d/%m:%Y"))
+#file.write(time.strftime("%d/%m:%Y"))
     
 # configure the serial port
 ser = serial.Serial(

@@ -106,7 +106,7 @@ Idle:
 	clr Ready
 	clr c
 	mov a, Soak_Temp
-	subb a, #32
+	subb a, #31
 	mov Soak_Temp, a
 	ljmp Preheat_Soak
 	
@@ -157,12 +157,12 @@ Preheat_Soak:
 	mov Target_Temp, Soak_Temp
 	jnb Ready, PreHeat_Soak
 	clr Ready
-	mov R5, #50
+	mov R5, #45
 X6:	lcall Wait
 	cpl LEDRA.5
 	djnz R5, X6
 	mov a, Target_Temp
-	Add a, #32
+	Add a, #31
 	mov Target_Temp, a
 Preheat_Soak0:	
 	jnb Ready, PreHeat_Soak0
@@ -175,7 +175,7 @@ Preheat_Soak0:
 WaitSoak:
 	lcall display_time
 	mov a, seconds
-	cjne a, #5, NotFive
+	cjne a, #7, NotFive
 	mov target_Temp, Reflow_Temp
 NotFive:	
 	jnb finished, WaitSoak
@@ -223,6 +223,7 @@ WaitCool:
 Done:
 	setb LEDG.7
 	jb Key.1, Done
+	jnb Key.1, $
 	mov LEDG, #0
 	ljmp Idle
 		

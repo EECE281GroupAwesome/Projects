@@ -132,6 +132,18 @@
 0000            131   LCD_RS    BIT  0DAH ; '0' for commands, '1' for data
 0000            132   LCD_ON    BIT  0DBH ; Write '1' to power the LCD
 0000            133   LCD_BLON  BIT  0DCH ; Write '1' to turn on back light
+0000            134   
+0000            135   FLASH_CMD  data 0DBH ; The control bits of the flash memory:
+0000            136   ; bit 0: FL_RST_N  Set to 1 for normal operation
+0000            137   ; bit 1: FL_WE_N
+0000            138   ; bit 2: FL_OE_N
+0000            139   ; bit 3: FL_CE_N
+0000            140   FLASH_DATA data 0DCH ; 8-bit data bus of flash memory.
+0000            141   FLASH_MOD  data 0DDH ; 0xff makes FLASH_DATA output.  0x00 makes FLASH_DATA input.
+0000            142   FLASH_ADD0 data 0E1H ; address bits 0 to 7.
+0000            143   FLASH_ADD1 data 0E2H ; address bits 8 to 15.
+0000            144   FLASH_ADD2 data 0E3H ; address bits 16 to 21.
+0000            145   
 0000              2   org 0000H
 0000 75817F       3            mov SP, #7FH
 0003 020AE5       4            ljmp PowerOff
@@ -543,7 +555,7 @@
 0B3E C200       106            clr Ready
 0B40 C3         107            clr c
 0B41 E543       108            mov a, Soak_Temp
-0B43 9420       109            subb a, #32
+0B43 941F       109            subb a, #31
 0B45 F543       110            mov Soak_Temp, a
 0B47 020B82     111            ljmp Preheat_Soak
 0B4A            112            
@@ -554,25 +566,25 @@
 0B4A            117   ;------------------------------------------------------------------
 0B4A            118   Set_Soak_Temp:
 0B4A 754D08     119            mov LCD_state, #8
-0B4D 120C9C     120            lcall Set_Soak_Temp_Relay
+0B4D 120C9F     120            lcall Set_Soak_Temp_Relay
 0B50 20ECF7     121            jb SWA.4, Set_Soak_Temp
 0B53 1208DC     122            lcall clear_hex
 0B56 80C8       123            sjmp Idle
 0B58            124   Set_Soak_Time:
 0B58 754D05     125            mov LCD_state, #5
-0B5B 120CE1     126            lcall Set_Soak_Time_Relay
+0B5B 120CE4     126            lcall Set_Soak_Time_Relay
 0B5E 20EBF7     127            jb SWA.3, Set_Soak_Time
 0B61 1208DC     128            lcall clear_hex
 0B64 80BA       129            Sjmp Idle
 0B66            130   Set_Reflow_Temp:
 0B66 754D07     131                    mov LCD_state, #7
-0B69 120C57     132            lcall Set_Reflow_Temp_Relay
+0B69 120C5A     132            lcall Set_Reflow_Temp_Relay
 0B6C 20EAF7     133            jb SWA.2, Set_Reflow_Temp
 0B6F 1208DC     134            lcall clear_hex
 0B72 80AC       135            Sjmp Idle
 0B74            136   Set_Reflow_Time:
 0B74 754D06     137                    mov LCD_state, #6
-0B77 120C12     138            lcall Set_Reflow_Time_Relay     
+0B77 120C15     138            lcall Set_Reflow_Time_Relay     
 0B7A 20E9F7     139            jb SWA.1, Set_Reflow_Time
 0B7D 1208DC     140            lcall clear_hex
 0B80 809E       141            Sjmp Idle
@@ -594,12 +606,12 @@
 0B87 854345     157            mov Target_Temp, Soak_Temp
 0B8A 3000F5     158            jnb Ready, PreHeat_Soak
 0B8D C200       159            clr Ready
-0B8F 7D32       160            mov R5, #50
+0B8F 7D2D       160            mov R5, #45
 0B91 120912     161   X6:      lcall Wait
 0B94 B2ED       162            cpl LEDRA.5
 0B96 DDF9       163            djnz R5, X6
 0B98 E545       164            mov a, Target_Temp
-0B9A 2420       165            Add a, #32
+0B9A 241F       165            Add a, #31
 0B9C F545       166            mov Target_Temp, a
 0B9E            167   Preheat_Soak0:   
 0B9E 3000FD     168            jnb Ready, PreHeat_Soak0
@@ -612,7 +624,7 @@
 0BAE            175   WaitSoak:
 0BAE 1208E9     176            lcall display_time
 0BB1 E537       177            mov a, seconds
-0BB3 B40503     178            cjne a, #5, NotFive
+0BB3 B40703     178            cjne a, #7, NotFive
 0BB6 854145     179            mov target_Temp, Reflow_Temp
 0BB9            180   NotFive:         
 0BB9 3001F2     181            jnb finished, WaitSoak
@@ -660,180 +672,181 @@
 0C07            223   Done:
 0C07 D2FF       224            setb LEDG.7
 0C09 20F9FB     225            jb Key.1, Done
-0C0C 75F800     226            mov LEDG, #0
-0C0F 020B20     227            ljmp Idle
-0C12            228                    
-0C12            229   Set_Reflow_Time_Relay:
-0C12            230            Inc_Reflow_Time:
-0C12 E542       230                    mov A, Reflow_Time
-0C14            230            
-0C14 20FA08     230                    jb KEY.2, Dec_Reflow_Time
-0C17 30FAFD     230            jnb KEY.2, $
-0C1A 04         230                    inc A
-0C1B B42E0C     230                    cjne A, #46, Done_Reflow_Time
-0C1E 14         230                    dec A
-0C1F            230            Dec_Reflow_Time:        
-0C1F 20FB08     230                jb KEY.3, Done_Reflow_Time
-0C22 30FBFD     230                jnb KEY.3, $
-0C25 14         230                    dec A
-0C26 B41D01     230                cjne A, #29, Done_Reflow_Time
-0C29 04         230           inc A
-0C2A            230            Done_Reflow_Time:
-0C2A F542       230                    mov Reflow_Time, A
-0C2C 85423A     231            mov x, Reflow_Time
-0C2F 753B00     231            mov x+1, #0
-0C32 12001E     231            lcall hex2bcd
-0C35 9009EB     231            mov dptr, #myLUT
-0C38            231            ; Display Digit 0
-0C38 E53E       231       mov A, bcd+0
-0C3A 540F       231       anl a, #0fh
-0C3C 93         231       movc A, @A+dptr
-0C3D F58E       231       mov HEX4, A
-0C3F            231            ; Display Digit 1
-0C3F E53E       231       mov A, bcd+0
-0C41 C4         231       swap a
-0C42 540F       231       anl a, #0fh
-0C44 93         231       movc A, @A+dptr
-0C45 F58F       231       mov HEX5, A    
-0C47            231       ; Display Digit 2
-0C47 E53F       231       mov A, bcd+1
-0C49 540F       231       anl a, #0fh
-0C4B 6006       231       jz Ender_Reflow_Time
-0C4D 93         231       movc A, @A+dptr
-0C4E F596       231       mov HEX6, A
-0C50 020C56     231       jmp Exit_Reflow_Time
-0C53            231       Ender_Reflow_Time:
-0C53 7596FF     231       mov HEX6, #0FFH
-0C56            231       Exit_Reflow_Time:
-0C56 22         232            ret     
-0C57            233   Set_Reflow_Temp_Relay:
-0C57            234            Inc_Reflow_Temp:
-0C57 E541       234                    mov A, Reflow_Temp
-0C59            234            
-0C59 20FA08     234                    jb KEY.2, Dec_Reflow_Temp
-0C5C 30FAFD     234            jnb KEY.2, $
-0C5F 04         234                    inc A
-0C60 B4E70C     234                    cjne A, #231, Done_Reflow_Temp
-0C63 14         234                    dec A
-0C64            234            Dec_Reflow_Temp:        
-0C64 20FB08     234                jb KEY.3, Done_Reflow_Temp
-0C67 30FBFD     234                jnb KEY.3, $
-0C6A 14         234                    dec A
-0C6B B4C701     234                cjne A, #199, Done_Reflow_Temp
-0C6E 04         234           inc A
-0C6F            234            Done_Reflow_Temp:
-0C6F F541       234                    mov Reflow_Temp, A
-0C71 85413A     235            mov x, Reflow_Temp
-0C74 753B00     235            mov x+1, #0
-0C77 12001E     235            lcall hex2bcd
-0C7A 9009EB     235            mov dptr, #myLUT
-0C7D            235            ; Display Digit 0
-0C7D E53E       235       mov A, bcd+0
-0C7F 540F       235       anl a, #0fh
-0C81 93         235       movc A, @A+dptr
-0C82 F58E       235       mov HEX4, A
-0C84            235            ; Display Digit 1
-0C84 E53E       235       mov A, bcd+0
-0C86 C4         235       swap a
-0C87 540F       235       anl a, #0fh
-0C89 93         235       movc A, @A+dptr
-0C8A F58F       235       mov HEX5, A    
-0C8C            235       ; Display Digit 2
-0C8C E53F       235       mov A, bcd+1
-0C8E 540F       235       anl a, #0fh
-0C90 6006       235       jz Ender_Reflow_Temp
-0C92 93         235       movc A, @A+dptr
-0C93 F596       235       mov HEX6, A
-0C95 020C9B     235       jmp Exit_Reflow_Temp
-0C98            235       Ender_Reflow_Temp:
-0C98 7596FF     235       mov HEX6, #0FFH
-0C9B            235       Exit_Reflow_Temp:
-0C9B 22         236            ret     
-0C9C            237   Set_Soak_Temp_Relay:     
-0C9C            238            Inc_Soak_Temp:
-0C9C E543       238                    mov A, Soak_Temp
-0C9E            238            
-0C9E 20FA08     238                    jb KEY.2, Dec_Soak_Temp
-0CA1 30FAFD     238            jnb KEY.2, $
-0CA4 04         238                    inc A
-0CA5 B4A50C     238                    cjne A, #165, Done_Soak_Temp
-0CA8 14         238                    dec A
-0CA9            238            Dec_Soak_Temp:  
-0CA9 20FB08     238                jb KEY.3, Done_Soak_Temp
-0CAC 30FBFD     238                jnb KEY.3, $
-0CAF 14         238                    dec A
-0CB0 B48601     238                cjne A, #134, Done_Soak_Temp
-0CB3 04         238           inc A
-0CB4            238            Done_Soak_Temp:
-0CB4 F543       238                    mov Soak_Temp, A
-0CB6 85433A     239            mov x, Soak_Temp
-0CB9 753B00     239            mov x+1, #0
-0CBC 12001E     239            lcall hex2bcd
-0CBF 9009EB     239            mov dptr, #myLUT
-0CC2            239            ; Display Digit 0
-0CC2 E53E       239       mov A, bcd+0
-0CC4 540F       239       anl a, #0fh
-0CC6 93         239       movc A, @A+dptr
-0CC7 F58E       239       mov HEX4, A
-0CC9            239            ; Display Digit 1
-0CC9 E53E       239       mov A, bcd+0
-0CCB C4         239       swap a
-0CCC 540F       239       anl a, #0fh
-0CCE 93         239       movc A, @A+dptr
-0CCF F58F       239       mov HEX5, A    
-0CD1            239       ; Display Digit 2
-0CD1 E53F       239       mov A, bcd+1
-0CD3 540F       239       anl a, #0fh
-0CD5 6006       239       jz Ender_Soak_Temp
-0CD7 93         239       movc A, @A+dptr
-0CD8 F596       239       mov HEX6, A
-0CDA 020CE0     239       jmp Exit_Soak_Temp
-0CDD            239       Ender_Soak_Temp:
-0CDD 7596FF     239       mov HEX6, #0FFH
-0CE0            239       Exit_Soak_Temp:
-0CE0 22         240            ret     
-0CE1            241   Set_Soak_Time_Relay:
-0CE1            242            Inc_Soak_Time:
-0CE1 E544       242                    mov A, Soak_Time
-0CE3            242            
-0CE3 20FA08     242                    jb KEY.2, Dec_Soak_Time
-0CE6 30FAFD     242            jnb KEY.2, $
-0CE9 04         242                    inc A
-0CEA B45B0C     242                    cjne A, #91, Done_Soak_Time
-0CED 14         242                    dec A
-0CEE            242            Dec_Soak_Time:  
-0CEE 20FB08     242                jb KEY.3, Done_Soak_Time
-0CF1 30FBFD     242                jnb KEY.3, $
-0CF4 14         242                    dec A
-0CF5 B43B01     242                cjne A, #59, Done_Soak_Time
-0CF8 04         242           inc A
-0CF9            242            Done_Soak_Time:
-0CF9 F544       242                    mov Soak_Time, A
-0CFB 85443A     243            mov x, Soak_Time
-0CFE 753B00     243            mov x+1, #0
-0D01 12001E     243            lcall hex2bcd
-0D04 9009EB     243            mov dptr, #myLUT
-0D07            243            ; Display Digit 0
-0D07 E53E       243       mov A, bcd+0
-0D09 540F       243       anl a, #0fh
-0D0B 93         243       movc A, @A+dptr
-0D0C F58E       243       mov HEX4, A
-0D0E            243            ; Display Digit 1
-0D0E E53E       243       mov A, bcd+0
-0D10 C4         243       swap a
-0D11 540F       243       anl a, #0fh
-0D13 93         243       movc A, @A+dptr
-0D14 F58F       243       mov HEX5, A    
-0D16            243       ; Display Digit 2
-0D16 E53F       243       mov A, bcd+1
-0D18 540F       243       anl a, #0fh
-0D1A 6006       243       jz Ender_Soak_Time
-0D1C 93         243       movc A, @A+dptr
-0D1D F596       243       mov HEX6, A
-0D1F 020D25     243       jmp Exit_Soak_Time
-0D22            243       Ender_Soak_Time:
-0D22 7596FF     243       mov HEX6, #0FFH
-0D25            243       Exit_Soak_Time:
-0D25 22         244            ret
-0D26            245                    
-0D26            246   END
+0C0C 30F9FD     226            jnb Key.1, $
+0C0F 75F800     227            mov LEDG, #0
+0C12 020B20     228            ljmp Idle
+0C15            229                    
+0C15            230   Set_Reflow_Time_Relay:
+0C15            231            Inc_Reflow_Time:
+0C15 E542       231                    mov A, Reflow_Time
+0C17            231            
+0C17 20FA08     231                    jb KEY.2, Dec_Reflow_Time
+0C1A 30FAFD     231            jnb KEY.2, $
+0C1D 04         231                    inc A
+0C1E B42E0C     231                    cjne A, #46, Done_Reflow_Time
+0C21 14         231                    dec A
+0C22            231            Dec_Reflow_Time:        
+0C22 20FB08     231                jb KEY.3, Done_Reflow_Time
+0C25 30FBFD     231                jnb KEY.3, $
+0C28 14         231                    dec A
+0C29 B41D01     231                cjne A, #29, Done_Reflow_Time
+0C2C 04         231           inc A
+0C2D            231            Done_Reflow_Time:
+0C2D F542       231                    mov Reflow_Time, A
+0C2F 85423A     232            mov x, Reflow_Time
+0C32 753B00     232            mov x+1, #0
+0C35 12001E     232            lcall hex2bcd
+0C38 9009EB     232            mov dptr, #myLUT
+0C3B            232            ; Display Digit 0
+0C3B E53E       232       mov A, bcd+0
+0C3D 540F       232       anl a, #0fh
+0C3F 93         232       movc A, @A+dptr
+0C40 F58E       232       mov HEX4, A
+0C42            232            ; Display Digit 1
+0C42 E53E       232       mov A, bcd+0
+0C44 C4         232       swap a
+0C45 540F       232       anl a, #0fh
+0C47 93         232       movc A, @A+dptr
+0C48 F58F       232       mov HEX5, A    
+0C4A            232       ; Display Digit 2
+0C4A E53F       232       mov A, bcd+1
+0C4C 540F       232       anl a, #0fh
+0C4E 6006       232       jz Ender_Reflow_Time
+0C50 93         232       movc A, @A+dptr
+0C51 F596       232       mov HEX6, A
+0C53 020C59     232       jmp Exit_Reflow_Time
+0C56            232       Ender_Reflow_Time:
+0C56 7596FF     232       mov HEX6, #0FFH
+0C59            232       Exit_Reflow_Time:
+0C59 22         233            ret     
+0C5A            234   Set_Reflow_Temp_Relay:
+0C5A            235            Inc_Reflow_Temp:
+0C5A E541       235                    mov A, Reflow_Temp
+0C5C            235            
+0C5C 20FA08     235                    jb KEY.2, Dec_Reflow_Temp
+0C5F 30FAFD     235            jnb KEY.2, $
+0C62 04         235                    inc A
+0C63 B4E70C     235                    cjne A, #231, Done_Reflow_Temp
+0C66 14         235                    dec A
+0C67            235            Dec_Reflow_Temp:        
+0C67 20FB08     235                jb KEY.3, Done_Reflow_Temp
+0C6A 30FBFD     235                jnb KEY.3, $
+0C6D 14         235                    dec A
+0C6E B4C701     235                cjne A, #199, Done_Reflow_Temp
+0C71 04         235           inc A
+0C72            235            Done_Reflow_Temp:
+0C72 F541       235                    mov Reflow_Temp, A
+0C74 85413A     236            mov x, Reflow_Temp
+0C77 753B00     236            mov x+1, #0
+0C7A 12001E     236            lcall hex2bcd
+0C7D 9009EB     236            mov dptr, #myLUT
+0C80            236            ; Display Digit 0
+0C80 E53E       236       mov A, bcd+0
+0C82 540F       236       anl a, #0fh
+0C84 93         236       movc A, @A+dptr
+0C85 F58E       236       mov HEX4, A
+0C87            236            ; Display Digit 1
+0C87 E53E       236       mov A, bcd+0
+0C89 C4         236       swap a
+0C8A 540F       236       anl a, #0fh
+0C8C 93         236       movc A, @A+dptr
+0C8D F58F       236       mov HEX5, A    
+0C8F            236       ; Display Digit 2
+0C8F E53F       236       mov A, bcd+1
+0C91 540F       236       anl a, #0fh
+0C93 6006       236       jz Ender_Reflow_Temp
+0C95 93         236       movc A, @A+dptr
+0C96 F596       236       mov HEX6, A
+0C98 020C9E     236       jmp Exit_Reflow_Temp
+0C9B            236       Ender_Reflow_Temp:
+0C9B 7596FF     236       mov HEX6, #0FFH
+0C9E            236       Exit_Reflow_Temp:
+0C9E 22         237            ret     
+0C9F            238   Set_Soak_Temp_Relay:     
+0C9F            239            Inc_Soak_Temp:
+0C9F E543       239                    mov A, Soak_Temp
+0CA1            239            
+0CA1 20FA08     239                    jb KEY.2, Dec_Soak_Temp
+0CA4 30FAFD     239            jnb KEY.2, $
+0CA7 04         239                    inc A
+0CA8 B4A50C     239                    cjne A, #165, Done_Soak_Temp
+0CAB 14         239                    dec A
+0CAC            239            Dec_Soak_Temp:  
+0CAC 20FB08     239                jb KEY.3, Done_Soak_Temp
+0CAF 30FBFD     239                jnb KEY.3, $
+0CB2 14         239                    dec A
+0CB3 B48601     239                cjne A, #134, Done_Soak_Temp
+0CB6 04         239           inc A
+0CB7            239            Done_Soak_Temp:
+0CB7 F543       239                    mov Soak_Temp, A
+0CB9 85433A     240            mov x, Soak_Temp
+0CBC 753B00     240            mov x+1, #0
+0CBF 12001E     240            lcall hex2bcd
+0CC2 9009EB     240            mov dptr, #myLUT
+0CC5            240            ; Display Digit 0
+0CC5 E53E       240       mov A, bcd+0
+0CC7 540F       240       anl a, #0fh
+0CC9 93         240       movc A, @A+dptr
+0CCA F58E       240       mov HEX4, A
+0CCC            240            ; Display Digit 1
+0CCC E53E       240       mov A, bcd+0
+0CCE C4         240       swap a
+0CCF 540F       240       anl a, #0fh
+0CD1 93         240       movc A, @A+dptr
+0CD2 F58F       240       mov HEX5, A    
+0CD4            240       ; Display Digit 2
+0CD4 E53F       240       mov A, bcd+1
+0CD6 540F       240       anl a, #0fh
+0CD8 6006       240       jz Ender_Soak_Temp
+0CDA 93         240       movc A, @A+dptr
+0CDB F596       240       mov HEX6, A
+0CDD 020CE3     240       jmp Exit_Soak_Temp
+0CE0            240       Ender_Soak_Temp:
+0CE0 7596FF     240       mov HEX6, #0FFH
+0CE3            240       Exit_Soak_Temp:
+0CE3 22         241            ret     
+0CE4            242   Set_Soak_Time_Relay:
+0CE4            243            Inc_Soak_Time:
+0CE4 E544       243                    mov A, Soak_Time
+0CE6            243            
+0CE6 20FA08     243                    jb KEY.2, Dec_Soak_Time
+0CE9 30FAFD     243            jnb KEY.2, $
+0CEC 04         243                    inc A
+0CED B45B0C     243                    cjne A, #91, Done_Soak_Time
+0CF0 14         243                    dec A
+0CF1            243            Dec_Soak_Time:  
+0CF1 20FB08     243                jb KEY.3, Done_Soak_Time
+0CF4 30FBFD     243                jnb KEY.3, $
+0CF7 14         243                    dec A
+0CF8 B43B01     243                cjne A, #59, Done_Soak_Time
+0CFB 04         243           inc A
+0CFC            243            Done_Soak_Time:
+0CFC F544       243                    mov Soak_Time, A
+0CFE 85443A     244            mov x, Soak_Time
+0D01 753B00     244            mov x+1, #0
+0D04 12001E     244            lcall hex2bcd
+0D07 9009EB     244            mov dptr, #myLUT
+0D0A            244            ; Display Digit 0
+0D0A E53E       244       mov A, bcd+0
+0D0C 540F       244       anl a, #0fh
+0D0E 93         244       movc A, @A+dptr
+0D0F F58E       244       mov HEX4, A
+0D11            244            ; Display Digit 1
+0D11 E53E       244       mov A, bcd+0
+0D13 C4         244       swap a
+0D14 540F       244       anl a, #0fh
+0D16 93         244       movc A, @A+dptr
+0D17 F58F       244       mov HEX5, A    
+0D19            244       ; Display Digit 2
+0D19 E53F       244       mov A, bcd+1
+0D1B 540F       244       anl a, #0fh
+0D1D 6005       244       jz Ender_Soak_Time
+0D1F 93         244       movc A, @A+dptr
+0D20 F596       244       mov HEX6, A
+0D22 020D27     244       jmp Exit_Soak_Time
+0D25            244       Ender_Soak_Time:
+0D25 7596FF     244       mov HEX6, #0FFH
+0D28            244       Exit_Soak_Time:
+0D28 22         245            ret
+0D29            246                    
+0D29            247   END
