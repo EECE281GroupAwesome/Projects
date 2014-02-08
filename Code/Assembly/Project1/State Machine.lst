@@ -511,9 +511,9 @@
 0A90 759AFF      64            mov P0MOD, #0xFF
 0A93             65            ;Reset standard times
 0A93 7541DC      66            mov Reflow_Temp, #ReflowConst
-0A96 754205      67            mov Reflow_Time, #5  ;30 real value
+0A96 75421E      67            mov Reflow_Time, #30  ;30 real value
 0A99 754396      68            mov Soak_Temp,   #SoakConst
-0A9C 75440A      69            mov Soak_Time,   #10 ; 75 real value
+0A9C 75444B      69            mov Soak_Time,   #75 ; 75 real value
 0A9F E59E        70            mov a, SWC
 0AA1 C2AF        71            clr EA  
 0AA3 30E1EA      72            jnb acc.1, PowerOff
@@ -824,10 +824,10 @@
 0CA1            230       ; Display Digit 2
 0CA1 E53F       230       mov A, bcd+1
 0CA3 540F       230       anl a, #0fh
-0CA5 6006       230       jz Ender_Soak_Time
+0CA5 6005       230       jz Ender_Soak_Time
 0CA7 93         230       movc A, @A+dptr
 0CA8 F596       230       mov HEX6, A
-0CAA 020CB0     230       jmp Exit_Soak_Time
+0CAA 020CAF     230       jmp Exit_Soak_Time
 0CAD            230       Ender_Soak_Time:
 0CAD 7596FF     230       mov HEX6, #0FFH
 0CB0            230       Exit_Soak_Time:
