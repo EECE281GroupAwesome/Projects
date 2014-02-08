@@ -13,8 +13,6 @@ import matplotlib.animation as animation
 # Global Variables
 xsize=100
 file = open('log_dump.dat', 'w')
-start = time.time()
-file.write(str(start) + '\n')
     
 # configure the serial port
 ser = serial.Serial(
@@ -32,7 +30,7 @@ def data_gen():
     t = data_gen.t
     while True: 
        t+=1
-       temp = ser.readline()
+       temp = float(ser.readline())
        val = temp[:3]
        file.write(val+'\n')
        val = float(val)
@@ -51,9 +49,6 @@ def run(data):
     return line,
 
 def onclose():
-    end = time.time()
-    elapsed = (end - start)    
-    file.write(str(elapsed) + '\n')
     #subprocess.call('python GraphTurtle.py')
     sys.exit(0)
 
