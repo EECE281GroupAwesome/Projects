@@ -60,9 +60,13 @@ display_Time:
     ; Display Digit 2
     mov A, bcd+1
     anl a, #0fh
+    jz X7
     movc A, @A+dptr
     mov HEX6, A
     ret   
+X7:
+    mov HEX6, #0xFF
+    ret
   
 Wait:
 	mov R3, #100

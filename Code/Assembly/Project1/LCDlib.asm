@@ -252,12 +252,14 @@ Preheat_Display:
 	push acc
 	mov dptr, #State2_LUT
 	lcall State_Display
+	lcall Target_Temp_display
 	pop acc
 	ret
 Reflow_Display:
 	push acc
 	mov dptr, #State3_LUT
 	lcall State_Display
+	lcall Target_Temp_display
 	pop acc
 	ret
 	
@@ -266,6 +268,7 @@ Soak_Display:
 	
 	mov dptr, #State4_LUT
 	lcall State_Display
+	lcall Target_Temp_display
 	
 	pop acc
 	ret
@@ -301,7 +304,8 @@ SetsoakTemp_Display:
 Cooling_Display:
 	push acc
 	mov dptr, #State9_LUT
-	lcall State_Display
+	lcall State_Display\
+	lcall Target_Temp_display
 	pop acc
 	ret
 	
@@ -351,7 +355,7 @@ Temp_display:
 	push acc
 	push psw
 
-	mov x+0, target_temp
+	mov x+0, oven_temp
 
 	LCD_cursor(Line2+11)
 	
@@ -370,12 +374,34 @@ Temp_display:
 	pop psw
 	pop acc
 	ret
+	
+Target_Temp_display:
+	push acc
+	push psw
+
+	mov x+0, target_temp
+
+	LCD_cursor(Line1+11)
+	
+	lcall hex2bcd
+	
+	lcall ascii_display
+
+	LCD_write(LCD+2)
+	LCD_write(LCD+1)
+	LCD_write(LCD+0)
+	LCD_Write(Degree)
+	LCD_Write(#'C')	
+
+	pop psw
+	pop acc
+	ret
 
 Thermo_update:
 
 	mov dptr, #Thermo_LUT
 	LCD_cursor(line2)
-	mov x+0, target_temp
+	mov x+0, oven_temp
 	load_y(24)
 	lcall x_lt_y
 	jb mf, toosmall
