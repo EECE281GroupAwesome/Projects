@@ -112,6 +112,7 @@ Idle:
 	clr Ready
 	clr c
 	mov a, Soak_Temp
+	;How early to shut off heating to account for inertia (31)
 	subb a, #31
 	mov Soak_Temp, a
 	ljmp Preheat_Soak
@@ -167,6 +168,7 @@ Preheat_Soak_:
 	mov Target_Temp, Soak_Temp
 	jnb Ready, PreHeat_Soak
 	clr Ready
+	;Wait about 15 seconds to allow heat to plateau
 	mov R5, #45
 X6:	lcall Wait
 	jnb killBit, X6_
@@ -194,6 +196,7 @@ WaitSoak:
 WaitSoak_:
 	lcall display_time
 	mov a, seconds
+	;Start ramping a bit before done soaking (takes awhile to take effect)
 	cjne a, #7, NotFive
 	mov target_Temp, Reflow_Temp
 NotFive:	
