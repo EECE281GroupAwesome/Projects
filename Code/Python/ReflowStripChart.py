@@ -6,14 +6,17 @@
 #
 # @author: Addison BG
 #
-import time, sys, serial, time, subprocess
+import datetime, sys, serial, time, subprocess
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 # Global Variables
 xsize=500
+myList = []
+theDate = datetime.date.today()
+myList.append(theDate)
 file = open('log_dump.dat', 'w')
-#file.write(time.strftime("%d/%m:%Y"))
+file.write(str(myList[0]))
     
 # configure the serial port
 ser = serial.Serial(
