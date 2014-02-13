@@ -519,367 +519,379 @@
 0AEC 75817F      65            mov SP, #7FH
 0AEF 759AFF      66            mov P0MOD, #0xFF
 0AF2 759DFF      67            mov P3MOD, #0xFF
-0AF5             68            ;Reset standard times
-0AF5 7541DC      69            mov Reflow_Temp, #ReflowConst
-0AF8 75421E      70            mov Reflow_Time, #30  ;30 real value
-0AFB 754396      71            mov Soak_Temp,   #SoakConst
-0AFE 75444B      72            mov Soak_Time,   #75 ; 75 real value
-0B01 1208DC      73            lcall Clear_Hex
-0B04 754D0B      74            mov LCD_State, #11   ; poweroff state
-0B07 754500      75            mov Target_Temp, #0
-0B0A E59E        76            mov a, SWC
-0B0C 30E1DD      77            jnb acc.1, PowerOff
-0B0F D2AF        78            setb EA
-0B11 D201        79            setb Finished   
-0B13 120422      80            lcall init_lcd
-0B16 020B19      81            ljmp PowerOn
-0B19             82   ;Initial Set up  on reboot
-0B19             83   PowerOn:
-0B19 1209B0      84            lcall ADC_Init
-0B1C 1209F5      85            lcall Initialize_Timer
-0B1F             86            ;setb EA
-0B1F             87            ;Turn off LED's
-0B1F 75E800      88            mov LEDRA, #0
-0B22 759500      89            mov LEDRB, #0
-0B25 759E00      90            mov LEDRC, #0
-0B28 75F800      91            mov LEDG, #0
-0B2B 754D01      92            mov LCD_state, #1
-0B2E D2CA        93            setb TR2
-0B30 020B33      94            ljmp Idle       
-0B33             95            
-0B33             96   ;awaiting process loop
-0B33             97   Idle:
-0B33 754D01      98            mov LCD_state, #1
-0B36 754500      99            mov Target_Temp, #0
-0B39 C202       100            clr timing
-0B3B D2A9       101            setb ET0
-0B3D D2F9       102            setb LEDG.1
-0B3F            103            ;Stop Timer
-0B3F            104            ;set things while switch is up, return by flicking down
-0B3F 20E948     105            jb SWA.1, Set_Reflow_Time
-0B42 20EA37     106            jb SWA.2, Set_Reflow_Temp
-0B45 20EB23     107            jb SWA.3, Set_Soak_Time
-0B48 20EC12     108            jb SWA.4, Set_Soak_Temp
-0B4B 20F9E5     109            jb Key.1, Idle
-0B4E            110            ;ready to start process
-0B4E 12091F     111            lcall beep
-0B51 C200       112            clr Ready
-0B53 C3         113            clr c
-0B54 E543       114            mov a, Soak_Temp
-0B56 941F       115            subb a, #31
-0B58 F543       116            mov Soak_Temp, a
-0B5A 020B98     117            ljmp Preheat_Soak
-0B5D            118            
-0B5D            119   ;------------------------------------------------------------------      
-0B5D            120   ;Setting Times and Temperatures (Not Done)
-0B5D            121   ;   -had thought maybe macro for time and temp, that takes bounds 
-0B5D            122   ;   so the time or temp is within reason
-0B5D            123   ;------------------------------------------------------------------
-0B5D            124   Set_Soak_Temp:
-0B5D 754D08     125            mov LCD_state, #8
-0B60 120CDF     126            lcall Set_Soak_Temp_Relay
-0B63 20ECF7     127            jb SWA.4, Set_Soak_Temp
-0B66 1208DC     128            lcall clear_hex
-0B69 80C8       129            sjmp Idle
-0B6B            130   Set_Soak_Time:
-0B6B 7597FF     131            mov HEX7, #0FFH
-0B6E 754D05     132            mov LCD_state, #5
-0B71 120D24     133            lcall Set_Soak_Time_Relay
-0B74 20EBF4     134            jb SWA.3, Set_Soak_Time
-0B77 1208DC     135            lcall clear_hex
-0B7A 80B7       136            Sjmp Idle
-0B7C            137   Set_Reflow_Temp:
-0B7C 754D07     138                    mov LCD_state, #7
-0B7F 120C9A     139            lcall Set_Reflow_Temp_Relay
-0B82 20EAF7     140            jb SWA.2, Set_Reflow_Temp
-0B85 1208DC     141            lcall clear_hex
-0B88 80A9       142            Sjmp Idle
-0B8A            143   Set_Reflow_Time:
-0B8A 754D06     144                    mov LCD_state, #6
-0B8D 120C55     145            lcall Set_Reflow_Time_Relay     
-0B90 20E9F7     146            jb SWA.1, Set_Reflow_Time
-0B93 1208DC     147            lcall clear_hex
-0B96 809B       148            Sjmp Idle
-0B98            149   
-0B98            150   ;------------------------------------------------------------------      
-0B98            151   ;Actual Progression Through Phases
-0B98            152   ;PRE-HEAT
-0B98            153   ;SOAK
-0B98            154   ;PRE-HEAT
-0B98            155   ;REFLOW
-0B98            156   ;COOLING
-0B98            157   ;DONE
-0B98            158   ;------------------------------------------------------------------
-0B98            159   
-0B98            160   ;Waits for temperature to get above soak temp
-0B98            161   Preheat_Soak:
-0B98 300403     162            jnb killBit, Preheat_Soak_
-0B9B 020AEC     163            ljmp PowerOff
-0B9E            164   Preheat_Soak_:
-0B9E 754D02     165            mov LCD_state, #2 ; preheat
-0BA1 D2FA       166            setb LEDG.2
-0BA3 854345     167            mov Target_Temp, Soak_Temp
-0BA6 3000EF     168            jnb Ready, PreHeat_Soak
-0BA9 C200       169            clr Ready
-0BAB 7D2D       170            mov R5, #45
-0BAD 120912     171   X6:      lcall Wait
-0BB0 300403     172            jnb killBit, X6_
-0BB3 020AEC     173            ljmp PowerOff
-0BB6            174   X6_:
-0BB6 B2ED       175            cpl LEDRA.5
-0BB8 DDF3       176            djnz R5, X6
-0BBA E545       177            mov a, Target_Temp
-0BBC 241F       178            Add a, #31
-0BBE F545       179            mov Target_Temp, a
-0BC0            180   Preheat_Soak0:
-0BC0 300403     181            jnb killBit, Preheat_Soak0_
-0BC3 020AEC     182            ljmp PowerOff
-0BC6            183   Preheat_Soak0_:  
-0BC6 3000F7     184            jnb Ready, PreHeat_Soak0
-0BC9 12091F     185            lcall beep
-0BCC            186   ;Initialize for holding constant
-0BCC D2FB       187            setb LEDG.3
-0BCE 854437     188            mov seconds, Soak_Time+0
-0BD1 754D04     189            mov LCD_state, #4 ;soak 
-0BD4 C201       190            clr finished     
-0BD6            191   WaitSoak:
-0BD6 300403     192            jnb killBit, WaitSoak_
-0BD9 020AEC     193            ljmp PowerOff
-0BDC            194   WaitSoak_:
-0BDC 1208E9     195            lcall display_time
-0BDF E537       196            mov a, seconds
-0BE1 B40703     197            cjne a, #7, NotFive
-0BE4 854145     198            mov target_Temp, Reflow_Temp
-0BE7            199   NotFive:         
-0BE7 3001EC     200            jnb finished, WaitSoak
-0BEA            201   
-0BEA            202   ;Initilize for ramp to Reflow
-0BEA            203            
-0BEA 1208DC     204            lcall clear_hex
-0BED D2FC       205            setb LEDG.4
-0BEF 12091F     206            lcall beep
-0BF2 754D02     207            mov LCD_state, #2 ; preheat
-0BF5 C200       208            clr ready
-0BF7            209            
-0BF7            210   Preheat_Reflow:
-0BF7 300403     211            jnb killBit, Preheat_Reflow_
-0BFA 020AEC     212            ljmp PowerOff
-0BFD            213   Preheat_Reflow_:
-0BFD 3000F7     214            jnb Ready, PreHeat_Reflow
-0C00 12091F     215            lcall beep
-0C03            216   ;Pass Reflow Time, wait for time to expire       
-0C03 D2FD       217            setb LEDG.5
-0C05 854237     218            mov seconds, Reflow_Time+0
-0C08 754D03     219            mov LCD_state, #3 ;reflow
-0C0B C201       220            clr finished
-0C0D            221   WaitReflow:
-0C0D 300403     222            jnb killBit, WaitReflow_
-0C10 020AEC     223            ljmp PowerOff
-0C13            224   WaitReflow_:
-0C13 1208E9     225            lcall display_time      
-0C16 3001F4     226            jnb finished, WaitReflow
-0C19 1208DC     227            lcall clear_hex
-0C1C 12091F     228            lcall beep
-0C1F            229   ;Process Finished, Wait for it to cool
-0C1F            230   Cooling:
-0C1F 754D09     231            mov LCD_state, #9
-0C22 75453C     232            mov Target_Temp, #CoolConst
-0C25 D200       233            setb ready      
-0C27            234   WaitCool:
-0C27 300403     235            jnb killBit, WaitCool_
-0C2A 020AEC     236            ljmp PowerOff
-0C2D            237   WaitCool_:       
-0C2D D2FE       238            setb LEDG.6
-0C2F            239            ;wait for temp to dip below 60 Celcius (Cool Constant)
-0C2F 2000F5     240            jb Ready, WaitCool
-0C32            241            ;set temp to zero
-0C32 754500     242            mov Target_Temp, #0
-0C35            243            ;triple beep
-0C35 12091F     244            lcall beep
-0C38 120912     245            lcall wait
-0C3B 12091F     246            lcall beep
-0C3E 120912     247            lcall wait
-0C41 12091F     248            lcall beep
-0C44            249   ;Cool Enough (just waits PB)
-0C44 754D0A     250                    mov LCD_state, #10      
-0C47            251   Done:
-0C47 D2FF       252            setb LEDG.7
-0C49 20F9FB     253            jb Key.1, Done
-0C4C 30F9FD     254            jnb Key.1, $
-0C4F 75F800     255            mov LEDG, #0
-0C52 020B33     256            ljmp Idle
-0C55            257                    
-0C55            258   Set_Reflow_Time_Relay:
-0C55            259            Inc_Reflow_Time:
-0C55 E542       259                    mov A, Reflow_Time
-0C57            259            
-0C57 20FA08     259                    jb KEY.2, Dec_Reflow_Time
-0C5A 30FAFD     259            jnb KEY.2, $
-0C5D 04         259                    inc A
-0C5E B42E0C     259                    cjne A, #46, Done_Reflow_Time
-0C61 14         259                    dec A
-0C62            259            Dec_Reflow_Time:        
-0C62 20FB08     259                jb KEY.3, Done_Reflow_Time
-0C65 30FBFD     259                jnb KEY.3, $
-0C68 14         259                    dec A
-0C69 B41D01     259                cjne A, #29, Done_Reflow_Time
-0C6C 04         259           inc A
-0C6D            259            Done_Reflow_Time:
-0C6D F542       259                    mov Reflow_Time, A
-0C6F 85423A     260            mov x, Reflow_Time
-0C72 753B00     260            mov x+1, #0
-0C75 12001E     260            lcall hex2bcd
-0C78 9009EB     260            mov dptr, #myLUT
-0C7B            260            ; Display Digit 0
-0C7B E53E       260       mov A, bcd+0
-0C7D 540F       260       anl a, #0fh
-0C7F 93         260       movc A, @A+dptr
-0C80 F58E       260       mov HEX4, A
-0C82            260            ; Display Digit 1
-0C82 E53E       260       mov A, bcd+0
-0C84 C4         260       swap a
-0C85 540F       260       anl a, #0fh
-0C87 93         260       movc A, @A+dptr
-0C88 F58F       260       mov HEX5, A    
-0C8A            260       ; Display Digit 2
-0C8A E53F       260       mov A, bcd+1
-0C8C 540F       260       anl a, #0fh
-0C8E 6006       260       jz Ender_Reflow_Time
-0C90 93         260       movc A, @A+dptr
-0C91 F596       260       mov HEX6, A
-0C93 020C99     260       jmp Exit_Reflow_Time
-0C96            260       Ender_Reflow_Time:
-0C96 7596FF     260       mov HEX6, #0FFH
-0C99            260       Exit_Reflow_Time:
-0C99 22         261            ret     
-0C9A            262   Set_Reflow_Temp_Relay:
-0C9A            263            Inc_Reflow_Temp:
-0C9A E541       263                    mov A, Reflow_Temp
-0C9C            263            
-0C9C 20FA08     263                    jb KEY.2, Dec_Reflow_Temp
-0C9F 30FAFD     263            jnb KEY.2, $
-0CA2 04         263                    inc A
-0CA3 B4E70C     263                    cjne A, #231, Done_Reflow_Temp
-0CA6 14         263                    dec A
-0CA7            263            Dec_Reflow_Temp:        
-0CA7 20FB08     263                jb KEY.3, Done_Reflow_Temp
-0CAA 30FBFD     263                jnb KEY.3, $
-0CAD 14         263                    dec A
-0CAE B4C701     263                cjne A, #199, Done_Reflow_Temp
-0CB1 04         263           inc A
-0CB2            263            Done_Reflow_Temp:
-0CB2 F541       263                    mov Reflow_Temp, A
-0CB4 85413A     264            mov x, Reflow_Temp
-0CB7 753B00     264            mov x+1, #0
-0CBA 12001E     264            lcall hex2bcd
-0CBD 9009EB     264            mov dptr, #myLUT
-0CC0            264            ; Display Digit 0
-0CC0 E53E       264       mov A, bcd+0
-0CC2 540F       264       anl a, #0fh
-0CC4 93         264       movc A, @A+dptr
-0CC5 F58E       264       mov HEX4, A
-0CC7            264            ; Display Digit 1
-0CC7 E53E       264       mov A, bcd+0
-0CC9 C4         264       swap a
-0CCA 540F       264       anl a, #0fh
-0CCC 93         264       movc A, @A+dptr
-0CCD F58F       264       mov HEX5, A    
-0CCF            264       ; Display Digit 2
-0CCF E53F       264       mov A, bcd+1
-0CD1 540F       264       anl a, #0fh
-0CD3 6006       264       jz Ender_Reflow_Temp
-0CD5 93         264       movc A, @A+dptr
-0CD6 F596       264       mov HEX6, A
-0CD8 020CDE     264       jmp Exit_Reflow_Temp
-0CDB            264       Ender_Reflow_Temp:
-0CDB 7596FF     264       mov HEX6, #0FFH
-0CDE            264       Exit_Reflow_Temp:
-0CDE 22         265            ret     
-0CDF            266   Set_Soak_Temp_Relay:     
-0CDF            267            Inc_Soak_Temp:
-0CDF E543       267                    mov A, Soak_Temp
-0CE1            267            
-0CE1 20FA08     267                    jb KEY.2, Dec_Soak_Temp
-0CE4 30FAFD     267            jnb KEY.2, $
-0CE7 04         267                    inc A
-0CE8 B4A50C     267                    cjne A, #165, Done_Soak_Temp
-0CEB 14         267                    dec A
-0CEC            267            Dec_Soak_Temp:  
-0CEC 20FB08     267                jb KEY.3, Done_Soak_Temp
-0CEF 30FBFD     267                jnb KEY.3, $
-0CF2 14         267                    dec A
-0CF3 B48601     267                cjne A, #134, Done_Soak_Temp
-0CF6 04         267           inc A
-0CF7            267            Done_Soak_Temp:
-0CF7 F543       267                    mov Soak_Temp, A
-0CF9 85433A     268            mov x, Soak_Temp
-0CFC 753B00     268            mov x+1, #0
-0CFF 12001E     268            lcall hex2bcd
-0D02 9009EB     268            mov dptr, #myLUT
-0D05            268            ; Display Digit 0
-0D05 E53E       268       mov A, bcd+0
-0D07 540F       268       anl a, #0fh
-0D09 93         268       movc A, @A+dptr
-0D0A F58E       268       mov HEX4, A
-0D0C            268            ; Display Digit 1
-0D0C E53E       268       mov A, bcd+0
-0D0E C4         268       swap a
-0D0F 540F       268       anl a, #0fh
-0D11 93         268       movc A, @A+dptr
-0D12 F58F       268       mov HEX5, A    
-0D14            268       ; Display Digit 2
-0D14 E53F       268       mov A, bcd+1
-0D16 540F       268       anl a, #0fh
-0D18 6006       268       jz Ender_Soak_Temp
-0D1A 93         268       movc A, @A+dptr
-0D1B F596       268       mov HEX6, A
-0D1D 020D23     268       jmp Exit_Soak_Temp
-0D20            268       Ender_Soak_Temp:
-0D20 7596FF     268       mov HEX6, #0FFH
-0D23            268       Exit_Soak_Temp:
-0D23 22         269            ret     
-0D24            270   Set_Soak_Time_Relay:
-0D24            271            Inc_Soak_Time:
-0D24 E544       271                    mov A, Soak_Time
-0D26            271            
-0D26 20FA08     271                    jb KEY.2, Dec_Soak_Time
-0D29 30FAFD     271            jnb KEY.2, $
-0D2C 04         271                    inc A
-0D2D B45B0C     271                    cjne A, #91, Done_Soak_Time
-0D30 14         271                    dec A
-0D31            271            Dec_Soak_Time:  
-0D31 20FB08     271                jb KEY.3, Done_Soak_Time
-0D34 30FBFD     271                jnb KEY.3, $
-0D37 14         271                    dec A
-0D38 B43B01     271                cjne A, #59, Done_Soak_Time
-0D3B 04         271           inc A
-0D3C            271            Done_Soak_Time:
-0D3C F544       271                    mov Soak_Time, A
-0D3E 85443A     272            mov x, Soak_Time
-0D41 753B00     272            mov x+1, #0
-0D44 12001E     272            lcall hex2bcd
-0D47 9009EB     272            mov dptr, #myLUT
-0D4A            272            ; Display Digit 0
-0D4A E53E       272       mov A, bcd+0
-0D4C 540F       272       anl a, #0fh
-0D4E 93         272       movc A, @A+dptr
-0D4F F58E       272       mov HEX4, A
-0D51            272            ; Display Digit 1
-0D51 E53E       272       mov A, bcd+0
-0D53 C4         272       swap a
-0D54 540F       272       anl a, #0fh
-0D56 93         272       movc A, @A+dptr
-0D57 F58F       272       mov HEX5, A    
-0D59            272       ; Display Digit 2
-0D59 E53F       272       mov A, bcd+1
-0D5B 540F       272       anl a, #0fh
-0D5D 6005       272       jz Ender_Soak_Time
-0D5F 93         272       movc A, @A+dptr
-0D60 F596       272       mov HEX6, A
-0D62 020D67     272       jmp Exit_Soak_Time
-0D65            272       Ender_Soak_Time:
-0D65 7596FF     272       mov HEX6, #0FFH
-0D68            272       Exit_Soak_Time:
-0D68 22         273            ret
-0D69            274                    
-0D69            275   END
+0AF5             68            ;Turn off LED's
+0AF5 75E800      69            mov LEDRA, #0
+0AF8 759500      70            mov LEDRB, #0
+0AFB 759E00      71            mov LEDRC, #0
+0AFE             72            ;Reset standard times
+0AFE 7541DC      73            mov Reflow_Temp, #ReflowConst
+0B01 75421E      74            mov Reflow_Time, #30  ;30 real value
+0B04 754396      75            mov Soak_Temp,   #SoakConst
+0B07 75444B      76            mov Soak_Time,   #75 ; 75 real value
+0B0A 1208DC      77            lcall Clear_Hex
+0B0D 754D0B      78            mov LCD_State, #11   ; poweroff state
+0B10 754500      79            mov Target_Temp, #0
+0B13 E59E        80            mov a, SWC
+0B15 30E1D4      81            jnb acc.1, PowerOff
+0B18 C204        82            clr killBit
+0B1A D2AF        83            setb EA
+0B1C D201        84            setb Finished   
+0B1E 120422      85            lcall init_lcd
+0B21 020B24      86            ljmp PowerOn
+0B24             87   ;Initial Set up  on reboot
+0B24             88   PowerOn:
+0B24 1209B0      89            lcall ADC_Init
+0B27 1209F5      90            lcall Initialize_Timer
+0B2A             91            ;setb EA
+0B2A             92            ;Turn off LED's
+0B2A 75F800      93            mov LEDG, #0
+0B2D 754D01      94            mov LCD_state, #1
+0B30 D2CA        95            setb TR2
+0B32 020B35      96            ljmp Idle       
+0B35             97            
+0B35             98   ;awaiting process loop
+0B35             99   Idle:
+0B35 754D01     100            mov LCD_state, #1
+0B38 754500     101            mov Target_Temp, #0
+0B3B C202       102            clr timing
+0B3D D2A9       103            setb ET0
+0B3F D2F9       104            setb LEDG.1
+0B41            105            ;Stop Timer
+0B41            106            ;set things while switch is up, return by flicking down
+0B41 20E954     107            jb SWA.1, Set_Reflow_Time
+0B44 20EA43     108            jb SWA.2, Set_Reflow_Temp
+0B47 20EB2D     109            jb SWA.3, Set_Soak_Time
+0B4A 20EC1C     110            jb SWA.4, Set_Soak_Temp
+0B4D 20049C     111            jb killBit, PowerOff 
+0B50 20F9E2     112            jb Key.1, Idle
+0B53 7446       113            mov A, #70
+0B55 C3         114            clr c
+0B56 9546       115            subb A, oven_temp
+0B58 40DB       116            jc Idle
+0B5A            117            ;ready to start process
+0B5A 12091F     118            lcall beep
+0B5D C200       119            clr Ready
+0B5F C3         120            clr c
+0B60 E543       121            mov a, Soak_Temp
+0B62            122            ;How early to shut off heating to account for inertia (31)
+0B62 941F       123            subb a, #31
+0B64 F545       124            mov Target_Temp, a
+0B66 020BA6     125            ljmp Preheat_Soak
+0B69            126            
+0B69            127   ;------------------------------------------------------------------      
+0B69            128   ;Setting Times and Temperatures (Not Done)
+0B69            129   ;   -had thought maybe macro for time and temp, that takes bounds 
+0B69            130   ;   so the time or temp is within reason
+0B69            131   ;------------------------------------------------------------------
+0B69            132   Set_Soak_Temp:
+0B69 754D08     133            mov LCD_state, #8
+0B6C 120CEA     134            lcall Set_Soak_Temp_Relay
+0B6F 20ECF7     135            jb SWA.4, Set_Soak_Temp
+0B72 1208DC     136            lcall clear_hex
+0B75 80BE       137            sjmp Idle
+0B77            138   Set_Soak_Time:
+0B77 7597FF     139            mov HEX7, #0FFH
+0B7A 754D05     140            mov LCD_state, #5
+0B7D 00         141            nop
+0B7E 00         142            nop
+0B7F 120D2F     143            lcall Set_Soak_Time_Relay
+0B82 20EBF2     144            jb SWA.3, Set_Soak_Time
+0B85 1208DC     145            lcall clear_hex
+0B88 80AB       146            Sjmp Idle
+0B8A            147   Set_Reflow_Temp:
+0B8A 754D07     148            mov LCD_state, #7
+0B8D 120CA5     149            lcall Set_Reflow_Temp_Relay
+0B90 20EAF7     150            jb SWA.2, Set_Reflow_Temp
+0B93 1208DC     151            lcall clear_hex
+0B96 809D       152            Sjmp Idle
+0B98            153   Set_Reflow_Time:
+0B98 754D06     154            mov LCD_state, #6
+0B9B 120C60     155            lcall Set_Reflow_Time_Relay     
+0B9E 20E9F7     156            jb SWA.1, Set_Reflow_Time
+0BA1 1208DC     157            lcall clear_hex
+0BA4 808F       158            Sjmp Idle
+0BA6            159   
+0BA6            160   ;------------------------------------------------------------------      
+0BA6            161   ;Actual Progression Through Phases
+0BA6            162   ;PRE-HEAT
+0BA6            163   ;SOAK
+0BA6            164   ;PRE-HEAT
+0BA6            165   ;REFLOW
+0BA6            166   ;COOLING
+0BA6            167   ;DONE
+0BA6            168   ;------------------------------------------------------------------
+0BA6            169   
+0BA6            170   ;Waits for temperature to get above soak temp
+0BA6            171   Preheat_Soak:
+0BA6 300403     172            jnb killBit, Preheat_Soak_
+0BA9 020AEC     173            ljmp PowerOff
+0BAC            174   Preheat_Soak_:
+0BAC 754D02     175            mov LCD_state, #2 ; preheat
+0BAF D2FA       176            setb LEDG.2
+0BB1 3000F2     177            jnb Ready, PreHeat_Soak
+0BB4 C200       178            clr Ready
+0BB6            179            ;Wait about 15 seconds to allow heat to plateau
+0BB6 7D2D       180            mov R5, #45
+0BB8 120912     181   X6:      lcall Wait
+0BBB 300403     182            jnb killBit, X6_
+0BBE 020AEC     183            ljmp PowerOff
+0BC1            184   X6_:
+0BC1 DDF5       185            djnz R5, X6
+0BC3 E545       186            mov a, Target_Temp
+0BC5 241F       187            Add a, #31
+0BC7 F545       188            mov Target_Temp, a
+0BC9            189   Preheat_Soak0:
+0BC9 300403     190            jnb killBit, Preheat_Soak0_
+0BCC 020AEC     191            ljmp PowerOff
+0BCF            192   Preheat_Soak0_:  
+0BCF C200       193            clr ready
+0BD1 3000F5     194            jnb Ready, PreHeat_Soak0
+0BD4 12091F     195            lcall beep
+0BD7            196   ;Initialize for holding constant
+0BD7 D2FB       197            setb LEDG.3
+0BD9 854437     198            mov seconds, Soak_Time+0
+0BDC 754D04     199            mov LCD_state, #4 ;soak 
+0BDF C201       200            clr finished     
+0BE1            201   WaitSoak:
+0BE1 300403     202            jnb killBit, WaitSoak_
+0BE4 020AEC     203            ljmp PowerOff
+0BE7            204   WaitSoak_:
+0BE7 1208E9     205            lcall display_time
+0BEA E537       206            mov a, seconds
+0BEC            207            ;Start ramping a bit before done soaking (takes awhile to take effect)
+0BEC B40A03     208            cjne a, #10, NotFive
+0BEF 854145     209            mov target_Temp, Reflow_Temp
+0BF2            210   NotFive:         
+0BF2 3001EC     211            jnb finished, WaitSoak
+0BF5            212   
+0BF5            213   ;Initilize for ramp to Reflow
+0BF5            214            
+0BF5 1208DC     215            lcall clear_hex
+0BF8 D2FC       216            setb LEDG.4
+0BFA 12091F     217            lcall beep
+0BFD 754D02     218            mov LCD_state, #2 ; preheat
+0C00 C200       219            clr ready
+0C02            220            
+0C02            221   Preheat_Reflow:
+0C02 300403     222            jnb killBit, Preheat_Reflow_
+0C05 020AEC     223            ljmp PowerOff
+0C08            224   Preheat_Reflow_:
+0C08 3000F7     225            jnb Ready, PreHeat_Reflow
+0C0B 12091F     226            lcall beep
+0C0E            227   ;Pass Reflow Time, wait for time to expire       
+0C0E D2FD       228            setb LEDG.5
+0C10 854237     229            mov seconds, Reflow_Time+0
+0C13 754D03     230            mov LCD_state, #3 ;reflow
+0C16 C201       231            clr finished
+0C18            232   WaitReflow:
+0C18 300403     233            jnb killBit, WaitReflow_
+0C1B 020AEC     234            ljmp PowerOff
+0C1E            235   WaitReflow_:
+0C1E 1208E9     236            lcall display_time      
+0C21 3001F4     237            jnb finished, WaitReflow
+0C24 1208DC     238            lcall clear_hex
+0C27 12091F     239            lcall beep
+0C2A            240   ;Process Finished, Wait for it to cool
+0C2A            241   Cooling:
+0C2A 754D09     242            mov LCD_state, #9
+0C2D 75453C     243            mov Target_Temp, #CoolConst
+0C30 D200       244            setb ready      
+0C32            245   WaitCool:
+0C32 300403     246            jnb killBit, WaitCool_
+0C35 020AEC     247            ljmp PowerOff
+0C38            248   WaitCool_:       
+0C38 D2FE       249            setb LEDG.6
+0C3A            250            ;wait for temp to dip below 60 Celcius (Cool Constant)
+0C3A 2000F5     251            jb Ready, WaitCool
+0C3D            252            ;set temp to zero
+0C3D 754500     253            mov Target_Temp, #0
+0C40            254            ;triple beep
+0C40 12091F     255            lcall beep
+0C43 120912     256            lcall wait
+0C46 12091F     257            lcall beep
+0C49 120912     258            lcall wait
+0C4C 12091F     259            lcall beep
+0C4F            260   ;Cool Enough (just waits PB)
+0C4F 754D0A     261                    mov LCD_state, #10      
+0C52            262   Done:
+0C52 D2FF       263            setb LEDG.7
+0C54 20F9FB     264            jb Key.1, Done
+0C57 30F9FD     265            jnb Key.1, $
+0C5A 75F800     266            mov LEDG, #0
+0C5D 020B35     267            ljmp Idle
+0C60            268                    
+0C60            269   Set_Reflow_Time_Relay:
+0C60            270            Inc_Reflow_Time:
+0C60 E542       270                    mov A, Reflow_Time
+0C62            270            
+0C62 20FA08     270                    jb KEY.2, Dec_Reflow_Time
+0C65 30FAFD     270            jnb KEY.2, $
+0C68 04         270                    inc A
+0C69 B42E0C     270                    cjne A, #46, Done_Reflow_Time
+0C6C 14         270                    dec A
+0C6D            270            Dec_Reflow_Time:        
+0C6D 20FB08     270                jb KEY.3, Done_Reflow_Time
+0C70 30FBFD     270                jnb KEY.3, $
+0C73 14         270                    dec A
+0C74 B41D01     270                cjne A, #29, Done_Reflow_Time
+0C77 04         270           inc A
+0C78            270            Done_Reflow_Time:
+0C78 F542       270                    mov Reflow_Time, A
+0C7A 85423A     271            mov x, Reflow_Time
+0C7D 753B00     271            mov x+1, #0
+0C80 12001E     271            lcall hex2bcd
+0C83 9009EB     271            mov dptr, #myLUT
+0C86            271            ; Display Digit 0
+0C86 E53E       271       mov A, bcd+0
+0C88 540F       271       anl a, #0fh
+0C8A 93         271       movc A, @A+dptr
+0C8B F58E       271       mov HEX4, A
+0C8D            271            ; Display Digit 1
+0C8D E53E       271       mov A, bcd+0
+0C8F C4         271       swap a
+0C90 540F       271       anl a, #0fh
+0C92 93         271       movc A, @A+dptr
+0C93 F58F       271       mov HEX5, A    
+0C95            271       ; Display Digit 2
+0C95 E53F       271       mov A, bcd+1
+0C97 540F       271       anl a, #0fh
+0C99 6006       271       jz Ender_Reflow_Time
+0C9B 93         271       movc A, @A+dptr
+0C9C F596       271       mov HEX6, A
+0C9E 020CA4     271       jmp Exit_Reflow_Time
+0CA1            271       Ender_Reflow_Time:
+0CA1 7596FF     271       mov HEX6, #0FFH
+0CA4            271       Exit_Reflow_Time:
+0CA4 22         272            ret     
+0CA5            273   Set_Reflow_Temp_Relay:
+0CA5            274            Inc_Reflow_Temp:
+0CA5 E541       274                    mov A, Reflow_Temp
+0CA7            274            
+0CA7 20FA08     274                    jb KEY.2, Dec_Reflow_Temp
+0CAA 30FAFD     274            jnb KEY.2, $
+0CAD 04         274                    inc A
+0CAE B4E70C     274                    cjne A, #231, Done_Reflow_Temp
+0CB1 14         274                    dec A
+0CB2            274            Dec_Reflow_Temp:        
+0CB2 20FB08     274                jb KEY.3, Done_Reflow_Temp
+0CB5 30FBFD     274                jnb KEY.3, $
+0CB8 14         274                    dec A
+0CB9 B4C701     274                cjne A, #199, Done_Reflow_Temp
+0CBC 04         274           inc A
+0CBD            274            Done_Reflow_Temp:
+0CBD F541       274                    mov Reflow_Temp, A
+0CBF 85413A     275            mov x, Reflow_Temp
+0CC2 753B00     275            mov x+1, #0
+0CC5 12001E     275            lcall hex2bcd
+0CC8 9009EB     275            mov dptr, #myLUT
+0CCB            275            ; Display Digit 0
+0CCB E53E       275       mov A, bcd+0
+0CCD 540F       275       anl a, #0fh
+0CCF 93         275       movc A, @A+dptr
+0CD0 F58E       275       mov HEX4, A
+0CD2            275            ; Display Digit 1
+0CD2 E53E       275       mov A, bcd+0
+0CD4 C4         275       swap a
+0CD5 540F       275       anl a, #0fh
+0CD7 93         275       movc A, @A+dptr
+0CD8 F58F       275       mov HEX5, A    
+0CDA            275       ; Display Digit 2
+0CDA E53F       275       mov A, bcd+1
+0CDC 540F       275       anl a, #0fh
+0CDE 6006       275       jz Ender_Reflow_Temp
+0CE0 93         275       movc A, @A+dptr
+0CE1 F596       275       mov HEX6, A
+0CE3 020CE9     275       jmp Exit_Reflow_Temp
+0CE6            275       Ender_Reflow_Temp:
+0CE6 7596FF     275       mov HEX6, #0FFH
+0CE9            275       Exit_Reflow_Temp:
+0CE9 22         276            ret     
+0CEA            277   Set_Soak_Temp_Relay:     
+0CEA            278            Inc_Soak_Temp:
+0CEA E543       278                    mov A, Soak_Temp
+0CEC            278            
+0CEC 20FA08     278                    jb KEY.2, Dec_Soak_Temp
+0CEF 30FAFD     278            jnb KEY.2, $
+0CF2 04         278                    inc A
+0CF3 B4A50C     278                    cjne A, #165, Done_Soak_Temp
+0CF6 14         278                    dec A
+0CF7            278            Dec_Soak_Temp:  
+0CF7 20FB08     278                jb KEY.3, Done_Soak_Temp
+0CFA 30FBFD     278                jnb KEY.3, $
+0CFD 14         278                    dec A
+0CFE B48601     278                cjne A, #134, Done_Soak_Temp
+0D01 04         278           inc A
+0D02            278            Done_Soak_Temp:
+0D02 F543       278                    mov Soak_Temp, A
+0D04 85433A     279            mov x, Soak_Temp
+0D07 753B00     279            mov x+1, #0
+0D0A 12001E     279            lcall hex2bcd
+0D0D 9009EB     279            mov dptr, #myLUT
+0D10            279            ; Display Digit 0
+0D10 E53E       279       mov A, bcd+0
+0D12 540F       279       anl a, #0fh
+0D14 93         279       movc A, @A+dptr
+0D15 F58E       279       mov HEX4, A
+0D17            279            ; Display Digit 1
+0D17 E53E       279       mov A, bcd+0
+0D19 C4         279       swap a
+0D1A 540F       279       anl a, #0fh
+0D1C 93         279       movc A, @A+dptr
+0D1D F58F       279       mov HEX5, A    
+0D1F            279       ; Display Digit 2
+0D1F E53F       279       mov A, bcd+1
+0D21 540F       279       anl a, #0fh
+0D23 6006       279       jz Ender_Soak_Temp
+0D25 93         279       movc A, @A+dptr
+0D26 F596       279       mov HEX6, A
+0D28 020D2E     279       jmp Exit_Soak_Temp
+0D2B            279       Ender_Soak_Temp:
+0D2B 7596FF     279       mov HEX6, #0FFH
+0D2E            279       Exit_Soak_Temp:
+0D2E 22         280            ret     
+0D2F            281   Set_Soak_Time_Relay:
+0D2F            282            Inc_Soak_Time:
+0D2F E544       282                    mov A, Soak_Time
+0D31            282            
+0D31 20FA08     282                    jb KEY.2, Dec_Soak_Time
+0D34 30FAFD     282            jnb KEY.2, $
+0D37 04         282                    inc A
+0D38 B45B0C     282                    cjne A, #91, Done_Soak_Time
+0D3B 14         282                    dec A
+0D3C            282            Dec_Soak_Time:  
+0D3C 20FB08     282                jb KEY.3, Done_Soak_Time
+0D3F 30FBFD     282                jnb KEY.3, $
+0D42 14         282                    dec A
+0D43 B43B01     282                cjne A, #59, Done_Soak_Time
+0D46 04         282           inc A
+0D47            282            Done_Soak_Time:
+0D47 F544       282                    mov Soak_Time, A
+0D49 85443A     283            mov x, Soak_Time
+0D4C 753B00     283            mov x+1, #0
+0D4F 12001E     283            lcall hex2bcd
+0D52 9009EB     283            mov dptr, #myLUT
+0D55            283            ; Display Digit 0
+0D55 E53E       283       mov A, bcd+0
+0D57 540F       283       anl a, #0fh
+0D59 93         283       movc A, @A+dptr
+0D5A F58E       283       mov HEX4, A
+0D5C            283            ; Display Digit 1
+0D5C E53E       283       mov A, bcd+0
+0D5E C4         283       swap a
+0D5F 540F       283       anl a, #0fh
+0D61 93         283       movc A, @A+dptr
+0D62 F58F       283       mov HEX5, A    
+0D64            283       ; Display Digit 2
+0D64 E53F       283       mov A, bcd+1
+0D66 540F       283       anl a, #0fh
+0D68 6005       283       jz Ender_Soak_Time
+0D6A 93         283       movc A, @A+dptr
+0D6B F596       283       mov HEX6, A
+0D6D 020D72     283       jmp Exit_Soak_Time
+0D70            283       Ender_Soak_Time:
+0D70 7596FF     283       mov HEX6, #0FFH
+0D73            283       Exit_Soak_Time:
+0D73 7596FF     284            mov Hex6, #0xFF
+0D76 22         285            ret
+0D77            286                    
+0D77            287   END

@@ -65,6 +65,10 @@ PowerOff:
 	mov SP, #7FH
 	mov P0MOD, #0xFF
 	mov P3MOD, #0xFF
+	;Turn off LED's
+	mov LEDRA, #0
+	mov LEDRB, #0
+	mov LEDRC, #0
 	;Reset standard times
 	mov Reflow_Temp, #ReflowConst
 	mov Reflow_Time, #30  ;30 real value
@@ -75,6 +79,7 @@ PowerOff:
 	mov Target_Temp, #0
 	mov a, SWC
 	jnb acc.1, PowerOff
+	clr killBit
 	setb EA
 	setb Finished	
 	lcall init_lcd
@@ -85,9 +90,6 @@ PowerOn:
 	lcall Initialize_Timer
 	;setb EA
 	;Turn off LED's
-	mov LEDRA, #0
-	mov LEDRB, #0
-	mov LEDRC, #0
 	mov LEDG, #0
 	mov LCD_state, #1
 	setb TR2
@@ -106,7 +108,12 @@ Idle:
 	jb SWA.2, Set_Reflow_Temp
 	jb SWA.3, Set_Soak_Time
 	jb SWA.4, Set_Soak_Temp
+	jb killBit, PowerOff 
 	jb Key.1, Idle
+	mov A, #70
+	clr c
+	subb A, oven_temp
+	jc Idle
 	;ready to start process
 	lcall beep
 	clr Ready
@@ -114,7 +121,7 @@ Idle:
 	mov a, Soak_Temp
 	;How early to shut off heating to account for inertia (31)
 	subb a, #31
-	mov Soak_Temp, a
+	mov Target_Temp, a
 	ljmp Preheat_Soak
 	
 ;------------------------------------------------------------------	
@@ -131,18 +138,20 @@ Set_Soak_Temp:
 Set_Soak_Time:
 	mov HEX7, #0FFH
 	mov LCD_state, #5
+	nop
+	nop
 	lcall Set_Soak_Time_Relay
 	jb SWA.3, Set_Soak_Time
 	lcall clear_hex
 	Sjmp Idle
 Set_Reflow_Temp:
-		mov LCD_state, #7
+	mov LCD_state, #7
 	lcall Set_Reflow_Temp_Relay
 	jb SWA.2, Set_Reflow_Temp
 	lcall clear_hex
 	Sjmp Idle
 Set_Reflow_Time:
-		mov LCD_state, #6
+	mov LCD_state, #6
 	lcall Set_Reflow_Time_Relay	
 	jb SWA.1, Set_Reflow_Time
 	lcall clear_hex
@@ -165,7 +174,6 @@ Preheat_Soak:
 Preheat_Soak_:
 	mov LCD_state, #2 ; preheat
 	setb LEDG.2
-	mov Target_Temp, Soak_Temp
 	jnb Ready, PreHeat_Soak
 	clr Ready
 	;Wait about 15 seconds to allow heat to plateau
@@ -174,7 +182,6 @@ X6:	lcall Wait
 	jnb killBit, X6_
 	ljmp PowerOff
 X6_:
-	cpl LEDRA.5
 	djnz R5, X6
 	mov a, Target_Temp
 	Add a, #31
@@ -183,6 +190,7 @@ Preheat_Soak0:
 	jnb killBit, Preheat_Soak0_
 	ljmp PowerOff
 Preheat_Soak0_:	
+	clr ready
 	jnb Ready, PreHeat_Soak0
 	lcall beep
 ;Initialize for holding constant
@@ -197,7 +205,7 @@ WaitSoak_:
 	lcall display_time
 	mov a, seconds
 	;Start ramping a bit before done soaking (takes awhile to take effect)
-	cjne a, #7, NotFive
+	cjne a, #10, NotFive
 	mov target_Temp, Reflow_Temp
 NotFive:	
 	jnb finished, WaitSoak
@@ -273,6 +281,7 @@ Set_Soak_Temp_Relay:
 Set_Soak_Time_Relay:
 	Set_Any(Soak_Time, #59, #91)
 	Display_Any(Soak_Time)
+	mov Hex6, #0xFF
 	ret
 		
 END
