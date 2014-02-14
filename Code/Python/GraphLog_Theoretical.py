@@ -9,11 +9,11 @@ maxTemp        = 0
 sampleRate     = 0
 elapsed        = 0
 angle          = 90
-pencolour       = 'black'
+pencolour       = 'grey'
 
-turtle.bgcolor('black')
+turtle.bgcolor('grey')
 turtle.title('Reflow Oven Log')
-file = open('addison_log_dump.dat', 'r')
+file = open('log_dump.dat', 'r')
 theDate = file.readline()
 theDate = theDate[:10]
 
@@ -45,6 +45,7 @@ setup( width = 1000, height = 500, startx = None, starty = None)
 
 # set the graph in its starting spot
 home()
+color(pencolour, pencolour)
 backward(120)
 right(90)
 forward(80)
@@ -60,6 +61,8 @@ right(90)
 color(pencolour, pencolour)
 backward(350)
 left(90)
+
+pencolour       = 'black'
     
 for lines in file: # 54 fills sreen by default graphing incrementing up
     value = int(lines)
@@ -70,7 +73,7 @@ for lines in file: # 54 fills sreen by default graphing incrementing up
         maxTemp = value        
         
     if   value > 220: color(pencolour, '#FF0000') #red
-    elif value > 160: color(pencolour, '#FFCC00') #dark yellow
+    elif value > 165: color(pencolour, '#FFCC00') #dark yellow
     elif value > 150: color(pencolour, '#FFFF00') #yellow
     elif value >  60: color(pencolour, '#0099FF') #blue
     elif value >   0: color(pencolour, '#000066') #navy  
@@ -81,7 +84,7 @@ for lines in file: # 54 fills sreen by default graphing incrementing up
 averageTemp = (runningTotal/lineCount)
 elapsed = getTime()
 
-color('white', 'white')
+color('black', 'white')
 
 home()
 backward(450)
