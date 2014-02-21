@@ -1,4 +1,6 @@
-;This is a library with LCD functions 
+;---------------------------------------------------
+;This is a library with LCD functions to write commands 
+;characters, LCD initialization, character creation   
 ;
 
 
@@ -16,19 +18,33 @@ Line1 EQU #080h
 Line2 EQU #0A8h
 Degree EQU #0DFH
 
+;LUT for the values needed by the thermometer display
 $include(Thermo_LUT.asm)
 
+
+;-----------------------------------------------------
+;macro to change the LCD cursor position 
+; the macro accepts Line1 or Line2 constant plus 
+; the desired offset
+;-----------------------------------------------------
 LCD_cursor mac
 	mov LCD_DATA, %0
 	lcall LCD_command
 	lcall wait2ms
 endmac
 
+;-----------------------------------------------------
+; Macro used to write to the LCD 
+; Accepts either a variable or constant variable
+;-----------------------------------------------------
 LCD_write mac
 	mov LCD_DATA, %0
 	lcall LCD_put
 endmac
 
+;-----------------------------------------------------
+;Various delay functions used in the library
+;-----------------------------------------------------
 delay100us:
 	push AR0
 	push AR1
@@ -67,7 +83,9 @@ J1:
 	pop AR1
 	pop AR0
 	ret
-
+;-----------------------------------------------------
+; SubrOUTINE to clear the LCD display. This is a long command 
+;-----------------------------------------------------
 Clear_LCD:
 	
 	mov LCD_DATA, #01H ; Clear screen (Warning, very slow command!)
@@ -77,10 +95,12 @@ Clear_LCD:
 	LCD_cursor(line1)
 
 	ret
+;-----------------------------------------------------
+
 ;This subroutine initiates the LCD to display 2 lines
 ;8 bit interface, 5x8 characters and clear the screen and move the 
 ;cursor to the start position
-	
+;-----------------------------------------------------	
 Init_LCD:
 
 	setb LCD_On
@@ -108,9 +128,11 @@ Init_LCD:
 	lcall LCD_command 
 	lcall wait1s
 	ret	
-	
+
+;-----------------------------------------------------	
 ;initiates the byte stored in the LCD_DATA as an 
 ;LCD command
+;-----------------------------------------------------
 	
 LCD_command:
 	
@@ -127,9 +149,9 @@ LCD_command:
 	clr	LCD_EN
 	lcall wait2ms	
 	ret
-
+;-----------------------------------------------------
 ;Sends the byte in the LCD_DATA to the LCD as an ascii character	
-	
+;-----------------------------------------------------	
 LCD_put:
 	;mov	LCD_DATA, A
 	setb LCD_RS
@@ -202,9 +224,12 @@ State11_LUT:
 State12_LUT:
 	DB 'Door Ajar', 10H	
 
-State_disp:
 
-	
+;-----------------------------------------------------
+;THis sub routine accepts a value corresponding to 
+; a state display and calls the proper LCD display routine
+;-----------------------------------------------------
+State_disp:	
 	mov a, LCD_state
 	cjne a, #12, not_door
 	lcall Door_open_state
@@ -244,7 +269,10 @@ not_done:
 not_poweroff:
 
 ret	
-	
+
+;-----------------------------------------------------
+;Sub routine to display LCD message for each state
+;-----------------------------------------------------	
 Idle_Display:
 	push acc
 	mov dptr, #State1_LUT
@@ -334,7 +362,11 @@ Door_open_state:
 	pop acc
 	ret
 
-
+;-----------------------------------------------------
+; State Display sub routine that displays a message in the 
+; look up table for the current state and calls temperature and thermometer 
+; update sub routines
+;-----------------------------------------------------
 State_Display:
 	push acc
 	push psw
@@ -354,7 +386,12 @@ State_Display_Loop:
 	pop psw
 	pop acc
 	ret	
-	
+
+;-----------------------------------------------------
+; Updates the LCD temperature display and accpets the 
+; oven_temp variable 
+; Displays in bottom right corner
+;-----------------------------------------------------	
 Temp_display:
 	push acc
 	push psw
@@ -379,6 +416,11 @@ Temp_display:
 	pop psw
 	pop acc
 	ret
+;-----------------------------------------------------
+; Updates the LCD target temperature display and accpets the 
+; target_temp variable 
+; Displays in top right corner
+;-----------------------------------------------------
 	
 Target_Temp_display:
 	push acc
@@ -401,6 +443,12 @@ Target_Temp_display:
 	pop psw
 	pop acc
 	ret
+;-----------------------------------------------------
+;Updates the thermometer image based off of the current oven 
+; temperature
+; calculation gives the value of character array stored in 
+; Thermo_LUT
+;-----------------------------------------------------
 
 Thermo_update:
 
@@ -426,6 +474,8 @@ JustRight:
 	
 	lcall Thermo_display
 	ret
+
+
 
 Thermo_Display:
 
@@ -454,7 +504,12 @@ Thermo_Display_Loop:
 	pop ar2
 	pop ar2
 	ret		
-	
+
+;-------------------------------------------------------------
+;This is the subroutine that create the 8 custom LCD characters 
+; for the thermometer display that updates with the oven 
+; temperature. The characters correspond to 0h - 7h 
+;-------------------------------------------------------------	
 Make_char:
 	mov LCD_DATA, #040H
 	lcall LCD_command
@@ -603,10 +658,10 @@ Make_char:
 	lcall LCD_put
 	lcall wait2ms	
 	ret
-
+;------------------------------------------------
 ;Thermometer Demo subroutine that runs the 
 ;LCD Thermometer through its full range
-;
+;------------------------------------------------
 
 	
 Thermometer_demo:
