@@ -13,7 +13,7 @@ pencolour       = 'grey'
 
 turtle.bgcolor('grey')
 turtle.title('Reflow Oven Log')
-file = open('log_dump.dat', 'r')
+file = open('josh_log_dump.dat', 'r')
 theDate = file.readline()
 theDate = theDate[:10]
 
@@ -72,7 +72,7 @@ for lines in file: # 54 fills sreen by default graphing incrementing up
     if value > maxTemp:
         maxTemp = value        
         
-    if   value > 220: color(pencolour, '#FF0000') #red
+    if   value > 225: color(pencolour, '#FF0000') #red
     elif value > 165: color(pencolour, '#FFCC00') #dark yellow
     elif value > 150: color(pencolour, '#FFFF00') #yellow
     elif value >  60: color(pencolour, '#0099FF') #blue
