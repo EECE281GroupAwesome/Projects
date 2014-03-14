@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html style="" class=" js no-touch svg inlinesvg svgclippaths no-ie8compat" lang="en"><!--<![endif]--><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>Drivers, Relays, and Solid State Relays | mbed</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7; IE=EDGE">
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="user-scalable=yes,width=device-width,initial-scale=0.9">
+
+
+    <!-- Included CSS Files -->
+    <link rel="stylesheet" href="VoltageDriverTransistor_mbed_files/a0d779960ba0.css" type="text/css">
+    
+    <script type="text/javascript" src="VoltageDriverTransistor_mbed_files/97224e57199f.js"></script>
+    <!--[if (gte IE 6)&(lte IE 8)]>
+        <script type="text/javascript" src="/media/js/selectivizr-min.js"></script>
+  <![endif]-->
+
+    
+    
+
+
+
+</head>
+<body>
+
+<div class="row nav-wrapper ">
+        <div class="twelve columns navigation">
+        
+            <ul class="nav-bar radius" id="nav">
+                <li><a href="http://mbed.org/"><img class="icon icon_house" src="VoltageDriverTransistor_mbed_files/blank.gif" height="16" width="16"></a></li>
+                <li><a href="http://mbed.org/handbook/">Handbook</a></li>
+                <li><a href="http://mbed.org/cookbook/">Cookbook</a></li>
+                
+                    <li><a href="http://mbed.org/platforms/">Platforms</a></li>
+                
+                
+                    <li><a href="http://mbed.org/components/">Components</a></li>   
+                
+                <li><a href="http://mbed.org/code/">Code</a></li>
+                <li><a href="http://mbed.org/questions/">Questions</a></li>
+                <li><a href="http://mbed.org/forum/">Forum</a></li>
+                <li class="user-links"><a href="http://mbed.org/compiler/" target="compiler">Compiler</a></li>
+                <li class="user-links"><a href="http://mbed.org/dashboard/">Dashboard</a></li>
+
+            </ul>
+        
+        </div>
+    </div>
+
+    <div class="row" id="top">
+        <div class="three columns logo mobile-two">
+            <h1><a href="http://mbed.org/">mbed</a></h1>
+        </div>
+        <div class="three columns header login-block push-six mobile-two">
+          
+            
+            <p class="logged-out"><script type="text/javascript">
+                    if (document.location.pathname == "/tour/compiler") {
+                        document.write('<a class="button  radius success" href="}https://mbed.org/account/login/?next=/compiler/"><img alt="Login" height="16" width="16" class="icon icon_login" src="/media/img/blank.gif"/> Login <span class="hide-for-small"> or signup</span></a>');
+                    } else {
+document.write('<a class="button  radius success" href="https://mbed.org/account/login/?next=' + document.location.pathname  + '"><img alt="Login" height="16" width="16" class="icon icon_login" src="/media/img/blank.gif"/> Login <span class="hide-for-small"> or signup</span></a><a class="hide-for-small" style="font-size:12px; font-weight: bold;" href="/handbook/Cookies/"> <img alt="Cookies" height="16" width="16" class="icon icon_cookies" src="/media/img/blank.gif"/> Cookie notice</a>');
+                    }
+                    </script><a class="button  radius success" href="https://mbed.org/account/login/?next=/users/4180_1/notebook/relays1/"><img alt="Login" class="icon icon_login" src="VoltageDriverTransistor_mbed_files/blank.gif" height="16" width="16"> Login <span class="hide-for-small"> or signup</span></a><a class="hide-for-small" style="font-size:12px; font-weight: bold;" href="http://mbed.org/handbook/Cookies/"> <img alt="Cookies" class="icon icon_cookies" src="VoltageDriverTransistor_mbed_files/blank.gif" height="16" width="16"> Cookie notice</a><br></p>
+              
+              
+             
+        </div>
+
+        <div class="six columns header pull-three">
+             
+            <form id="search" action="/search/" method="GET">
+            <input name="type" value="" type="hidden">
+                <div class="row">
+                    <div class="ten mobile-three columns">
+                        <input name="q" id="id_q" placeholder="Search mbed.org..." class="search-input" type="search">
+                    </div>
+                    <div class="two mobile-one columns">
+                        <input value="Go" class="button radius  " type="submit">
+                    </div>
+                </div>
+            </form>
+            
+        </div>
+    </div><!-- end of #top -->
+    
+    <div class="row">
+        <div class="twelve columns" style="position: relative;">
+            <div class="breadcrumbs">
+                
+ <a href="http://mbed.org/activity/">Users</a> » <a href="http://mbed.org/users/4180_1/">4180_1</a> »
+        <a href="http://mbed.org/users/4180_1/notebook">Notebook</a> »  Drivers, Relays, and Solid State Relays
+
+
+
+            </div>
+            
+            <div class="breadcrumbs breadcrumbs-right">
+                
+            </div>
+
+        </div>
+    </div>
+    
+    
+    
+    <div class="row">
+        <div class="nine columns main-content" id="mbed-content">
+            
+        
+            
+
+
+
+
+
+<h2 class="over-cinfo"> Drivers, Relays, and Solid State Relays</h2> 
+
+
+<div class="content-info">
+
+    
+        Page last updated  <abbr class="timeago" title="07 Aug 2013">07 Aug 2013</abbr>, by <b> <span class="authortext"><a href="http://mbed.org/users/4180_1/"><img alt="" class="icon" src="VoltageDriverTransistor_mbed_files/401c808725c0afaf27444ace957c5ecc.jpg" height="16px" width="16px"></a> <a href="http://mbed.org/users/4180_1/"> jim hamblen</a></span></b>.
+    
+    
+        
+    
+        
+        <b>
+        <a onclick="$('#commentform').show()" href="http://mbed.org/users/4180_1/notebook/relays1/#commentform">  1 reply </a></b>
+
+
+
+    
+         <img class="icon icon_tag" src="VoltageDriverTransistor_mbed_files/blank.gif" height="16" width="16">
+        
+            <a href="http://mbed.org/search/?q=BJT&amp;type=Notebook">BJT</a>, 
+        
+            <a href="http://mbed.org/search/?q=drivers&amp;type=Notebook">drivers</a>, 
+        
+            <a href="http://mbed.org/search/?q=IGBT&amp;type=Notebook">IGBT</a>, 
+        
+            <a href="http://mbed.org/search/?q=MOSFET&amp;type=Notebook">MOSFET</a>, 
+        
+            <a href="http://mbed.org/search/?q=MOV&amp;type=Notebook">MOV</a>, 
+        
+            <a href="http://mbed.org/search/?q=optical%20isolation&amp;type=Notebook">optical isolation</a>, 
+        
+            <a href="http://mbed.org/search/?q=optoisolator&amp;type=Notebook">optoisolator</a>, 
+        
+            <a href="http://mbed.org/search/?q=relays&amp;type=Notebook">relays</a>, 
+        
+            <a href="http://mbed.org/search/?q=snubber%20diode&amp;type=Notebook">snubber diode</a>, 
+        
+            <a href="http://mbed.org/search/?q=solid%20state%20relays&amp;type=Notebook">solid state relays</a>, 
+        
+            <a href="http://mbed.org/search/?q=ssr&amp;type=Notebook">ssr</a>, 
+        
+            <a href="http://mbed.org/search/?q=transorb&amp;type=Notebook">transorb</a>, 
+        
+            <a href="http://mbed.org/search/?q=triac&amp;type=Notebook">triac</a>, 
+        
+            <a href="http://mbed.org/search/?q=tvs%20diode&amp;type=Notebook">tvs diode</a>, 
+        
+            <a href="http://mbed.org/search/?q=varistor&amp;type=Notebook">varistor</a>
+        
+    
+
+
+</div>
+
+<p>
+</p><div class="wiki-content">
+<h2>Driver circuits</h2>
+<p>A typical digital logic output pin can only supply tens of MA of 
+current. Even though they might require the same voltage levels, small 
+external devices such as high-power LEDs, motors, speakers, light bulbs,
+ buzzers, solenoids, and relays can require hundreds of MA. Larger 
+devices might even need several amps. To control smaller devices that 
+use DC, a transistor-based driver circuit can be used to boost the 
+current to the levels needed for the device. When voltage and current 
+levels are in the correct range, the transistor acts like a high-current
+ switch controlled by the lower current digital logic signal. A discrete
+ <a href="http://en.wikipedia.org/wiki/Bipolar_Junction_Transistor" rel="nofollow">BJT</a>
+ is sometimes used instead of a newer MOSFET transistor especially on 
+older or low voltage circuits as shown below. On mbed, any GPIO pin 
+could be used for the logic control input to the circuit with <a href="http://mbed.org/handbook/DigitalOut">DigitalOut</a>.<br></p>
+<p><img src="VoltageDriverTransistor_mbed_files/_scaled_driverbjt.jpg" alt="/media/uploads/4180_1/_scaled_driverbjt.jpg" title="/media/uploads/4180_1/_scaled_driverbjt.jpg"><br><br>
+Basic driver circuit using a BJT transistor<br><br>
+The transistor primarily provides current gain. PNP, NPN, or MOS 
+transistors can also be used. The resistor used on the base of the 
+transistor is typically around 1K ohm.  On inductive loads (i.e., 
+motors, relays, solenoids), a diode is often connected backwards across 
+the load to suppress the voltage spikes (back EMF) generated when 
+turning devices off. (Recall on an inductor V=L*di/dt, so a negative 
+voltage spike is produced when turning the device off). Sometimes the 
+diode is also connected across the transistor instead of the load (this 
+protects the transistor). The <a href="http://www.sparkfun.com/datasheets/Components/2N3904.pdf" rel="nofollow">2N3904</a>
+ shown below is a small discrete BJT transistor that can be used for a 
+driver circuit needing less than 200MA. In this circuit with BJTs, Vcc 
+can also be a higher voltage supply than the logic power supply. 6 or 
+12V DC is often needed for motors or relays. In battery operated 
+devices, the load may be directly connected to the battery power and not
+ pass through the voltage regulator. Many devices such as motors have a 
+momentary large inrush current spike when they are first turned on and 
+have a larger stall current, so be a bit conservative on the maximum 
+current ratings.<br><br><br>
+<img alt="SBJT" title="SBJT" src="VoltageDriverTransistor_mbed_files/2n3904.jpg" width="250"><br>
+<a href="http://search.digikey.com/us/en/products/2N3904BU/2N3904FS-ND/1413" rel="nofollow">2N3904 Transistor in a TO-92 package</a><br></p>
+<p><br>
+Depending on the current gain of the transistor used, some adjustments 
+may be needed in the value of the base resistor. A high gain TO-92 
+transistor such as the <a href="http://search.digikey.com/scripts/DkSearch/dksus.dll?lang=en&amp;site=us&amp;KeyWords=ZTX689B" rel="nofollow">ZTX689B</a> can drive up to 2A at up to 12V in this circuit. A <a href="http://en.wikipedia.org/wiki/Darlington_transistor" rel="nofollow">Darlington transistor</a>
+ pair contains two BJT transistors connected together for higher current
+ gain. If a Darlington transistor in a TO-92 package such as a <a href="http://search.digikey.com/scripts/DkSearch/dksus.dll?lang=en&amp;site=us&amp;KeyWords=ZTX605" rel="nofollow">ZTX605</a>
+ is used in the driver circuit, outputs of 1A at up to 100V are 
+possible. At high current levels, the transistor might get a bit hot. 
+Transistors can even get too hot and burn out, if the circuit is not 
+designed correctly. The transistor has to dissipate the power (V*I) 
+across its C-E junction (i.e., the switch point) as heat. This means 
+that the transistor should either be completely “on” (saturation) or 
+“off” (cutoff) to minimize heat dissipation and maximize efficiency. 
+Larger power transistors have metal tabs on the case that can be 
+connected to a heat sink for cooling. The pins on larger power 
+transistors are often too large for standard breadboards and the spacing
+ is not always compatible. <br></p>
+<h3>PWM Control</h3>
+<p>The logic signal (control) turns the transistor on and off to drive 
+high current loads. For motor speed control or dimming lights, a <a href="http://en.wikipedia.org/wiki/Pulse-width_modulation" rel="nofollow">digital PWM output signal</a>
+ is typically used for control instead of an analog output. Digital PWM 
+is more energy efficient than analog as it significantly reduces the 
+heat dissipated by the transistor (i.e., it is always completely "on" or
+ "off"). For motors, the PWM clock rate is typically in the tens of KHz 
+range. For lighting, it needs to be greater than 50Hz or perhaps 100Hz. 
+Early studies for electric power systems showed that many people have 
+headaches caused by lighting systems that use less than 50Hz AC even if 
+they do not directly perceive a flicker. A <a href="http://en.wikipedia.org/wiki/Class-D_amplifier" rel="nofollow">Class-D amplifier</a>
+ uses PWM to drive audio speakers and the PWM clock rate is typically 
+around ten times the highest frequency in the audio signal. A <a href="http://en.wikipedia.org/wiki/Low_pass_filter" rel="nofollow">low pass filter</a> is sometimes added on the output. The mbed <a href="http://mbed.org/handbook/PwmOut">PWMout Handbook page</a> shows an example using PWM to dim an LED. Even when using PWM, some large transistors may require a <a href="http://en.wikipedia.org/wiki/Heat_sink" rel="nofollow">heat sink</a> for proper cooling. If the transistor gets too hot to touch, it needs a larger heatsink.
+<br></p>
+<div class="flashbox fnote"><h4 class="ftitle">Noise Issues from High Current Loads</h4><p>Switching
+ high current inductive loads and motor arcing can put noise spikes or 
+voltage surges on power supply lines and it is possible that they can 
+become large enough or that the supply voltage could momentarily drop 
+low enough when turning on a large inductive load to cause a 
+microprocessor to crash and even reset when using the same power supply 
+as the load, so additional power supply <a href="http://en.wikipedia.org/wiki/Decoupling_capacitor" rel="nofollow">decoupling capacitors</a> may need to be added near the high current load, or a separate power supply can be used for the high current load. </p>
+<p>If high voltage spikes, surges, or electrostatic discharge (static electricity) are a potential issue, <a href="http://en.wikipedia.org/wiki/Transorb" rel="nofollow">transient-voltage-suppression (TVS) diodes</a> (also known as transorbs) or <a href="http://en.wikipedia.org/wiki/Varistor" rel="nofollow">varistors</a>
+ (also known as MOVs) are sometimes connected across a high current load
+ or the high voltage supply lines for even more protection. MOVs are 
+typically found in AC surge protector outlet strips. A <a href="http://search.digikey.com/us/en/cat/circuit-protection/tvs-varistors-movs" rel="nofollow">wide variety of these devices</a>
+ are available in different voltage and current ranges. These devices 
+typically clip off voltage spikes above a fixed threshold voltage.It is 
+common to pick a transorb or MOV with a clip-off threshold voltage a bit
+ higher than the normal operating range found in the circuit (&gt;20%?).
+ Activated transorbs or MOVs have to dissipate the energy in the clipped
+ off voltage spike and they are typically rated by the amount of energy 
+they can absorb before overheating and burning out, so the duration of 
+the overvoltage spike needs to be relatively short.
+<br></p>
+</div><h3>Driver ICs</h3>
+<p>As an alternative to using discrete transistors, special purpose 
+driver ICs are also available that can drive multiple devices. These ICs
+ contain several internal transistor driver circuits similar to the one 
+just described above. A small number are still available in a DIP 
+package that can plug into a breadboard such as the <a href="http://www.sparkfun.com/datasheets/IC/uln2803a.pdf" rel="nofollow">ULN2803</a>
+ 8-channel 500MA 50V driver seen below, but most new ones are surface 
+mount ICs that will require a breakout board for use on a breadboard. <br><br>
+<img alt="ULN" title="ULN" src="VoltageDriverTransistor_mbed_files/uln2803a.jpg" width="250"><br>
+<a href="http://search.digikey.com/scripts/dksearch/dksus.dll?vendor=0&amp;keywords=ULN2803" rel="nofollow">ULN2803 8-Channel Darlington Driver DIP IC</a><br><br>
+<img alt="TLC5490" title="TLC5490" src="VoltageDriverTransistor_mbed_files/_scaled_tlc5940.jpg" width="250"><br>
+TLC5940 16 channel PWM Driver<br><br>
+The <a href="http://www.sparkfun.com/products/10136" rel="nofollow">TI TLC5940</a>
+ is a 16 channel driver IC with 12 bit duty cycle PWM control (0 - 
+4095), 6 bit current limit control (0 - 63), and a daisy chainable 
+serial interface (SPI). Maximum drive current is 120 MA per output. It 
+is handy for expanding the number of high current drive PWM outputs 
+available. This IC was originally targeted for driving LED arrays. 16 
+PWM outputs might sound like a lot, but a humanoid robot might need over
+ twenty to control all of the servo motors used the joints. In addition 
+to the DIP package seen above, is it also available in surface mount. 
+Sparkfun makes the breakout board seen below using the surface mount 
+package. A <a href="http://mbed.org/users/Fiuba/libraries/tlc5940/liirw9">TLC5940 code library</a> is available for mbed. Driver ICs may also require heat sinks or other cooling considerations when used at high current levels.<br><br></p>
+<p><img alt="TLC5940" title="TLC5940" src="VoltageDriverTransistor_mbed_files/_scaled_tlc5940breakout.jpg" width="300"><br>
+<a href="http://www.sparkfun.com/products/10616" rel="nofollow">Sparkfun TLC5940 Breakout board</a></p>
+<p><br><br>
+Devices that require several amps of current will need a more complex 
+driver circuit with larger power transistors on heat sinks, and more 
+than one transistor current amplification stage may be required. It is 
+not advisable or reliable in the long term to connect several small BJT 
+transistors in parallel to increase the current output provided by the 
+driver circuit; a larger power transistor must be used.
+Driver circuits can be built using small discrete transistors such as 
+the TO-92 size 2N3904 on a standard breadboard. If even higher current 
+drive is needed, the larger power transistors used will not fit directly
+ on a breadboard and the wires are not large enough. Having these 
+devices already assembled on a small PCB will save prototyping time with
+ mbed, so those options will be the primary focus here.<br><br>
+For <a href="https://mbed.org/users/4180_1/notebook/using-a-speaker-for-audio-output/">speakers, an audio amplifier IC</a> is often used to drive the speaker. New class D audio amplifiers actually use PWM.
+<br></p>
+<h2>MOSFETs</h2>
+<p>At higher voltage and high current levels, newer <a href="http://en.wikipedia.org/wiki/MOSFET" rel="nofollow">MOSFET</a>
+ transistors are more efficient than the older BJTs. In BJTs, the base 
+current controls the switch, but in MOSFETs it is the gate voltage. A 
+common N-channel <a href="http://www.sparkfun.com/datasheets/Components/General/RFP30N06LE.pdf" rel="nofollow">RFP30N06LE</a> MOSFET transistor symbol and pinout is shown below.<br><br></p>
+<p><img src="VoltageDriverTransistor_mbed_files/_scaled_mosfet_symbol.jpg" alt="/media/uploads/4180_1/_scaled_mosfet_symbol.jpg" title="/media/uploads/4180_1/_scaled_mosfet_symbol.jpg"><br><br>
+N-Channel MOSFET transistor symbol and TO-220 package pinout<br><br></p>
+<p><img src="VoltageDriverTransistor_mbed_files/_scaled_mdriver.jpg" alt="/media/uploads/4180_1/_scaled_mdriver.jpg" title="/media/uploads/4180_1/_scaled_mdriver.jpg"><br><br>
+<a href="http://www.sparkfun.com/products/10256" rel="nofollow">Sparkfun MOSFET driver breakout board</a></p>
+<p>The board seen above uses the RFP30N06LE MOSFET transistor rated at 
+60V and 30A for higher current loads.  The trace size on the PCB and the
+ wire size for the screw terminals limits loads to around 4A. The screw 
+terminals are used for high current connections since the wires need to 
+be larger than the standard breadboard jumper wires. The schematic is 
+seen in the image below. This special MOSFET has a very low gate input 
+voltage that works with 3.3V logic signals like those on mbed.<br> A 
+typical MOSFET runs just a bit more efficiently if the gate input is a 
+bit higher than the supply voltage. Special MOSFET driver ICs such as 
+the <a href="http://cds.linear.com/docs/Datasheet/1155fa.pdf" rel="nofollow">LTC1155</a> use a <a href="http://en.wikipedia.org/wiki/Charge_pump" rel="nofollow">charge pump circuit</a>
+ to drive the gate voltage higher on higher voltage MOSFET driver 
+circuits using a normal digital logic level control signal (i.e., useful
+ when load voltage (RAW in schematic) is larger then the logic supply 
+voltage). The <a href="http://search.digikey.com/scripts/DkSearch/dksus.dll?lang=en&amp;site=us&amp;KeyWords=LTC1155&amp;x=19&amp;y=14" rel="nofollow">LTC1155</a>
+ is used with a MOSFET in many laptop PCs and cellphones to turn power 
+on and off for power management and is available in an 8-pin DIP package
+ or surface mount. Overvoltage and short circuit protection can also be 
+added using the LTC1155. Some large MOSFETs including the one on the 
+Sparkfun board already contain an internal <a href="http://en.wikipedia.org/wiki/Flyback_diode" rel="nofollow">snubber diode</a>
+ for driving inductive loads. If this is not the case, it would be a 
+good idea to add an external diode when driving inductive loads.</p>
+<p><img src="VoltageDriverTransistor_mbed_files/_scaled_mdrvschem.png" alt="/media/uploads/4180_1/_scaled_mdrvschem.png" title="/media/uploads/4180_1/_scaled_mdrvschem.png"><br>
+MOSFET driver circuit for high current DC loads</p>
+<div class="flashbox fnote"><h4 class="ftitle">Floating Inputs</h4><p>Note
+ the 10K pull-down resistor on the control input line. This prevents the
+ gate input from floating high and turning on the device when nothing is
+ driving the input. If it did float, it is also possible that the MOSFET
+ might oscillate and overheat.  In most cases, the device should be off 
+if something is wrong. This can happen if a wire was not connected or 
+perhaps briefly when the microcontroller is reset and GPIO pins reset to
+ input mode. It also might happen if the power supply for the 
+microcontroller is not on, but another power supply for the device is 
+on.  A similar design issue of leaving control inputs floating in a 
+computer control system in a hydroelectric power plant once caused a 
+major power blackout in California when power was lost on the computer.
+<br></p>
+</div><p><br></p>
+<h3>Wiring</h3>
+<table><tbody><tr><th>mbed</th><th>MOSFET PCB</th><th>5V &lt;200MA* External Device</th></tr>
+<tr><td>gnd</td><td>gnd</td><td></td></tr>
+<tr><td>5V</td><td>JP2-1 RAW</td><td></td></tr>
+<tr><td>P8</td><td>JP2-3 Control</td><td></td></tr>
+<tr><td></td><td>JP1-1</td><td>Device(neg)</td></tr>
+<tr><td></td><td>JP2-2</td><td>Device(pos)</td></tr>
+</tbody></table>
+<p>Any digital out pin can be used for control (connects to the control 
+input of the driver circuit). If you plan on using PWM, select one of 
+the mbed <a href="http://mbed.org/handbook/PwmOut">PWMOut</a> pins.
+Keep in mind that mbed can only supply about 200MA of current for 
+external devices via USB power, so an external DC power supply may also 
+be needed for large loads. When using external DC power supplies for 
+additional power (to RAW in schematic above), only connect the supply 
+grounds together (i.e., and not mbed Vcc and RAW even if the voltage is 
+the same). <br><br> 
+Here is an example program the turns the transistor switch on and off every .2 seconds.</p>
+<div class="flashbox fcode"><h4 class="ftitle"> </h4><pre class="mbed-code"><table class="codify_table" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="codify_numcol"><div class="codify_numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br></div></td><td class="codify_screen"><pre><span class="SH_BUILTIN">#include&nbsp;</span><span class="SH_STRING">"mbed.h"</span>
+&nbsp;
+DigitalOut&nbsp;myled(LED1);
+DigitalOut&nbsp;Ctrl(p8);
+&nbsp;
+<span class="SH_RESERVED">int</span>&nbsp;main()&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="SH_RESERVED">while</span>(<span class="SH_BUILTIN">1</span>)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ctrl&nbsp;=&nbsp;<span class="SH_BUILTIN">1</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myled&nbsp;=&nbsp;<span class="SH_BUILTIN">1</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait(.<span class="SH_BUILTIN">2</span>);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ctrl&nbsp;=&nbsp;<span class="SH_BUILTIN">0</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myled&nbsp;=&nbsp;<span class="SH_BUILTIN">0</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait(.<span class="SH_BUILTIN">2</span>);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+}
+&nbsp;
+</pre></td></tr></tbody></table></pre></div><p><br><br></p>
+<h3>IGBTs</h3>
+<p>The <a href="http://en.wikipedia.org/wiki/IGBT" rel="nofollow">insulated gate bipolar transistor (IGBT)</a>
+ is a new type of semiconductor device used as an electronic switch in 
+newer designs that combines high efficiency and fast switching. It is 
+used in medium and high power applications such as appliances, electric 
+cars, trains, variable speed refrigerators, air-conditioners, stereo 
+systems that use switching amplifiers, and even welding machines.  They 
+can be connected in parallel to make devices with ratings up to 6000V 
+and hundreds of amps.
+It has an isolated gate FET as the control input of a BJT.<br><br></p>
+<p> <img src="VoltageDriverTransistor_mbed_files/igbtsym.png" alt="/media/uploads/4180_1/igbtsym.png" title="/media/uploads/4180_1/igbtsym.png"> 
+<br>
+IGBT schematic symbol<br><br>
+ <img alt="IGBT" title="IGBT" src="VoltageDriverTransistor_mbed_files/igbtmodule.jpg" width="300"><br>
+<a href="http://www.infineon.com/cms/en/product/channel.html?channel=db3a30431a5c32f2011a727cfcb3708e" rel="nofollow">Infineon Hybrid Car IGBT switch module</a><br><br>
+The IGBT module seen above is used to switch the drive motor in hybrid cars. It contains six IGBTs (3 Phase AC motor with <a href="http://en.wikipedia.org/wiki/Variable-frequency_drive" rel="nofollow">variable frequency drive</a> using PWM) and is rated at 800A/650V. A wide array of <a href="http://search.digikey.com/us/en/cat/semiconductor-modules/igbts/4261063?k=IGBT" rel="nofollow">IGBT modules</a>
+ are available ranging from several amps to several thousand amps and in
+ this range they can be more energy efficient than power MOSFETs.<br><br></p>
+<h2>Special Purpose Driver ICs</h2>
+<p>As an alternative to using several discrete power transistors mounted
+ on a PCB, multiple driver circuits are often packaged in ICs targeted 
+for particular applications to save space and reduce cost. Two of the 
+most common examples are motor and LED driver ICs.<br><br></p>
+<h2>H-Bridge Driver ICs</h2>
+<p>To control and reverse a DC motor, an <a href="http://en.wikipedia.org/wiki/H-bridge" rel="nofollow">H-bridge circuit</a>
+ is used with two control signals and four driver transistors. This 
+allows the current direction through the load to be reversed similar to 
+swapping the wires on a DC motor. <br><br></p>
+<p> <img alt="hb" title="hb" src="VoltageDriverTransistor_mbed_files/h-bridge.png" width="500"><br>
+Basic H-bridge driver for DC motor control
+<br><br>
+The basic H-Bridge circuit with four power transistors that provide 
+drive current for the motor is seen above. In this circuit, you can 
+think of the power transistors functioning as on/off switches. Two 
+digital logic level inputs, forward and reverse, turn diagonal pairs of 
+transistors on and off to reverse the current flow through the DC motor 
+(M). In this basic circuit, forward and reverse must not both be turned 
+on at the same time or it will short the power supply. More advanced 
+H-bridge circuits prevent this issue and add a dynamic brake feature. 
+MOSFETs are often used in newer H-bridge ICs instead of BJTs.<br> </p>
+<p>See <a href="http://mbed.org/cookbook/Motor">http://mbed.org/cookbook/Motor</a>
+ for example code using an H-bridge driver to control the direction of a
+ DC motor. It also uses digital PWM for motor speed control. Small 
+H-bridge modules are available on breakout boards.<br><br><br></p>
+<p><img src="VoltageDriverTransistor_mbed_files/_scaled_dhbpinout.jpg" alt="/media/uploads/4180_1/_scaled_dhbpinout.jpg" title="/media/uploads/4180_1/_scaled_dhbpinout.jpg"><br><br>
+<a href="http://www.pololu.com/catalog/product/713" rel="nofollow">Pololu</a> or <a href="http://www.sparkfun.com/products/9457" rel="nofollow">Sparkfun</a> 1.2A MOSFET Dual H-bridge breakout board
+<br><br>
+The small breakout board seen above uses Toshiba’s TB6612FNG dual 
+H-bridge motor driver IC, which can independently control two 
+bidirectional DC motors or one bipolar stepper motor. A recommended 
+motor voltage of 4.5 – 13.5 V and peak current output of 3 A per channel
+ (1 A continuous) make this a handy motor driver for low-power motors. 
+Many small robots have two DC drive motors controlled by a dual H-bridge
+ driver with PWM speed control. The <a href="http://mbed.org/users/4180_1/notebook/sparkfun-magician-robot-base-kit/">Sparkfun magician robot</a> cookbook page has code examples for mbed. <a href="http://www.pololu.com/search/compare/11" rel="nofollow">Higher current H-bridge modules</a> are also available.<br><br>
+The speed of DC motors varies with the load, and will also vary a bit 
+from motor to motor even on identical motors. For accurate speed control
+ under varying loads, feedback is typically required. Three cookbook 
+projects, <a href="http://mbed.org/cookbook/QEI">QEI</a>,  <a href="http://mbed.org/cookbook/PID">PID</a>, and <a href="http://mbed.org/cookbook/mbed-Rover">mbed Rover</a> provide some additional background on how to use feedback for more accurate speed control of DC motors.
+<br><br></p>
+<h2>Stepper motor driver ICs</h2>
+<p><a href="http://en.wikipedia.org/wiki/Stepper_motor" rel="nofollow">Stepper motors</a>
+ have multiple coil windings that need to be activated in the current 
+sequence to rotate the motor shaft by a fixed angle without the need for
+ position feedback hardware.  Stepper motors are used in devices to 
+provide low-cost accurate position control (i.e., moving the print head 
+on an inkjet printer). Stepper motor driver ICs contain an H-bridge 
+driver for each winding and often also include a small state machine or 
+counter to sequence through the correct states to drive the motor. The 
+typical control inputs are step and direction. The newest stepper motor 
+driver ICs can respond to a variety of complex commands that even 
+include the capability to move fractions of a step using PWM or perhaps 
+move multiple steps automatically. The Pololu stepper motor driver 
+breakout board seen below will drive a bipolar stepper motor up to 2A 
+per coil using the <a href="http://www.pololu.com/file/download/a4988_DMOS_microstepping_driver_with_translator.pdf?file_id=0J450" rel="nofollow">Allegro A4988 DMOS Microstepping Driver IC</a>. An example  <a href="http://mbed.org/users/AjK/libraries/SimpleSteppers/lrg1ps">library to control stepper motors</a> is available in the cookbook. A wide variety of <a href="http://search.digikey.com/us/en/cat/integrated-circuits-ics/pmic-motor-and-fan-controllers-drivers/2556626?k=stepper%20motor%20driver" rel="nofollow">stepper motor driver ICs</a> is available.<br><br>
+<img src="VoltageDriverTransistor_mbed_files/_scaled_stepdrvic.jpg" alt="/media/uploads/4180_1/_scaled_stepdrvic.jpg" title="/media/uploads/4180_1/_scaled_stepdrvic.jpg">
+<br><br>
+<a href="http://www.pololu.com/catalog/product/1182" rel="nofollow">Pololu stepper motor driver breakout board</a></p>
+<h2>LED Driver ICs</h2>
+<p>High-power bright LEDs require more current than the typical digital 
+logic output pin can provide and they need a driver circuit.
+The small module seen below contains the Allegro A6281 IC with three 
+150MA driver circuits for a high-power red, green and blue(RGB) LED. It 
+also includes PWM dimming hardware for each of the three driver circuits
+ and it can generate 2<sup>30</sup> different colors and brightness levels. Code examples for mbed can be found on the <a href="http://mbed.org/users/4180_1/notebook/shiftbrite1/">Shiftbrite</a>
+ cookbook page. The modules can be chained together to build large LED 
+arrays. With the rapid growth of LED lighting, quite a few <a href="http://search.digikey.com/us/en/cat/integrated-circuits-ics/pmic-led-drivers/2556628?k=LED%20driver%20IC" rel="nofollow">LED driver ICs</a> are available.</p>
+<p><img src="VoltageDriverTransistor_mbed_files/_scaled_shiftbrite.png" alt="/media/uploads/4180_1/_scaled_shiftbrite.png" title="/media/uploads/4180_1/_scaled_shiftbrite.png"><br>
+<a href="http://macetech.com/store/index.php?main_page=product_info&amp;cPath=1&amp;products_id=1" rel="nofollow">Shiftbrite RGB LED driver breakout board</a></p>
+<p><br><br></p>
+<h2>Relays</h2>
+<p>Relays can also be used to switch high current and/or high voltage AC and DC devices using logic signals for control.<br><br></p>
+<p> <img alt="rr" title="rr" src="VoltageDriverTransistor_mbed_files/relay.jpg" width="300"><br><br>
+Electromechanical Relay </p>
+<p>An electromechanical relay contains an electromagnetic coil (right 
+side of image above) that moves a metal arm to make and break an 
+electrical connection. Electromechanical relays can be used to switch 
+high current and also AC devices. They provide electrical isolation 
+between the control signal and the load and are relatively low cost. No 
+common ground connection between the control signal and load is needed. A
+ standard digital logic GPIO output pin does not supply enough current 
+to drive a relay coil directly. When using logic signals to control a 
+relay, a driver circuit must be used to boost the current needed to 
+energize the relay’s electromagnetic coil. The load is switched on and 
+off using the relay’s metal contacts that move when the coil is 
+energized. Since the metal contacts actually touch, relays will have 
+less of a voltage drop across the switch point than transistor circuits.
+ They are sometimes used to switch regulated power supplies on and off. 
+Relays tend to more resistant to failure caused by high voltage surges 
+than semiconductor devices.</p>
+<p>Electromechanical relays do have some limitations for designers to consider:
+&nbsp;</p>
+<ul><li>The number of lifetime ON/OFF cycles is limited by mechanical wear (typically 10<sup>6</sup> to 10<sup>7</sup> cycles)<br>
+</li><li>They have slow ON/OFF times – around 20 per minute. Too slow for motor speed control or dimming lights.<br>
+</li><li>Relay contacts can wear out due to arcing on inductive loads (perhaps as few as 10<sup>5</sup> cycles) even on rated loads.<br>
+</li><li>Oxidation on relay contacts can be a problem on low voltage 
+analog signals. (around 2 volts is needed to initially punch through the
+ oxidation layer that occurs between any two metal contacts)<br>
+</li><li>Worn out relays will sometimes stick due to mechanical wear and an audible click is typically heard during switching.
+</li></ul>
+<p> <img alt="RBB" title="RBB" src="VoltageDriverTransistor_mbed_files/spfnrelaypcb.jpg" width="400">  <br><br>
+<a href="http://www.sparkfun.com/products/11042" rel="nofollow">Sparkfun relay board with driver</a><br><br>
+Sparkfun makes a low-cost relay board shown above that contains both the
+ relay and the required driver circuit built using a discrete 
+transistor. The relay coils on this relay require around 200MA at 5VDC. 
+It is easier to drive relays like this that use a lower coil voltage. 
+The relay board's
+driver circuit is built using a BJT as seen in the schematic below. The 
+relay can switch up to 220VAC at 20A using a logic signal for control, 
+but the small PCB layout and screw terminals likely limit it to lower 
+voltage and current levels to at least half of these ratings. A similar 
+board is available from <a href="http://www.sparkyswidgets.com/Products/Store/Details/tabid/81/ProductID/3/Default.aspx" rel="nofollow">Sparky's Widgets</a>. It is probably wise to be very conservative on the maximum voltage and current ratings quoted for relays in datasheets.<br><br></p>
+<p> <img alt="RS" title="RS" src="VoltageDriverTransistor_mbed_files/relayschem.jpg" width="400"> <br>
+Sparkfun Relay Board Schematic<br><br></p>
+<p>The <a href="http://en.wikipedia.org/wiki/Flyback_diode" rel="nofollow">snubber diode</a>
+ backwards across the relay coil absorbs the reverse voltage inductive 
+spike that occurs when turning off the coil (i.e., V=Ldi/dt).</p>
+<p>Any digital out pin can be used to control the relay (connects to the input of the relay driver circuit).</p>
+<h3>Wiring</h3>
+<table><tbody><tr><th>mbed</th><th>Relay PCB</th><th>External Device</th></tr>
+<tr><td>gnd</td><td>JP2-1 gnd</td><td></td></tr>
+<tr><td>5V</td><td>JP2-3 or ext 5V for RAW?</td><td></td></tr>
+<tr><td>P8</td><td>JP2-2 Relay Control</td><td></td></tr>
+<tr><td></td><td>JP3-1</td><td>Load1</td></tr>
+<tr><td></td><td>JP3-2</td><td>Load2</td></tr>
+</tbody></table>
+<div class="flashbox fnote"><h4 class="ftitle">Safety Note on High Voltages</h4><p>A
+ high voltage power line shorted to a digital logic circuit on a 
+breadboard can blow up an entire computer system, or cause electrocution
+ if touched.
+For safety, keep the wires for any high voltage and/or high current 
+devices well away from the breadboard and do not touch them when power 
+is on. Even a momentary wire short can blow things ups. An inline fuse 
+and even a <a href="http://en.wikipedia.org/wiki/Residual-current_device" rel="nofollow">GFI</a>
+ breaker is not a bad idea. Long before a standard household AC circuit 
+breaker trips, electronic parts will blow out with a short. Make sure 
+that the bottom side of the PCB does not short out on any metallic 
+surfaces. Breadboard contacts and small jumper wires only handle about 
+one amp. The relay boards typically use screw terminals to attach the 
+larger wires needed for the external device. Just driving the coil of a 
+large relay requires most of the additional current that can be supplied
+ to mbed via the USB cable, so an external DC power supply will likely 
+be needed to power the relay coils and the load of the external device. 
+For electrical isolation, when using a relay to control external AC 
+devices or high voltage DC devices, do not connect the grounds on the 
+power supplies from the control side to the load side.<br></p>
+</div><p>Here is an example program the turns the relay on and off every 2 seconds.<br></p>
+<div class="flashbox fcode"><h4 class="ftitle"> </h4><pre class="mbed-code"><table class="codify_table" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td class="codify_numcol"><div class="codify_numbers">1<br>2<br>3<br>4<br>5<br>6<br>7<br>8<br>9<br>10<br>11<br>12<br>13<br>14<br>15<br>16<br></div></td><td class="codify_screen"><pre><span class="SH_BUILTIN">#include&nbsp;</span><span class="SH_STRING">"mbed.h"</span>
+&nbsp;
+DigitalOut&nbsp;myled(LED1);
+DigitalOut&nbsp;Ctrl(p8);
+&nbsp;
+<span class="SH_RESERVED">int</span>&nbsp;main()&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="SH_RESERVED">while</span>(<span class="SH_BUILTIN">1</span>)&nbsp;{
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ctrl&nbsp;=&nbsp;<span class="SH_BUILTIN">1</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myled&nbsp;=&nbsp;<span class="SH_BUILTIN">1</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait(<span class="SH_BUILTIN">2</span>);
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Ctrl&nbsp;=&nbsp;<span class="SH_BUILTIN">0</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;myled&nbsp;=&nbsp;<span class="SH_BUILTIN">0</span>;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wait(<span class="SH_BUILTIN">2</span>);
+&nbsp;&nbsp;&nbsp;&nbsp;}
+}
+&nbsp;
+</pre></td></tr></tbody></table></pre></div><p><br>
+A demo using mbed with this code example for the Sparky's Widget relay breakout board is available at <a href="http://mbed.org/users/4180_1/notebook/relay-breakout-boards/">http://mbed.org/users/4180_1/notebook/relay-breakout-boards/</a>.
+<br><br>
+For safety and especially if you do not have prior experience working 
+with high voltage AC, one of the sealed devices such as the <a href="http://powerswitchtail.com/" rel="nofollow">Power Switch Tail II</a>
+ seen below would be a safer alternative to switch small household AC 
+devices. It has an internal switch module and the high voltage 
+connections are all enclosed in the case. Standard AC plugs are already 
+attached and <a href="http://powerswitchtail.com/PSTIIU.aspx" rel="nofollow">international versions of the Power Switch Tail</a> are also available. The US version is also available from <a href="http://www.sparkfun.com/products/10747" rel="nofollow">Sparkfun</a>. A code example for mbed is available at <a href="http://mbed.org/users/4180_1/notebook/powerswitch-tail-ii/">http://mbed.org/users/4180_1/notebook/powerswitch-tail-ii/</a><br><br>
+<img src="VoltageDriverTransistor_mbed_files/_scaled_powertail.jpg" alt="/media/uploads/4180_1/_scaled_powertail.jpg" title="/media/uploads/4180_1/_scaled_powertail.jpg"><br><br>
+The <a href="http://powerswitchtail.com/" rel="nofollow">Power Switch Tail II</a> has an internal driver and relay circuit with the standard AC plugs for the US<br><br>
+<img alt="PTS" title="PTS" src="VoltageDriverTransistor_mbed_files/powertailschematic.jpg" width="550"><br><br>
+Power Switch Tail II Schematic<br><br>
+In the schematic above, A1 is a <a href="http://www.vishay.com/docs/81166/vo2223.pdf" rel="nofollow">VO2223</a>
+ 0.9A 600V optically isolated TRIAC (Phototriac) in a DIP package that 
+is used to drive the mechanical relay. Note that it also has two MOVs 
+included for surge suppression. It addition to the standard relay 
+version, a Power Switch Tail with a solid state relay (SSR) is also 
+available. SSRs and TRIACs will be explained in a later section.</p>
+<p><br><br>
+The small Phidgets dual relay board seen below works in a similar manner to the Sparkfun board, but it has two relays.<br><br>
+<img src="VoltageDriverTransistor_mbed_files/prelay.jpg" alt="/media/uploads/4180_1/prelay.jpg" title="/media/uploads/4180_1/prelay.jpg"><br><br>
+<a href="http://www.phidgets.com/products.php?category=9&amp;product_id=3051_1" rel="nofollow">Phidgets Dual relay board</a><br><br>
+Relays need to be selected based on both the input and output current 
+and voltage rating. Since contacts can wear out on the output side be 
+conservative on current ratings.</p>
+<p><br><br><br></p>
+<h2>Reed Relays</h2>
+<p> <img alt="rr" title="rr" src="VoltageDriverTransistor_mbed_files/_scaled_reed_relay.jpg" width="250"><br>
+A <a href="http://search.digikey.com/scripts/DkSearch/dksus.dll?lang=en&amp;site=us&amp;KeyWords=reed+relay+DIP" rel="nofollow">small reed relay module in a DIP package</a> </p>
+<p>A <a href="http://en.wikipedia.org/wiki/Reed_relay" rel="nofollow">reed relay</a> is a type of relay that uses an electromagnet to control one or more <a href="http://en.wikipedia.org/wiki/Reed_switch" rel="nofollow">reed switches</a>.
+ The contacts are of magnetic material and the electromagnet acts 
+directly on them without requiring an armature to move them. Sealed in a
+ long, narrow glass tube, the contacts are protected from corrosion, and
+ are usually plated with silver. As the moving parts are small and 
+lightweight, reed relays can switch much faster than relays with 
+armatures. They typically switch lower current values than a large 
+relay. They are mechanically simple, making for a bit more reliability 
+and longer life. The coil current needed is lower (perhaps 10MA @5V) and
+ in some cases a driver circuit may not be needed if the digital logic 
+output has high drive current. Some reed relays already contain a 
+snubber diode. If not, an external back EMF <a href="http://en.wikipedia.org/wiki/Flyback_diode" rel="nofollow">snubber diode</a> would still be a good idea. Many are small enough to come in a DIP package that can plug into a breadboard.</p>
+<p><br><br><br></p>
+<h2>Solid State Relays</h2>
+<p>In many applications, <a href="http://en.wikipedia.org/wiki/Solid_state_relay" rel="nofollow">solid state relays</a>
+ can be used instead of electromechanical relays. Solid State Relays 
+(SSRs) offer several advantages over electromechanical relays:</p>
+<ul><li>Most have optical isolation between input and output load<br>
+</li><li>No moving parts - built using semiconductors<br>
+</li><li>Some are fast enough for motor speed control and dimming lights<br>
+</li><li>Resistant to shock and vibration<br>
+</li><li>Around 100X more reliable than mechanical relays<br>
+</li><li>Silent operation<br>
+<br>
+<img src="VoltageDriverTransistor_mbed_files/_scaled_ssr.jpg" alt="/media/uploads/4180_1/_scaled_ssr.jpg" title="/media/uploads/4180_1/_scaled_ssr.jpg"><br>
+<a href="http://www.sparkfun.com/products/10684" rel="nofollow">Sparkfun Solid State Relay Board</a>
+</li></ul>
+<p>The schematic is shown below for the Sparkfun Solid State Relay board seen above. It uses a <a href="http://dlnmh9ip6v2uc.cloudfront.net/datasheets/Components/General%20IC/S108,208T02%20Series.pdf" rel="nofollow">Sharp SSR module</a>
+ and can switch 125VAC at 8A (AC only - not DC). Note that it also 
+requires a driver circuit and the external wire connections are the same
+ as the relay board. A demo for mbed is available at <a href="http://mbed.org/users/4180_1/notebook/ssr-breakout-boards/">http://mbed.org/users/4180_1/notebook/ssr-breakout-boards/</a><br><br></p>
+<p><img src="VoltageDriverTransistor_mbed_files/_scaled_ssrschem.jpg" alt="/media/uploads/4180_1/_scaled_ssrschem.jpg" title="/media/uploads/4180_1/_scaled_ssrschem.jpg"><br>
+Sparkfun Solid State Relay Board Schematic<br><br>
+<br></p>
+<h3>Optical Isolation</h3>
+<p>Optical or mechanical isolation (relays) between higher voltage 
+supplies and computers is always a good idea. Not having to connect 
+grounds between supplies helps in noisy industrial environments. Long 
+wires can also pick up large transient voltages. One of the first 
+projects to control and instrument an airport ended abruptly when a 
+lightning bolt from a thunderstorm hit near the end of the runway and 
+the ground wires carried the ground voltage transient spike all the way 
+back to the control tower and blew up the computer. Most SSRs have an <a href="http://en.wikipedia.org/wiki/Opto-isolator" rel="nofollow">opto-isolator</a>
+ on the input. As seen below, Sparkfun also makes a small opto-isolator 
+breakout board with small driver transistors on the output to isolate 
+the computer output signals and convert them to higher voltage signals. 
+It has limited current drive, but it could be added to the input side of
+ a driver circuit to provide optical isolation. Opto-isolators are 
+sometimes also used on sensor inputs to a computer. In this case, the 
+sensor drives the input side and the output side connects to the 
+computer. <br>
+<img src="VoltageDriverTransistor_mbed_files/_scaled_optoisl.jpg" alt="/media/uploads/4180_1/_scaled_optoisl.jpg" title="/media/uploads/4180_1/_scaled_optoisl.jpg"><br>
+<a href="http://www.sparkfun.com/products/9118" rel="nofollow">Sparkfun Opto-isolater breakout board</a><br>
+<br><br>
+As seen below, the ILD2213T optocoupler IC used on the Sparkfun board contains two optically
+coupled pairs consisting of a Gallium Arsenide infrared LED and a
+silicon NPN <a href="http://en.wikipedia.org/wiki/Phototransistor#Other_modes_of_operation" rel="nofollow">phototransistor</a>.
+ Signal information, including a
+DC level, can be transmitted by the LED via IR (infrared light) to the 
+phototransistor while maintaining
+4000V of electrical isolation between the input and output. Before 
+reaching 4000V, other parts such as wires and connectors will likely 
+short out first.
+Opto-isolators tend to be a bit slow to switch when compared to the 
+speed of digital logic circuits. This device is in the five microsecond 
+range.  A few SSRs use reed relays on the input signal or feed the input
+ through a DC to AC converter with a transformer for electrical 
+isolation.</p>
+<p><br><br>
+<img src="VoltageDriverTransistor_mbed_files/_scaled_oi_schem.png" alt="/media/uploads/4180_1/_scaled_oi_schem.png" title="/media/uploads/4180_1/_scaled_oi_schem.png"><br>
+<a href="http://www.sparkfun.com/datasheets/Components/SMD/ild205t.pdf" rel="nofollow">ILD213T Dual Optocoupler IC</a><br>
+<br></p>
+<h3>Other SSR modules</h3>
+<p>Unfortunately, solid state relay modules typically cost a bit more 
+than mechanical relays. Many SSRs include a zero crossing circuit that 
+turns on or off the device only when the AC voltage level is zero(a zero
+ crossing). This also helps to reduce RF noise emissions generated by 
+switching high current loads. The Phidgets SSR board seen below can 
+switch both AC and DC voltages. It uses a small <a href="http://search.digikey.com/us/en/cat/relays/solid-state/1048664?k=SSR%20CEL" rel="nofollow">NEC/CEL SSR</a> IC.</p>
+<p><img src="VoltageDriverTransistor_mbed_files/_scaled_phidgetsssr.jpg" alt="/media/uploads/4180_1/_scaled_phidgetsssr.jpg" title="/media/uploads/4180_1/_scaled_phidgetsssr.jpg"><br>
+<a href="http://www.phidgets.com/products.php?category=9&amp;product_id=3052_0" rel="nofollow">Phidgets SSR board</a>
+<br><br></p>
+<h3>Switching AC</h3>
+<p>Some solid state relays can also drive AC loads. 
+This is possible using a <a href="http://en.wikipedia.org/wiki/TRIAC" rel="nofollow">TRIAC</a>
+ as in the Sparkfun Solid State relay board schematic above with the 
+Sharp SSR module. The TRIAC symbol looks like two diodes connected in 
+opposite directions as seen below. The gate control input (G) only 
+requires a few milliamps and the AC load connects to A1 and A2. In the 
+Sharp SSR module, the IR light from the LED drives the TRIAC gate input 
+(provides optical isolation). A TRIAC's gate input can be carefully time
+ controlled in phase with the AC signal to dim lights, control motor 
+speed, or adjust the power output to the load. Household light dimmer 
+switches often use TRIACs. <br><br>
+ <img alt="TRIAC" title="TRIAC" src="VoltageDriverTransistor_mbed_files/triac.png" width="150"><br>
+A TRIAC can switch AC loads<br><br><br>
+Two MOSFETs with their source pins connected together as in the Phidgets
+ SSR module with the NEC/CEL SSR IC will also drive AC loads as seen 
+below. The gate input is optically isolated and the MOSFETs drain pins 
+connect to the AC load. This works since all MOSFETs have a substrate 
+diode that always conducts current in the reverse direction (only the 
+normal current direction can be switched). Be sure to check the SSR's 
+datasheet, SSRs can be AC only (TRIAC) or AC/DC(have two MOSFETs) or DC 
+only(one MOSFET).<br><br>
+<img alt="AC_MOSFET" title="AC_MOSFET" src="VoltageDriverTransistor_mbed_files/acmosfet.png" width="300"><br>
+SSR using two MOSFETs to switch AC loads with optical isolation<br><br></p>
+<p>The power SSR tail module seen below can be used to dim incandescent or dimmable LED lights.<br><br>
+<img src="VoltageDriverTransistor_mbed_files/_scaled_powerssrtail.png" alt="/media/uploads/4180_1/_scaled_powerssrtail.png" title="/media/uploads/4180_1/_scaled_powerssrtail.png"><br><br>
+The <a href="http://www.powerswitchtail.com/Pages/PowerSSRTail.aspx" rel="nofollow">PowerSSR Tail</a> includes AC plugs and an SSR in an enclosed case<br><br></p>
+<p>As seen in the schematic below, it contains a solid state relay built
+ using an opto-isolator with digital logic inputs, a TRIAC for AC 
+switching, and a MOV for surge suppression. A <a href="http://powerswitchtail.com/ZeroCrossTail.aspx" rel="nofollow">zero crossing</a> and <a href="http://powerswitchtail.com/PowerStateTail.aspx" rel="nofollow">state detection</a> tail module with isolation are also available.<br><br>
+<img alt="PowerSSR" title="PowerSSR" src="VoltageDriverTransistor_mbed_files/powerssr_schem.png" width="600"><br><br>
+Power SSR Tail Schematic<br><br></p>
+<h3>Higher Power SSRs</h3>
+<p>Opto 22 developed the first SSRs and makes a wide variety of DC and 
+AC SSR modules including the large module below that will switch 480V AC
+ at 45A with a 3V DC logic control input. They are frequently used in 
+industrial automation systems. Heatsinks may also be needed on SSRs.
+<br>
+<img src="VoltageDriverTransistor_mbed_files/_scaled_optossr.png" alt="/media/uploads/4180_1/_scaled_optossr.png" title="/media/uploads/4180_1/_scaled_optossr.png"><br>
+<a href="http://www.opto22.com/site/solidstaterelays.aspx" rel="nofollow">Opto 22 480D45 SSR module</a><br><br>
+IGBTs are also starting to appear in new designs of medium to high current SSRs. A wide assortment of <a href="http://search.digikey.com/us/en/cat/relays/solid-state/1048664?k=SSR" rel="nofollow">SSRs</a> is available.</p>
+<h3>Industrial Automation Systems &amp; PACs</h3>
+<p>Programmable automation controllers (<a href="http://en.wikipedia.org/wiki/Programmable_automation_controller" rel="nofollow">PACs</a>)
+ for industrial automation systems with a large number of inputs and 
+outputs often mount a customized mixture of relays, AC/DC SSR modules, 
+and AC/DC isolated input modules on special breakout boards or rail 
+mount systems with screw terminals. Some SSRs mount directly to the 
+rail. Several examples are shown below. They are handy whenever there 
+are a large number of external I/Os to hookup with larger wires. A 
+ribbon cable connector ties the digital I/O signals to the 
+microcontroller. Such packaging works out well and helps to keep the 
+wiring under control and organized. If a lot of external devices need to
+ be connected in a prototype, many of these systems can be adapted for 
+use with small microcontrollers such as mbed. <br><br> 
+<img src="VoltageDriverTransistor_mbed_files/_scaled_dinrail.jpg" alt="/media/uploads/4180_1/_scaled_dinrail.jpg" title="/media/uploads/4180_1/_scaled_dinrail.jpg"><br>
+DIN rail mounting system for SSRs and relays.<br><br><br>
+<img src="VoltageDriverTransistor_mbed_files/dinssr.jpg" alt="/media/uploads/4180_1/dinssr.jpg" title="/media/uploads/4180_1/dinssr.jpg"><img alt="PIO" title="PIO" src="VoltageDriverTransistor_mbed_files/io-odc-module.jpg" width="250">
+<br><br>
+Two types of direct DIN rail mount SSR modules from <a href="http://www.crydom.com/" rel="nofollow">Crydom</a> and <a href="http://www.power-io.com/products.htm" rel="nofollow">Power IO</a><br><br>
+<img alt="IOAC" title="IOAC" src="VoltageDriverTransistor_mbed_files/io-idc-module.jpg" width="230"><br><br>
+DIN rail mount optically isolated AC input module<br><br></p>
+<h3>Home Automation Systems</h3>
+<p>If you only need to control household AC devices, several  low-cost 
+home automation systems are available with small plug in modules for 
+controlling household AC devices and dimming lights. <a href="http://www.x10.com/" rel="nofollow">X10</a>
+ is of the first low-cost systems, and it uses signaling over the power 
+lines to control each module. Switches on each X10 control module are 
+configured by the user to select a unique address (0..255) for each AC 
+device as seen below. X10 power line control signals are sensitive to 
+distance and noise and will not cross over from one power phase to the 
+other, just like home networking  plug in devices. In addition to a 
+power line interface to decode the control signals, a module contains a 
+relay for appliances, or a triac to dim lights. A small interface device
+ is available from X10 to send the control signals over the power line 
+using a microprocessor.  An easier to use RS232 serial interface for X10
+ can still be found, but it is no longer in production. There are two 
+mbed X10 projects already available in the mbed cookbook, <a href="http://mbed.org/users/sener/notebook/x10-things/">links to ways to interface to the X10 power line signals</a>, and <a href="http://mbed.org/users/lotfi_baghli/notebook/x10-server/">code for a wireless interface to the X10 wireless module</a>. The X10 wireless receiver module then sends out the signals on the power line to control modules.<br><br>
+<img src="VoltageDriverTransistor_mbed_files/_scaled_x10appliancemodule.jpg" alt="/media/uploads/4180_1/_scaled_x10appliancemodule.jpg" title="/media/uploads/4180_1/_scaled_x10appliancemodule.jpg">
+<br><br>
+A plug in X10 appliance module can switch household AC devices<br><br>
+Another home automation system is <a href="http://www.z-wave.com/" rel="nofollow">Z-wave</a>. It uses RF signals to control the plug in AC modules. <a href="http://www.insteon.net/" rel="nofollow">Insteon</a>
+ uses both power line and RF signals in a mesh network.  One of the 
+controllers from these systems could be interfaced with mbed to use 
+these modules. WiFi controlled AC outlet strips are also starting to 
+appear such as the one seen below. These systems work well in homes, but
+ probably would not be appropriate for use in noisy safety critical 
+industrial environments.<br><br>
+<img src="VoltageDriverTransistor_mbed_files/_scaled_iremotetap.png" alt="/media/uploads/4180_1/_scaled_iremotetap.png" title="/media/uploads/4180_1/_scaled_iremotetap.png"><br><br>
+The <a href="http://www.gadgetechno.com/news/power-strip-with-built-in-wi-fi/" rel="nofollow">iRemoTap</a> can be controlled via WiFi</p>
+
+</div>
+<p></p>
+<hr class="blue">
+
+
+
+
+
+    
+             
+ 
+
+    
+        <h3>1 comment on Drivers, Relays, and Solid State Relays:</h3>
+            
+            
+
+
+<div class="post post-odd ">
+    <a name="c2339"></a>
+    <a name="comment-2339"></a>
+
+    
+    <div class="inner">
+        <div class="post-container">
+            <div class="info" style="min-height: 2em">
+                <span style="float: right;">
+
+
+
+    
+
+</span>
+                <div style="float: left;">
+                    <div class="author"><span class="authortext"><a href="http://mbed.org/users/yoonghm/"><img alt="" class="icon" src="VoltageDriverTransistor_mbed_files/29660f5ea855d8f1568d02a23d5c878a.jpg" height="16px" width="16px"></a> <a href="http://mbed.org/users/yoonghm/"> HM Yoong</a></span>  </div>
+                    <span class="authorusername" style="display: none;">yoonghm</span>
+                    <a class="permalink" href="http://mbed.org/comments/cr/83/1906/#c2339">#</a>
+                    
+                        <span class="updated"><abbr class="timeago" title="13 Dec 2011">13 Dec 2011</abbr> </span>
+                    
+                </div>
+                
+                <div style="clear: left;"></div>
+                
+            </div>
+
+            <div class="forum-content">
+                <div class="comment-messagebody">
+                    
+                       <p>Thank for the effort. The page is very useful.</p>
+
+                    
+                </div>
+                <div class="comment-wikitext" style="display: none;">Thank for the effort. The page is very useful. </div>
+
+                
+ 
+              </div>
+        </div>
+    </div>
+</div>
+
+            
+    
+
+   
+        <p>Please <a href="http://mbed.org/account/login/?next=/users/4180_1/notebook/relays1/">login</a> to post comments.
+    
+
+
+
+
+        </p></div>
+        
+        <div class="three columns sidebar ">
+            
+
+<div class="panel radius">
+<h5 class="subheader">Drivers, Relays, and Solid State Relays</h5>
+    <p>
+        
+            
+        
+
+        
+    </p>
+
+    
+        <p>
+             <img class="icon icon_tag" src="VoltageDriverTransistor_mbed_files/blank.gif" height="16" width="16">
+            
+                <a href="http://mbed.org/search/?q=BJT&amp;type=Notebook">BJT</a>, 
+            
+                <a href="http://mbed.org/search/?q=drivers&amp;type=Notebook">drivers</a>, 
+            
+                <a href="http://mbed.org/search/?q=IGBT&amp;type=Notebook">IGBT</a>, 
+            
+                <a href="http://mbed.org/search/?q=MOSFET&amp;type=Notebook">MOSFET</a>, 
+            
+                <a href="http://mbed.org/search/?q=MOV&amp;type=Notebook">MOV</a>, 
+            
+                <a href="http://mbed.org/search/?q=optical%20isolation&amp;type=Notebook">optical isolation</a>, 
+            
+                <a href="http://mbed.org/search/?q=optoisolator&amp;type=Notebook">optoisolator</a>, 
+            
+                <a href="http://mbed.org/search/?q=relays&amp;type=Notebook">relays</a>, 
+            
+                <a href="http://mbed.org/search/?q=snubber%20diode&amp;type=Notebook">snubber diode</a>, 
+            
+                <a href="http://mbed.org/search/?q=solid%20state%20relays&amp;type=Notebook">solid state relays</a>, 
+            
+                <a href="http://mbed.org/search/?q=ssr&amp;type=Notebook">ssr</a>, 
+            
+                <a href="http://mbed.org/search/?q=transorb&amp;type=Notebook">transorb</a>, 
+            
+                <a href="http://mbed.org/search/?q=triac&amp;type=Notebook">triac</a>, 
+            
+                <a href="http://mbed.org/search/?q=tvs%20diode&amp;type=Notebook">tvs diode</a>, 
+            
+                <a href="http://mbed.org/search/?q=varistor&amp;type=Notebook">varistor</a>
+            
+        </p>
+    
+  
+    <p>
+          Page owner: <span class="authortext"><a href="http://mbed.org/users/4180_1/"><img alt="" class="icon" src="VoltageDriverTransistor_mbed_files/401c808725c0afaf27444ace957c5ecc.jpg" height="16px" width="16px"></a> <a href="http://mbed.org/users/4180_1/"> jim hamblen</a></span>
+    </p>
+    <p>
+        Created <abbr class="timeago" title="28 Nov 2011">28 Nov 2011</abbr>.
+         
+            <br>
+         Last updated <abbr class="timeago" title="07 Aug 2013">07 Aug 2013</abbr>
+        
+        
+
+
+    </p>
+
+</div>
+    
+   
+        
+
+        </div>
+    </div>
+    
+    
+    <div class="row footer ">
+        <div class="twelve columns">
+        <hr>
+        <a href="http://www.arm.com/"><img src="VoltageDriverTransistor_mbed_files/blank.gif" class="icon_arm_logo" style="float:right" height="48" width="48"></a>
+        <ul>
+            <li>© mbed</li> 
+            <li><a href="http://mbed.org/blog">blog</a></li>
+            <li><a href="http://mbed.org/order">get an mbed</a></li>
+            <li><a href="http://mbed.org/handbook/About">about mbed</a></li>
+            <li><a href="http://mbed.org/handbook/Jobs">we're hiring!</a></li>
+            <li><a href="http://mbed.org/handbook/Help">support</a></li>
+            <li><a href="http://mbed.org/handbook/Service-status">service status</a></li>
+            <li><a href="http://mbed.org/privacy">privacy policy</a></li>
+            <li><a href="http://mbed.org/terms">terms and conditions</a> </li>
+            <li class="last">Language: <a href="http://mbed.org/setlang?lang=en">en</a> <a href="http://mbed.org/setlang?lang=ja">ja</a> <a href="http://mbed.org/setlang?lang=es">es</a> <a href="http://mbed.org/setlang?lang=de">de</a></li> 
+            </ul>
+           <p style="clear:left">mbed, the fastest way to create devices with ARM-based microcontrollers.</p>
+           <p class="backtotop"><a href="#top">^ back to top</a></p>
+       </div>
+
+    
+    </div>
+    <script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="VoltageDriverTransistor_mbed_files/ga.js" type="text/javascript"></script>
+<script type="text/javascript">
+try{
+var pageTracker = _gat._getTracker("UA-1447836-8");
+
+pageTracker._setCustomVar(1, 'User Type', 'Guest', 2);
+
+pageTracker._trackPageview();
+} catch(err) {}
+</script>
+
+
+
+
+</body></html>
