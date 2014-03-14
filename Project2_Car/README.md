@@ -1,6 +1,7 @@
-Projects
+Car Project
 ========
-From the LM339, MC3004, and an OP-AMP, we will get the phase from the LM339. We will get 2-4 voltage values. 
+Components we will use: LM339, MC3004, and an OP-AMP.
+We will get the phase from the LM339. We will get 2-4 voltage values. 
 
 Distance
 -----------
@@ -12,4 +13,4 @@ Angle
 We will get the angle: arctan(V_x/V_y)
 We want to isolate the voltages from the rest of the code, we just want distance and angle. 
 
-Projects
+
