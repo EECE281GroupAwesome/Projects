@@ -16,7 +16,7 @@ We want to isolate the voltages from the rest of the code, we just want distance
 
 
 **Minimum Requirements**
-- The car needs to be able to follow the beacon and maintain a set distance.
+- **Follow** The car needs to be able to follow the beacon and maintain a set distance.
 - **Move closer.** When the user presses a button in the transmitter, it commands
 the robot to move closer.
 - **Move farther** When the user presses a button in the transmitter, it commands
