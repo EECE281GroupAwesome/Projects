@@ -26,7 +26,7 @@
 
 static const int TOO_FAR   = 10;
 static const int TOO_CLOSE = 5;
-static const int K 	   = 0.0036; 
+static const int DISTANCE_CONSTANT = 0.0036;
 
 struct voltage
 {
@@ -129,9 +129,11 @@ int main (void)
  *	Modify:	  distance
  *	Returns:  distance to beacon   
  */
-unsigned int getDistance(struct voltage x, struct voltage y)
+unsigned int getDistance(struct voltage x, struct voltage y) 
 {
-	int distance = sqrtf(x.peak*x.peak + y.peak*y.peak);
+	int distance = pow( (DISTANCE_CONSTANT / (sqrtf(x.peak*x.peak + y.peak*y.peak))) , 1/3); //maybe this should be a float
+	
+	//from the formula: pythagoras(Vx,Vy) = K/d^3 -> d = (K/pyth)^(1/3)
 	
 	return distance;
 }
