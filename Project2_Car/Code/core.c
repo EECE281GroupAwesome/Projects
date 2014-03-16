@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 #include <at89lp51rd2.h>
 
 //---Defined Macros---
@@ -22,6 +23,18 @@
 #define FREQ 10000L
 
 //---Global Variables---
+
+static const int TOO_FAR   = 10;
+static const int TOO_CLOSE = 5;
+static const int K 	   = 0.0036; 
+
+struct voltage
+{
+	float peak;
+	float RMS;
+	float phase;
+};
+
 
 volatile unsigned int pwmCount = 0;
 volatile unsigned int leftPwm = 0;
@@ -93,7 +106,7 @@ unsigned char _c51_external_startup(void)
 
 //---MAIN---
 
-void main (void)
+int main (void)
 {	
 	while (1)
 	{
@@ -104,6 +117,8 @@ void main (void)
 		turnCar(leftPwm, rightPwm, turnDirection);
 		moveCar(distance);
 	}
+	
+	return 0;
 }
 
 //---Function Implementations---
@@ -114,10 +129,11 @@ void main (void)
  *	Modify:	  distance
  *	Returns:  distance to beacon   
  */
-unsigned int getDistance()
+unsigned int getDistance(struct voltage x, struct voltage y)
 {
-	// TODO
-	return 0;
+	int distance = sqrtf(x.peak*x.peak + y.peak*y.peak);
+	
+	return distance;
 }
 
 /*	getAngle(): computes the angle that the car must turn to align with
@@ -126,10 +142,11 @@ unsigned int getDistance()
  *  Modify:   angle
  *  Returns:  angle to turn car chassis in degrees 
  */
-float getAngle()
+float getAngle(struct voltage x, struct voltage y)
 {
-	// TODO
-	return 0;
+	float angle    = atanf(x.peak / y.peak);
+
+	return angle;
 }
 
 /*	getDirection(): find which the direction the car need turn L/R
@@ -137,9 +154,19 @@ float getAngle()
  *	Modify:   turnDirection
  *	Returns:  direction to turn car, left or right
  */
-char getDirection(float angle)
+char getDirection(float angle, struct voltage forward, struct voltage back)
 {
-	// TODO
+	
+	//calculate which of four angles is correct (incomplete)
+	//instead of using a second set of sensors (forward and back)
+	//we could use x.phase and y.phase, I'll work on it
+	
+	if(forward.peak > back.peak)
+		angle = angle; //turn left
+	else if(back.peak < forward.peak)
+		angle = angle; //turn right
+	else
+		angle = angle; //test by changing direction and get new values (or something else?)
 	return 'd';
 }
 
@@ -148,9 +175,18 @@ char getDirection(float angle)
  *	Modify:	 n/a
  *	Returns:  n/a
  */
-void turnCar(unsigned int Lwheel, unsigned int Rwheel, unsigned char turnDirection)
+void turnCar(unsigned int Lwheel, unsigned int Rwheel, unsigned char turnDirection, struct voltage x)
 {
-	// TODO
+	//turn towards beacon until parallel voltage becomes weakest and starts to rise
+	
+	float min;
+	
+	do
+	{
+		//continue to turn
+		if(x.peak < min) min = x.peak;
+		
+	}while(x.peak <= min);
 }
 
 /*	moveCar(): move the car towards the beacon if neccessarry
@@ -160,7 +196,13 @@ void turnCar(unsigned int Lwheel, unsigned int Rwheel, unsigned char turnDirecti
  */
 void moveCar(unsigned int dist)
 {
-	// TODO
+	if(distance > TOO_CLOSE)
+		//move back
+	
+	if(distance < TOO_FAR)
+		//move forward
+	
+	return;
 }
 
 // wait for 2 milliseconds
