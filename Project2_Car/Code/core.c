@@ -21,6 +21,9 @@
 #define TIMER0_RELOAD_VALUE (65536L-(CLK/(12L*FREQ)))
 #define TIMER_2_RELOAD (0x10000L-(CLK/(32L*BAUD)))
 #define FREQ 10000L
+#define RED P0_0
+#define GRN P0_1
+#define YLW P0_2
 
 //---Global Variables---
 
@@ -68,10 +71,32 @@ void beaconSignal() interrupt 0
 void pwmCounter() interrupt 1
 {
 	if(++pwmCount>99)
-	{
 		pwmCount = 0;
+	//Left wheel
+	if(pwmLeft>0)
+	{	
+		P1_0=(pwmLeft>pwmcount)0:1;
+		P1_1=1;
 	}
-}
+	if(pwmLeft<0)
+	{	
+		P1_1=(pwmLeft>pwmcount)0:1;
+		P1_0=1;
+	}
+	//Right wheel
+	if(pwmRight>0)
+	{	
+		P1_0=(pwmRight>pwmcount)0:1;
+		P1_1=1;
+	}
+	if(pwmRight<0)
+	{	
+		P1_1=(pwmRight>pwmcount)0:1;
+		P1_0=1;
+	}
+
+
+}		
 
 //---Boot---
 
@@ -85,12 +110,6 @@ unsigned char _c51_external_startup(void)
 	AUXR = 0B_0001_0001; // 1152 bytes of internal XDATA, P4.4 is a general purpose I/O
 	P4M0 = 0;	P4M1 = 0;
     
-    // Initialize the serial port and baud rate generator
-    PCON |= 0x80;
-	SCON = 0x53;
-    BDRCON = 0;
-    BRL = BRG_VAL;	
-    BDRCON = BRR | TBCK | RBCK | SPD;
 	
 	TMOD = 0x01;	// Timer 0 as 16-bit timer	
 	TH0 = RH0 = TIMER0_RELOAD_VALUE / 0x100;
@@ -105,19 +124,50 @@ unsigned char _c51_external_startup(void)
 }
 
 //---MAIN---
-
+volatile int instruction;
 int main (void)
 {	
+	instruction=0;
+	
 	while (1)
 	{
-		distance = getDistance();
-		angle = getAngle();
-		turnDirection = getDirection(angle);
+		while (instruction==0 && angle > 10)
+		{
+			YLW=1;
+			GRN=0;
+			RED=0;
+			angle = getAngle();
+			turnDirection = getDirection(angle);
+			turnCar(leftPwm, rightPwm, turnDirection);
+			distance = getDistance();
+		}
 		
-		turnCar(leftPwm, rightPwm, turnDirection);
-		moveCar(distance);
+		switch (instruction)
+		{
+			case 1: //Move Forward
+			
+			break;
+			case 2: //Move Backwards
+			
+			break;
+			case 3: //180 Turn
+			
+			break;
+			case 4: //Park
+			
+			break;
+			case 5:
+			
+			break;
+			default: //Turn on LED for bad instrucion
+			RED=1;
+			GRN=0;
+			YLW=0;
+			
+		}
+		
+		instruction=0;
 	}
-	
 	return 0;
 }
 
@@ -202,8 +252,7 @@ void moveCar(unsigned int dist)
 		//move back
 	
 	if(distance < TOO_FAR)
-		//move forward
-	
+		//move forward	
 	return;
 }
 
