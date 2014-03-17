@@ -21,9 +21,9 @@
 #define TIMER0_RELOAD_VALUE (65536L-(CLK/(12L*FREQ)))
 #define TIMER_2_RELOAD (0x10000L-(CLK/(32L*BAUD)))
 #define FREQ 10000L
-#define RED P0_0
-#define GRN P0_1
-#define YLW P0_2
+#define RED P3_0
+#define GRN P3_1
+#define YLW P3_2
 
 //---Global Variables---
 
@@ -32,6 +32,7 @@ static const int TOO_CLOSE = 5;
 static const int DISTANCE_CONSTANT = 0.0036;
 static const int PRESETS[] = {5,10,15,20,25,30};
 
+volatile unsigned int Stage = 0;
 volatile unsigned int pwmCount = 0;
 volatile int pwmRight = 0;
 volatile int pwmLeft = 0;
@@ -48,7 +49,8 @@ unsigned int getDistance();
 float getAngle();
 char getDirection();
 void turnCar(unsigned int Lwheel, unsigned int Rwheel);
-void moveCar(char direction);
+void moveCar();
+void adjustAngle();
 void wait2ms();
 void wait1s();
 
@@ -61,29 +63,31 @@ void beaconSignal() interrupt 3
 
 void pwmCounter() interrupt 1
 {
+	angle = getAngle();
+	distance = getDistance();
 	if(++pwmCount>99)
 		pwmCount = 0;
 	//Left wheel
 	if(pwmLeft>0)
 	{	
-		P1_0 =(pwmLeft>pwmCount)?0:1;
-		P1_1 =1;
+		P0_0 =(pwmLeft>pwmCount)?0:1;
+		P0_2 =1;
 	}
 	if(pwmLeft<0)
 	{	
-		P1_1=(pwmLeft>pwmCount)?0:1;
-		P1_0=1;
+		P0_2=(pwmLeft>pwmCount)?0:1;
+		P0_0=1;
 	}
 	//Right wheel
 	if(pwmRight>0)
 	{	
-		P1_0=(pwmRight>pwmCount)?0:1;
-		P1_1=1;
+		P0_4=(pwmRight>pwmCount)?0:1;
+		P0_6=1;
 	}
 	if(pwmRight<0)
 	{	
-		P1_1=(pwmRight>pwmCount)?0:1;
-		P1_0=1;
+		P0_6=(pwmRight>pwmCount)?0:1;
+		P0_4=1;
 	}
 
 
@@ -101,6 +105,12 @@ unsigned char _c51_external_startup(void)
 	AUXR = 0B_0001_0001; // 1152 bytes of internal XDATA, P4.4 is a general purpose I/O
 	P4M0 = 0;	P4M1 = 0;
     
+	//Serial Baud
+	PCON|=0x80;
+	SCON = 0x52;
+	BDRCON =0;
+	BRL=BRG_VAL;
+	BDRCON=BRR|TBCK|RBCK|SPD;
 	
 	TMOD = 0x01;	// Timer 0 as 16-bit timer	
 	TH0 = RH0 = TIMER0_RELOAD_VALUE / 0x100;
@@ -115,6 +125,7 @@ unsigned char _c51_external_startup(void)
 	pwmRight=0;
 	pwmLeft=0;
 	instruction=0;
+	Stage=3;
     return 0;
 }
 
@@ -123,27 +134,23 @@ int main (void)
 {	
 	while (1)
 	{
-		while (instruction==0 && angle > 10)
+		while (instruction==0)
 		{
-			YLW=1;
-			GRN=0;
-			RED=0;
-			angle = getAngle();
-			turnDirection = getDirection();
-			turnCar(pwmLeft, pwmRight);
-			distance = getDistance();
+			moveCar();
 		}
 		
 		switch (instruction)
 		{
-			case 1: //Move Forward
-			moveCar(1);
+			case 1: //Move Forward to Next Node
+			if(Stage!=0)
+				Stage--;
 			break;
-			case 2: //Move Backwards
-			moveCar(-1);
+			case 2: //Move Backwards to Next Node
+			if(Stage!=5)
+				Stage++;
 			break;
 			case 3: //180 Turn
-			
+	
 			break;
 			case 4: //Park
 			
@@ -155,7 +162,6 @@ int main (void)
 			RED=1;
 			GRN=0;
 			YLW=0;
-			
 		}
 		
 		instruction=0;
@@ -218,45 +224,39 @@ void turnCar(unsigned int Lwheel, unsigned int Rwheel)
  *  Modify:   n/a
  *  Returns:  n/a
  */
-void moveCar(char direction)
-{
-	int i;
-	int Stage=6;
-	//find distance Node
-	distance=getDistance();
-	for (i=0; i< 6; i++)
+void moveCar()
+{	
+	while(distance > PRESETS[Stage])
 	{
-		if ( distance < PRESETS[i]+3 && distance > PRESETS[i]-3 )
-			Stage=i;
+		pwmLeft=pwmRight=(75);
 	}
-	if(direction > 0 && distance > PRESETS[0])           //forwards
+	while(distance < PRESETS[Stage])
 	{
-		while(distance < PRESETS[Stage-1])
-		{
-			pwmLeft=pwmRight=75;
-			distance--;
-			
-			//distance=getDistance();
-		}
-	} else if (direction < 0 && distance < PRESETS[5])	 //backwards
-	{
-		while(distance > PRESETS[Stage+1])
-		{
-			pwmLeft=pwmRight=(-75);
-			distance++;
-			
-			//distance=getDistance();
-		}
-	} else                                               //error
-	{
-		RED=1;
-		GRN=0;
-		YLW=0;
+		pwmLeft=pwmRight=(-75);
 	}
 	pwmLeft=pwmRight=0;
+	
 	return;
 }
-
+void adjustAngle()
+{
+	if (angle < -2)
+	{
+		pwmLeft=+5;
+		pwmRight=-5;
+	}	
+	else if (angle > 2)
+	{
+		pwmLeft=-5;
+		pwmRight=+5;
+	}
+	else
+	{
+		GRN=1;
+		RED=0;
+		YLW=0;
+	}
+}
 // wait for 2 milliseconds
 void wait2ms (void)
 {

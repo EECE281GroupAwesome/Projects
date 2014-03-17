@@ -1,0 +1,595 @@
+<MODULE>
+Movement Simulator
+</MODULE>
+
+<OPTC51>
+--model-small
+</OPTC51>
+
+<SEGMENTS>
+R_GSINIT,code,0000,NO
+R_BSEG,bit,0001,NO
+R_XSEG,xdata,0000,NO
+BIT_BANK,data,0001,OV
+R_CONST,code,000C,NO
+rbank0,data,0000,OV
+R_PSEG,xdata,0000,NO
+R_DINIT,code,001E,NO
+R_DSEG,data,0015,NO
+R_OSEG,data,0002,OV
+R_IXSEG,xdata,0000,NO
+R_ISEG,idata,0000,NO
+R_HOME,code,0000,NO
+R_XINIT,code,0000,NO
+R_CSEG,code,0319,NO
+</SEGMENTS>
+
+<LOCALS>
+bits,BIT_BANK,0000,0001
+L005037?,R_CSEG,019E,0000
+L005036?,R_CSEG,0191,0000
+L005033?,R_CSEG,017A,0000
+L005032?,R_CSEG,0172,0000
+L005031?,R_CSEG,016A,0000
+L005030?,R_CSEG,0162,0000
+L003008?,R_CSEG,00B7,0000
+L003006?,R_CSEG,0094,0000
+L003004?,R_CSEG,007D,0000
+L003002?,R_CSEG,005A,0000
+L010010?,R_CSEG,0296,0000
+J1,R_CSEG,0305,0000
+J2,R_CSEG,0303,0000
+J3,R_CSEG,0301,0000
+L1,R_CSEG,0311,0000
+L2,R_CSEG,030F,0000
+L3,R_CSEG,030D,0000
+b0,BIT_BANK,0000,0000
+b1,BIT_BANK,0000,0000
+b2,BIT_BANK,0000,0000
+b3,BIT_BANK,0000,0000
+b4,BIT_BANK,0000,0000
+b5,BIT_BANK,0000,0000
+b6,BIT_BANK,0000,0000
+b7,BIT_BANK,0000,0000
+L005007?,R_CSEG,0193,0000
+L005004?,R_CSEG,0182,0000
+L005003?,R_CSEG,0156,0000
+L005001?,R_CSEG,014B,0000
+L010006?,R_CSEG,026E,0000
+L010005?,R_CSEG,023F,0000
+L010001?,R_CSEG,0217,0000
+_PRESETS,R_CONST,0000,0000
+L011005?,R_CSEG,0300,0000
+L011002?,R_CSEG,02D0,0000
+L003011?,R_CSEG,00CE,0000
+_pwmCounter_sloc0_1_0,R_BSEG,0000,0001
+L005014?,R_CSEG,01CB,0000
+L005013?,R_CSEG,01C5,0000
+L005010?,R_CSEG,01AB,0000
+</LOCALS>
+
+<PUBLICS>
+_wait2ms,R_CSEG,0301,0000
+_main,R_CSEG,014B,0000
+_turnCar_PARM_2,R_OSEG,0000,0002
+_pwmCount,R_DSEG,0002,0002
+__c51_external_startup,R_CSEG,00EB,0000
+_getDistance,R_CSEG,01D3,0000
+_instruction,R_DSEG,000C,0002
+_adjustAngle,R_CSEG,02A0,0000
+_angle,R_DSEG,0011,0004
+_distance,R_DSEG,000E,0002
+_Stage,R_DSEG,0000,0002
+_getAngle,R_CSEG,01D7,0000
+_moveCar,R_CSEG,01E8,0000
+_pwmCounter,R_CSEG,000A,0000
+_getDirection,R_CSEG,01E3,0000
+_beaconSignal,R_CSEG,0000,0000
+_turnDirection,R_DSEG,0010,0001
+_turnCar,R_CSEG,01E7,0000
+_wait1s,R_CSEG,030B,0000
+_leftSensor,R_DSEG,0008,0002
+_pwmRight,R_DSEG,0004,0002
+_pwmLeft,R_DSEG,0006,0002
+_rightSensor,R_DSEG,000A,0002
+</PUBLICS>
+
+<EXTERNALS>
+___fsgt,any,0000,0000
+___fslt,any,0000,0000
+_crt0,any,0000,0000
+</EXTERNALS>
+
+<CODE AT 0000>
+</CODE>
+
+<CODE R_HOME>
+</CODE>
+
+<CODE R_GSINIT>
+</CODE>
+
+<CODE R_CSEG>
+</CODE>
+
+<CODE AT 0000>
+02 addr16(_crt0;)  
+</CODE>
+
+<CODE AT 000B>
+02 addr16(_pwmCounter;)  
+</CODE>
+
+<CODE AT 001B>
+02 addr16(_beaconSignal;)  
+</CODE>
+
+<CODE R_HOME>
+</CODE>
+
+<CODE R_GSINIT>
+</CODE>
+
+<CODE R_GSINIT>
+</CODE>
+
+<CODE R_DINIT>
+E4
+F5 data8(_Stage;)
+F5 data8(_Stage;0x0001;+;)
+E4
+F5 data8(_pwmCount;)
+F5 data8(_pwmCount;0x0001;+;)
+E4
+F5 data8(_pwmRight;)
+F5 data8(_pwmRight;0x0001;+;)
+E4
+F5 data8(_pwmLeft;)
+F5 data8(_pwmLeft;0x0001;+;)
+E4
+F5 data8(_leftSensor;)
+F5 data8(_leftSensor;0x0001;+;)
+E4
+F5 data8(_rightSensor;)
+F5 data8(_rightSensor;0x0001;+;)
+</CODE>
+
+<CODE R_CSEG>
+C0 E0
+E4
+F5 data8(_instruction;)
+F5 data8(_instruction;0x0001;+;)
+D0 E0
+32
+C0 data8(bits;)
+C0 E0
+C0 F0
+C0 82
+C0 83
+C0 02
+C0 03
+C0 04
+C0 05
+C0 06
+C0 07
+C0 00
+C0 01
+C0 D0
+75 D0 00
+12 addr16(_getAngle;)  
+85 82 data8(_angle;)
+85 83 data8(_angle;0x0001;+;)
+85 F0 data8(_angle;0x0002;+;)
+F5 data8(_angle;0x0003;+;)
+12 addr16(_getDistance;)  
+85 82 data8(_distance;)
+85 83 data8(_distance;0x0001;+;)
+74 01
+25 data8(_pwmCount;)
+F5 data8(_pwmCount;)
+E4
+35 data8(_pwmCount;0x0001;+;)
+F5 data8(_pwmCount;0x0001;+;)
+C3
+74 63
+95 data8(_pwmCount;)
+E4
+95 data8(_pwmCount;0x0001;+;)
+50 rel2(L003002?;)
+E4
+F5 data8(_pwmCount;)
+F5 data8(_pwmCount;0x0001;+;)
+C3
+E4
+95 data8(_pwmLeft;)
+E4
+64 80
+85 data8(_pwmLeft;0x0001;+;) F0
+63 F0 80
+95 F0
+50 rel2(L003004?;)
+AA data8(_pwmLeft;)
+AB data8(_pwmLeft;0x0001;+;)
+C3
+E5 data8(_pwmCount;)
+9A
+E5 data8(_pwmCount;0x0001;+;)
+9B
+92 data8(_pwmCounter_sloc0_1_0;)
+B3
+92 80
+D2 82
+E5 data8(_pwmLeft;0x0001;+;)
+30 E7 rel3(L003006?;)
+AA data8(_pwmLeft;)
+AB data8(_pwmLeft;0x0001;+;)
+C3
+E5 data8(_pwmCount;)
+9A
+E5 data8(_pwmCount;0x0001;+;)
+9B
+92 data8(_pwmCounter_sloc0_1_0;)
+B3
+92 82
+D2 80
+C3
+E4
+95 data8(_pwmRight;)
+E4
+64 80
+85 data8(_pwmRight;0x0001;+;) F0
+63 F0 80
+95 F0
+50 rel2(L003008?;)
+AA data8(_pwmRight;)
+AB data8(_pwmRight;0x0001;+;)
+C3
+E5 data8(_pwmCount;)
+9A
+E5 data8(_pwmCount;0x0001;+;)
+9B
+92 data8(_pwmCounter_sloc0_1_0;)
+B3
+92 84
+D2 86
+E5 data8(_pwmRight;0x0001;+;)
+30 E7 rel3(L003011?;)
+AA data8(_pwmRight;)
+AB data8(_pwmRight;0x0001;+;)
+C3
+E5 data8(_pwmCount;)
+9A
+E5 data8(_pwmCount;0x0001;+;)
+9B
+92 data8(_pwmCounter_sloc0_1_0;)
+B3
+92 86
+D2 84
+D0 D0
+D0 01
+D0 00
+D0 07
+D0 06
+D0 05
+D0 04
+D0 03
+D0 02
+D0 83
+D0 82
+D0 F0
+D0 E0
+D0 data8(bits;)
+32
+75 E6 00
+75 E7 00
+75 D6 00
+75 D7 00
+75 CE 00
+75 CF 00
+75 C6 00
+75 C7 00
+75 8E 11
+75 BE 00
+75 BF 00
+43 87 80
+75 98 52
+75 9B 00
+75 9A FA
+75 9B 1E
+75 89 01
+75 F3 FF
+75 8C FF
+75 F2 48
+75 8A 48
+D2 8C
+D2 A9
+D2 A8
+D2 88
+D2 AF
+E4
+F5 data8(_pwmRight;)
+F5 data8(_pwmRight;0x0001;+;)
+F5 data8(_pwmLeft;)
+F5 data8(_pwmLeft;0x0001;+;)
+F5 data8(_instruction;)
+F5 data8(_instruction;0x0001;+;)
+75 data8(_Stage;) 03
+E4
+F5 data8(_Stage;0x0001;+;)
+75 82 00
+22
+E5 data8(_instruction;)
+45 data8(_instruction;0x0001;+;)
+70 rel2(L005003?;)
+12 addr16(_moveCar;)  
+80 rel2(L005001?;)
+AA data8(_instruction;)
+AB data8(_instruction;0x0001;+;)
+BA 01 rel3(L005030?;)
+BB 00 rel3(L005030?;)
+80 rel2(L005004?;)
+BA 02 rel3(L005031?;)
+BB 00 rel3(L005031?;)
+80 rel2(L005007?;)
+BA 03 rel3(L005032?;)
+BB 00 rel3(L005032?;)
+80 rel2(L005010?;)
+BA 04 rel3(L005033?;)
+BB 00 rel3(L005033?;)
+80 rel2(L005014?;)
+BA 05 rel3(L005013?;)
+BB 00 rel3(L005013?;)
+80 rel2(L005014?;)
+E5 data8(_Stage;)
+45 data8(_Stage;0x0001;+;)
+60 rel2(L005014?;)
+15 data8(_Stage;)
+74 FF
+B5 data8(_Stage;) rel3(L005036?;)
+15 data8(_Stage;0x0001;+;)
+80 rel2(L005014?;)
+74 05
+B5 data8(_Stage;) rel3(L005037?;)
+E4
+B5 data8(_Stage;0x0001;+;) rel3(L005037?;)
+80 rel2(L005014?;)
+74 01
+25 data8(_Stage;)
+F5 data8(_Stage;)
+E4
+35 data8(_Stage;0x0001;+;)
+F5 data8(_Stage;0x0001;+;)
+80 rel2(L005014?;)
+75 data8(_pwmLeft;) 32
+E4
+F5 data8(_pwmLeft;0x0001;+;)
+75 data8(_pwmRight;) CE
+75 data8(_pwmRight;0x0001;+;) FF
+12 addr16(_wait1s;)  
+E4
+F5 data8(_pwmRight;)
+F5 data8(_pwmRight;0x0001;+;)
+F5 data8(_pwmLeft;)
+F5 data8(_pwmLeft;0x0001;+;)
+80 rel2(L005014?;)
+D2 80
+C2 81
+C2 82
+E4
+F5 data8(_instruction;)
+F5 data8(_instruction;0x0001;+;)
+02 addr16(L005001?;)  
+90 00 00
+22
+85 data8(_angle;) 82
+85 data8(_angle;0x0001;+;) 83
+85 data8(_angle;0x0002;+;) F0
+E5 data8(_angle;0x0003;+;)
+22
+75 82 00
+22
+22
+E5 data8(_Stage;)
+25 E0
+FA
+E5 data8(_Stage;0x0001;+;)
+33
+FB
+EA
+24 data8(_PRESETS;)
+F5 82
+EB
+34 data8(_PRESETS;0x0008;>>;)
+F5 83
+E4
+93
+FA
+A3
+E4
+93
+FB
+C3
+EA
+95 data8(_distance;)
+EB
+95 data8(_distance;0x0001;+;)
+50 rel2(L010005?;)
+75 data8(_pwmRight;) 4B
+E4
+F5 data8(_pwmRight;0x0001;+;)
+75 data8(_pwmLeft;) 4B
+E4
+F5 data8(_pwmLeft;0x0001;+;)
+E5 data8(_Stage;)
+25 E0
+FA
+E5 data8(_Stage;0x0001;+;)
+33
+FB
+EA
+24 data8(_PRESETS;)
+F5 82
+EB
+34 data8(_PRESETS;0x0008;>>;)
+F5 83
+E4
+93
+FA
+A3
+E4
+93
+FB
+C3
+EA
+95 data8(_distance;)
+EB
+95 data8(_distance;0x0001;+;)
+50 rel2(L010005?;)
+12 addr16(_adjustAngle;)  
+80 rel2(L010001?;)
+E5 data8(_Stage;)
+25 E0
+FA
+E5 data8(_Stage;0x0001;+;)
+33
+FB
+EA
+24 data8(_PRESETS;)
+F5 82
+EB
+34 data8(_PRESETS;0x0008;>>;)
+F5 83
+E4
+93
+FA
+A3
+E4
+93
+FB
+C3
+E5 data8(_distance;)
+9A
+E5 data8(_distance;0x0001;+;)
+9B
+50 rel2(L010010?;)
+75 data8(_pwmRight;) B5
+75 data8(_pwmRight;0x0001;+;) FF
+75 data8(_pwmLeft;) B5
+75 data8(_pwmLeft;0x0001;+;) FF
+E5 data8(_Stage;)
+25 E0
+FA
+E5 data8(_Stage;0x0001;+;)
+33
+FB
+EA
+24 data8(_PRESETS;)
+F5 82
+EB
+34 data8(_PRESETS;0x0008;>>;)
+F5 83
+E4
+93
+FA
+A3
+E4
+93
+FB
+C3
+E5 data8(_distance;)
+9A
+E5 data8(_distance;0x0001;+;)
+9B
+50 rel2(L010010?;)
+12 addr16(_adjustAngle;)  
+80 rel2(L010006?;)
+E4
+F5 data8(_pwmRight;)
+F5 data8(_pwmRight;0x0001;+;)
+F5 data8(_pwmLeft;)
+F5 data8(_pwmLeft;0x0001;+;)
+22
+E4
+C0 E0
+C0 E0
+C0 E0
+74 C0
+C0 E0
+85 data8(_angle;) 82
+85 data8(_angle;0x0001;+;) 83
+85 data8(_angle;0x0002;+;) F0
+E5 data8(_angle;0x0003;+;)
+12 addr16(___fslt;)  
+AA 82
+E5 81
+24 FC
+F5 81
+EA
+60 rel2(L011002?;)
+75 data8(_pwmLeft;) 05
+E4
+F5 data8(_pwmLeft;0x0001;+;)
+75 data8(_pwmRight;) FB
+75 data8(_pwmRight;0x0001;+;) FF
+E4
+C0 E0
+C0 E0
+C0 E0
+74 40
+C0 E0
+85 data8(_angle;) 82
+85 data8(_angle;0x0001;+;) 83
+85 data8(_angle;0x0002;+;) F0
+E5 data8(_angle;0x0003;+;)
+12 addr16(___fsgt;)  
+AA 82
+E5 81
+24 FC
+F5 81
+EA
+60 rel2(L011005?;)
+75 data8(_pwmLeft;) FB
+75 data8(_pwmLeft;0x0001;+;) FF
+75 data8(_pwmRight;) 05
+E4
+F5 data8(_pwmRight;0x0001;+;)
+22
+7C 0A
+7B B8
+DB rel2(J1;)
+DC rel2(J2;)
+22
+22
+7A 14
+79 F8
+78 B8
+D8 rel2(L1;)
+D9 rel2(L2;)
+DA rel2(L3;)
+22
+22
+</CODE>
+
+<CODE R_CSEG>
+</CODE>
+
+<CODE R_XINIT>
+</CODE>
+
+<CODE R_CONST>
+05
+00
+0A
+00
+0F
+00
+14
+00
+19
+00
+1E
+00
+</CODE>
+
+<CODE AT 001E>
+</CODE>
