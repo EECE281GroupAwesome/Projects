@@ -3,6 +3,8 @@
 	
 	Core File
 	Written for AT89LP51 on the LP51 microcontroller
+	
+	CodeName: Mr. Squiggles
 */
 
 //---Included Files---
@@ -203,7 +205,7 @@ void turnCar()
 		pwmLeft = 50;
 		pwmRight = (-50);
 	}
-	while(distanceLeft < distanceRight)
+	while(distanceLeft > distanceRight)
 	{
 		pwmLeft = (-50);
 		pwmRight = 50;

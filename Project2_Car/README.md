@@ -1,5 +1,8 @@
 Car Project
-========
+===========
+CodeName: Mr. Squiggles
+=======================
+
 Components we will use: LM339, MC3004, and an OP-AMP.
 We will get the phase from the LM339. We will get 2-4 voltage values. 
 
