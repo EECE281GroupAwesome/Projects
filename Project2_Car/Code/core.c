@@ -61,7 +61,7 @@ unsigned int GetADC(unsigned char channel);
 
 //---Interrupts---
 
-void beaconSignal() interrupt 0
+void beaconSignal() interrupt 3
 {
 	// TODO
 	// quickly check if signal is zero, if not, return
