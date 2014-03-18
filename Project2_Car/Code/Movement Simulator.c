@@ -16,7 +16,7 @@
 //---Defined Macros---
 
 #define CLK 22118400L
-#define BAUD 115200L
+#define BAUD 115200L0
 #define BRG_VAL (0x100-(CLK/(32L*BAUD)))
 #define TIMER0_RELOAD_VALUE (65536L-(CLK/(12L*FREQ)))
 #define TIMER_2_RELOAD (0x10000L-(CLK/(32L*BAUD)))
@@ -31,6 +31,12 @@ static const int TOO_FAR   = 10;
 static const int TOO_CLOSE = 5;
 static const int DISTANCE_CONSTANT = 0.0036;
 static const int PRESETS[] = {5,10,15,20,25,30};
+static const int FACING_ANGLE = 5;000
+static const int TOO_FAR_DIGIT = 1;
+static const int TOO_CLOSE_DIGIT = 0;
+static const int CLOSE_ENOUGH_DIGIT = 2;
+static const int LEFT_DIRECTION = 1;
+static const int RIGHT_DIRECTION = 0;
 
 volatile unsigned int Stage = 0;
 volatile unsigned int pwmCount = 0;
@@ -38,6 +44,7 @@ volatile int pwmRight = 0;
 volatile int pwmLeft = 0;
 volatile unsigned int leftSensor = 0;
 volatile unsigned int rightSensor = 0;
+volatile unsigned int closeness = 2; //If the car is too close, make it a 0. Too far, make it a 1. If it's fine, make it 2.
 volatile int instruction;
 unsigned int distance;
 char turnDirection;
@@ -47,10 +54,10 @@ float angle;
 
 unsigned int getDistance();
 float getAngle();
-char getDirection();
+char getDirection(unsigned int angle);
 void turnCar(unsigned int Lwheel, unsigned int Rwheel);
-void moveCar();
-void adjustAngle();
+void moveCar(unsigned int distance);
+void adjustAngle(unsigned int angle);
 void wait2ms();
 void wait1s();
 
@@ -136,7 +143,21 @@ int main (void)
 	{
 		while (instruction==0)
 		{
-			moveCar();
+			while(getAngle() != FACING_ANGLE) {
+				if(getDirection(angle) == 1) turnCar(-75, 75); //right wheel go forwards,, turn left
+				else if(getDirection(angle) == 0) turnCar(75,-75); //left wheel go forwards turn right
+			}
+			while(getAngle() == FACING_ANGLE ) {
+				while(getDistance() > TOO_FAR) {
+					closeness = TOO_FAR_DIGIT;
+					moveCar(closeness);
+				}
+				while(getDistance() < TOO_CLOSE) {
+					closeness = TOO_CLOSE_DIGIT;
+					moveCar(closeness);
+				}
+				closeness = CLOSE_ENOUGH_DIGIT;
+			}
 		}
 		
 		switch (instruction)
@@ -158,7 +179,7 @@ int main (void)
 			case 5:
 			
 			break;
-			default: //Turn on LED for bad instrucion
+			default: //Turn on LED for bad instruction
 			RED=1;
 			GRN=0;
 			YLW=0;
@@ -179,7 +200,7 @@ int main (void)
  */
 unsigned int getDistance() 
 {
-	return 0;
+	return distance;
 }
 
 /*	getAngle(): computes the angle that the car must turn to align with
@@ -197,13 +218,14 @@ float getAngle()
 /*	getDirection(): find which the direction the car need turn L/R
  *	Requires: angle
  *	Modify:   turnDirection
- *	Returns:  direction to turn car, left or right
+ *	Returns:  direction to turn car, left or right (1 is left, 0 is right - not sure which angle is which though, will likely need changing)
  */
-char getDirection()
+unsigned int getDirection(unsigned int angle) 
 {
-	
+	unsigned int direction = LEFT_DIRECTION;
+	if(angle < 0) direction = RIGHT_DIRECTION;
 	//SIMULATE
-	return 0;
+	return direction;
 }
 
 /*	turnCar(): turn both wheels individually to align vehicle with angle
@@ -214,8 +236,10 @@ char getDirection()
 void turnCar(unsigned int Lwheel, unsigned int Rwheel)
 {
 	//turn towards beacon until parallel voltage becomes weakest and starts to rise
-	Lwheel=0;
-	Rwheel=0;
+	
+	pwmLeft = Lwheel;
+	pwmRight = Rwheel;
+	
 	return;
 }
 
@@ -224,8 +248,18 @@ void turnCar(unsigned int Lwheel, unsigned int Rwheel)
  *  Modify:   n/a
  *  Returns:  n/a
  */
-void moveCar()
+void moveCar(unsigned int closeness)
 {	
+	if(closeness == TOO_FAR_DIGIT) {
+		pwmLeft=pwmRight=(75);
+	}
+	else if(closeness == TOO_CLOSE_DIGIT) {
+		pwmLeft=pwmRight=(-75);
+	}
+	else {
+		pwmLeft=pwmRight=(0);
+	}
+/*
 	while(distance > PRESETS[Stage])
 	{
 		pwmLeft=pwmRight=(75);
@@ -235,10 +269,12 @@ void moveCar()
 		pwmLeft=pwmRight=(-75);
 	}
 	pwmLeft=pwmRight=0;
-	
+*/
 	return;
 }
-void adjustAngle()
+
+//What is this function for?? Isn't this functionality covered in turnCar? - Josh
+void adjustAngle(unsigned int angle)
 {
 	if (angle < -2)
 	{
