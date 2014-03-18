@@ -2,7 +2,7 @@
 	EECE 281 Project 2
 	
 	Core File
-	Written for AT89LP51
+	Written for AT89LP51 on the LP51 microcontroller
 */
 
 //---Included Files---
@@ -37,11 +37,14 @@ volatile int pwmLeft = 0;
 volatile int pwmRight = 0;
 volatile unsigned int leftSensor = 0;
 volatile unsigned int rightSensor = 0;
+
 //left and right coil distances
 unsigned int distanceLeft;
 unsigned int distanceRight;
+
 //current instruction
 unsigned int instruction;
+
 //current preset distance
 unsigned int Stage;
 
@@ -62,46 +65,44 @@ void beaconSignal() interrupt 0
 {
 	// TODO
 	// quickly check if signal is zero, if not, return
-	// if it is zero, get the new instrution and allocate
+	// if it is zero, get the new instruction and allocate
 	//
 }
 
 void pwmCounter() interrupt 1
 {
 	
-	if(++pwmCount>99)
+	if(++pwmCount > 99)
 		pwmCount = 0;
 		
 	//Get left and right distances
 	//if they arent equal, stop moving and re-align
 	getDistance();
-	if(distanceLeft!=distanceRight)
+	if(distanceLeft != distanceRight)
 		turnCar();
 		
 	//Left wheel
-	if(pwmLeft>0)
+	if(pwmLeft > 0)
 	{	
-		P1_0=(pwmLeft>pwmCount)?0:1;
-		P1_1=1;
+		P1_0=(pwmLeft > pwmCount) ? 0:1;
+		P1_1 = 1;
 	}
-	if(pwmLeft<0)
+	if(pwmLeft < 0)
 	{	
-		P1_1=((-1)*pwmLeft>pwmCount)?0:1;
-		P1_0=1;
+		P1_1 = ((-1) * pwmLeft > pwmCount) ? 0:1;
+		P1_0 = 1;
 	}
 	//Right wheel
-	if(pwmRight>0)
+	if(pwmRight > 0)
 	{	
-		P1_0=(pwmRight>pwmCount)?0:1;
-		P1_1=1;
+		P1_0 = (pwmRight > pwmCount) ? 0:1;
+		P1_1 = 1;
 	}
-	if(pwmRight<0)
+	if(pwmRight < 0)
 	{	
-		P1_1=((-1)*pwmRight>pwmCount)?0:1;
-		P1_0=1;
+		P1_1 = ((-1) * pwmRight > pwmCount) ? 0:1;
+		P1_0 = 1;
 	}
-
-
 }		
 
 //---Boot---
@@ -136,19 +137,20 @@ int main (void)
 	while (1)
 	{
 		//stay on tether until instruction is read
-		while (instruction==0)
+		while (instruction == 0)
 		{
 			moveCar();
 		}
+		
 		//get instruction and go back to tether
 		switch (instruction)
 		{
 			case 1: //Move Forward
-			if(Stage!=0)
+			if(Stage != 0)
 				Stage--;
 			break;
 			case 2: //Move Backwards
-			if(Stage!=7)
+			if(Stage != 7)
 				Stage++;	
 			break;
 			case 3: //180 Turn
@@ -162,7 +164,7 @@ int main (void)
 			break;
 			default: //Turn on LED for bad instrucion	
 		}
-		instruction=0;
+		instruction = 0;
 	}
 	return 0;
 }
@@ -181,34 +183,36 @@ void getDistance()
 }
 
 /*	turnCar(): turn both wheels individually to align vehicle with angle
- *	Requires: leftPwm, rightPwm, turnDirection
+ *	Requires: rightPwm, leftPwm
  *	Modify:	 n/a
  *	Returns:  n/a
  */
 void turnCar()
 {
 	//save pwmvalues
-	int tempL=pwmLeft;
-	int tempR=pwmRight;
+	int tempL = pwmLeft;
+	int tempR = pwmRight;
+	
 	//turn towards beacon
-	while(distanceLeft<distanceRight)
+	while(distanceLeft < distanceRight)
 	{
-		pwmLeft=50;
-		pwmRight=(-50);
+		pwmLeft = 50;
+		pwmRight = (-50);
 	}
-	while(distanceLeft<distanceRight)
+	while(distanceLeft < distanceRight)
 	{
-		pwmLeft=(-50);
-		pwmRight=50;
+		pwmLeft = (-50);
+		pwmRight = 50;
 	}
+	
 	//restore values
-	pwmRight=tempR;
-	pwmLeft=tempL;
+	pwmRight = tempR;
+	pwmLeft = tempL;
 }
 
 /*	moveCar(): move the car towards the beacon if neccessarry
- *  Requires: distance
- *  Modify:   n/a
+ *  Requires: distanceRight, distanceLeft
+ *  Modify:   pwmRight, pwmLeft
  *  Returns:  n/a
  */
 void moveCar()
@@ -216,10 +220,10 @@ void moveCar()
 	//car alignment will be handled in interrupt
 	
 	//move forward
-	if(distanceRight>PRESETS[Stage])
-		pwmLeft=pwmRight=75;
-	if(distanceRight>PRESETS[Stage])
-		pwmLeft=pwmRight=(-75);		
+	if(distanceRight > PRESETS[Stage])
+		pwmLeft = pwmRight = 75;
+	if(distanceRight > PRESETS[Stage])
+		pwmLeft = pwmRight = (-75);		
 	return;
 }
 
