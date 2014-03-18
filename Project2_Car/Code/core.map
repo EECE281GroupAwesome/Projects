@@ -1,0 +1,298 @@
+Modules linked:
+   'core' from 'core.obj'
+   'uint2fs' from 'Z:\CrossIDE\Call51\Bin\..\lib\small\libfloat.lib'
+   'fsmul' from 'Z:\CrossIDE\Call51\Bin\..\lib\small\libfloat.lib'
+   'crt0' from 'Z:\CrossIDE\Call51\Bin\..\lib\small\libc51.lib'
+   'fsdiv' from 'Z:\CrossIDE\Call51\Bin\..\lib\small\libfloat.lib'
+   'ulong2fs' from 'Z:\CrossIDE\Call51\Bin\..\lib\small\libfloat.lib'
+   'fsreturnval' from 'Z:\CrossIDE\Call51\Bin\..\lib\small\libfloat.lib'
+   'fsnormalize' from 'Z:\CrossIDE\Call51\Bin\..\lib\small\libfloat.lib'
+   'fsget2args' from 'Z:\CrossIDE\Call51\Bin\..\lib\small\libfloat.lib'
+
+Memory use per module linked:
+               core: C:00810 D:019 I:000 B:001 X:00000
+            uint2fs: C:00012 D:000 I:000 B:000 X:00000
+              fsmul: C:00163 D:000 I:000 B:000 X:00000
+               crt0: C:00113 D:000 I:000 B:000 X:00000
+              fsdiv: C:00287 D:004 I:000 B:000 X:00000
+           ulong2fs: C:00019 D:000 I:000 B:000 X:00000
+        fsreturnval: C:00079 D:000 I:000 B:000 X:00000
+        fsnormalize: C:00051 D:000 I:000 B:000 X:00000
+         fsget2args: C:00046 D:000 I:000 B:000 X:00000
+           ABSOLUTE: C:00010 D:000 I:000 B:000 X:00000
+------------------------------------------------------
+             Totals: C:01590 D:023 I:000 B:001 X:00000
+
+INTERMAL RAM map (see legend below):
+00: 0 0 0 0 0 0 0 0 a a a a a a a a 
+10: a a a a a a a a a a b b b b . . 
+20: K B . . . . . . . . . . . . . . 
+30: . . . . . . . . . . . . . . . . 
+40: . . . . . . . . . . . . . . . . 
+50: . . . . . . . . . . . . . . . . 
+60: . . . . . . . . . . . . . . . . 
+70: . . . . . . . . . . . . . . . . 
+80: . . . . . . . . . . . . . . . . 
+90: . . . . . . . . . . . . . . . . 
+A0: . . . . . . . . . . . . . . . . 
+B0: . . . . . . . . . . . . . . . . 
+C0: . . . . . . . . . . . . . . . . 
+D0: . . . . . . . . . . . . . . . . 
+E0: . . . . . . . . . . . . . . . . 
+F0: . . . . . . . . . . . . . . . . 
+
+Legend:
+	0: Register bank 0
+	1: Register bank 1
+	2: Register bank 2
+	3: Register bank 3
+	B: bits (see 'BIT map' below)
+	K: BIT_BANK
+	a: core:R_DSEG
+	b: R_OSEG
+
+BIT map:
+00: U U U U U U U U U . . . . . . . 
+10: . . . . . . . . . . . . . . . . 
+20: . . . . . . . . . . . . . . . . 
+30: . . . . . . . . . . . . . . . . 
+40: . . . . . . . . . . . . . . . . 
+50: . . . . . . . . . . . . . . . . 
+60: . . . . . . . . . . . . . . . . 
+70: . . . . . . . . . . . . . . . . 
+
+CODE usage map:
+0000: 251 256 256 256 256 256 059 000 000 000 000 000 000 000 000 000 
+1000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+2000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+3000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+4000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+5000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+6000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+7000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+8000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+9000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+A000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+B000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+C000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+D000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+E000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+F000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+Total: 1590 bytes
+
+XDATA usage map:
+0000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+1000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+2000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+3000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+4000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+5000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+6000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+7000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+8000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+9000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+A000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+B000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+C000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+D000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+E000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+F000: 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 000 
+Total: 0 bytes
+
+Base Segments:
+   BIT_BANK=D:0020, size=0001
+   R_BSEG=B:0008, size=0001
+   R_CONST=C:007F, size=0018
+   R_CSEG=C:00B1, size=058A
+   R_DINIT=C:0097, size=0019
+   R_DSEG=D:0000, size=0012
+   R_GSINIT=C:000E, size=0071
+   R_HOME=C:0000, size=0000
+   R_ISEG=I:0000, size=0000
+   R_IXSEG=X:0000, size=0000
+   R_OSEG=D:001A, size=0004
+   R_PSEG=X:0000, size=0000
+   R_XINIT=C:0000, size=0000
+   R_XSEG=X:0000, size=0000
+   rbank0=D:0000, size=0008
+
+Module Segments:
+   CSEG=C:0000, size=000A
+   core:BIT_BANK=D:0020, size=0001
+   core:R_BSEG=B:0008, size=0001
+   core:R_CONST=C:007F, size=0018
+   core:R_CSEG=C:00B1, size=02F9
+   core:R_DINIT=C:0097, size=0019
+   core:R_DSEG=D:0008, size=0012
+   crt0:R_GSINIT=C:000E, size=0071
+   fsdiv:R_CSEG=C:0459, size=011F
+   fsdiv:R_OSEG=D:001A, size=0004
+   fsget2args:R_CSEG=C:060D, size=002E
+   fsmul:R_CSEG=C:03B6, size=00A3
+   fsnormalize:R_CSEG=C:05DA, size=0033
+   fsreturnval:R_CSEG=C:058B, size=004F
+   uint2fs:R_CSEG=C:03AA, size=000C
+   ulong2fs:R_CSEG=C:0578, size=0013
+
+Public symbols:
+   _GetADC=C:034E
+   _R_BSEG_size=L:0001
+   _R_BSEG_start=L:0008
+   _R_CONST_size=L:0018
+   _R_CONST_start=L:007F
+   _R_CSEG_size=L:058A
+   _R_CSEG_start=L:00B1
+   _R_DINIT_size=L:0019
+   _R_DINIT_start=L:0097
+   _R_GSINIT_size=L:0071
+   _R_GSINIT_start=L:000E
+   _R_HOME_size=L:0000
+   _R_HOME_start=L:0000
+   _R_ISEG_size=L:0000
+   _R_ISEG_start=L:0000
+   _R_IXSEG_size=L:0000
+   _R_IXSEG_start=L:0000
+   _R_OSEG_size=L:0004
+   _R_OSEG_start=L:001A
+   _R_PSEG_size=L:0000
+   _R_PSEG_start=L:0000
+   _R_XINIT_size=L:0000
+   _R_XINIT_start=L:0000
+   _R_XSEG_size=L:0000
+   _R_XSEG_start=L:0000
+   _SPIWrite=C:033E
+   _Stage=D:0018
+   ___fsdiv=C:0459
+   ___fsmul=C:03B6
+   ___uint2fs=C:03AA
+   ___ulong2fs=C:0578
+   __c51_external_startup=C:0198
+   _beaconSignal=C:00B1
+   _core_R_DSEG_size=L:0012
+   _core_R_DSEG_start=L:0008
+   _crt0=C:000E
+   _distanceLeft=D:0012
+   _distanceRight=D:0014
+   _dummy_name_crt0=C:0459
+   _getDistance=C:0243
+   _instruction=D:0016
+   _leftSensor=D:000E
+   _main=C:01E1
+   _moveCar=C:0282
+   _pwmCount=D:0008
+   _pwmCounter=C:00B2
+   _pwmLeft=D:000A
+   _pwmRight=D:000C
+   _rightSensor=D:0010
+   _stack_start=L:0022
+   _turnCar=C:0244
+   _voltage=C:02E3
+   _wait1s=C:02D5
+   _wait2ms=C:02CB
+   fs_direct_return=C:05B4
+   fs_normalize_a=C:05DA
+   fs_return_inf=C:05C2
+   fs_return_nan=C:05CF
+   fs_return_zero=C:05AC
+   fs_round_and_return=C:058B
+   fs_zerocheck_return=C:05A3
+   fsgetargs=C:060D
+   ulong2fs_doit=C:0581
+
+Local symbols:
+   core:J1=C:02CF
+   core:J2=C:02CD
+   core:J3=C:02CB
+   core:L003002?=C:00EB
+   core:L003004?=C:00FD
+   core:L003006?=C:0120
+   core:L003008?=C:013C
+   core:L003010?=C:015F
+   core:L003013?=C:017B
+   core:L003022?=C:00FA
+   core:L005001?=C:01E1
+   core:L005003?=C:01EC
+   core:L005004?=C:0212
+   core:L005007?=C:0223
+   core:L005010?=C:0238
+   core:L005011?=C:023A
+   core:L005012?=C:023C
+   core:L005013?=C:023C
+   core:L005014?=C:023C
+   core:L005027?=C:0200
+   core:L005029?=C:0221
+   core:L005030?=C:022E
+   core:L007001?=C:024C
+   core:L007004?=C:0268
+   core:L007006?=C:0279
+   core:L008002?=C:02B5
+   core:L008004?=C:02CA
+   core:L012001?=C:0345
+   core:L013003?=C:0367
+   core:L013009?=C:036C
+   core:L1=C:02DB
+   core:L2=C:02D9
+   core:L3=C:02D7
+   core:_PRESETS=C:007F
+   core:_pwmCounter_sloc0_1_0=B:0008
+   core:b0=D:0020
+   core:b1=D:0020
+   core:b2=D:0020
+   core:b3=D:0020
+   core:b4=D:0020
+   core:b5=D:0020
+   core:b6=D:0020
+   core:b7=D:0020
+   core:bits=D:0020
+   crt0:PClearLoop?done?=C:0077
+   crt0:PClearLoop?repeat?=C:0069
+   crt0:XClearLoop?done?=C:005F
+   crt0:XClearLoop?repeat?=C:0051
+   crt0:XInitLoop?done?=C:0047
+   crt0:XInitLoop?repeat?=C:0027
+   crt0:__c51_init_data=C:001B
+   crt0:__c51_program_startup=C:007A
+   crt0:forever?home?=C:007D
+   fsdiv:L00001?=C:0461
+   fsdiv:L00002?=C:046A
+   fsdiv:L00003?=C:046D
+   fsdiv:L00004?=C:0473
+   fsdiv:L00005?=C:0480
+   fsdiv:L00006?=C:0483
+   fsdiv:L00007?=C:048B
+   fsdiv:L00008?=C:0497
+   fsdiv:L00009?=C:049F
+   fsdiv:L00010?=C:04B5
+   fsdiv:L00011?=C:0505
+   fsdiv:L00012?=C:0518
+   fsdiv:L00013?=C:0567
+   fsdiv:L00014?=C:0575
+   fsdiv:_dummy=C:0459
+   fsdiv:saved_b=D:001D
+   fsdiv:saved_r5=D:001A
+   fsdiv:saved_r6=D:001B
+   fsdiv:saved_r7=D:001C
+   fsget2args:L00001?=C:061A
+   fsget2args:L00002?=C:0636
+   fsget2args:_dummy=C:060D
+   fsmul:L00001?=C:03BC
+   fsmul:L00002?=C:03BF
+   fsmul:L00003?=C:03C7
+   fsmul:L00004?=C:03CF
+   fsmul:L00005?=C:03D7
+   fsmul:L00006?=C:03E2
+   fsmul:L00007?=C:03EA
+   fsmul:L00010?=C:0456
+   fsmul:_dummy=C:03B6
+   fsnormalize:L00001?=C:05DD
+   fsnormalize:L00002?=C:05EF
+   fsnormalize:L00003?=C:05F0
+   fsnormalize:L00004?=C:05F4
+   fsnormalize:L00005?=C:05FB
+   fsnormalize:L00006?=C:060A
+   fsnormalize:_dummy=C:05DA
+   fsreturnval:L00001?=C:0591
+   fsreturnval:_dummy=C:058B
+   uint2fs:_dummy=C:03AA
+   ulong2fs:_dummy=C:0578
+   ulong2fs:long2fs_doit=C:0583

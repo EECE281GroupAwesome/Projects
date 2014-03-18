@@ -30,31 +30,26 @@
 static const int TOO_FAR   = 10;
 static const int TOO_CLOSE = 5;
 static const int DISTANCE_CONSTANT = 0.0036;
-
-struct voltage
-{
-	float peak;
-	float RMS;
-	float phase;
-};
-
+static const int PRESETS[] = {5,10,15,20,25,30,35,40,45,50,55,60};
 
 volatile unsigned int pwmCount = 0;
-volatile unsigned int leftPwm = 0;
-volatile unsigned int rightPwm = 0;
+volatile int pwmLeft = 0;
+volatile int pwmRight = 0;
 volatile unsigned int leftSensor = 0;
 volatile unsigned int rightSensor = 0;
-unsigned int distance;
-char turnDirection;
-float angle;
+//left and right coil distances
+unsigned int distanceLeft;
+unsigned int distanceRight;
+//current instruction
+unsigned int instruction;
+//current preset distance
+unsigned int Stage;
 
 //---Function Prototypes---
 
-unsigned int getDistance();
-float getAngle();
-char getDirection(float angle);
-void turnCar(unsigned int Lwheel, unsigned int Rwheel, unsigned char turnDirection);
-void moveCar(unsigned int dist);
+void getDistance();
+void turnCar();
+void moveCar();
 void wait2ms();
 void wait1s();
 float voltage (unsigned char channel);
@@ -66,32 +61,43 @@ unsigned int GetADC(unsigned char channel);
 void beaconSignal() interrupt 0
 {
 	// TODO
+	// quickly check if signal is zero, if not, return
+	// if it is zero, get the new instrution and allocate
+	//
 }
 
 void pwmCounter() interrupt 1
 {
+	
 	if(++pwmCount>99)
 		pwmCount = 0;
+		
+	//Get left and right distances
+	//if they arent equal, stop moving and re-align
+	getDistance();
+	if(distanceLeft!=distanceRight)
+		turnCar();
+		
 	//Left wheel
 	if(pwmLeft>0)
 	{	
-		P1_0=(pwmLeft>pwmcount)0:1;
+		P1_0=(pwmLeft>pwmCount)?0:1;
 		P1_1=1;
 	}
 	if(pwmLeft<0)
 	{	
-		P1_1=(pwmLeft>pwmcount)0:1;
+		P1_1=((-1)*pwmLeft>pwmCount)?0:1;
 		P1_0=1;
 	}
 	//Right wheel
 	if(pwmRight>0)
 	{	
-		P1_0=(pwmRight>pwmcount)0:1;
+		P1_0=(pwmRight>pwmCount)?0:1;
 		P1_1=1;
 	}
 	if(pwmRight<0)
 	{	
-		P1_1=(pwmRight>pwmcount)0:1;
+		P1_1=((-1)*pwmRight>pwmCount)?0:1;
 		P1_0=1;
 	}
 
@@ -119,36 +125,31 @@ unsigned char _c51_external_startup(void)
 	EX0 = 1;	// Enable external interrupt 0
 	IT0 = 1;
 	EA = 1; 	// Enable global interrupts
-	
+	instruction=0;
+	Stage=3;
     return 0;
 }
 
 //---MAIN---
-volatile int instruction;
 int main (void)
 {	
-	instruction=0;
-	
 	while (1)
 	{
-		while (instruction==0 && angle > 10)
+		//stay on tether until instruction is read
+		while (instruction==0)
 		{
-			YLW=1;
-			GRN=0;
-			RED=0;
-			angle = getAngle();
-			turnDirection = getDirection(angle);
-			turnCar(leftPwm, rightPwm, turnDirection);
-			distance = getDistance();
+			moveCar();
 		}
-		
+		//get instruction and go back to tether
 		switch (instruction)
 		{
 			case 1: //Move Forward
-			
+			if(Stage!=0)
+				Stage--;
 			break;
 			case 2: //Move Backwards
-			
+			if(Stage!=7)
+				Stage++;	
 			break;
 			case 3: //180 Turn
 			
@@ -159,13 +160,8 @@ int main (void)
 			case 5:
 			
 			break;
-			default: //Turn on LED for bad instrucion
-			RED=1;
-			GRN=0;
-			YLW=0;
-			
+			default: //Turn on LED for bad instrucion	
 		}
-		
 		instruction=0;
 	}
 	return 0;
@@ -179,47 +175,9 @@ int main (void)
  *	Modify:	  distance
  *	Returns:  distance to beacon   
  */
-unsigned int getDistance(struct voltage x, struct voltage y) 
+void getDistance() 
 {
-	int distance = pow( (DISTANCE_CONSTANT / (sqrtf(x.peak*x.peak + y.peak*y.peak))) , 1/3); //maybe this should be a float
-	
-	//from the formula: pythagoras(Vx,Vy) = K/d^3 -> d = (K/pyth)^(1/3)
-	
-	return distance;
-}
-
-/*	getAngle(): computes the angle that the car must turn to align with
- *              the beacon
- *	Requires: leftSensor, rightSensor
- *  Modify:   angle
- *  Returns:  angle to turn car chassis in degrees 
- */
-float getAngle(struct voltage x, struct voltage y)
-{
-	float angle    = atanf(x.peak / y.peak);
-
-	return angle;
-}
-
-/*	getDirection(): find which the direction the car need turn L/R
- *	Requires: angle
- *	Modify:   turnDirection
- *	Returns:  direction to turn car, left or right
- */
-char getDirection(float angle, struct voltage forward, struct voltage back)
-{
-	
-	//calculate which of four angles is correct (incomplete)
-	//instead of using a second set of sensors (forward and back)
-	//we could use x.phase and y.phase, I'll work on it
-	
-	if(forward.peak > back.peak)
-		angle = angle; //turn left
-	else if(back.peak < forward.peak)
-		angle = angle; //turn right
-	else
-		angle = angle; //test by changing direction and get new values (or something else?)
-	return 'd';
+	//get distance left and right and store to global variables
 }
 
 /*	turnCar(): turn both wheels individually to align vehicle with angle
@@ -227,18 +185,25 @@ char getDirection(float angle, struct voltage forward, struct voltage back)
  *	Modify:	 n/a
  *	Returns:  n/a
  */
-void turnCar(unsigned int Lwheel, unsigned int Rwheel, unsigned char turnDirection, struct voltage x)
+void turnCar()
 {
-	//turn towards beacon until parallel voltage becomes weakest and starts to rise
-	
-	float min;
-	
-	do
+	//save pwmvalues
+	int tempL=pwmLeft;
+	int tempR=pwmRight;
+	//turn towards beacon
+	while(distanceLeft<distanceRight)
 	{
-		//continue to turn
-		if(x.peak < min) min = x.peak;
-		
-	}while(x.peak <= min);
+		pwmLeft=50;
+		pwmRight=(-50);
+	}
+	while(distanceLeft<distanceRight)
+	{
+		pwmLeft=(-50);
+		pwmRight=50;
+	}
+	//restore values
+	pwmRight=tempR;
+	pwmLeft=tempL;
 }
 
 /*	moveCar(): move the car towards the beacon if neccessarry
@@ -246,13 +211,15 @@ void turnCar(unsigned int Lwheel, unsigned int Rwheel, unsigned char turnDirecti
  *  Modify:   n/a
  *  Returns:  n/a
  */
-void moveCar(unsigned int dist)
+void moveCar()
 {
-	if(distance > TOO_CLOSE)
-		//move back
+	//car alignment will be handled in interrupt
 	
-	if(distance < TOO_FAR)
-		//move forward	
+	//move forward
+	if(distanceRight>PRESETS[Stage])
+		pwmLeft=pwmRight=75;
+	if(distanceRight>PRESETS[Stage])
+		pwmLeft=pwmRight=(-75);		
 	return;
 }
 
