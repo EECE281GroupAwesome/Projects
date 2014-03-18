@@ -61,12 +61,18 @@ unsigned int GetADC(unsigned char channel);
 
 //---Interrupts---
 
-void beaconSignal() interrupt 3
+void beaconSignal() interrupt 0
 {
 	// TODO
 	// quickly check if signal is zero, if not, return
 	// if it is zero, get the new instruction and allocate
 	//
+	// -if volatge(0)< min??
+	//   -get message
+	// -else
+	//  -return
+	//
+	
 }
 
 void pwmCounter() interrupt 1
@@ -211,7 +217,7 @@ void turnCar()
  */
 void moveCar()
 {	
-	//move forward or backward as long as aligned and not at right distance
+	//move forward or back as long as aligned and not at right distance
 	while(distanceRight > PRESETS[Stage] && distanceLeft==distanceRight)
 	{
 		pwmLeft = pwmRight = 75;
