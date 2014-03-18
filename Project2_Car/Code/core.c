@@ -78,8 +78,7 @@ void pwmCounter() interrupt 1
 	//Get left and right distances
 	//if they arent equal, stop moving and re-align
 	getDistance();
-	if(distanceLeft != distanceRight)
-		turnCar();
+	
 		
 	//Left wheel
 	if(pwmLeft > 0)
@@ -140,6 +139,9 @@ int main (void)
 		while (instruction == 0)
 		{
 			moveCar();
+			//inplace turning if car is not aligned
+			if(distanceLeft != distanceRight)
+				turnCar();
 		}
 		
 		//get instruction and go back to tether
@@ -189,10 +191,6 @@ void getDistance()
  */
 void turnCar()
 {
-	//save pwmvalues
-	int tempL = pwmLeft;
-	int tempR = pwmRight;
-	
 	//turn towards beacon
 	while(distanceLeft < distanceRight)
 	{
@@ -204,10 +202,6 @@ void turnCar()
 		pwmLeft = (-50);
 		pwmRight = 50;
 	}
-	
-	//restore values
-	pwmRight = tempR;
-	pwmLeft = tempL;
 }
 
 /*	moveCar(): move the car towards the beacon if neccessarry
@@ -216,14 +210,18 @@ void turnCar()
  *  Returns:  n/a
  */
 void moveCar()
-{
-	//car alignment will be handled in interrupt
-	
-	//move forward
-	if(distanceRight > PRESETS[Stage])
+{	
+	//move forward or backward as long as aligned and not at right distance
+	while(distanceRight > PRESETS[Stage] && distanceLeft==distanceRight)
+	{
 		pwmLeft = pwmRight = 75;
-	if(distanceRight > PRESETS[Stage])
+	}
+	while(distanceRight > PRESETS[Stage] && distanceLeft==distanceRight)
+	{
 		pwmLeft = pwmRight = (-75);		
+	}
+	//done, stop
+	pwmLeft=pwmRight=0;
 	return;
 }
 
