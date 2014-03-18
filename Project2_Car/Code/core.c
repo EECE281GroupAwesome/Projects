@@ -181,11 +181,11 @@ int main (void)
 
 //---Function Implementations---
 
-/*	getDistance(): calculates the linear distance from the beacon using
- *				   the EXT interrupt to interpret the beacon's signal
- *	Requires: external interrupt 0
- *	Modify:	  distance
- *	Returns:  distance to beacon   
+/*	getDistance(): calculates the linear distance from the beacon using peak detectors
+ *				 
+ *	Requires: nada
+ *	Modify:	  distance(L and R)
+ *	Returns:  nothing, changes global variables left and right distance  
  */
 void getDistance() 
 {
@@ -193,7 +193,7 @@ void getDistance()
 }
 
 /*	turnCar(): turn both wheels individually to align vehicle with angle
- *	Requires: rightPwm, leftPwm
+ *	Requires: nada, looks at globals
  *	Modify:	 n/a
  *	Returns:  n/a
  */
