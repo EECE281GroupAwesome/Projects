@@ -41,14 +41,14 @@ volatile unsigned int leftSensor = 0;
 volatile unsigned int rightSensor = 0;
 
 //left and right coil distances
-unsigned int distanceLeft;
-unsigned int distanceRight;
+unsigned int distanceLeft = 45;
+unsigned int distanceRight = 41;
 
 //current instruction
-unsigned int instruction;
+unsigned int instruction = 0;
 
 //current preset distance
-unsigned int Stage;
+unsigned int Stage = 2;
 
 //---Function Prototypes---
 
@@ -91,24 +91,25 @@ void pwmCounter() interrupt 1
 	//Left wheel
 	if(pwmLeft > 0)
 	{	
-		P1_0=(pwmLeft > pwmCount) ? 0:1;
+		P1_0 = (pwmLeft > pwmCount) ? 0:1;
 		P1_1 = 1;
 	}
 	if(pwmLeft < 0)
 	{	
-		P1_1 = ((-1) * pwmLeft > pwmCount) ? 0:1;
+		P1_1 = ( pwmLeft > pwmCount) ? 0:1;
 		P1_0 = 1;
 	}
+	
 	//Right wheel
 	if(pwmRight > 0)
 	{	
-		P1_0 = (pwmRight > pwmCount) ? 0:1;
-		P1_1 = 1;
+		P1_3 = ((-1) * pwmRight > pwmCount) ? 0:1;
+		P1_4 = 1;
 	}
 	if(pwmRight < 0)
 	{	
-		P1_1 = ((-1) * pwmRight > pwmCount) ? 0:1;
-		P1_0 = 1;
+		P1_4 = ((-1) * pwmRight > pwmCount) ? 0:1;
+		P1_3 = 1;
 	}
 }		
 
@@ -123,7 +124,14 @@ unsigned char _c51_external_startup(void)
 	P3M0 = 0;	P3M1 = 0;
 	AUXR = 0B_0001_0001; // 1152 bytes of internal XDATA, P4.4 is a general purpose I/O
 	P4M0 = 0;	P4M1 = 0;
-    
+	
+	// Instead of using a timer to generate the clock for the serial
+    // port, use the built-in baud rate generator.
+    PCON |= 0x80;
+	SCON = 0x52;
+    BDRCON = 0;
+    BRL = BRG_VAL;
+    BDRCON = BRR | TBCK | RBCK | SPD;
 	
 	TMOD = 0x01;	// Timer 0 as 16-bit timer	
 	TH0 = RH0 = TIMER0_RELOAD_VALUE / 0x100;
@@ -133,16 +141,23 @@ unsigned char _c51_external_startup(void)
 	EX0 = 1;	// Enable external interrupt 0
 	IT0 = 1;
 	EA = 1; 	// Enable global interrupts
-	instruction=0;
-	Stage=3;
+	
     return 0;
 }
 
 //---MAIN---
 int main (void)
 {	
+	
+	//---TEMPORARY INPUT---
+	//getchar();	
+	//printf("Input L/R distances with a space between them: ");
+	//scanf("%ui %ui", distanceLeft, distanceRight);
+	//printf("\r");
+	//---------------------
+	
 	while (1)
-	{
+	{	
 		//stay on tether until instruction is read
 		while (instruction == 0)
 		{
@@ -156,23 +171,26 @@ int main (void)
 		switch (instruction)
 		{
 			case 1: //Move Forward
-			if(Stage != 0)
-				Stage--;
-			break;
+				if(Stage != 0)
+					Stage--;
+				P3_3 = 0;
+				break;
 			case 2: //Move Backwards
-			if(Stage != 7)
-				Stage++;	
-			break;
+				if(Stage != 7)
+					Stage++;
+				P3_3 = 0;	
+				break;
 			case 3: //180 Turn
-			
-			break;
+				P3_3 = 0;
+				break;
 			case 4: //Park
-			
-			break;
+				P3_3 = 0;
+				break;
 			case 5:
-			
-			break;
+				P3_3 = 0;
+				break;
 			default: //Turn on LED for bad instrucion	
+				P3_3 = 1;
 		}
 		instruction = 0;
 	}
@@ -189,6 +207,9 @@ int main (void)
  */
 void getDistance() 
 {
+	// TODO
+	distanceLeft = 0;
+	distanceRight = 0;
 	//get distance left and right and store to global variables
 }
 
@@ -202,13 +223,13 @@ void turnCar()
 	//turn towards beacon
 	while(distanceLeft < distanceRight)
 	{
-		pwmLeft = 50;
-		pwmRight = (-50);
+		pwmLeft = (-50);
+		pwmRight = 50;
 	}
 	while(distanceLeft > distanceRight)
 	{
-		pwmLeft = (-50);
-		pwmRight = 50;
+		pwmLeft = 50;
+		pwmRight = (-50);
 	}
 }
 
