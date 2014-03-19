@@ -29,20 +29,20 @@
 
 //---Global Variables---
 
-static const int TOO_FAR   = 10;
-static const int TOO_CLOSE = 5;
-static const int DISTANCE_CONSTANT = 0.0036;
-static const int PRESETS[] = {5,10,15,20,25,30,35,40,45,50,55,60};
+const int TOO_FAR   = 10;
+const int TOO_CLOSE = 5;
+const int DISTANCE_CONSTANT = 0.0036;
+const unsigned int PRESETS[] = {5,10,15,20,25,30,35,40,45,50,55,60};
 
-volatile unsigned int pwmCount = 0;
+volatile int pwmCount = 0;
 volatile int pwmLeft = 0;
 volatile int pwmRight = 0;
 volatile unsigned int leftSensor = 0;
 volatile unsigned int rightSensor = 0;
 
 //left and right coil distances
-unsigned int distanceLeft = 45;
-unsigned int distanceRight = 41;
+unsigned int distanceLeft = 40;
+unsigned int distanceRight = 50;
 
 //current instruction
 unsigned int instruction = 0;
@@ -73,8 +73,7 @@ void beaconSignal() interrupt 0
 	//   -get message
 	// -else
 	//  -return
-	//
-	
+	//	
 }
 
 void pwmCounter() interrupt 1
@@ -91,25 +90,25 @@ void pwmCounter() interrupt 1
 	//Left wheel
 	if(pwmLeft > 0)
 	{	
-		P1_0 = (pwmLeft > pwmCount) ? 0:1;
-		P1_1 = 1;
+		P1_1 = (pwmLeft > pwmCount) ? 0:1;
+		P1_0 = 1;
 	}
 	if(pwmLeft < 0)
 	{	
-		P1_1 = ( pwmLeft > pwmCount) ? 0:1;
-		P1_0 = 1;
+		P1_0 = ((-1) * pwmLeft > pwmCount) ? 0:1;
+		P1_1 = 1;
 	}
 	
 	//Right wheel
 	if(pwmRight > 0)
 	{	
-		P1_3 = ((-1) * pwmRight > pwmCount) ? 0:1;
-		P1_4 = 1;
+		P1_4 = (pwmRight > pwmCount) ? 0:1;
+		P1_3 = 1;
 	}
 	if(pwmRight < 0)
 	{	
-		P1_4 = ((-1) * pwmRight > pwmCount) ? 0:1;
-		P1_3 = 1;
+		P1_3 = ((-1) * pwmRight > pwmCount) ? 0:1;
+		P1_4 = 1;
 	}
 }		
 
@@ -147,15 +146,7 @@ unsigned char _c51_external_startup(void)
 
 //---MAIN---
 int main (void)
-{	
-	
-	//---TEMPORARY INPUT---
-	//getchar();	
-	//printf("Input L/R distances with a space between them: ");
-	//scanf("%ui %ui", distanceLeft, distanceRight);
-	//printf("\r");
-	//---------------------
-	
+{		
 	while (1)
 	{	
 		//stay on tether until instruction is read
@@ -164,7 +155,10 @@ int main (void)
 			moveCar();
 			//inplace turning if car is not aligned
 			if(distanceLeft != distanceRight)
+			{	
+				P3_3 = 1;
 				turnCar();
+			}
 		}
 		
 		//get instruction and go back to tether
@@ -190,7 +184,7 @@ int main (void)
 				P3_3 = 0;
 				break;
 			default: //Turn on LED for bad instrucion	
-				P3_3 = 1;
+			
 		}
 		instruction = 0;
 	}
@@ -208,8 +202,6 @@ int main (void)
 void getDistance() 
 {
 	// TODO
-	distanceLeft = 0;
-	distanceRight = 0;
 	//get distance left and right and store to global variables
 }
 
@@ -223,13 +215,13 @@ void turnCar()
 	//turn towards beacon
 	while(distanceLeft < distanceRight)
 	{
-		pwmLeft = (-50);
-		pwmRight = 50;
+		pwmLeft = 50;
+		pwmRight = (-50);
 	}
 	while(distanceLeft > distanceRight)
 	{
-		pwmLeft = 50;
-		pwmRight = (-50);
+		pwmLeft = (-50);
+		pwmRight = 50;
 	}
 }
 
@@ -241,14 +233,15 @@ void turnCar()
 void moveCar()
 {	
 	//move forward or back as long as aligned and not at right distance
-	while(distanceRight > PRESETS[Stage] && distanceLeft==distanceRight)
+	while (distanceRight > PRESETS[Stage] && distanceLeft==distanceRight)
 	{
-		pwmLeft = pwmRight = 75;
+		pwmLeft = 50;
+		pwmRight = 50;
 	}
-	while(distanceRight > PRESETS[Stage] && distanceLeft==distanceRight)
-	{
-		pwmLeft = pwmRight = (-75);		
-	}
+	//while(distanceRight > PRESETS[Stage] && distanceLeft==distanceRight)
+	//{
+	//	pwmLeft = pwmRight = (-75);		
+	//}
 	//done, stop
 	pwmLeft=pwmRight=0;
 	return;
