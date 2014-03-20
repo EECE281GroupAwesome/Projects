@@ -34,7 +34,7 @@ const int TOO_CLOSE = 5;
 const int DISTANCE_CONSTANT = 0.0036;
 const unsigned int PRESETS[] = {5,10,15,20,25,30,35,40,45,50,55,60};
 
-volatile int pwmCount = 0;
+volatile unsigned int pwmCount = 0;
 volatile int pwmLeft = 0;
 volatile int pwmRight = 0;
 volatile unsigned int leftSensor = 0;
