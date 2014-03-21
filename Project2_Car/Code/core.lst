@@ -1,7 +1,7 @@
 0000              1   ;--------------------------------------------------------
 0000              2   ; File Created by C51
 0000              3   ; Version 1.0.0 #1034 (Dec 12 2012) (MSVC)
-0000              4   ; This file was generated Mon Mar 17 16:24:42 2014
+0000              4   ; This file was generated Fri Mar 21 11:08:16 2014
 0000              5   ;--------------------------------------------------------
                   5   $name core
                   6   $optc51 --model-small
@@ -23,1066 +23,1334 @@
 0000             23   ;--------------------------------------------------------
 0000             24   ; Public variables in this module
 0000             25   ;--------------------------------------------------------
-0000             26            public _main
-0000             27            public __c51_external_startup
-0000             28            public _pwmCounter
-0000             29            public _beaconSignal
-0000             30            public _Stage
-0000             31            public _instruction
-0000             32            public _distanceRight
-0000             33            public _distanceLeft
-0000             34            public _rightSensor
-0000             35            public _leftSensor
-0000             36            public _pwmRight
-0000             37            public _pwmLeft
-0000             38            public _pwmCount
-0000             39            public _getDistance
-0000             40            public _turnCar
-0000             41            public _moveCar
-0000             42            public _wait2ms
-0000             43            public _wait1s
-0000             44            public _voltage
-0000             45            public _SPIWrite
-0000             46            public _GetADC
-0000             47   ;--------------------------------------------------------
-0000             48   ; Special Function Registers
-0000             49   ;--------------------------------------------------------
-0000             50   _ACC            DATA 0xe0
-0000             51   _B              DATA 0xf0
-0000             52   _PSW            DATA 0xd0
-0000             53   _SP             DATA 0x81
-0000             54   _SPX            DATA 0xef
-0000             55   _DPL            DATA 0x82
-0000             56   _DPH            DATA 0x83
-0000             57   _DPLB           DATA 0xd4
-0000             58   _DPHB           DATA 0xd5
-0000             59   _PAGE           DATA 0xf6
-0000             60   _AX             DATA 0xe1
-0000             61   _BX             DATA 0xf7
-0000             62   _DSPR           DATA 0xe2
-0000             63   _FIRD           DATA 0xe3
-0000             64   _MACL           DATA 0xe4
-0000             65   _MACH           DATA 0xe5
-0000             66   _PCON           DATA 0x87
-0000             67   _AUXR           DATA 0x8e
-0000             68   _AUXR1          DATA 0xa2
-0000             69   _DPCF           DATA 0xa1
-0000             70   _CKRL           DATA 0x97
-0000             71   _CKCKON0        DATA 0x8f
-0000             72   _CKCKON1        DATA 0xaf
-0000             73   _CKSEL          DATA 0x85
-0000             74   _CLKREG         DATA 0xae
-0000             75   _OSCCON         DATA 0x85
-0000             76   _IE             DATA 0xa8
-0000             77   _IEN0           DATA 0xa8
-0000             78   _IEN1           DATA 0xb1
-0000             79   _IPH0           DATA 0xb7
-0000             80   _IP             DATA 0xb8
-0000             81   _IPL0           DATA 0xb8
-0000             82   _IPH1           DATA 0xb3
-0000             83   _IPL1           DATA 0xb2
-0000             84   _P0             DATA 0x80
-0000             85   _P1             DATA 0x90
-0000             86   _P2             DATA 0xa0
-0000             87   _P3             DATA 0xb0
-0000             88   _P4             DATA 0xc0
-0000             89   _P0M0           DATA 0xe6
-0000             90   _P0M1           DATA 0xe7
-0000             91   _P1M0           DATA 0xd6
-0000             92   _P1M1           DATA 0xd7
-0000             93   _P2M0           DATA 0xce
-0000             94   _P2M1           DATA 0xcf
-0000             95   _P3M0           DATA 0xc6
-0000             96   _P3M1           DATA 0xc7
-0000             97   _P4M0           DATA 0xbe
-0000             98   _P4M1           DATA 0xbf
-0000             99   _SCON           DATA 0x98
-0000            100   _SBUF           DATA 0x99
-0000            101   _SADEN          DATA 0xb9
-0000            102   _SADDR          DATA 0xa9
-0000            103   _BDRCON         DATA 0x9b
-0000            104   _BRL            DATA 0x9a
-0000            105   _TCON           DATA 0x88
-0000            106   _TMOD           DATA 0x89
-0000            107   _TCONB          DATA 0x91
-0000            108   _TL0            DATA 0x8a
-0000            109   _TH0            DATA 0x8c
-0000            110   _TL1            DATA 0x8b
-0000            111   _TH1            DATA 0x8d
-0000            112   _RL0            DATA 0xf2
-0000            113   _RH0            DATA 0xf3
-0000            114   _RTL1           DATA 0xf4
-0000            115   _RH1            DATA 0xf5
-0000            116   _WDTRST         DATA 0xa6
-0000            117   _WDTPRG         DATA 0xa7
-0000            118   _T2CON          DATA 0xc8
-0000            119   _T2MOD          DATA 0xc9
-0000            120   _RCAP2H         DATA 0xcb
-0000            121   _RCAP2L         DATA 0xca
-0000            122   _TH2            DATA 0xcd
-0000            123   _TL2            DATA 0xcc
-0000            124   _SPCON          DATA 0xc3
-0000            125   _SPSTA          DATA 0xc4
-0000            126   _SPDAT          DATA 0xc5
-0000            127   _SSCON          DATA 0x93
-0000            128   _SSCS           DATA 0x94
-0000            129   _SSDAT          DATA 0x95
-0000            130   _SSADR          DATA 0x96
-0000            131   _KBLS           DATA 0x9c
-0000            132   _KBE            DATA 0x9d
-0000            133   _KBF            DATA 0x9e
-0000            134   _KBMOD          DATA 0x9f
-0000            135   _BMSEL          DATA 0x92
-0000            136   _FCON           DATA 0xd2
-0000            137   _EECON          DATA 0xd2
-0000            138   _ACSRA          DATA 0xa3
-0000            139   _ACSRB          DATA 0xab
-0000            140   _AREF           DATA 0xbd
-0000            141   _DADC           DATA 0xa4
-0000            142   _DADI           DATA 0xa5
-0000            143   _DADL           DATA 0xac
-0000            144   _DADH           DATA 0xad
-0000            145   _CCON           DATA 0xd8
-0000            146   _CMOD           DATA 0xd9
-0000            147   _CL             DATA 0xe9
-0000            148   _CH             DATA 0xf9
-0000            149   _CCAPM0         DATA 0xda
-0000            150   _CCAPM1         DATA 0xdb
-0000            151   _CCAPM2         DATA 0xdc
-0000            152   _CCAPM3         DATA 0xdd
-0000            153   _CCAPM4         DATA 0xde
-0000            154   _CCAP0H         DATA 0xfa
-0000            155   _CCAP1H         DATA 0xfb
-0000            156   _CCAP2H         DATA 0xfc
-0000            157   _CCAP3H         DATA 0xfd
-0000            158   _CCAP4H         DATA 0xfe
-0000            159   _CCAP0L         DATA 0xea
-0000            160   _CCAP1L         DATA 0xeb
-0000            161   _CCAP2L         DATA 0xec
-0000            162   _CCAP3L         DATA 0xed
-0000            163   _CCAP4L         DATA 0xee
-0000            164   ;--------------------------------------------------------
-0000            165   ; special function bits
-0000            166   ;--------------------------------------------------------
-0000            167   _ACC_0          BIT 0xe0
-0000            168   _ACC_1          BIT 0xe1
-0000            169   _ACC_2          BIT 0xe2
-0000            170   _ACC_3          BIT 0xe3
-0000            171   _ACC_4          BIT 0xe4
-0000            172   _ACC_5          BIT 0xe5
-0000            173   _ACC_6          BIT 0xe6
-0000            174   _ACC_7          BIT 0xe7
-0000            175   _B_0            BIT 0xf0
-0000            176   _B_1            BIT 0xf1
-0000            177   _B_2            BIT 0xf2
-0000            178   _B_3            BIT 0xf3
-0000            179   _B_4            BIT 0xf4
-0000            180   _B_5            BIT 0xf5
-0000            181   _B_6            BIT 0xf6
-0000            182   _B_7            BIT 0xf7
-0000            183   _P              BIT 0xd0
-0000            184   _F1             BIT 0xd1
-0000            185   _OV             BIT 0xd2
-0000            186   _RS0            BIT 0xd3
-0000            187   _RS1            BIT 0xd4
-0000            188   _F0             BIT 0xd5
-0000            189   _AC             BIT 0xd6
-0000            190   _CY             BIT 0xd7
-0000            191   _EX0            BIT 0xa8
-0000            192   _ET0            BIT 0xa9
-0000            193   _EX1            BIT 0xaa
-0000            194   _ET1            BIT 0xab
-0000            195   _ES             BIT 0xac
-0000            196   _ET2            BIT 0xad
-0000            197   _EC             BIT 0xae
-0000            198   _EA             BIT 0xaf
-0000            199   _PX0            BIT 0xb8
-0000            200   _PT0            BIT 0xb9
-0000            201   _PX1            BIT 0xba
-0000            202   _PT1            BIT 0xbb
-0000            203   _PS             BIT 0xbc
-0000            204   _PT2            BIT 0xbd
-0000            205   _IP0D           BIT 0xbf
-0000            206   _PPCL           BIT 0xbe
-0000            207   _PT2L           BIT 0xbd
-0000            208   _PLS            BIT 0xbc
-0000            209   _PT1L           BIT 0xbb
-0000            210   _PX1L           BIT 0xba
-0000            211   _PT0L           BIT 0xb9
-0000            212   _PX0L           BIT 0xb8
-0000            213   _P0_0           BIT 0x80
-0000            214   _P0_1           BIT 0x81
-0000            215   _P0_2           BIT 0x82
-0000            216   _P0_3           BIT 0x83
-0000            217   _P0_4           BIT 0x84
-0000            218   _P0_5           BIT 0x85
-0000            219   _P0_6           BIT 0x86
-0000            220   _P0_7           BIT 0x87
-0000            221   _P1_0           BIT 0x90
-0000            222   _P1_1           BIT 0x91
-0000            223   _P1_2           BIT 0x92
-0000            224   _P1_3           BIT 0x93
-0000            225   _P1_4           BIT 0x94
-0000            226   _P1_5           BIT 0x95
-0000            227   _P1_6           BIT 0x96
-0000            228   _P1_7           BIT 0x97
-0000            229   _P2_0           BIT 0xa0
-0000            230   _P2_1           BIT 0xa1
-0000            231   _P2_2           BIT 0xa2
-0000            232   _P2_3           BIT 0xa3
-0000            233   _P2_4           BIT 0xa4
-0000            234   _P2_5           BIT 0xa5
-0000            235   _P2_6           BIT 0xa6
-0000            236   _P2_7           BIT 0xa7
-0000            237   _P3_0           BIT 0xb0
-0000            238   _P3_1           BIT 0xb1
-0000            239   _P3_2           BIT 0xb2
-0000            240   _P3_3           BIT 0xb3
-0000            241   _P3_4           BIT 0xb4
-0000            242   _P3_5           BIT 0xb5
-0000            243   _P3_6           BIT 0xb6
-0000            244   _P3_7           BIT 0xb7
-0000            245   _RXD            BIT 0xb0
-0000            246   _TXD            BIT 0xb1
-0000            247   _INT0           BIT 0xb2
-0000            248   _INT1           BIT 0xb3
-0000            249   _T0             BIT 0xb4
-0000            250   _T1             BIT 0xb5
-0000            251   _WR             BIT 0xb6
-0000            252   _RD             BIT 0xb7
-0000            253   _P4_0           BIT 0xc0
-0000            254   _P4_1           BIT 0xc1
-0000            255   _P4_2           BIT 0xc2
-0000            256   _P4_3           BIT 0xc3
-0000            257   _P4_4           BIT 0xc4
-0000            258   _P4_5           BIT 0xc5
-0000            259   _P4_6           BIT 0xc6
-0000            260   _P4_7           BIT 0xc7
-0000            261   _RI             BIT 0x98
-0000            262   _TI             BIT 0x99
-0000            263   _RB8            BIT 0x9a
-0000            264   _TB8            BIT 0x9b
-0000            265   _REN            BIT 0x9c
-0000            266   _SM2            BIT 0x9d
-0000            267   _SM1            BIT 0x9e
-0000            268   _SM0            BIT 0x9f
-0000            269   _IT0            BIT 0x88
-0000            270   _IE0            BIT 0x89
-0000            271   _IT1            BIT 0x8a
-0000            272   _IE1            BIT 0x8b
-0000            273   _TR0            BIT 0x8c
-0000            274   _TF0            BIT 0x8d
-0000            275   _TR1            BIT 0x8e
-0000            276   _TF1            BIT 0x8f
-0000            277   _CP_RL2         BIT 0xc8
-0000            278   _C_T2           BIT 0xc9
-0000            279   _TR2            BIT 0xca
-0000            280   _EXEN2          BIT 0xcb
-0000            281   _TCLK           BIT 0xcc
-0000            282   _RCLK           BIT 0xcd
-0000            283   _EXF2           BIT 0xce
-0000            284   _TF2            BIT 0xcf
-0000            285   _CF             BIT 0xdf
-0000            286   _CR             BIT 0xde
-0000            287   _CCF4           BIT 0xdc
-0000            288   _CCF3           BIT 0xdb
-0000            289   _CCF2           BIT 0xda
-0000            290   _CCF1           BIT 0xd9
-0000            291   _CCF0           BIT 0xd8
-0000            292   ;--------------------------------------------------------
-0000            293   ; overlayable register banks
-0000            294   ;--------------------------------------------------------
-0000            295            rbank0 segment data overlay
-0000            296   ;--------------------------------------------------------
-0000            297   ; overlayable bit register bank
-0000            298   ;--------------------------------------------------------
-0000            299            rseg BIT_BANK
-0000            300   bits:
-0000            301            ds 1
-0001            302            b0 equ  bits.0 
-0001            303            b1 equ  bits.1 
-0001            304            b2 equ  bits.2 
-0001            305            b3 equ  bits.3 
-0001            306            b4 equ  bits.4 
-0001            307            b5 equ  bits.5 
-0001            308            b6 equ  bits.6 
-0001            309            b7 equ  bits.7 
-0001            310   ;--------------------------------------------------------
-0001            311   ; internal ram data
-0001            312   ;--------------------------------------------------------
-0000            313            rseg R_DSEG
-0000            314   _pwmCount:
-0000            315            ds 2
-0002            316   _pwmLeft:
-0002            317            ds 2
-0004            318   _pwmRight:
-0004            319            ds 2
-0006            320   _leftSensor:
-0006            321            ds 2
-0008            322   _rightSensor:
-0008            323            ds 2
-000A            324   _distanceLeft:
-000A            325            ds 2
-000C            326   _distanceRight:
-000C            327            ds 2
-000E            328   _instruction:
-000E            329            ds 2
-0010            330   _Stage:
-0010            331            ds 2
-0012            332   ;--------------------------------------------------------
-0012            333   ; overlayable items in internal ram 
-0012            334   ;--------------------------------------------------------
-0000            335            rseg    R_OSEG
-0000            336            rseg    R_OSEG
+0000             26            public _PRESETS
+0000             27            public _NSTAGES
+0000             28            public _ANGLEBUFFER
+0000             29            public _DISTANCEBUFFER
+0000             30            public _TURNSPEED
+0000             31            public _MOVESPEED
+0000             32            public _main
+0000             33            public __c51_external_startup
+0000             34            public _pwmCounter
+0000             35            public _beaconSignal
+0000             36            public _Stage
+0000             37            public _instruction
+0000             38            public _distanceRight
+0000             39            public _distanceLeft
+0000             40            public _rightSensor
+0000             41            public _leftSensor
+0000             42            public _pwmRight
+0000             43            public _pwmLeft
+0000             44            public _pwmCount
+0000             45            public _getDistance
+0000             46            public _turnCar
+0000             47            public _moveCar
+0000             48            public _uTurn
+0000             49            public _wait2ms
+0000             50            public _wait1s
+0000             51            public _voltage
+0000             52            public _SPIWrite
+0000             53            public _GetADC
+0000             54   ;--------------------------------------------------------
+0000             55   ; Special Function Registers
+0000             56   ;--------------------------------------------------------
+0000             57   _ACC            DATA 0xe0
+0000             58   _B              DATA 0xf0
+0000             59   _PSW            DATA 0xd0
+0000             60   _SP             DATA 0x81
+0000             61   _SPX            DATA 0xef
+0000             62   _DPL            DATA 0x82
+0000             63   _DPH            DATA 0x83
+0000             64   _DPLB           DATA 0xd4
+0000             65   _DPHB           DATA 0xd5
+0000             66   _PAGE           DATA 0xf6
+0000             67   _AX             DATA 0xe1
+0000             68   _BX             DATA 0xf7
+0000             69   _DSPR           DATA 0xe2
+0000             70   _FIRD           DATA 0xe3
+0000             71   _MACL           DATA 0xe4
+0000             72   _MACH           DATA 0xe5
+0000             73   _PCON           DATA 0x87
+0000             74   _AUXR           DATA 0x8e
+0000             75   _AUXR1          DATA 0xa2
+0000             76   _DPCF           DATA 0xa1
+0000             77   _CKRL           DATA 0x97
+0000             78   _CKCKON0        DATA 0x8f
+0000             79   _CKCKON1        DATA 0xaf
+0000             80   _CKSEL          DATA 0x85
+0000             81   _CLKREG         DATA 0xae
+0000             82   _OSCCON         DATA 0x85
+0000             83   _IE             DATA 0xa8
+0000             84   _IEN0           DATA 0xa8
+0000             85   _IEN1           DATA 0xb1
+0000             86   _IPH0           DATA 0xb7
+0000             87   _IP             DATA 0xb8
+0000             88   _IPL0           DATA 0xb8
+0000             89   _IPH1           DATA 0xb3
+0000             90   _IPL1           DATA 0xb2
+0000             91   _P0             DATA 0x80
+0000             92   _P1             DATA 0x90
+0000             93   _P2             DATA 0xa0
+0000             94   _P3             DATA 0xb0
+0000             95   _P4             DATA 0xc0
+0000             96   _P0M0           DATA 0xe6
+0000             97   _P0M1           DATA 0xe7
+0000             98   _P1M0           DATA 0xd6
+0000             99   _P1M1           DATA 0xd7
+0000            100   _P2M0           DATA 0xce
+0000            101   _P2M1           DATA 0xcf
+0000            102   _P3M0           DATA 0xc6
+0000            103   _P3M1           DATA 0xc7
+0000            104   _P4M0           DATA 0xbe
+0000            105   _P4M1           DATA 0xbf
+0000            106   _SCON           DATA 0x98
+0000            107   _SBUF           DATA 0x99
+0000            108   _SADEN          DATA 0xb9
+0000            109   _SADDR          DATA 0xa9
+0000            110   _BDRCON         DATA 0x9b
+0000            111   _BRL            DATA 0x9a
+0000            112   _TCON           DATA 0x88
+0000            113   _TMOD           DATA 0x89
+0000            114   _TCONB          DATA 0x91
+0000            115   _TL0            DATA 0x8a
+0000            116   _TH0            DATA 0x8c
+0000            117   _TL1            DATA 0x8b
+0000            118   _TH1            DATA 0x8d
+0000            119   _RL0            DATA 0xf2
+0000            120   _RH0            DATA 0xf4
+0000            121   _RL1            DATA 0xf3
+0000            122   _RH1            DATA 0xf5
+0000            123   _WDTRST         DATA 0xa6
+0000            124   _WDTPRG         DATA 0xa7
+0000            125   _T2CON          DATA 0xc8
+0000            126   _T2MOD          DATA 0xc9
+0000            127   _RCAP2H         DATA 0xcb
+0000            128   _RCAP2L         DATA 0xca
+0000            129   _TH2            DATA 0xcd
+0000            130   _TL2            DATA 0xcc
+0000            131   _SPCON          DATA 0xc3
+0000            132   _SPSTA          DATA 0xc4
+0000            133   _SPDAT          DATA 0xc5
+0000            134   _SSCON          DATA 0x93
+0000            135   _SSCS           DATA 0x94
+0000            136   _SSDAT          DATA 0x95
+0000            137   _SSADR          DATA 0x96
+0000            138   _KBLS           DATA 0x9c
+0000            139   _KBE            DATA 0x9d
+0000            140   _KBF            DATA 0x9e
+0000            141   _KBMOD          DATA 0x9f
+0000            142   _BMSEL          DATA 0x92
+0000            143   _FCON           DATA 0xd2
+0000            144   _EECON          DATA 0xd2
+0000            145   _ACSRA          DATA 0xa3
+0000            146   _ACSRB          DATA 0xab
+0000            147   _AREF           DATA 0xbd
+0000            148   _DADC           DATA 0xa4
+0000            149   _DADI           DATA 0xa5
+0000            150   _DADL           DATA 0xac
+0000            151   _DADH           DATA 0xad
+0000            152   _CCON           DATA 0xd8
+0000            153   _CMOD           DATA 0xd9
+0000            154   _CL             DATA 0xe9
+0000            155   _CH             DATA 0xf9
+0000            156   _CCAPM0         DATA 0xda
+0000            157   _CCAPM1         DATA 0xdb
+0000            158   _CCAPM2         DATA 0xdc
+0000            159   _CCAPM3         DATA 0xdd
+0000            160   _CCAPM4         DATA 0xde
+0000            161   _CCAP0H         DATA 0xfa
+0000            162   _CCAP1H         DATA 0xfb
+0000            163   _CCAP2H         DATA 0xfc
+0000            164   _CCAP3H         DATA 0xfd
+0000            165   _CCAP4H         DATA 0xfe
+0000            166   _CCAP0L         DATA 0xea
+0000            167   _CCAP1L         DATA 0xeb
+0000            168   _CCAP2L         DATA 0xec
+0000            169   _CCAP3L         DATA 0xed
+0000            170   _CCAP4L         DATA 0xee
+0000            171   ;--------------------------------------------------------
+0000            172   ; special function bits
+0000            173   ;--------------------------------------------------------
+0000            174   _ACC_0          BIT 0xe0
+0000            175   _ACC_1          BIT 0xe1
+0000            176   _ACC_2          BIT 0xe2
+0000            177   _ACC_3          BIT 0xe3
+0000            178   _ACC_4          BIT 0xe4
+0000            179   _ACC_5          BIT 0xe5
+0000            180   _ACC_6          BIT 0xe6
+0000            181   _ACC_7          BIT 0xe7
+0000            182   _B_0            BIT 0xf0
+0000            183   _B_1            BIT 0xf1
+0000            184   _B_2            BIT 0xf2
+0000            185   _B_3            BIT 0xf3
+0000            186   _B_4            BIT 0xf4
+0000            187   _B_5            BIT 0xf5
+0000            188   _B_6            BIT 0xf6
+0000            189   _B_7            BIT 0xf7
+0000            190   _P              BIT 0xd0
+0000            191   _F1             BIT 0xd1
+0000            192   _OV             BIT 0xd2
+0000            193   _RS0            BIT 0xd3
+0000            194   _RS1            BIT 0xd4
+0000            195   _F0             BIT 0xd5
+0000            196   _AC             BIT 0xd6
+0000            197   _CY             BIT 0xd7
+0000            198   _EX0            BIT 0xa8
+0000            199   _ET0            BIT 0xa9
+0000            200   _EX1            BIT 0xaa
+0000            201   _ET1            BIT 0xab
+0000            202   _ES             BIT 0xac
+0000            203   _ET2            BIT 0xad
+0000            204   _EC             BIT 0xae
+0000            205   _EA             BIT 0xaf
+0000            206   _PX0            BIT 0xb8
+0000            207   _PT0            BIT 0xb9
+0000            208   _PX1            BIT 0xba
+0000            209   _PT1            BIT 0xbb
+0000            210   _PS             BIT 0xbc
+0000            211   _PT2            BIT 0xbd
+0000            212   _IP0D           BIT 0xbf
+0000            213   _PPCL           BIT 0xbe
+0000            214   _PT2L           BIT 0xbd
+0000            215   _PLS            BIT 0xbc
+0000            216   _PT1L           BIT 0xbb
+0000            217   _PX1L           BIT 0xba
+0000            218   _PT0L           BIT 0xb9
+0000            219   _PX0L           BIT 0xb8
+0000            220   _P0_0           BIT 0x80
+0000            221   _P0_1           BIT 0x81
+0000            222   _P0_2           BIT 0x82
+0000            223   _P0_3           BIT 0x83
+0000            224   _P0_4           BIT 0x84
+0000            225   _P0_5           BIT 0x85
+0000            226   _P0_6           BIT 0x86
+0000            227   _P0_7           BIT 0x87
+0000            228   _P1_0           BIT 0x90
+0000            229   _P1_1           BIT 0x91
+0000            230   _P1_2           BIT 0x92
+0000            231   _P1_3           BIT 0x93
+0000            232   _P1_4           BIT 0x94
+0000            233   _P1_5           BIT 0x95
+0000            234   _P1_6           BIT 0x96
+0000            235   _P1_7           BIT 0x97
+0000            236   _P2_0           BIT 0xa0
+0000            237   _P2_1           BIT 0xa1
+0000            238   _P2_2           BIT 0xa2
+0000            239   _P2_3           BIT 0xa3
+0000            240   _P2_4           BIT 0xa4
+0000            241   _P2_5           BIT 0xa5
+0000            242   _P2_6           BIT 0xa6
+0000            243   _P2_7           BIT 0xa7
+0000            244   _P3_0           BIT 0xb0
+0000            245   _P3_1           BIT 0xb1
+0000            246   _P3_2           BIT 0xb2
+0000            247   _P3_3           BIT 0xb3
+0000            248   _P3_4           BIT 0xb4
+0000            249   _P3_5           BIT 0xb5
+0000            250   _P3_6           BIT 0xb6
+0000            251   _P3_7           BIT 0xb7
+0000            252   _RXD            BIT 0xb0
+0000            253   _TXD            BIT 0xb1
+0000            254   _INT0           BIT 0xb2
+0000            255   _INT1           BIT 0xb3
+0000            256   _T0             BIT 0xb4
+0000            257   _T1             BIT 0xb5
+0000            258   _WR             BIT 0xb6
+0000            259   _RD             BIT 0xb7
+0000            260   _P4_0           BIT 0xc0
+0000            261   _P4_1           BIT 0xc1
+0000            262   _P4_2           BIT 0xc2
+0000            263   _P4_3           BIT 0xc3
+0000            264   _P4_4           BIT 0xc4
+0000            265   _P4_5           BIT 0xc5
+0000            266   _P4_6           BIT 0xc6
+0000            267   _P4_7           BIT 0xc7
+0000            268   _RI             BIT 0x98
+0000            269   _TI             BIT 0x99
+0000            270   _RB8            BIT 0x9a
+0000            271   _TB8            BIT 0x9b
+0000            272   _REN            BIT 0x9c
+0000            273   _SM2            BIT 0x9d
+0000            274   _SM1            BIT 0x9e
+0000            275   _SM0            BIT 0x9f
+0000            276   _IT0            BIT 0x88
+0000            277   _IE0            BIT 0x89
+0000            278   _IT1            BIT 0x8a
+0000            279   _IE1            BIT 0x8b
+0000            280   _TR0            BIT 0x8c
+0000            281   _TF0            BIT 0x8d
+0000            282   _TR1            BIT 0x8e
+0000            283   _TF1            BIT 0x8f
+0000            284   _CP_RL2         BIT 0xc8
+0000            285   _C_T2           BIT 0xc9
+0000            286   _TR2            BIT 0xca
+0000            287   _EXEN2          BIT 0xcb
+0000            288   _TCLK           BIT 0xcc
+0000            289   _RCLK           BIT 0xcd
+0000            290   _EXF2           BIT 0xce
+0000            291   _TF2            BIT 0xcf
+0000            292   _CF             BIT 0xdf
+0000            293   _CR             BIT 0xde
+0000            294   _CCF4           BIT 0xdc
+0000            295   _CCF3           BIT 0xdb
+0000            296   _CCF2           BIT 0xda
+0000            297   _CCF1           BIT 0xd9
+0000            298   _CCF0           BIT 0xd8
+0000            299   ;--------------------------------------------------------
+0000            300   ; overlayable register banks
+0000            301   ;--------------------------------------------------------
+0000            302            rbank0 segment data overlay
+0000            303   ;--------------------------------------------------------
+0000            304   ; internal ram data
+0000            305   ;--------------------------------------------------------
+0000            306            rseg R_DSEG
+0000            307   _pwmCount:
+0000            308            ds 2
+0002            309   _pwmLeft:
+0002            310            ds 2
+0004            311   _pwmRight:
+0004            312            ds 2
+0006            313   _leftSensor:
+0006            314            ds 2
+0008            315   _rightSensor:
+0008            316            ds 2
+000A            317   _distanceLeft:
+000A            318            ds 2
+000C            319   _distanceRight:
+000C            320            ds 2
+000E            321   _instruction:
+000E            322            ds 2
+0010            323   _Stage:
+0010            324            ds 2
+0012            325   ;--------------------------------------------------------
+0012            326   ; overlayable items in internal ram 
+0012            327   ;--------------------------------------------------------
+0000            328            rseg    R_OSEG
+0000            329   ;--------------------------------------------------------
+0000            330   ; indirectly addressable internal ram data
+0000            331   ;--------------------------------------------------------
+0000            332            rseg R_ISEG
+0000            333   ;--------------------------------------------------------
+0000            334   ; absolute internal ram data
+0000            335   ;--------------------------------------------------------
+0000            336            DSEG
 0000            337   ;--------------------------------------------------------
-0000            338   ; indirectly addressable internal ram data
+0000            338   ; bit data
 0000            339   ;--------------------------------------------------------
-0000            340            rseg R_ISEG
-0000            341   ;--------------------------------------------------------
-0000            342   ; absolute internal ram data
-0000            343   ;--------------------------------------------------------
-0000            344            DSEG
-0000            345   ;--------------------------------------------------------
-0000            346   ; bit data
+0000            340            rseg R_BSEG
+0000            341   _pwmCounter_sloc0_1_0:
+0000            342            DBIT    1
+0001            343   ;--------------------------------------------------------
+0001            344   ; paged external ram data
+0001            345   ;--------------------------------------------------------
+0000            346            rseg R_PSEG
 0000            347   ;--------------------------------------------------------
-0000            348            rseg R_BSEG
-0000            349   _pwmCounter_sloc0_1_0:
-0000            350            DBIT    1
-0001            351   ;--------------------------------------------------------
-0001            352   ; paged external ram data
-0001            353   ;--------------------------------------------------------
-0000            354            rseg R_PSEG
+0000            348   ; external ram data
+0000            349   ;--------------------------------------------------------
+0000            350            rseg R_XSEG
+0000            351   ;--------------------------------------------------------
+0000            352   ; absolute external ram data
+0000            353   ;--------------------------------------------------------
+0000            354            XSEG
 0000            355   ;--------------------------------------------------------
-0000            356   ; external ram data
+0000            356   ; external initialized ram data
 0000            357   ;--------------------------------------------------------
-0000            358            rseg R_XSEG
-0000            359   ;--------------------------------------------------------
-0000            360   ; absolute external ram data
-0000            361   ;--------------------------------------------------------
-0000            362            XSEG
-0000            363   ;--------------------------------------------------------
-0000            364   ; external initialized ram data
-0000            365   ;--------------------------------------------------------
-0000            366            rseg R_IXSEG
-0000            367            rseg R_HOME
-0000            368            rseg R_GSINIT
-0000            369            rseg R_CSEG
-0000            370   ;--------------------------------------------------------
-0000            371   ; Reset entry point and interrupt vectors
-0000            372   ;--------------------------------------------------------
-0000            373            CSEG at 0x0000
-0000 020100     374            ljmp    _crt0
-0003            375            CSEG at 0x0003
-0003 020100     376            ljmp    _beaconSignal
-000B            377            CSEG at 0x000b
-000B 020100     378            ljmp    _pwmCounter
-000E            379   ;--------------------------------------------------------
-000E            380   ; global & static initialisations
-000E            381   ;--------------------------------------------------------
-0000            382            rseg R_HOME
-0000            383            rseg R_GSINIT
-0000            384            rseg R_GSINIT
-0000            385   ;--------------------------------------------------------
-0000            386   ; data variables initialization
-0000            387   ;--------------------------------------------------------
-0000            388            rseg R_DINIT
-0000            389   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:35: volatile unsigned int pwmCount = 0;
-0000 E4         390            clr     a
-0001 F5B0       391            mov     _pwmCount,a
-0003 F5B1       392            mov     (_pwmCount + 1),a
-0005            393   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:36: volatile int pwmLeft = 0;
-0005 E4         394            clr     a
-0006 F570       395            mov     _pwmLeft,a
-0008 F571       396            mov     (_pwmLeft + 1),a
-000A            397   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:37: volatile int pwmRight = 0;
-000A E4         398            clr     a
-000B F530       399            mov     _pwmRight,a
-000D F531       400            mov     (_pwmRight + 1),a
-000F            401   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:38: volatile unsigned int leftSensor = 0;
-000F E4         402            clr     a
-0010 F5F0       403            mov     _leftSensor,a
-0012 F5F1       404            mov     (_leftSensor + 1),a
-0014            405   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:39: volatile unsigned int rightSensor = 0;
-0014 E4         406            clr     a
-0015 F5C0       407            mov     _rightSensor,a
-0017 F5C1       408            mov     (_rightSensor + 1),a
-0019            409            ; The linker places a 'ret' at the end of segment R_DINIT.
-0019            410   ;--------------------------------------------------------
-0019            411   ; code
-0019            412   ;--------------------------------------------------------
-0000            413            rseg R_CSEG
-0000            414   ;------------------------------------------------------------
-0000            415   ;Allocation info for local variables in function 'beaconSignal'
-0000            416   ;------------------------------------------------------------
-0000            417   ;------------------------------------------------------------
-0000            418   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:61: void beaconSignal() interrupt 0
-0000            419   ;        -----------------------------------------
-0000            420   ;         function beaconSignal
-0000            421   ;        -----------------------------------------
-0000            422   _beaconSignal:
-0000            423            using   0
-0000            424   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:67: }
-0000 32         425            reti
-0001            426   ;        eliminated unneeded push/pop psw
-0001            427   ;        eliminated unneeded push/pop dpl
-0001            428   ;        eliminated unneeded push/pop dph
-0001            429   ;        eliminated unneeded push/pop b
-0001            430   ;        eliminated unneeded push/pop acc
-0001            431   ;------------------------------------------------------------
-0001            432   ;Allocation info for local variables in function 'pwmCounter'
-0001            433   ;------------------------------------------------------------
-0001            434   ;------------------------------------------------------------
-0001            435   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:69: void pwmCounter() interrupt 1
-0001            436   ;        -----------------------------------------
-0001            437   ;         function pwmCounter
-0001            438   ;        -----------------------------------------
-0001            439   _pwmCounter:
-0001 C0F0       440            push    bits
-0003 C0E0       441            push    acc
-0005 C0F0       442            push    b
-0007 C082       443            push    dpl
-0009 C083       444            push    dph
-000B C002       445            push    (0+2)
-000D C003       446            push    (0+3)
-000F C004       447            push    (0+4)
-0011 C005       448            push    (0+5)
-0013 C006       449            push    (0+6)
-0015 C007       450            push    (0+7)
-0017 C000       451            push    (0+0)
-0019 C001       452            push    (0+1)
-001B C0D0       453            push    psw
-001D 75D000     454            mov     psw,#0x00
-0020            455   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:72: if(++pwmCount>99)
-0020 7401       456            mov     a,#0x01
-0022 25B0       457            add     a,_pwmCount
-0024 F5B0       458            mov     _pwmCount,a
-0026 E4         459            clr     a
-0027 35B1       460            addc    a,(_pwmCount + 1)
-0029 F5B1       461            mov     (_pwmCount + 1),a
-002B C3         462            clr     c
-002C 7463       463            mov     a,#0x63
-002E 95B0       464            subb    a,_pwmCount
-0030 E4         465            clr     a
-0031 95B1       466            subb    a,(_pwmCount + 1)
-0033 5001       467            jnc     L003002?
-0035            468   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:73: pwmCount = 0;
-0035 E4         469            clr     a
-0036 F5B0       470            mov     _pwmCount,a
-0038 F5B1       471            mov     (_pwmCount + 1),a
-003A            472   L003002?:
-003A            473   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:77: getDistance();
-003A 120100     474            lcall   _getDistance
-003D            475   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:78: if(distanceLeft!=distanceRight)
-003D E540       476            mov     a,_distanceRight
-003F B58008     477            cjne    a,_distanceLeft,L003022?
-0042 E541       478            mov     a,(_distanceRight + 1)
-0044 B58108     479            cjne    a,(_distanceLeft + 1),L003022?
-0047 8001       480            sjmp    L003004?
-0049            481   L003022?:
-0049            482   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:79: turnCar();
-0049 120100     483            lcall   _turnCar
-004C            484   L003004?:
-004C            485   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:82: if(pwmLeft>0)
-004C C3         486            clr     c
-004D E4         487            clr     a
-004E 9570       488            subb    a,_pwmLeft
-0050 E4         489            clr     a
-0051 6480       490            xrl     a,#0x80
-0053 8571F0     491            mov     b,(_pwmLeft + 1)
-0056 63F080     492            xrl     b,#0x80
-0059 95F0       493            subb    a,b
-005B 5001       494            jnc     L003006?
-005D            495   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:84: P1_0=(pwmLeft>pwmCount)?0:1;
-005D AA70       496            mov     r2,_pwmLeft
-005F AB71       497            mov     r3,(_pwmLeft + 1)
-0061 C3         498            clr     c
-0062 E5B0       499            mov     a,_pwmCount
-0064 9A         500            subb    a,r2
-0065 E5B1       501            mov     a,(_pwmCount + 1)
-0067 9B         502            subb    a,r3
-0068 9208       503            mov  _pwmCounter_sloc0_1_0,c
-006A B3         504            cpl     c
-006B 9290       505            mov     _P1_0,c
-006D            506   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:85: P1_1=1;
-006D D291       507            setb    _P1_1
-006F            508   L003006?:
-006F            509   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:87: if(pwmLeft<0)
-006F E571       510            mov     a,(_pwmLeft + 1)
-0071 30E7C8     511            jnb     acc.7,L003008?
-0074            512   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:89: P1_1=((-1)*pwmLeft>pwmCount)?0:1;
-0074 C3         513            clr     c
-0075 E4         514            clr     a
-0076 9570       515            subb    a,_pwmLeft
-0078 FA         516            mov     r2,a
-0079 E4         517            clr     a
-007A 9571       518            subb    a,(_pwmLeft + 1)
-007C FB         519            mov     r3,a
-007D C3         520            clr     c
-007E E5B0       521            mov     a,_pwmCount
-0080 9A         522            subb    a,r2
-0081 E5B1       523            mov     a,(_pwmCount + 1)
-0083 9B         524            subb    a,r3
-0084 9208       525            mov  _pwmCounter_sloc0_1_0,c
-0086 B3         526            cpl     c
-0087 9291       527            mov     _P1_1,c
-0089            528   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:90: P1_0=1;
-0089 D290       529            setb    _P1_0
-008B            530   L003008?:
-008B            531   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:93: if(pwmRight>0)
-008B C3         532            clr     c
-008C E4         533            clr     a
-008D 9530       534            subb    a,_pwmRight
-008F E4         535            clr     a
-0090 6480       536            xrl     a,#0x80
-0092 8531F0     537            mov     b,(_pwmRight + 1)
-0095 63F080     538            xrl     b,#0x80
-0098 95F0       539            subb    a,b
-009A 5001       540            jnc     L003010?
-009C            541   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:95: P1_0=(pwmRight>pwmCount)?0:1;
-009C AA30       542            mov     r2,_pwmRight
-009E AB31       543            mov     r3,(_pwmRight + 1)
-00A0 C3         544            clr     c
-00A1 E5B0       545            mov     a,_pwmCount
-00A3 9A         546            subb    a,r2
-00A4 E5B1       547            mov     a,(_pwmCount + 1)
-00A6 9B         548            subb    a,r3
-00A7 9208       549            mov  _pwmCounter_sloc0_1_0,c
-00A9 B3         550            cpl     c
-00AA 9290       551            mov     _P1_0,c
-00AC            552   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:96: P1_1=1;
-00AC D291       553            setb    _P1_1
-00AE            554   L003010?:
-00AE            555   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:98: if(pwmRight<0)
-00AE E531       556            mov     a,(_pwmRight + 1)
-00B0 30E748     557            jnb     acc.7,L003013?
-00B3            558   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:100: P1_1=((-1)*pwmRight>pwmCount)?0:1;
-00B3 C3         559            clr     c
-00B4 E4         560            clr     a
-00B5 9530       561            subb    a,_pwmRight
-00B7 FA         562            mov     r2,a
-00B8 E4         563            clr     a
-00B9 9531       564            subb    a,(_pwmRight + 1)
-00BB FB         565            mov     r3,a
-00BC C3         566            clr     c
-00BD E5B0       567            mov     a,_pwmCount
-00BF 9A         568            subb    a,r2
-00C0 E5B1       569            mov     a,(_pwmCount + 1)
-00C2 9B         570            subb    a,r3
-00C3 9208       571            mov  _pwmCounter_sloc0_1_0,c
-00C5 B3         572            cpl     c
-00C6 9291       573            mov     _P1_1,c
-00C8            574   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:101: P1_0=1;
-00C8 D290       575            setb    _P1_0
-00CA            576   L003013?:
-00CA D0D0       577            pop     psw
-00CC D001       578            pop     (0+1)
-00CE D000       579            pop     (0+0)
-00D0 D007       580            pop     (0+7)
-00D2 D006       581            pop     (0+6)
-00D4 D005       582            pop     (0+5)
-00D6 D004       583            pop     (0+4)
-00D8 D003       584            pop     (0+3)
-00DA D002       585            pop     (0+2)
-00DC D083       586            pop     dph
-00DE D082       587            pop     dpl
-00E0 D0F0       588            pop     b
-00E2 D0E0       589            pop     acc
-00E4 D0F0       590            pop     bits
-00E6 32         591            reti
-00E7            592   ;------------------------------------------------------------
-00E7            593   ;Allocation info for local variables in function '_c51_external_startup'
-00E7            594   ;------------------------------------------------------------
-00E7            595   ;------------------------------------------------------------
-00E7            596   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:109: unsigned char _c51_external_startup(void)
-00E7            597   ;        -----------------------------------------
-00E7            598   ;         function _c51_external_startup
-00E7            599   ;        -----------------------------------------
-00E7            600   __c51_external_startup:
-00E7            601   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:112: P0M0 = 0;         P0M1 = 0;
-00E7 75E600     602            mov     _P0M0,#0x00
-00EA 75E700     603            mov     _P0M1,#0x00
-00ED            604   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:113: P1M0 = 0;         P1M1 = 0;
-00ED 75D600     605            mov     _P1M0,#0x00
-00F0 75D700     606            mov     _P1M1,#0x00
-00F3            607   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:114: P2M0 = 0;         P2M1 = 0;
-00F3 75CE00     608            mov     _P2M0,#0x00
-00F6 75CF00     609            mov     _P2M1,#0x00
-00F9            610   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:115: P3M0 = 0;         P3M1 = 0;
-00F9 75C600     611            mov     _P3M0,#0x00
-00FC 75C700     612            mov     _P3M1,#0x00
-00FF            613   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:116: AUXR = 0B_0001_0001; // 1152 bytes of internal XDATA, P4.4 is a general purpose I/O
-00FF 758E11     614            mov     _AUXR,#0x11
-0102            615   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:117: P4M0 = 0;         P4M1 = 0;
-0102 75BE00     616            mov     _P4M0,#0x00
-0105 75BF00     617            mov     _P4M1,#0x00
-0108            618   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:120: TMOD = 0x01;      // Timer 0 as 16-bit timer      
-0108 758901     619            mov     _TMOD,#0x01
-010B            620   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:121: TH0 = RH0 = TIMER0_RELOAD_VALUE / 0x100;
-010B 75F3FF     621            mov     _RH0,#0xFF
-010E 758CFF     622            mov     _TH0,#0xFF
-0111            623   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:122: TL0 = RL0 = TIMER0_RELOAD_VALUE % 0x100;
-0111 75F248     624            mov     _RL0,#0x48
-0114 758A48     625            mov     _TL0,#0x48
-0117            626   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:123: TR0 = 1;
-0117 D28C       627            setb    _TR0
-0119            628   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:124: ET0 = 1;  // Enable timer 0 interrupt
-0119 D2A9       629            setb    _ET0
-011B            630   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:125: EX0 = 1;  // Enable external interrupt 0
-011B D2A8       631            setb    _EX0
-011D            632   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:126: IT0 = 1;
-011D D288       633            setb    _IT0
-011F            634   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:127: EA = 1;   // Enable global interrupts
-011F D2AF       635            setb    _EA
-0121            636   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:128: instruction=0;
-0121 E4         637            clr     a
-0122 F500       638            mov     _instruction,a
-0124 F501       639            mov     (_instruction + 1),a
-0126            640   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:129: Stage=3;
-0126 75C003     641            mov     _Stage,#0x03
-0129 E4         642            clr     a
-012A F5C1       643            mov     (_Stage + 1),a
-012C            644   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:130: return 0;
-012C 758200     645            mov     dpl,#0x00
-012F 22         646            ret
-0130            647   ;------------------------------------------------------------
-0130            648   ;Allocation info for local variables in function 'main'
-0130            649   ;------------------------------------------------------------
-0130            650   ;------------------------------------------------------------
-0130            651   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:134: int main (void)
-0130            652   ;        -----------------------------------------
-0130            653   ;         function main
-0130            654   ;        -----------------------------------------
-0130            655   _main:
-0130            656   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:139: while (instruction==0)
-0130            657   L005001?:
-0130 E500       658            mov     a,_instruction
-0132 4501       659            orl     a,(_instruction + 1)
-0134 7001       660            jnz     L005003?
-0136            661   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:141: moveCar();
-0136 120100     662            lcall   _moveCar
-0139 8001       663            sjmp    L005001?
-013B            664   L005003?:
-013B            665   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:144: switch (instruction)
-013B C3         666            clr     c
-013C 7405       667            mov     a,#0x05
-013E 9500       668            subb    a,_instruction
-0140 E4         669            clr     a
-0141 9501       670            subb    a,(_instruction + 1)
-0143 4001       671            jc      L005014?
-0145 E500       672            mov     a,_instruction
-0147 2500       673            add     a,_instruction
-0149 2500       674            add     a,_instruction
-014B 908648     675            mov     dptr,#L005027?
-014E 73         676            jmp     @a+dptr
-014F            677   L005027?:
-014F 020100     678            ljmp    L005013?
-0152 020100     679            ljmp    L005004?
-0155 020100     680            ljmp    L005007?
-0158 020100     681            ljmp    L005010?
-015B 020100     682            ljmp    L005011?
-015E 020100     683            ljmp    L005012?
-0161            684   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:146: case 1: //Move Forward
-0161            685   L005004?:
-0161            686   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:147: if(Stage!=0)
-0161 E5C0       687            mov     a,_Stage
-0163 45C1       688            orl     a,(_Stage + 1)
-0165 6001       689            jz      L005014?
-0167            690   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:148: Stage--;
-0167 15C0       691            dec     _Stage
-0169 74FF       692            mov     a,#0xff
-016B B5C008     693            cjne    a,_Stage,L005029?
-016E 15C1       694            dec     (_Stage + 1)
-0170            695   L005029?:
-0170            696   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:149: break;
-0170            697   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:150: case 2: //Move Backwards
-0170 8001       698            sjmp    L005014?
-0172            699   L005007?:
-0172            700   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:151: if(Stage!=7)
-0172 7407       701            mov     a,#0x07
-0174 B5C048     702            cjne    a,_Stage,L005030?
-0177 E4         703            clr     a
-0178 B5C148     704            cjne    a,(_Stage + 1),L005030?
-017B 8001       705            sjmp    L005014?
-017D            706   L005030?:
-017D            707   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:152: Stage++;  
-017D 05C0       708            inc     _Stage
-017F E4         709            clr     a
-0180            710   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:153: break;
-0180            711   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:154: case 3: //180 Turn
-0180 B5C008     712            cjne    a,_Stage,L005014?
-0183 05C1       713            inc     (_Stage + 1)
-0185 8001       714            sjmp    L005014?
-0187            715   L005010?:
-0187            716   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:156: break;
-0187            717   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:157: case 4: //Park
-0187 8001       718            sjmp    L005014?
-0189            719   L005011?:
-0189            720   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:159: break;
-0189            721   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:160: case 5:
-0189 8001       722            sjmp    L005014?
-018B            723   L005012?:
-018B            724   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:162: break;
-018B            725   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:163: default: //Turn on LED for bad instrucion         
-018B            726   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:164: }
-018B            727   L005013?:
-018B            728   L005014?:
-018B            729   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:165: instruction=0;
-018B E4         730            clr     a
-018C F500       731            mov     _instruction,a
-018E F501       732            mov     (_instruction + 1),a
-0190            733   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:167: return 0;
-0190 8001       734            sjmp    L005001?
-0192            735   ;------------------------------------------------------------
-0192            736   ;Allocation info for local variables in function 'getDistance'
-0192            737   ;------------------------------------------------------------
-0192            738   ;------------------------------------------------------------
-0192            739   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:178: void getDistance() 
-0192            740   ;        -----------------------------------------
-0192            741   ;         function getDistance
-0192            742   ;        -----------------------------------------
-0192            743   _getDistance:
-0192            744   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:181: }
-0192 22         745            ret
-0193            746   ;------------------------------------------------------------
-0193            747   ;Allocation info for local variables in function 'turnCar'
-0193            748   ;------------------------------------------------------------
-0193            749   ;tempL                     Allocated to registers r2 r3 
-0193            750   ;tempR                     Allocated to registers r4 r5 
-0193            751   ;------------------------------------------------------------
-0193            752   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:188: void turnCar()
-0193            753   ;        -----------------------------------------
-0193            754   ;         function turnCar
-0193            755   ;        -----------------------------------------
-0193            756   _turnCar:
-0193            757   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:191: int tempL=pwmLeft;
-0193 AA70       758            mov     r2,_pwmLeft
-0195 AB71       759            mov     r3,(_pwmLeft + 1)
-0197            760   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:192: int tempR=pwmRight;
-0197 AC30       761            mov     r4,_pwmRight
-0199 AD31       762            mov     r5,(_pwmRight + 1)
-019B            763   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:194: while(distanceLeft<distanceRight)
-019B            764   L007001?:
-019B C3         765            clr     c
-019C E580       766            mov     a,_distanceLeft
-019E 9540       767            subb    a,_distanceRight
-01A0 E581       768            mov     a,(_distanceLeft + 1)
-01A2 9541       769            subb    a,(_distanceRight + 1)
-01A4 E4         770            clr     a
-01A5 33         771            rlc     a
-01A6 FE         772            mov     r6,a
-01A7 6001       773            jz      L007004?
-01A9            774   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:196: pwmLeft=50;
-01A9 757032     775            mov     _pwmLeft,#0x32
-01AC E4         776            clr     a
-01AD F571       777            mov     (_pwmLeft + 1),a
-01AF            778   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:197: pwmRight=(-50);
-01AF 7530CE     779            mov     _pwmRight,#0xCE
-01B2 7531FF     780            mov     (_pwmRight + 1),#0xFF
-01B5            781   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:199: while(distanceLeft<distanceRight)
-01B5 8001       782            sjmp    L007001?
-01B7            783   L007004?:
-01B7 EE         784            mov     a,r6
-01B8 6001       785            jz      L007006?
-01BA            786   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:201: pwmLeft=(-50);
-01BA 7570CE     787            mov     _pwmLeft,#0xCE
-01BD 7571FF     788            mov     (_pwmLeft + 1),#0xFF
-01C0            789   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:202: pwmRight=50;
-01C0 753032     790            mov     _pwmRight,#0x32
-01C3 E4         791            clr     a
-01C4 F531       792            mov     (_pwmRight + 1),a
-01C6 8001       793            sjmp    L007004?
-01C8            794   L007006?:
-01C8            795   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:205: pwmRight=tempR;
-01C8 8C30       796            mov     _pwmRight,r4
-01CA 8D31       797            mov     (_pwmRight + 1),r5
-01CC            798   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:206: pwmLeft=tempL;
-01CC 8A70       799            mov     _pwmLeft,r2
-01CE 8B71       800            mov     (_pwmLeft + 1),r3
-01D0 22         801            ret
-01D1            802   ;------------------------------------------------------------
-01D1            803   ;Allocation info for local variables in function 'moveCar'
-01D1            804   ;------------------------------------------------------------
-01D1            805   ;------------------------------------------------------------
-01D1            806   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:214: void moveCar()
-01D1            807   ;        -----------------------------------------
-01D1            808   ;         function moveCar
-01D1            809   ;        -----------------------------------------
-01D1            810   _moveCar:
-01D1            811   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:219: if(distanceRight>PRESETS[Stage])
-01D1 E5C0       812            mov     a,_Stage
-01D3 25C0       813            add     a,_Stage
-01D5 FA         814            mov     r2,a
-01D6 E5C1       815            mov     a,(_Stage + 1)
-01D8 33         816            rlc     a
-01D9 FB         817            mov     r3,a
-01DA EA         818            mov     a,r2
-01DB 2448       819            add     a,#_PRESETS
-01DD F582       820            mov     dpl,a
-01DF EB         821            mov     a,r3
-01E0 3489       822            addc    a,#(_PRESETS >> 8)
-01E2 F583       823            mov     dph,a
-01E4 E4         824            clr     a
-01E5 93         825            movc    a,@a+dptr
-01E6 FA         826            mov     r2,a
-01E7 A3         827            inc     dptr
-01E8 E4         828            clr     a
-01E9 93         829            movc    a,@a+dptr
-01EA FB         830            mov     r3,a
-01EB 8A04       831            mov     ar4,r2
-01ED 8B05       832            mov     ar5,r3
-01EF C3         833            clr     c
-01F0 EC         834            mov     a,r4
-01F1 9540       835            subb    a,_distanceRight
-01F3 ED         836            mov     a,r5
-01F4 9541       837            subb    a,(_distanceRight + 1)
-01F6 5001       838            jnc     L008002?
-01F8            839   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:220: pwmLeft=pwmRight=75;
-01F8 75304B     840            mov     _pwmRight,#0x4B
-01FB E4         841            clr     a
-01FC F531       842            mov     (_pwmRight + 1),a
-01FE 75704B     843            mov     _pwmLeft,#0x4B
-0201 E4         844            clr     a
-0202 F571       845            mov     (_pwmLeft + 1),a
-0204            846   L008002?:
-0204            847   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:221: if(distanceRight>PRESETS[Stage])
-0204 C3         848            clr     c
-0205 EA         849            mov     a,r2
-0206 9540       850            subb    a,_distanceRight
-0208 EB         851            mov     a,r3
-0209 9541       852            subb    a,(_distanceRight + 1)
-020B 5001       853            jnc     L008004?
-020D            854   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:222: pwmLeft=pwmRight=(-75);           
-020D 7530B5     855            mov     _pwmRight,#0xB5
-0210 7531FF     856            mov     (_pwmRight + 1),#0xFF
-0213 7570B5     857            mov     _pwmLeft,#0xB5
-0216 7571FF     858            mov     (_pwmLeft + 1),#0xFF
-0219            859   L008004?:
-0219            860   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:223: return;
-0219 22         861            ret
-021A            862   ;------------------------------------------------------------
-021A            863   ;Allocation info for local variables in function 'wait2ms'
-021A            864   ;------------------------------------------------------------
-021A            865   ;------------------------------------------------------------
-021A            866   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:227: void wait2ms (void)
-021A            867   ;        -----------------------------------------
-021A            868   ;         function wait2ms
-021A            869   ;        -----------------------------------------
-021A            870   _wait2ms:
-021A            871   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:237: _endasm;
-021A            872            
-021A            873     ;For a 22.1184MHz crystal one machine cycle
-021A            874     ;takes 12/22.1184MHz=0.5425347us
-021A            875             J3:
-021A 7C0A       876            mov R4, #10
-021C            877             J2:
-021C 7BB8       878            mov R3, #184
-021E            879             J1:
-021E DB88       880            djnz R3, J1 ; 2 machine cycles-> 2*0.5425347us*184=200us
-0220 DC48       881                 djnz R4, J2 ; 200us*250=0.05s
-0222 22         882                 ret
-0223            883                
-0223 22         884            ret
-0224            885   ;------------------------------------------------------------
-0224            886   ;Allocation info for local variables in function 'wait1s'
-0224            887   ;------------------------------------------------------------
-0224            888   ;------------------------------------------------------------
-0224            889   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:241: void wait1s (void)
-0224            890   ;        -----------------------------------------
-0224            891   ;         function wait1s
-0224            892   ;        -----------------------------------------
-0224            893   _wait1s:
-0224            894   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:253: _endasm;
-0224            895            
-0224            896     ;For a 22.1184MHz crystal one machine cycle
-0224            897     ;takes 12/22.1184MHz=0.5425347us
-0224 7A14       898                 mov R2, #20
-0226            899             L3:
-0226 79F8       900            mov R1, #248
-0228            901             L2:
-0228 78B8       902            mov R0, #184
-022A            903             L1:
-022A D848       904            djnz R0, L1 ; 2 machine cycles-> 2*0.5425347us*184=200us
-022C D908       905                 djnz R1, L2 ; 200us*250=0.05s
-022E DAC8       906                 djnz R2, L3 ; 0.05s*20=1s
-0230 22         907                 ret
-0231            908                
-0231 22         909            ret
-0232            910   ;------------------------------------------------------------
-0232            911   ;Allocation info for local variables in function 'voltage'
-0232            912   ;------------------------------------------------------------
-0232            913   ;channel                   Allocated to registers 
-0232            914   ;------------------------------------------------------------
-0232            915   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:261: float voltage (unsigned char channel)
-0232            916   ;        -----------------------------------------
-0232            917   ;         function voltage
-0232            918   ;        -----------------------------------------
-0232            919   _voltage:
-0232            920   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:263: return ((GetADC(channel) * 4.84) / 1023.0); // VCC=4.84V (measured)
-0232 120100     921            lcall   _GetADC
-0235 120100     922            lcall   ___uint2fs
-0238 AA82       923            mov     r2,dpl
-023A AB83       924            mov     r3,dph
-023C ACF0       925            mov     r4,b
-023E FD         926            mov     r5,a
-023F C002       927            push    ar2
-0241 C003       928            push    ar3
-0243 C004       929            push    ar4
-0245 C005       930            push    ar5
-0247 90E148     931            mov     dptr,#0xE148
-024A 75F09A     932            mov     b,#0x9A
-024D 7440       933            mov     a,#0x40
-024F 120100     934            lcall   ___fsmul
-0252 AA82       935            mov     r2,dpl
-0254 AB83       936            mov     r3,dph
-0256 ACF0       937            mov     r4,b
-0258 FD         938            mov     r5,a
-0259 E581       939            mov     a,sp
-025B 24FC       940            add     a,#0xfc
-025D F581       941            mov     sp,a
-025F E4         942            clr     a
-0260 C0E0       943            push    acc
-0262 74C0       944            mov     a,#0xC0
-0264 C0E0       945            push    acc
-0266 747F       946            mov     a,#0x7F
-0268 C0E0       947            push    acc
-026A 7444       948            mov     a,#0x44
-026C C0E0       949            push    acc
-026E 8A82       950            mov     dpl,r2
-0270 8B83       951            mov     dph,r3
-0272 8CF0       952            mov     b,r4
-0274 ED         953            mov     a,r5
-0275 120100     954            lcall   ___fsdiv
-0278 AA82       955            mov     r2,dpl
-027A AB83       956            mov     r3,dph
-027C ACF0       957            mov     r4,b
-027E FD         958            mov     r5,a
-027F E581       959            mov     a,sp
-0281 24FC       960            add     a,#0xfc
-0283 F581       961            mov     sp,a
-0285 8A82       962            mov     dpl,r2
-0287 8B83       963            mov     dph,r3
-0289 8CF0       964            mov     b,r4
-028B ED         965            mov     a,r5
-028C 22         966            ret
-028D            967   ;------------------------------------------------------------
-028D            968   ;Allocation info for local variables in function 'SPIWrite'
-028D            969   ;------------------------------------------------------------
-028D            970   ;value                     Allocated to registers r2 
-028D            971   ;------------------------------------------------------------
-028D            972   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:266: void SPIWrite(unsigned char value)
-028D            973   ;        -----------------------------------------
-028D            974   ;         function SPIWrite
-028D            975   ;        -----------------------------------------
-028D            976   _SPIWrite:
-028D AA82       977            mov     r2,dpl
-028F            978   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:268: SPSTA &= (~SPIF); // Clear the SPIF flag in SPSTA
-028F 53C47F     979            anl     _SPSTA,#0x7F
-0292            980   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:269: SPDAT = value;
-0292 8AC5       981            mov     _SPDAT,r2
-0294            982   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:270: while ((SPSTA & SPIF) != SPIF); //Wait for transmission to end
-0294            983   L012001?:
-0294 7480       984            mov     a,#0x80
-0296 55C4       985            anl     a,_SPSTA
-0298 FA         986            mov     r2,a
-0299 BA8088     987            cjne    r2,#0x80,L012001?
-029C 22         988            ret
-029D            989   ;------------------------------------------------------------
-029D            990   ;Allocation info for local variables in function 'GetADC'
-029D            991   ;------------------------------------------------------------
-029D            992   ;channel                   Allocated to registers r2 
-029D            993   ;adc                       Allocated to registers r2 r3 
-029D            994   ;------------------------------------------------------------
-029D            995   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:274: unsigned int GetADC(unsigned char channel)
-029D            996   ;        -----------------------------------------
-029D            997   ;         function GetADC
-029D            998   ;        -----------------------------------------
-029D            999   _GetADC:
-029D AA82      1000            mov     r2,dpl
-029F           1001   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:279: SPCON &= (~SPEN); // Disable SPI
-029F 53C3BF    1002            anl     _SPCON,#0xBF
-02A2           1003   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:280: SPCON = MSTR | CPOL | CPHA | SPR1 | SPR0 | SSDIS;
-02A2 75C33F    1004            mov     _SPCON,#0x3F
-02A5           1005   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:281: SPCON |= SPEN; // Enable SPI
-02A5 43C340    1006            orl     _SPCON,#0x40
-02A8           1007   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:283: P1_4 = 0; // Activate the MCP3004 ADC.
-02A8 C294      1008            clr     _P1_4
-02AA           1009   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:284: SPIWrite(channel | 0x18);         // Send start bit, single/diff* bit, D2, D1, and D0 bits.
-02AA 7418      1010            mov     a,#0x18
-02AC 4A        1011            orl     a,r2
-02AD F582      1012            mov     dpl,a
-02AF 120100    1013            lcall   _SPIWrite
-02B2           1014   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:285: for (adc=0; adc < 10; adc++); // Wait for S/H to setup
-02B2 7A0A      1015            mov     r2,#0x0A
-02B4 7B00      1016            mov     r3,#0x00
-02B6           1017   L013003?:
-02B6 1A        1018            dec     r2
-02B7 BAFF08    1019            cjne    r2,#0xff,L013009?
-02BA 1B        1020            dec     r3
-02BB           1021   L013009?:
-02BB EA        1022            mov     a,r2
-02BC 4B        1023            orl     a,r3
-02BD 7001      1024            jnz     L013003?
-02BF           1025   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:286: SPIWrite(0x55); // Read bits 9 down to 4
-02BF 758255    1026            mov     dpl,#0x55
-02C2 120100    1027            lcall   _SPIWrite
-02C5           1028   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:287: adc=((SPDAT & 0x3f) * 0x100);
-02C5 743F      1029            mov     a,#0x3F
-02C7 55C5      1030            anl     a,_SPDAT
-02C9 FB        1031            mov     r3,a
-02CA 7A00      1032            mov     r2,#0x00
-02CC           1033   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:288: SPIWrite(0x55);// Read bits 3 down to 0
-02CC 758255    1034            mov     dpl,#0x55
-02CF C002      1035            push    ar2
-02D1 C003      1036            push    ar3
-02D3 120100    1037            lcall   _SPIWrite
-02D6 D003      1038            pop     ar3
-02D8 D002      1039            pop     ar2
-02DA           1040   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:289: P1_4 = 1; // Deactivate the MCP3004 ADC.
-02DA D294      1041            setb    _P1_4
-02DC           1042   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:290: adc += (SPDAT & 0xf0); // SPDR contains the low part of the result. 
-02DC 74F0      1043            mov     a,#0xF0
-02DE 55C5      1044            anl     a,_SPDAT
-02E0 FC        1045            mov     r4,a
-02E1 7D00      1046            mov     r5,#0x00
-02E3 EC        1047            mov     a,r4
-02E4 2A        1048            add     a,r2
-02E5 FA        1049            mov     r2,a
-02E6 ED        1050            mov     a,r5
-02E7 3B        1051            addc    a,r3
-02E8           1052   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:291: adc >>= 4;
-02E8 C4        1053            swap    a
-02E9 CA        1054            xch     a,r2
-02EA C4        1055            swap    a
-02EB 540F      1056            anl     a,#0x0f
-02ED 6A        1057            xrl     a,r2
-02EE CA        1058            xch     a,r2
-02EF 540F      1059            anl     a,#0x0f
-02F1 CA        1060            xch     a,r2
-02F2 6A        1061            xrl     a,r2
-02F3 CA        1062            xch     a,r2
-02F4           1063   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:293: return adc;
-02F4 8A82      1064            mov     dpl,r2
-02F6 F583      1065            mov     dph,a
-02F8 22        1066            ret
-02F9           1067            rseg R_CSEG
-02F9           1068   
-0000           1069            rseg R_XINIT
-0000           1070   
-0000           1071            rseg R_CONST
-0000           1072   _PRESETS:
-0000 0500      1073            db 0x05,0x00    ;  5
-0002 0A00      1074            db 0x0A,0x00    ;  10
-0004 0F00      1075            db 0x0F,0x00    ;  15
-0006 1400      1076            db 0x14,0x00    ;  20
-0008 1900      1077            db 0x19,0x00    ;  25
-000A 1E00      1078            db 0x1E,0x00    ;  30
-000C 2300      1079            db 0x23,0x00    ;  35
-000E 2800      1080            db 0x28,0x00    ;  40
-0010 2D00      1081            db 0x2D,0x00    ;  45
-0012 3200      1082            db 0x32,0x00    ;  50
-0014 3700      1083            db 0x37,0x00    ;  55
-0016 3C00      1084            db 0x3C,0x00    ;  60
-0018           1085   
-000E           1086            CSEG
-000E           1087   
-000E           1088   end
+0000            358            rseg R_IXSEG
+0000            359            rseg R_HOME
+0000            360            rseg R_GSINIT
+0000            361            rseg R_CSEG
+0000            362   ;--------------------------------------------------------
+0000            363   ; Reset entry point and interrupt vectors
+0000            364   ;--------------------------------------------------------
+0000            365            CSEG at 0x0000
+0000 020100     366            ljmp    _crt0
+0003            367            CSEG at 0x0003
+0003 020100     368            ljmp    _beaconSignal
+000B            369            CSEG at 0x000b
+000B 020100     370            ljmp    _pwmCounter
+000E            371   ;--------------------------------------------------------
+000E            372   ; global & static initialisations
+000E            373   ;--------------------------------------------------------
+0000            374            rseg R_HOME
+0000            375            rseg R_GSINIT
+0000            376            rseg R_GSINIT
+0000            377   ;--------------------------------------------------------
+0000            378   ; data variables initialization
+0000            379   ;--------------------------------------------------------
+0000            380            rseg R_DINIT
+0000            381   ;        Z:\Projects\Project2_Car\Code\core.c:62: volatile unsigned int pwmCount = 0;
+0000 E4         382            clr     a
+0001 F5C0       383            mov     _pwmCount,a
+0003 F5C1       384            mov     (_pwmCount + 1),a
+0005            385   ;        Z:\Projects\Project2_Car\Code\core.c:65: volatile unsigned int leftSensor = 0;
+0005 E4         386            clr     a
+0006 F500       387            mov     _leftSensor,a
+0008 F501       388            mov     (_leftSensor + 1),a
+000A            389   ;        Z:\Projects\Project2_Car\Code\core.c:66: volatile unsigned int rightSensor = 0;
+000A E4         390            clr     a
+000B F5C0       391            mov     _rightSensor,a
+000D F5C1       392            mov     (_rightSensor + 1),a
+000F            393            ; The linker places a 'ret' at the end of segment R_DINIT.
+000F            394   ;--------------------------------------------------------
+000F            395   ; code
+000F            396   ;--------------------------------------------------------
+0000            397            rseg R_CSEG
+0000            398   ;------------------------------------------------------------
+0000            399   ;Allocation info for local variables in function 'beaconSignal'
+0000            400   ;------------------------------------------------------------
+0000            401   ;------------------------------------------------------------
+0000            402   ;        Z:\Projects\Project2_Car\Code\core.c:92: void beaconSignal() interrupt 0
+0000            403   ;        -----------------------------------------
+0000            404   ;         function beaconSignal
+0000            405   ;        -----------------------------------------
+0000            406   _beaconSignal:
+0000            407            using   0
+0000            408   ;        Z:\Projects\Project2_Car\Code\core.c:99: }
+0000 32         409            reti
+0001            410   ;        eliminated unneeded push/pop psw
+0001            411   ;        eliminated unneeded push/pop dpl
+0001            412   ;        eliminated unneeded push/pop dph
+0001            413   ;        eliminated unneeded push/pop b
+0001            414   ;        eliminated unneeded push/pop acc
+0001            415   ;------------------------------------------------------------
+0001            416   ;Allocation info for local variables in function 'pwmCounter'
+0001            417   ;------------------------------------------------------------
+0001            418   ;------------------------------------------------------------
+0001            419   ;        Z:\Projects\Project2_Car\Code\core.c:101: void pwmCounter() interrupt 1
+0001            420   ;        -----------------------------------------
+0001            421   ;         function pwmCounter
+0001            422   ;        -----------------------------------------
+0001            423   _pwmCounter:
+0001 C0E0       424            push    acc
+0003 C0F0       425            push    b
+0005 C002       426            push    ar2
+0007 C003       427            push    ar3
+0009 C0D0       428            push    psw
+000B 75D000     429            mov     psw,#0x00
+000E            430   ;        Z:\Projects\Project2_Car\Code\core.c:107: if(++pwmCount > 99)
+000E 7401       431            mov     a,#0x01
+0010 25C0       432            add     a,_pwmCount
+0012 F5C0       433            mov     _pwmCount,a
+0014 E4         434            clr     a
+0015 35C1       435            addc    a,(_pwmCount + 1)
+0017 F5C1       436            mov     (_pwmCount + 1),a
+0019 C3         437            clr     c
+001A 7463       438            mov     a,#0x63
+001C 95C0       439            subb    a,_pwmCount
+001E E4         440            clr     a
+001F 95C1       441            subb    a,(_pwmCount + 1)
+0021 5001       442            jnc     L003002?
+0023            443   ;        Z:\Projects\Project2_Car\Code\core.c:108: pwmCount = 0;
+0023 E4         444            clr     a
+0024 F5C0       445            mov     _pwmCount,a
+0026 F5C1       446            mov     (_pwmCount + 1),a
+0028            447   L003002?:
+0028            448   ;        Z:\Projects\Project2_Car\Code\core.c:110: if(pwmLeft > 0)
+0028 C3         449            clr     c
+0029 E4         450            clr     a
+002A 9580       451            subb    a,_pwmLeft
+002C E4         452            clr     a
+002D 6480       453            xrl     a,#0x80
+002F 8581F0     454            mov     b,(_pwmLeft + 1)
+0032 63F080     455            xrl     b,#0x80
+0035 95F0       456            subb    a,b
+0037 5001       457            jnc     L003004?
+0039            458   ;        Z:\Projects\Project2_Car\Code\core.c:112: P1_1 = (pwmLeft > pwmCount) ? 0:1;
+0039 AA80       459            mov     r2,_pwmLeft
+003B AB81       460            mov     r3,(_pwmLeft + 1)
+003D C3         461            clr     c
+003E E5C0       462            mov     a,_pwmCount
+0040 9A         463            subb    a,r2
+0041 E5C1       464            mov     a,(_pwmCount + 1)
+0043 9B         465            subb    a,r3
+0044 9250       466            mov  _pwmCounter_sloc0_1_0,c
+0046 B3         467            cpl     c
+0047 9291       468            mov     _P1_1,c
+0049            469   ;        Z:\Projects\Project2_Car\Code\core.c:113: P1_0 = 1;
+0049 D290       470            setb    _P1_0
+004B            471   L003004?:
+004B            472   ;        Z:\Projects\Project2_Car\Code\core.c:115: if(pwmLeft < 0)
+004B E581       473            mov     a,(_pwmLeft + 1)
+004D 30E710     474            jnb     acc.7,L003006?
+0050            475   ;        Z:\Projects\Project2_Car\Code\core.c:117: P1_0 = ((-1) * pwmLeft > pwmCount) ? 0:1;
+0050 C3         476            clr     c
+0051 E4         477            clr     a
+0052 9580       478            subb    a,_pwmLeft
+0054 FA         479            mov     r2,a
+0055 E4         480            clr     a
+0056 9581       481            subb    a,(_pwmLeft + 1)
+0058 FB         482            mov     r3,a
+0059 C3         483            clr     c
+005A E5C0       484            mov     a,_pwmCount
+005C 9A         485            subb    a,r2
+005D E5C1       486            mov     a,(_pwmCount + 1)
+005F 9B         487            subb    a,r3
+0060 9250       488            mov  _pwmCounter_sloc0_1_0,c
+0062 B3         489            cpl     c
+0063 9290       490            mov     _P1_0,c
+0065            491   ;        Z:\Projects\Project2_Car\Code\core.c:118: P1_1 = 1;
+0065 D291       492            setb    _P1_1
+0067            493   L003006?:
+0067            494   ;        Z:\Projects\Project2_Car\Code\core.c:122: if(pwmRight > 0)
+0067 C3         495            clr     c
+0068 E4         496            clr     a
+0069 9540       497            subb    a,_pwmRight
+006B E4         498            clr     a
+006C 6480       499            xrl     a,#0x80
+006E 8541F0     500            mov     b,(_pwmRight + 1)
+0071 63F080     501            xrl     b,#0x80
+0074 95F0       502            subb    a,b
+0076 5001       503            jnc     L003008?
+0078            504   ;        Z:\Projects\Project2_Car\Code\core.c:124: P1_4 = (pwmRight > pwmCount) ? 0:1;
+0078 AA40       505            mov     r2,_pwmRight
+007A AB41       506            mov     r3,(_pwmRight + 1)
+007C C3         507            clr     c
+007D E5C0       508            mov     a,_pwmCount
+007F 9A         509            subb    a,r2
+0080 E5C1       510            mov     a,(_pwmCount + 1)
+0082 9B         511            subb    a,r3
+0083 9250       512            mov  _pwmCounter_sloc0_1_0,c
+0085 B3         513            cpl     c
+0086 9294       514            mov     _P1_4,c
+0088            515   ;        Z:\Projects\Project2_Car\Code\core.c:125: P1_3 = 1;
+0088 D293       516            setb    _P1_3
+008A            517   L003008?:
+008A            518   ;        Z:\Projects\Project2_Car\Code\core.c:127: if(pwmRight < 0)
+008A E541       519            mov     a,(_pwmRight + 1)
+008C 30E790     520            jnb     acc.7,L003011?
+008F            521   ;        Z:\Projects\Project2_Car\Code\core.c:129: P1_3 = ((-1) * pwmRight > pwmCount) ? 0:1;
+008F C3         522            clr     c
+0090 E4         523            clr     a
+0091 9540       524            subb    a,_pwmRight
+0093 FA         525            mov     r2,a
+0094 E4         526            clr     a
+0095 9541       527            subb    a,(_pwmRight + 1)
+0097 FB         528            mov     r3,a
+0098 C3         529            clr     c
+0099 E5C0       530            mov     a,_pwmCount
+009B 9A         531            subb    a,r2
+009C E5C1       532            mov     a,(_pwmCount + 1)
+009E 9B         533            subb    a,r3
+009F 9250       534            mov  _pwmCounter_sloc0_1_0,c
+00A1 B3         535            cpl     c
+00A2 9293       536            mov     _P1_3,c
+00A4            537   ;        Z:\Projects\Project2_Car\Code\core.c:130: P1_4 = 1;
+00A4 D294       538            setb    _P1_4
+00A6            539   L003011?:
+00A6 D0D0       540            pop     psw
+00A8 D003       541            pop     ar3
+00AA D002       542            pop     ar2
+00AC D0F0       543            pop     b
+00AE D0E0       544            pop     acc
+00B0 32         545            reti
+00B1            546   ;        eliminated unneeded push/pop dpl
+00B1            547   ;        eliminated unneeded push/pop dph
+00B1            548   ;------------------------------------------------------------
+00B1            549   ;Allocation info for local variables in function '_c51_external_startup'
+00B1            550   ;------------------------------------------------------------
+00B1            551   ;------------------------------------------------------------
+00B1            552   ;        Z:\Projects\Project2_Car\Code\core.c:136: unsigned char _c51_external_startup(void)
+00B1            553   ;        -----------------------------------------
+00B1            554   ;         function _c51_external_startup
+00B1            555   ;        -----------------------------------------
+00B1            556   __c51_external_startup:
+00B1            557   ;        Z:\Projects\Project2_Car\Code\core.c:139: P0M0 = 0;     P0M1 = 0;
+00B1 75E600     558            mov     _P0M0,#0x00
+00B4 75E700     559            mov     _P0M1,#0x00
+00B7            560   ;        Z:\Projects\Project2_Car\Code\core.c:140: P1M0 = 0;     P1M1 = 0;
+00B7 75D600     561            mov     _P1M0,#0x00
+00BA 75D700     562            mov     _P1M1,#0x00
+00BD            563   ;        Z:\Projects\Project2_Car\Code\core.c:141: P2M0 = 0;     P2M1 = 0;
+00BD 75CE00     564            mov     _P2M0,#0x00
+00C0 75CF00     565            mov     _P2M1,#0x00
+00C3            566   ;        Z:\Projects\Project2_Car\Code\core.c:142: P3M0 = 0;     P3M1 = 0;
+00C3 75C600     567            mov     _P3M0,#0x00
+00C6 75C700     568            mov     _P3M1,#0x00
+00C9            569   ;        Z:\Projects\Project2_Car\Code\core.c:143: AUXR = 0B_0001_0001; // 1152 bytes of internal XDATA, P4.4 is a general purpose I/O
+00C9 758E11     570            mov     _AUXR,#0x11
+00CC            571   ;        Z:\Projects\Project2_Car\Code\core.c:144: P4M0 = 0;     P4M1 = 0;
+00CC 75BE00     572            mov     _P4M0,#0x00
+00CF 75BF00     573            mov     _P4M1,#0x00
+00D2            574   ;        Z:\Projects\Project2_Car\Code\core.c:148: PCON |= 0x80;
+00D2 438780     575            orl     _PCON,#0x80
+00D5            576   ;        Z:\Projects\Project2_Car\Code\core.c:149: SCON = 0x52;
+00D5 759852     577            mov     _SCON,#0x52
+00D8            578   ;        Z:\Projects\Project2_Car\Code\core.c:150: BDRCON = 0;
+00D8 759B00     579            mov     _BDRCON,#0x00
+00DB            580   ;        Z:\Projects\Project2_Car\Code\core.c:151: BRL = BRG_VAL;
+00DB 759AFA     581            mov     _BRL,#0xFA
+00DE            582   ;        Z:\Projects\Project2_Car\Code\core.c:152: BDRCON = BRR | TBCK | RBCK | SPD;
+00DE 759B1E     583            mov     _BDRCON,#0x1E
+00E1            584   ;        Z:\Projects\Project2_Car\Code\core.c:154: TMOD = 0x01;  // Timer 0 as 16-bit timer      
+00E1 758901     585            mov     _TMOD,#0x01
+00E4            586   ;        Z:\Projects\Project2_Car\Code\core.c:155: TH0 = RH0 = TIMER0_RELOAD_VALUE / 0x100;
+00E4 75F4FF     587            mov     _RH0,#0xFF
+00E7 758CFF     588            mov     _TH0,#0xFF
+00EA            589   ;        Z:\Projects\Project2_Car\Code\core.c:156: TL0 = RL0 = TIMER0_RELOAD_VALUE % 0x100;
+00EA 75F248     590            mov     _RL0,#0x48
+00ED 758A48     591            mov     _TL0,#0x48
+00F0            592   ;        Z:\Projects\Project2_Car\Code\core.c:157: TR0 = 1;
+00F0 D28C       593            setb    _TR0
+00F2            594   ;        Z:\Projects\Project2_Car\Code\core.c:158: ET0 = 1;      // Enable timer 0 interrupt
+00F2 D2A9       595            setb    _ET0
+00F4            596   ;        Z:\Projects\Project2_Car\Code\core.c:159: EX0 = 1;      // Enable external interrupt 0
+00F4 D2A8       597            setb    _EX0
+00F6            598   ;        Z:\Projects\Project2_Car\Code\core.c:160: IT0 = 1;
+00F6 D288       599            setb    _IT0
+00F8            600   ;        Z:\Projects\Project2_Car\Code\core.c:161: EA = 1;       // Enable global interrupts
+00F8 D2AF       601            setb    _EA
+00FA            602   ;        Z:\Projects\Project2_Car\Code\core.c:162: return 0;
+00FA 758200     603            mov     dpl,#0x00
+00FD 22         604            ret
+00FE            605   ;------------------------------------------------------------
+00FE            606   ;Allocation info for local variables in function 'main'
+00FE            607   ;------------------------------------------------------------
+00FE            608   ;------------------------------------------------------------
+00FE            609   ;        Z:\Projects\Project2_Car\Code\core.c:166: int main (void)
+00FE            610   ;        -----------------------------------------
+00FE            611   ;         function main
+00FE            612   ;        -----------------------------------------
+00FE            613   _main:
+00FE            614   ;        Z:\Projects\Project2_Car\Code\core.c:168: distanceLeft=15;
+00FE 75800F     615            mov     _distanceLeft,#0x0F
+0101 E4         616            clr     a
+0102 F581       617            mov     (_distanceLeft + 1),a
+0104            618   ;        Z:\Projects\Project2_Car\Code\core.c:169: distanceRight=15;     
+0104 75400F     619            mov     _distanceRight,#0x0F
+0107 E4         620            clr     a
+0108 F541       621            mov     (_distanceRight + 1),a
+010A            622   ;        Z:\Projects\Project2_Car\Code\core.c:170: Stage=2;
+010A 75C002     623            mov     _Stage,#0x02
+010D E4         624            clr     a
+010E F5C1       625            mov     (_Stage + 1),a
+0110            626   ;        Z:\Projects\Project2_Car\Code\core.c:171: pwmLeft=0;
+0110            627   ;        Z:\Projects\Project2_Car\Code\core.c:172: pwmRight=0;
+0110 E4         628            clr     a
+0111 F580       629            mov     _pwmLeft,a
+0113 F581       630            mov     (_pwmLeft + 1),a
+0115 F540       631            mov     _pwmRight,a
+0117 F541       632            mov     (_pwmRight + 1),a
+0119            633   ;        Z:\Projects\Project2_Car\Code\core.c:173: while (1)
+0119            634   L005023?:
+0119            635   ;        Z:\Projects\Project2_Car\Code\core.c:175: instruction = 0;
+0119 E4         636            clr     a
+011A F500       637            mov     _instruction,a
+011C F501       638            mov     (_instruction + 1),a
+011E            639   ;        Z:\Projects\Project2_Car\Code\core.c:177: while (instruction == 0)
+011E            640   L005003?:
+011E E500       641            mov     a,_instruction
+0120 4501       642            orl     a,(_instruction + 1)
+0122 7001       643            jnz     L005005?
+0124            644   ;        Z:\Projects\Project2_Car\Code\core.c:180: if(distanceLeft != distanceRight)
+0124 E540       645            mov     a,_distanceRight
+0126 B580D0     646            cjne    a,_distanceLeft,L005038?
+0129 E541       647            mov     a,(_distanceRight + 1)
+012B B581D0     648            cjne    a,(_distanceLeft + 1),L005038?
+012E 8001       649            sjmp    L005002?
+0130            650   L005038?:
+0130            651   ;        Z:\Projects\Project2_Car\Code\core.c:182: P3_3 = 1;
+0130 D2B3       652            setb    _P3_3
+0132            653   L005002?:
+0132            654   ;        Z:\Projects\Project2_Car\Code\core.c:187: printf("\nIntstruction: ");
+0132 7450       655            mov     a,#__str_0
+0134 C0E0       656            push    acc
+0136 7489       657            mov     a,#(__str_0 >> 8)
+0138 C0E0       658            push    acc
+013A 7480       659            mov     a,#0x80
+013C C0E0       660            push    acc
+013E 120100     661            lcall   _printf
+0141 1581       662            dec     sp
+0143 1581       663            dec     sp
+0145 1581       664            dec     sp
+0147            665   ;        Z:\Projects\Project2_Car\Code\core.c:188: scanf("%ud", &instruction);
+0147 7400       666            mov     a,#_instruction
+0149 C0E0       667            push    acc
+014B 7445       668            mov     a,#(_instruction >> 8)
+014D C0E0       669            push    acc
+014F 7440       670            mov     a,#0x40
+0151 C0E0       671            push    acc
+0153 7410       672            mov     a,#__str_1
+0155 C0E0       673            push    acc
+0157 748A       674            mov     a,#(__str_1 >> 8)
+0159 C0E0       675            push    acc
+015B 7480       676            mov     a,#0x80
+015D C0E0       677            push    acc
+015F 120100     678            lcall   _scanf
+0162 E581       679            mov     a,sp
+0164 24FA       680            add     a,#0xfa
+0166 F581       681            mov     sp,a
+0168 8001       682            sjmp    L005003?
+016A            683   L005005?:
+016A            684   ;        Z:\Projects\Project2_Car\Code\core.c:192: if(instruction==1)                        //move forward
+016A 7401       685            mov     a,#0x01
+016C B50090     686            cjne    a,_instruction,L005039?
+016F E4         687            clr     a
+0170 B50190     688            cjne    a,(_instruction + 1),L005039?
+0173 8001       689            sjmp    L005040?
+0175            690   L005039?:
+0175 8001       691            sjmp    L005020?
+0177            692   L005040?:
+0177            693   ;        Z:\Projects\Project2_Car\Code\core.c:194: if(Stage!=0)
+0177 E5C0       694            mov     a,_Stage
+0179 45C1       695            orl     a,(_Stage + 1)
+017B 6001       696            jz      L005007?
+017D            697   ;        Z:\Projects\Project2_Car\Code\core.c:195: Stage--;
+017D 15C0       698            dec     _Stage
+017F 74FF       699            mov     a,#0xff
+0181 B5C090     700            cjne    a,_Stage,L005042?
+0184 15C1       701            dec     (_Stage + 1)
+0186            702   L005042?:
+0186            703   L005007?:
+0186            704   ;        Z:\Projects\Project2_Car\Code\core.c:196: printf("\nMove forwrds");
+0186 74D0       705            mov     a,#__str_2
+0188 C0E0       706            push    acc
+018A 748B       707            mov     a,#(__str_2 >> 8)
+018C C0E0       708            push    acc
+018E 7480       709            mov     a,#0x80
+0190 C0E0       710            push    acc
+0192 120100     711            lcall   _printf
+0195 1581       712            dec     sp
+0197 1581       713            dec     sp
+0199 1581       714            dec     sp
+019B 020100     715            ljmp    L005023?
+019E            716   L005020?:
+019E            717   ;        Z:\Projects\Project2_Car\Code\core.c:197: }else if(instruction==2)                  //move backwards
+019E 7402       718            mov     a,#0x02
+01A0 B50010     719            cjne    a,_instruction,L005043?
+01A3 E4         720            clr     a
+01A4 B50110     721            cjne    a,(_instruction + 1),L005043?
+01A7 8001       722            sjmp    L005044?
+01A9            723   L005043?:
+01A9 8001       724            sjmp    L005017?
+01AB            725   L005044?:
+01AB            726   ;        Z:\Projects\Project2_Car\Code\core.c:199: if(Stage!=NSTAGES)
+01AB 904270     727            mov     dptr,#_NSTAGES
+01AE E4         728            clr     a
+01AF 93         729            movc    a,@a+dptr
+01B0 FA         730            mov     r2,a
+01B1 7401       731            mov     a,#0x01
+01B3 93         732            movc    a,@a+dptr
+01B4 FB         733            mov     r3,a
+01B5 EA         734            mov     a,r2
+01B6 B5C0D0     735            cjne    a,_Stage,L005045?
+01B9 EB         736            mov     a,r3
+01BA B5C1D0     737            cjne    a,(_Stage + 1),L005045?
+01BD 8001       738            sjmp    L005009?
+01BF            739   L005045?:
+01BF            740   ;        Z:\Projects\Project2_Car\Code\core.c:200: Stage++;
+01BF 7401       741            mov     a,#0x01
+01C1 25C0       742            add     a,_Stage
+01C3 F5C0       743            mov     _Stage,a
+01C5 E4         744            clr     a
+01C6 35C1       745            addc    a,(_Stage + 1)
+01C8 F5C1       746            mov     (_Stage + 1),a
+01CA            747   L005009?:
+01CA            748   ;        Z:\Projects\Project2_Car\Code\core.c:201: printf("\n Move back");       
+01CA 7450       749            mov     a,#__str_3
+01CC C0E0       750            push    acc
+01CE 748D       751            mov     a,#(__str_3 >> 8)
+01D0 C0E0       752            push    acc
+01D2 7480       753            mov     a,#0x80
+01D4 C0E0       754            push    acc
+01D6 120100     755            lcall   _printf
+01D9 1581       756            dec     sp
+01DB 1581       757            dec     sp
+01DD 1581       758            dec     sp
+01DF 020100     759            ljmp    L005023?
+01E2            760   L005017?:
+01E2            761   ;        Z:\Projects\Project2_Car\Code\core.c:202: }else if(instruction==3)                  //uturn
+01E2 7403       762            mov     a,#0x03
+01E4 B50090     763            cjne    a,_instruction,L005046?
+01E7 E4         764            clr     a
+01E8 B50190     765            cjne    a,(_instruction + 1),L005046?
+01EB 8001       766            sjmp    L005047?
+01ED            767   L005046?:
+01ED 8001       768            sjmp    L005014?
+01EF            769   L005047?:
+01EF            770   ;        Z:\Projects\Project2_Car\Code\core.c:204: uTurn();
+01EF 120100     771            lcall   _uTurn
+01F2            772   ;        Z:\Projects\Project2_Car\Code\core.c:205: printf("\nturned");
+01F2 7450       773            mov     a,#__str_4
+01F4 C0E0       774            push    acc
+01F6 748E       775            mov     a,#(__str_4 >> 8)
+01F8 C0E0       776            push    acc
+01FA 7480       777            mov     a,#0x80
+01FC C0E0       778            push    acc
+01FE 120100     779            lcall   _printf
+0201 1581       780            dec     sp
+0203 1581       781            dec     sp
+0205 1581       782            dec     sp
+0207 020100     783            ljmp    L005023?
+020A            784   L005014?:
+020A            785   ;        Z:\Projects\Project2_Car\Code\core.c:206: }else if(instruction==4)                  //parralell park
+020A 7404       786            mov     a,#0x04
+020C B50090     787            cjne    a,_instruction,L005048?
+020F E4         788            clr     a
+0210 B50190     789            cjne    a,(_instruction + 1),L005048?
+0213 020100     790            ljmp    L005023?
+0216            791   L005048?:
+0216            792   ;        Z:\Projects\Project2_Car\Code\core.c:211: printf("\nERROR");
+0216 74D0       793            mov     a,#__str_5
+0218 C0E0       794            push    acc
+021A 748E       795            mov     a,#(__str_5 >> 8)
+021C C0E0       796            push    acc
+021E 7480       797            mov     a,#0x80
+0220 C0E0       798            push    acc
+0222 120100     799            lcall   _printf
+0225 1581       800            dec     sp
+0227 1581       801            dec     sp
+0229 1581       802            dec     sp
+022B            803   ;        Z:\Projects\Project2_Car\Code\core.c:214: return 0;
+022B 020100     804            ljmp    L005023?
+022E            805   ;------------------------------------------------------------
+022E            806   ;Allocation info for local variables in function 'getDistance'
+022E            807   ;------------------------------------------------------------
+022E            808   ;------------------------------------------------------------
+022E            809   ;        Z:\Projects\Project2_Car\Code\core.c:225: void getDistance() 
+022E            810   ;        -----------------------------------------
+022E            811   ;         function getDistance
+022E            812   ;        -----------------------------------------
+022E            813   _getDistance:
+022E            814   ;        Z:\Projects\Project2_Car\Code\core.c:229: }
+022E 22         815            ret
+022F            816   ;------------------------------------------------------------
+022F            817   ;Allocation info for local variables in function 'turnCar'
+022F            818   ;------------------------------------------------------------
+022F            819   ;------------------------------------------------------------
+022F            820   ;        Z:\Projects\Project2_Car\Code\core.c:236: void turnCar()
+022F            821   ;        -----------------------------------------
+022F            822   ;         function turnCar
+022F            823   ;        -----------------------------------------
+022F            824   _turnCar:
+022F            825   ;        Z:\Projects\Project2_Car\Code\core.c:239: while(distanceLeft < distanceRight+ANGLEBUFFER)
+022F            826   L007001?:
+022F 9042B0     827            mov     dptr,#_ANGLEBUFFER
+0232 E4         828            clr     a
+0233 93         829            movc    a,@a+dptr
+0234 FA         830            mov     r2,a
+0235 7401       831            mov     a,#0x01
+0237 93         832            movc    a,@a+dptr
+0238 FB         833            mov     r3,a
+0239 EA         834            mov     a,r2
+023A 2540       835            add     a,_distanceRight
+023C FC         836            mov     r4,a
+023D EB         837            mov     a,r3
+023E 3541       838            addc    a,(_distanceRight + 1)
+0240 FD         839            mov     r5,a
+0241 C3         840            clr     c
+0242 E580       841            mov     a,_distanceLeft
+0244 9C         842            subb    a,r4
+0245 E581       843            mov     a,(_distanceLeft + 1)
+0247 6480       844            xrl     a,#0x80
+0249 8DF0       845            mov     b,r5
+024B 63F080     846            xrl     b,#0x80
+024E 95F0       847            subb    a,b
+0250 5001       848            jnc     L007004?
+0252            849   ;        Z:\Projects\Project2_Car\Code\core.c:241: pwmLeft = TURNSPEED;
+0252 904330     850            mov     dptr,#_TURNSPEED
+0255 E4         851            clr     a
+0256 93         852            movc    a,@a+dptr
+0257 FC         853            mov     r4,a
+0258 7401       854            mov     a,#0x01
+025A 93         855            movc    a,@a+dptr
+025B FD         856            mov     r5,a
+025C 8C80       857            mov     _pwmLeft,r4
+025E 8D81       858            mov     (_pwmLeft + 1),r5
+0260            859   ;        Z:\Projects\Project2_Car\Code\core.c:242: pwmRight = (-TURNSPEED);
+0260 C3         860            clr     c
+0261 E4         861            clr     a
+0262 9C         862            subb    a,r4
+0263 F540       863            mov     _pwmRight,a
+0265 E4         864            clr     a
+0266 9D         865            subb    a,r5
+0267 F541       866            mov     (_pwmRight + 1),a
+0269            867   ;        Z:\Projects\Project2_Car\Code\core.c:244: while(distanceLeft+ANGLEBUFFER > distanceRight)
+0269 8001       868            sjmp    L007001?
+026B            869   L007004?:
+026B EA         870            mov     a,r2
+026C 2580       871            add     a,_distanceLeft
+026E FC         872            mov     r4,a
+026F EB         873            mov     a,r3
+0270 3581       874            addc    a,(_distanceLeft + 1)
+0272 FD         875            mov     r5,a
+0273 C3         876            clr     c
+0274 E540       877            mov     a,_distanceRight
+0276 9C         878            subb    a,r4
+0277 E541       879            mov     a,(_distanceRight + 1)
+0279 6480       880            xrl     a,#0x80
+027B 8DF0       881            mov     b,r5
+027D 63F080     882            xrl     b,#0x80
+0280 95F0       883            subb    a,b
+0282 5001       884            jnc     L007006?
+0284            885   ;        Z:\Projects\Project2_Car\Code\core.c:246: pwmLeft = (-TURNSPEED);
+0284 904330     886            mov     dptr,#_TURNSPEED
+0287 E4         887            clr     a
+0288 93         888            movc    a,@a+dptr
+0289 FC         889            mov     r4,a
+028A 7401       890            mov     a,#0x01
+028C 93         891            movc    a,@a+dptr
+028D FD         892            mov     r5,a
+028E C3         893            clr     c
+028F E4         894            clr     a
+0290 9C         895            subb    a,r4
+0291 F580       896            mov     _pwmLeft,a
+0293 E4         897            clr     a
+0294 9D         898            subb    a,r5
+0295 F581       899            mov     (_pwmLeft + 1),a
+0297            900   ;        Z:\Projects\Project2_Car\Code\core.c:247: pwmRight = TURNSPEED;
+0297 8C40       901            mov     _pwmRight,r4
+0299 8D41       902            mov     (_pwmRight + 1),r5
+029B 8001       903            sjmp    L007004?
+029D            904   L007006?:
+029D            905   ;        Z:\Projects\Project2_Car\Code\core.c:249: pwmLeft=pwmRight=0;
+029D E4         906            clr     a
+029E F540       907            mov     _pwmRight,a
+02A0 F541       908            mov     (_pwmRight + 1),a
+02A2 F580       909            mov     _pwmLeft,a
+02A4 F581       910            mov     (_pwmLeft + 1),a
+02A6            911   ;        Z:\Projects\Project2_Car\Code\core.c:250: return;
+02A6 22         912            ret
+02A7            913   ;------------------------------------------------------------
+02A7            914   ;Allocation info for local variables in function 'moveCar'
+02A7            915   ;------------------------------------------------------------
+02A7            916   ;------------------------------------------------------------
+02A7            917   ;        Z:\Projects\Project2_Car\Code\core.c:258: void moveCar()
+02A7            918   ;        -----------------------------------------
+02A7            919   ;         function moveCar
+02A7            920   ;        -----------------------------------------
+02A7            921   _moveCar:
+02A7            922   ;        Z:\Projects\Project2_Car\Code\core.c:261: while (distanceRight+DISTANCEBUFFER > PRESETS[Stage] && distanceLeft==distanceRight)
+02A7            923   L008002?:
+02A7 9042F0     924            mov     dptr,#_DISTANCEBUFFER
+02AA E4         925            clr     a
+02AB 93         926            movc    a,@a+dptr
+02AC FA         927            mov     r2,a
+02AD 7401       928            mov     a,#0x01
+02AF 93         929            movc    a,@a+dptr
+02B0 FB         930            mov     r3,a
+02B1 EA         931            mov     a,r2
+02B2 2540       932            add     a,_distanceRight
+02B4 FC         933            mov     r4,a
+02B5 EB         934            mov     a,r3
+02B6 3541       935            addc    a,(_distanceRight + 1)
+02B8 FD         936            mov     r5,a
+02B9 E5C0       937            mov     a,_Stage
+02BB 25E0       938            add     a,acc
+02BD FE         939            mov     r6,a
+02BE E5C1       940            mov     a,(_Stage + 1)
+02C0 33         941            rlc     a
+02C1 FF         942            mov     r7,a
+02C2 EE         943            mov     a,r6
+02C3 2430       944            add     a,#_PRESETS
+02C5 F582       945            mov     dpl,a
+02C7 EF         946            mov     a,r7
+02C8 3442       947            addc    a,#(_PRESETS >> 8)
+02CA F583       948            mov     dph,a
+02CC E4         949            clr     a
+02CD 93         950            movc    a,@a+dptr
+02CE FE         951            mov     r6,a
+02CF A3         952            inc     dptr
+02D0 E4         953            clr     a
+02D1 93         954            movc    a,@a+dptr
+02D2 FF         955            mov     r7,a
+02D3 C3         956            clr     c
+02D4 EE         957            mov     a,r6
+02D5 9C         958            subb    a,r4
+02D6 EF         959            mov     a,r7
+02D7 9D         960            subb    a,r5
+02D8 5001       961            jnc     L008006?
+02DA E540       962            mov     a,_distanceRight
+02DC B58050     963            cjne    a,_distanceLeft,L008006?
+02DF E541       964            mov     a,(_distanceRight + 1)
+02E1 B58150     965            cjne    a,(_distanceLeft + 1),L008006?
+02E4            966   ;        Z:\Projects\Project2_Car\Code\core.c:263: pwmLeft = MOVESPEED;
+02E4 904370     967            mov     dptr,#_MOVESPEED
+02E7 E4         968            clr     a
+02E8 93         969            movc    a,@a+dptr
+02E9 FC         970            mov     r4,a
+02EA 7401       971            mov     a,#0x01
+02EC 93         972            movc    a,@a+dptr
+02ED FD         973            mov     r5,a
+02EE 8C80       974            mov     _pwmLeft,r4
+02F0 8D81       975            mov     (_pwmLeft + 1),r5
+02F2            976   ;        Z:\Projects\Project2_Car\Code\core.c:264: pwmRight = MOVESPEED;
+02F2 8C40       977            mov     _pwmRight,r4
+02F4 8D41       978            mov     (_pwmRight + 1),r5
+02F6            979   ;        Z:\Projects\Project2_Car\Code\core.c:267: while(distanceRight < PRESETS[Stage]+DISTANCEBUFFER && distanceLeft==distanceRight)
+02F6 8001       980            sjmp    L008002?
+02F8            981   L008006?:
+02F8 E5C0       982            mov     a,_Stage
+02FA 25E0       983            add     a,acc
+02FC FC         984            mov     r4,a
+02FD E5C1       985            mov     a,(_Stage + 1)
+02FF 33         986            rlc     a
+0300 FD         987            mov     r5,a
+0301 EC         988            mov     a,r4
+0302 2430       989            add     a,#_PRESETS
+0304 F582       990            mov     dpl,a
+0306 ED         991            mov     a,r5
+0307 3442       992            addc    a,#(_PRESETS >> 8)
+0309 F583       993            mov     dph,a
+030B E4         994            clr     a
+030C 93         995            movc    a,@a+dptr
+030D FC         996            mov     r4,a
+030E A3         997            inc     dptr
+030F E4         998            clr     a
+0310 93         999            movc    a,@a+dptr
+0311 FD        1000            mov     r5,a
+0312 EA        1001            mov     a,r2
+0313 2C        1002            add     a,r4
+0314 FC        1003            mov     r4,a
+0315 EB        1004            mov     a,r3
+0316 3D        1005            addc    a,r5
+0317 FD        1006            mov     r5,a
+0318 AE40      1007            mov     r6,_distanceRight
+031A AF41      1008            mov     r7,(_distanceRight + 1)
+031C C3        1009            clr     c
+031D EE        1010            mov     a,r6
+031E 9C        1011            subb    a,r4
+031F EF        1012            mov     a,r7
+0320 9D        1013            subb    a,r5
+0321 5001      1014            jnc     L008008?
+0323 E540      1015            mov     a,_distanceRight
+0325 B58090    1016            cjne    a,_distanceLeft,L008008?
+0328 E541      1017            mov     a,(_distanceRight + 1)
+032A B58190    1018            cjne    a,(_distanceLeft + 1),L008008?
+032D           1019   ;        Z:\Projects\Project2_Car\Code\core.c:269: pwmLeft = (-MOVESPEED); 
+032D 904370    1020            mov     dptr,#_MOVESPEED
+0330 E4        1021            clr     a
+0331 93        1022            movc    a,@a+dptr
+0332 FC        1023            mov     r4,a
+0333 7401      1024            mov     a,#0x01
+0335 93        1025            movc    a,@a+dptr
+0336 FD        1026            mov     r5,a
+0337 C3        1027            clr     c
+0338 E4        1028            clr     a
+0339 9C        1029            subb    a,r4
+033A FC        1030            mov     r4,a
+033B E4        1031            clr     a
+033C 9D        1032            subb    a,r5
+033D FD        1033            mov     r5,a
+033E 8C80      1034            mov     _pwmLeft,r4
+0340 8D81      1035            mov     (_pwmLeft + 1),r5
+0342           1036   ;        Z:\Projects\Project2_Car\Code\core.c:270: pwmRight = (-MOVESPEED);              
+0342 8C40      1037            mov     _pwmRight,r4
+0344 8D41      1038            mov     (_pwmRight + 1),r5
+0346 8001      1039            sjmp    L008006?
+0348           1040   L008008?:
+0348           1041   ;        Z:\Projects\Project2_Car\Code\core.c:273: pwmLeft=pwmRight=0;
+0348 E4        1042            clr     a
+0349 F540      1043            mov     _pwmRight,a
+034B F541      1044            mov     (_pwmRight + 1),a
+034D F580      1045            mov     _pwmLeft,a
+034F F581      1046            mov     (_pwmLeft + 1),a
+0351           1047   ;        Z:\Projects\Project2_Car\Code\core.c:274: return;
+0351 22        1048            ret
+0352           1049   ;------------------------------------------------------------
+0352           1050   ;Allocation info for local variables in function 'uTurn'
+0352           1051   ;------------------------------------------------------------
+0352           1052   ;------------------------------------------------------------
+0352           1053   ;        Z:\Projects\Project2_Car\Code\core.c:277: void uTurn()
+0352           1054   ;        -----------------------------------------
+0352           1055   ;         function uTurn
+0352           1056   ;        -----------------------------------------
+0352           1057   _uTurn:
+0352           1058   ;        Z:\Projects\Project2_Car\Code\core.c:279: pwmLeft=TURNSPEED;
+0352 904330    1059            mov     dptr,#_TURNSPEED
+0355 E4        1060            clr     a
+0356 93        1061            movc    a,@a+dptr
+0357 FA        1062            mov     r2,a
+0358 7401      1063            mov     a,#0x01
+035A 93        1064            movc    a,@a+dptr
+035B FB        1065            mov     r3,a
+035C 8A80      1066            mov     _pwmLeft,r2
+035E 8B81      1067            mov     (_pwmLeft + 1),r3
+0360           1068   ;        Z:\Projects\Project2_Car\Code\core.c:280: pwmRight=(-TURNSPEED);
+0360 C3        1069            clr     c
+0361 E4        1070            clr     a
+0362 9A        1071            subb    a,r2
+0363 F540      1072            mov     _pwmRight,a
+0365 E4        1073            clr     a
+0366 9B        1074            subb    a,r3
+0367 F541      1075            mov     (_pwmRight + 1),a
+0369           1076   ;        Z:\Projects\Project2_Car\Code\core.c:281: wait1s();
+0369 120100    1077            lcall   _wait1s
+036C           1078   ;        Z:\Projects\Project2_Car\Code\core.c:282: pwmLeft=100;
+036C 758064    1079            mov     _pwmLeft,#0x64
+036F E4        1080            clr     a
+0370 F581      1081            mov     (_pwmLeft + 1),a
+0372           1082   ;        Z:\Projects\Project2_Car\Code\core.c:283: pwmRight=100;
+0372 754064    1083            mov     _pwmRight,#0x64
+0375 E4        1084            clr     a
+0376 F541      1085            mov     (_pwmRight + 1),a
+0378           1086   ;        Z:\Projects\Project2_Car\Code\core.c:284: return;
+0378 22        1087            ret
+0379           1088   ;------------------------------------------------------------
+0379           1089   ;Allocation info for local variables in function 'wait2ms'
+0379           1090   ;------------------------------------------------------------
+0379           1091   ;------------------------------------------------------------
+0379           1092   ;        Z:\Projects\Project2_Car\Code\core.c:288: void wait2ms (void)
+0379           1093   ;        -----------------------------------------
+0379           1094   ;         function wait2ms
+0379           1095   ;        -----------------------------------------
+0379           1096   _wait2ms:
+0379           1097   ;        Z:\Projects\Project2_Car\Code\core.c:298: _endasm;
+0379           1098            
+0379           1099     ;For a 22.1184MHz crystal one machine cycle
+0379           1100     ;takes 12/22.1184MHz=0.5425347us
+0379           1101             J3:
+0379 7C0A      1102            mov R4, #10
+037B           1103             J2:
+037B 7BB8      1104            mov R3, #184
+037D           1105             J1:
+037D DB50      1106            djnz R3, J1 ; 2 machine cycles-> 2*0.5425347us*184=200us
+037F DC10      1107                 djnz R4, J2 ; 200us*250=0.05s
+0381 22        1108                 ret
+0382           1109                
+0382 22        1110            ret
+0383           1111   ;------------------------------------------------------------
+0383           1112   ;Allocation info for local variables in function 'wait1s'
+0383           1113   ;------------------------------------------------------------
+0383           1114   ;------------------------------------------------------------
+0383           1115   ;        Z:\Projects\Project2_Car\Code\core.c:302: void wait1s (void)
+0383           1116   ;        -----------------------------------------
+0383           1117   ;         function wait1s
+0383           1118   ;        -----------------------------------------
+0383           1119   _wait1s:
+0383           1120   ;        Z:\Projects\Project2_Car\Code\core.c:314: _endasm;
+0383           1121            
+0383           1122     ;For a 22.1184MHz crystal one machine cycle
+0383           1123     ;takes 12/22.1184MHz=0.5425347us
+0383 7A14      1124                 mov R2, #20
+0385           1125             L3:
+0385 79F8      1126            mov R1, #248
+0387           1127             L2:
+0387 78B8      1128            mov R0, #184
+0389           1129             L1:
+0389 D810      1130            djnz R0, L1 ; 2 machine cycles-> 2*0.5425347us*184=200us
+038B D9D0      1131                 djnz R1, L2 ; 200us*250=0.05s
+038D DA90      1132                 djnz R2, L3 ; 0.05s*20=1s
+038F 22        1133                 ret
+0390           1134                
+0390 22        1135            ret
+0391           1136   ;------------------------------------------------------------
+0391           1137   ;Allocation info for local variables in function 'voltage'
+0391           1138   ;------------------------------------------------------------
+0391           1139   ;channel                   Allocated to registers 
+0391           1140   ;------------------------------------------------------------
+0391           1141   ;        Z:\Projects\Project2_Car\Code\core.c:322: float voltage (unsigned char channel)
+0391           1142   ;        -----------------------------------------
+0391           1143   ;         function voltage
+0391           1144   ;        -----------------------------------------
+0391           1145   _voltage:
+0391           1146   ;        Z:\Projects\Project2_Car\Code\core.c:324: return ((GetADC(channel) * 4.84) / 1023.0); // VCC=4.84V (measured)
+0391 120100    1147            lcall   _GetADC
+0394 120100    1148            lcall   ___uint2fs
+0397 AA82      1149            mov     r2,dpl
+0399 AB83      1150            mov     r3,dph
+039B ACF0      1151            mov     r4,b
+039D FD        1152            mov     r5,a
+039E C002      1153            push    ar2
+03A0 C003      1154            push    ar3
+03A2 C004      1155            push    ar4
+03A4 C005      1156            push    ar5
+03A6 90E148    1157            mov     dptr,#0xE148
+03A9 75F09A    1158            mov     b,#0x9A
+03AC 7440      1159            mov     a,#0x40
+03AE 120100    1160            lcall   ___fsmul
+03B1 AA82      1161            mov     r2,dpl
+03B3 AB83      1162            mov     r3,dph
+03B5 ACF0      1163            mov     r4,b
+03B7 FD        1164            mov     r5,a
+03B8 E581      1165            mov     a,sp
+03BA 24FC      1166            add     a,#0xfc
+03BC F581      1167            mov     sp,a
+03BE E4        1168            clr     a
+03BF C0E0      1169            push    acc
+03C1 74C0      1170            mov     a,#0xC0
+03C3 C0E0      1171            push    acc
+03C5 747F      1172            mov     a,#0x7F
+03C7 C0E0      1173            push    acc
+03C9 7444      1174            mov     a,#0x44
+03CB C0E0      1175            push    acc
+03CD 8A82      1176            mov     dpl,r2
+03CF 8B83      1177            mov     dph,r3
+03D1 8CF0      1178            mov     b,r4
+03D3 ED        1179            mov     a,r5
+03D4 120100    1180            lcall   ___fsdiv
+03D7 AA82      1181            mov     r2,dpl
+03D9 AB83      1182            mov     r3,dph
+03DB ACF0      1183            mov     r4,b
+03DD FD        1184            mov     r5,a
+03DE E581      1185            mov     a,sp
+03E0 24FC      1186            add     a,#0xfc
+03E2 F581      1187            mov     sp,a
+03E4 8A82      1188            mov     dpl,r2
+03E6 8B83      1189            mov     dph,r3
+03E8 8CF0      1190            mov     b,r4
+03EA ED        1191            mov     a,r5
+03EB 22        1192            ret
+03EC           1193   ;------------------------------------------------------------
+03EC           1194   ;Allocation info for local variables in function 'SPIWrite'
+03EC           1195   ;------------------------------------------------------------
+03EC           1196   ;value                     Allocated to registers r2 
+03EC           1197   ;------------------------------------------------------------
+03EC           1198   ;        Z:\Projects\Project2_Car\Code\core.c:327: void SPIWrite(unsigned char value)
+03EC           1199   ;        -----------------------------------------
+03EC           1200   ;         function SPIWrite
+03EC           1201   ;        -----------------------------------------
+03EC           1202   _SPIWrite:
+03EC AA82      1203            mov     r2,dpl
+03EE           1204   ;        Z:\Projects\Project2_Car\Code\core.c:329: SPSTA &= (~SPIF); // Clear the SPIF flag in SPSTA
+03EE 53C47F    1205            anl     _SPSTA,#0x7F
+03F1           1206   ;        Z:\Projects\Project2_Car\Code\core.c:330: SPDAT = value;
+03F1 8AC5      1207            mov     _SPDAT,r2
+03F3           1208   ;        Z:\Projects\Project2_Car\Code\core.c:331: while ((SPSTA & SPIF) != SPIF); //Wait for transmission to end
+03F3           1209   L013001?:
+03F3 7480      1210            mov     a,#0x80
+03F5 55C4      1211            anl     a,_SPSTA
+03F7 FA        1212            mov     r2,a
+03F8 BA8010    1213            cjne    r2,#0x80,L013001?
+03FB 22        1214            ret
+03FC           1215   ;------------------------------------------------------------
+03FC           1216   ;Allocation info for local variables in function 'GetADC'
+03FC           1217   ;------------------------------------------------------------
+03FC           1218   ;channel                   Allocated to registers r2 
+03FC           1219   ;adc                       Allocated to registers r2 r3 
+03FC           1220   ;------------------------------------------------------------
+03FC           1221   ;        Z:\Projects\Project2_Car\Code\core.c:335: unsigned int GetADC(unsigned char channel)
+03FC           1222   ;        -----------------------------------------
+03FC           1223   ;         function GetADC
+03FC           1224   ;        -----------------------------------------
+03FC           1225   _GetADC:
+03FC AA82      1226            mov     r2,dpl
+03FE           1227   ;        Z:\Projects\Project2_Car\Code\core.c:340: SPCON &= (~SPEN); // Disable SPI
+03FE 53C3BF    1228            anl     _SPCON,#0xBF
+0401           1229   ;        Z:\Projects\Project2_Car\Code\core.c:341: SPCON = MSTR | CPOL | CPHA | SPR1 | SPR0 | SSDIS;
+0401 75C33F    1230            mov     _SPCON,#0x3F
+0404           1231   ;        Z:\Projects\Project2_Car\Code\core.c:342: SPCON |= SPEN; // Enable SPI
+0404 43C340    1232            orl     _SPCON,#0x40
+0407           1233   ;        Z:\Projects\Project2_Car\Code\core.c:344: P1_4 = 0; // Activate the MCP3004 ADC.
+0407 C294      1234            clr     _P1_4
+0409           1235   ;        Z:\Projects\Project2_Car\Code\core.c:345: SPIWrite(channel | 0x18);     // Send start bit, single/diff* bit, D2, D1, and D0 bits.
+0409 7418      1236            mov     a,#0x18
+040B 4A        1237            orl     a,r2
+040C F582      1238            mov     dpl,a
+040E 120100    1239            lcall   _SPIWrite
+0411           1240   ;        Z:\Projects\Project2_Car\Code\core.c:346: for (adc=0; adc < 10; adc++); // Wait for S/H to setup
+0411 7A0A      1241            mov     r2,#0x0A
+0413 7B00      1242            mov     r3,#0x00
+0415           1243   L014003?:
+0415 1A        1244            dec     r2
+0416 BAFF90    1245            cjne    r2,#0xff,L014009?
+0419 1B        1246            dec     r3
+041A           1247   L014009?:
+041A EA        1248            mov     a,r2
+041B 4B        1249            orl     a,r3
+041C 7001      1250            jnz     L014003?
+041E           1251   ;        Z:\Projects\Project2_Car\Code\core.c:347: SPIWrite(0x55); // Read bits 9 down to 4
+041E 758255    1252            mov     dpl,#0x55
+0421 120100    1253            lcall   _SPIWrite
+0424           1254   ;        Z:\Projects\Project2_Car\Code\core.c:348: adc=((SPDAT & 0x3f) * 0x100);
+0424 743F      1255            mov     a,#0x3F
+0426 55C5      1256            anl     a,_SPDAT
+0428 FB        1257            mov     r3,a
+0429 7A00      1258            mov     r2,#0x00
+042B           1259   ;        Z:\Projects\Project2_Car\Code\core.c:349: SPIWrite(0x55);// Read bits 3 down to 0
+042B 758255    1260            mov     dpl,#0x55
+042E C002      1261            push    ar2
+0430 C003      1262            push    ar3
+0432 120100    1263            lcall   _SPIWrite
+0435 D003      1264            pop     ar3
+0437 D002      1265            pop     ar2
+0439           1266   ;        Z:\Projects\Project2_Car\Code\core.c:350: P1_4 = 1; // Deactivate the MCP3004 ADC.
+0439 D294      1267            setb    _P1_4
+043B           1268   ;        Z:\Projects\Project2_Car\Code\core.c:351: adc += (SPDAT & 0xf0); // SPDR contains the low part of the result. 
+043B 74F0      1269            mov     a,#0xF0
+043D 55C5      1270            anl     a,_SPDAT
+043F FC        1271            mov     r4,a
+0440 7D00      1272            mov     r5,#0x00
+0442 EC        1273            mov     a,r4
+0443 2A        1274            add     a,r2
+0444 FA        1275            mov     r2,a
+0445 ED        1276            mov     a,r5
+0446 3B        1277            addc    a,r3
+0447           1278   ;        Z:\Projects\Project2_Car\Code\core.c:352: adc >>= 4;
+0447 C4        1279            swap    a
+0448 CA        1280            xch     a,r2
+0449 C4        1281            swap    a
+044A 540F      1282            anl     a,#0x0f
+044C 6A        1283            xrl     a,r2
+044D CA        1284            xch     a,r2
+044E 540F      1285            anl     a,#0x0f
+0450 CA        1286            xch     a,r2
+0451 6A        1287            xrl     a,r2
+0452 CA        1288            xch     a,r2
+0453           1289   ;        Z:\Projects\Project2_Car\Code\core.c:354: return adc;
+0453 8A82      1290            mov     dpl,r2
+0455 F583      1291            mov     dph,a
+0457 22        1292            ret
+0458           1293            rseg R_CSEG
+0458           1294   
+0000           1295            rseg R_XINIT
+0000           1296   
+0000           1297            rseg R_CONST
+0000           1298   _MOVESPEED:
+0000 5000      1299            db 0x50,0x00    ;  80
+0002           1300   _TURNSPEED:
+0002 5000      1301            db 0x50,0x00    ;  80
+0004           1302   _DISTANCEBUFFER:
+0004 0000      1303            db 0x00,0x00    ;  0
+0006           1304   _ANGLEBUFFER:
+0006 0000      1305            db 0x00,0x00    ;  0
+0008           1306   _NSTAGES:
+0008 0C00      1307            db 0x0C,0x00    ;  12
+000A           1308   _PRESETS:
+000A 0500      1309            db 0x05,0x00    ; 5
+000C 0A00      1310            db 0x0A,0x00    ; 10
+000E 0F00      1311            db 0x0F,0x00    ; 15
+0010 1400      1312            db 0x14,0x00    ; 20
+0012 1900      1313            db 0x19,0x00    ; 25
+0014 1E00      1314            db 0x1E,0x00    ; 30
+0016 2300      1315            db 0x23,0x00    ; 35
+0018 2800      1316            db 0x28,0x00    ; 40
+001A 2D00      1317            db 0x2D,0x00    ; 45
+001C 3200      1318            db 0x32,0x00    ; 50
+001E 3700      1319            db 0x37,0x00    ; 55
+0020 3C00      1320            db 0x3C,0x00    ; 60
+0022           1321   __str_0:
+0022 0A        1322            db 0x0A
+0023 496E7473  1323            db 'Intstruction: '
+     74727563
+     74696F6E
+     3A20
+0031 00        1324            db 0x00
+0032           1325   __str_1:
+0032 257564    1326            db '%ud'
+0035 00        1327            db 0x00
+0036           1328   __str_2:
+0036 0A        1329            db 0x0A
+0037 4D6F7665  1330            db 'Move forwrds'
+     20666F72
+     77726473
+0043 00        1331            db 0x00
+0044           1332   __str_3:
+0044 0A        1333            db 0x0A
+0045 204D6F76  1334            db ' Move back'
+     65206261
+     636B
+004F 00        1335            db 0x00
+0050           1336   __str_4:
+0050 0A        1337            db 0x0A
+0051 7475726E  1338            db 'turned'
+     6564
+0057 00        1339            db 0x00
+0058           1340   __str_5:
+0058 0A        1341            db 0x0A
+0059 4552524F  1342            db 'ERROR'
+     52
+005E 00        1343            db 0x00
+005F           1344   
+000E           1345            CSEG
+000E           1346   
+000E           1347   end

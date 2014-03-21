@@ -27,34 +27,60 @@
 #define GRN P0_1
 #define YLW P0_2
 
+/* ANSI colors */
+#define	COLOR_BLACK		0
+#define	COLOR_RED		1
+#define	COLOR_GREEN		2
+#define	COLOR_YELLOW	3
+#define	COLOR_BLUE		4
+#define	COLOR_MAGENTA	5
+#define	COLOR_CYAN		6
+#define	COLOR_WHITE		7
+
+/* Some ANSI escape sequences */
+#define CURSOR_ON "\x1b[?25h"
+#define CURSOR_OFF "\x1b[?25l"
+#define CLEAR_SCREEN "\x1b[2J"
+#define GOTO_YX "\x1B[%d;%dH"
+#define CLR_TO_END_LINE "\x1B[K"
+/* Black foreground, white background */
+#define BKF_WTB "\x1B[0;30;47m"
+#define FORE_BACK "\x1B[0;3%d;4%dm"
+#define FONT_SELECT "\x1B[%dm"
+
 //---Global Variables---
-
-const int TOO_FAR   = 10;
-const int TOO_CLOSE = 5;
-const int DISTANCE_CONSTANT = 0.0036;
+//speed to move and turn
+const int MOVESPEED=80;
+const int TURNSPEED=80;
+//buffers of error for aligning and distance
+const int DISTANCEBUFFER=0;
+const int ANGLEBUFFER=0;
+//preset distances
+const int NSTAGES=12;
 const unsigned int PRESETS[] = {5,10,15,20,25,30,35,40,45,50,55,60};
-
+//pwm modulation
 volatile unsigned int pwmCount = 0;
-volatile int pwmLeft = 0;
-volatile int pwmRight = 0;
+volatile int pwmLeft;
+volatile int pwmRight;
 volatile unsigned int leftSensor = 0;
 volatile unsigned int rightSensor = 0;
 
 //left and right coil distances
-unsigned int distanceLeft = 40;
-unsigned int distanceRight = 50;
+volatile int distanceLeft;
+volatile int distanceRight;
 
 //current instruction
-unsigned int instruction = 0;
+volatile unsigned int instruction;
 
-//current preset distance
-unsigned int Stage = 2;
+//Start up preset distance
+volatile unsigned int Stage;
 
 //---Function Prototypes---
 
 void getDistance();
 void turnCar();
 void moveCar();
+void uTurn();
 void wait2ms();
 void wait1s();
 float voltage (unsigned char channel);
@@ -65,28 +91,21 @@ unsigned int GetADC(unsigned char channel);
 
 void beaconSignal() interrupt 0
 {
-	// TODO
-	// quickly check if signal is zero, if not, return
-	// if it is zero, get the new instruction and allocate
-	//
-	// -if volatge(0)< min??
-	//   -get message
-	// -else
-	//  -return
-	//	
+	//if(voltage(0)>MINREAD)
+	//	return;
+	//else
+	// getmessage();
+    //	alters instruction variable
 }
 
 void pwmCounter() interrupt 1
 {
 	
+	//Get left and right distances
+	//getDistance();
+	
 	if(++pwmCount > 99)
 		pwmCount = 0;
-		
-	//Get left and right distances
-	//if they arent equal, stop moving and re-align
-	getDistance();
-	
-		
 	//Left wheel
 	if(pwmLeft > 0)
 	{	
@@ -140,53 +159,57 @@ unsigned char _c51_external_startup(void)
 	EX0 = 1;	// Enable external interrupt 0
 	IT0 = 1;
 	EA = 1; 	// Enable global interrupts
-	
     return 0;
 }
 
 //---MAIN---
 int main (void)
-{		
+{	
+	distanceLeft=15;
+	distanceRight=15;	
+	Stage=2;
+	pwmLeft=0;
+	pwmRight=0;
 	while (1)
 	{	
+		instruction = 0;
 		//stay on tether until instruction is read
 		while (instruction == 0)
 		{
-			moveCar();
 			//inplace turning if car is not aligned
 			if(distanceLeft != distanceRight)
 			{	
 				P3_3 = 1;
-				turnCar();
+				//turnCar();
 			}
+			//moveCar();
+			
+			printf("\nIntstruction: ");
+			scanf("%ud", &instruction);
 		}
 		
 		//get instruction and go back to tether
-		switch (instruction)
+		if(instruction==1)                        //move forward
 		{
-			case 1: //Move Forward
-				if(Stage != 0)
-					Stage--;
-				P3_3 = 0;
-				break;
-			case 2: //Move Backwards
-				if(Stage != 7)
-					Stage++;
-				P3_3 = 0;	
-				break;
-			case 3: //180 Turn
-				P3_3 = 0;
-				break;
-			case 4: //Park
-				P3_3 = 0;
-				break;
-			case 5:
-				P3_3 = 0;
-				break;
-			default: //Turn on LED for bad instrucion	
-			
+			if(Stage!=0)
+				Stage--;
+			printf("\nMove forwrds");
+		}else if(instruction==2)                  //move backwards
+		{
+			if(Stage!=NSTAGES)
+				Stage++;
+			printf("\n Move back");	
+		}else if(instruction==3)                  //uturn
+		{
+			uTurn();
+			printf("\nturned");
+		}else if(instruction==4)                  //parralell park
+		{
+			//park
+		}else
+		{
+			printf("\nERROR");
 		}
-		instruction = 0;
 	}
 	return 0;
 }
@@ -201,8 +224,8 @@ int main (void)
  */
 void getDistance() 
 {
-	// TODO
-	//get distance left and right and store to global variables
+	//distanceRight=voltage(0);
+	//distanceLeft=voltage(1); 
 }
 
 /*	turnCar(): turn both wheels individually to align vehicle with angle
@@ -213,16 +236,18 @@ void getDistance()
 void turnCar()
 {
 	//turn towards beacon
-	while(distanceLeft < distanceRight)
+	while(distanceLeft < distanceRight+ANGLEBUFFER)
 	{
-		pwmLeft = 50;
-		pwmRight = (-50);
+		pwmLeft = TURNSPEED;
+		pwmRight = (-TURNSPEED);
 	}
-	while(distanceLeft > distanceRight)
+	while(distanceLeft+ANGLEBUFFER > distanceRight)
 	{
-		pwmLeft = (-50);
-		pwmRight = 50;
+		pwmLeft = (-TURNSPEED);
+		pwmRight = TURNSPEED;
 	}
+	pwmLeft=pwmRight=0;
+	return;
 }
 
 /*	moveCar(): move the car towards the beacon if neccessarry
@@ -233,19 +258,29 @@ void turnCar()
 void moveCar()
 {	
 	//move forward if too far and aligned
-	while (distanceRight > PRESETS[Stage] && distanceLeft==distanceRight)
+	while (distanceRight+DISTANCEBUFFER > PRESETS[Stage] && distanceLeft==distanceRight)
 	{
-		pwmLeft = 50;
-		pwmRight = 50;
+		pwmLeft = MOVESPEED;
+		pwmRight = MOVESPEED;
 	}
 	//move back if too close and aligned
-	while(distanceRight < PRESETS[Stage] && distanceLeft==distanceRight)
+	while(distanceRight < PRESETS[Stage]+DISTANCEBUFFER && distanceLeft==distanceRight)
 	{
-		pwmLeft = (-75); 
-		pwmRight = (-75);		
+		pwmLeft = (-MOVESPEED); 
+		pwmRight = (-MOVESPEED);		
 	}
 	//done, stop
 	pwmLeft=pwmRight=0;
+	return;
+}
+
+void uTurn()
+{
+	pwmLeft=TURNSPEED;
+	pwmRight=(-TURNSPEED);
+	wait1s();
+	pwmLeft=0;
+	pwmRight=0;
 	return;
 }
 
