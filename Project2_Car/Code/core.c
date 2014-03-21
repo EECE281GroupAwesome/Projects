@@ -232,16 +232,18 @@ void turnCar()
  */
 void moveCar()
 {	
-	//move forward or back as long as aligned and not at right distance
+	//move forward if too far and aligned
 	while (distanceRight > PRESETS[Stage] && distanceLeft==distanceRight)
 	{
 		pwmLeft = 50;
 		pwmRight = 50;
 	}
-	//while(distanceRight > PRESETS[Stage] && distanceLeft==distanceRight)
-	//{
-	//	pwmLeft = pwmRight = (-75);		
-	//}
+	//move back if too close and aligned
+	while(distanceRight < PRESETS[Stage] && distanceLeft==distanceRight)
+	{
+		pwmLeft = (-75); 
+		pwmRight = (-75);		
+	}
 	//done, stop
 	pwmLeft=pwmRight=0;
 	return;
