@@ -206,7 +206,11 @@ int main (void)
 		}else if(instruction==4)                  //parralell park
 		{
 			//park
-		}else
+		}else if(instruction==5)
+		{
+			//break or re-initiate tether	
+		}
+		else
 		{
 			printf("\nERROR");
 		}
