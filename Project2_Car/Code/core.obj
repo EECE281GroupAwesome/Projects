@@ -15,93 +15,102 @@ R_CONST,code,005F,NO
 rbank0,data,0000,OV
 R_PSEG,xdata,0000,NO
 R_DINIT,code,000F,NO
-R_DSEG,data,0012,NO
+R_DSEG,data,0016,NO
 R_OSEG,data,0000,OV
 R_IXSEG,xdata,0000,NO
 R_ISEG,idata,0000,NO
 R_HOME,code,0000,NO
 R_XINIT,code,0000,NO
-R_CSEG,code,0458,NO
+R_CSEG,code,050E,NO
 </SEGMENTS>
 
 <LOCALS>
-L005023?,R_CSEG,0119,0000
-L005020?,R_CSEG,019E,0000
-L005039?,R_CSEG,0175,0000
-L005038?,R_CSEG,0130,0000
+L005027?,R_CSEG,01AF,0000
+L005024?,R_CSEG,01F3,0000
+L005021?,R_CSEG,021B,0000
+L005034?,R_CSEG,02AA,0000
+L005032?,R_CSEG,024B,0000
+L005030?,R_CSEG,012A,0000
 L003008?,R_CSEG,008A,0000
 L003006?,R_CSEG,0067,0000
 L003004?,R_CSEG,004B,0000
-L005048?,R_CSEG,0216,0000
-L005047?,R_CSEG,01EF,0000
 L003002?,R_CSEG,0028,0000
-L005046?,R_CSEG,01ED,0000
-L005045?,R_CSEG,01BF,0000
-L005044?,R_CSEG,01AB,0000
-L005043?,R_CSEG,01A9,0000
-L005042?,R_CSEG,0186,0000
-L005040?,R_CSEG,0177,0000
-J1,R_CSEG,037D,0000
-J2,R_CSEG,037B,0000
-J3,R_CSEG,0379,0000
-L1,R_CSEG,0389,0000
-L2,R_CSEG,0387,0000
-L3,R_CSEG,0385,0000
-L005009?,R_CSEG,01CA,0000
-L005007?,R_CSEG,0186,0000
-L005005?,R_CSEG,016A,0000
-L005003?,R_CSEG,011E,0000
-L005002?,R_CSEG,0132,0000
-L007006?,R_CSEG,029D,0000
-L007004?,R_CSEG,026B,0000
-L007001?,R_CSEG,022F,0000
+J1,R_CSEG,0433,0000
+J2,R_CSEG,0431,0000
+J3,R_CSEG,042F,0000
+L1,R_CSEG,043F,0000
+L2,R_CSEG,043D,0000
+L3,R_CSEG,043B,0000
+L005008?,R_CSEG,023A,0000
+L005007?,R_CSEG,01DB,0000
+L005005?,R_CSEG,0197,0000
+L005003?,R_CSEG,017B,0000
+L005001?,R_CSEG,012F,0000
+L007006?,R_CSEG,0344,0000
+L007004?,R_CSEG,0312,0000
+L007001?,R_CSEG,02D6,0000
+L005059?,R_CSEG,01BA,0000
+L005058?,R_CSEG,0197,0000
+L005056?,R_CSEG,0188,0000
+L005055?,R_CSEG,0186,0000
+L005069?,R_CSEG,0267,0000
+L005068?,R_CSEG,0247,0000
+L005067?,R_CSEG,0245,0000
+L005066?,R_CSEG,0235,0000
+L005065?,R_CSEG,0232,0000
+L005064?,R_CSEG,0227,0000
 __str_0,R_CONST,0022,0000
 __str_1,R_CONST,0032,0000
+L005063?,R_CSEG,0200,0000
 __str_2,R_CONST,0036,0000
 __str_3,R_CONST,0044,0000
 __str_4,R_CONST,0050,0000
 __str_5,R_CONST,0058,0000
-L008008?,R_CSEG,0348,0000
-L008006?,R_CSEG,02F8,0000
-L008002?,R_CSEG,02A7,0000
+L005062?,R_CSEG,01FE,0000
+L008008?,R_CSEG,03FB,0000
+L005061?,R_CSEG,01D0,0000
+L005060?,R_CSEG,01BC,0000
+L008006?,R_CSEG,03A5,0000
+L008002?,R_CSEG,034E,0000
 L003011?,R_CSEG,00A6,0000
 _pwmCounter_sloc0_1_0,R_BSEG,0000,0001
-L013001?,R_CSEG,03F3,0000
-L014009?,R_CSEG,041A,0000
-L005017?,R_CSEG,01E2,0000
-L005014?,R_CSEG,020A,0000
-L014003?,R_CSEG,0415,0000
+L013001?,R_CSEG,04A9,0000
+L014009?,R_CSEG,04D0,0000
+L005015?,R_CSEG,02B1,0000
+L014003?,R_CSEG,04CB,0000
 </LOCALS>
 
 <PUBLICS>
-_wait2ms,R_CSEG,0379,0000
-_main,R_CSEG,00FE,0000
+_wait2ms,R_CSEG,042F,0000
+_main,R_CSEG,010F,0000
 _NSTAGES,R_CONST,0008,0000
-_SPIWrite,R_CSEG,03EC,0000
+_SPIWrite,R_CSEG,04A2,0000
+_direction,R_DSEG,0006,0002
 _pwmCount,R_DSEG,0000,0002
 __c51_external_startup,R_CSEG,00B1,0000
-_getDistance,R_CSEG,022E,0000
+_getDistance,R_CSEG,02CF,0000
 _ANGLEBUFFER,R_CONST,0006,0000
-_instruction,R_DSEG,000E,0002
+_instruction,R_DSEG,0012,0002
 _DISTANCEBUFFER,R_CONST,0004,0000
-_GetADC,R_CSEG,03FC,0000
-_distanceLeft,R_DSEG,000A,0002
-_Stage,R_DSEG,0010,0002
-_moveCar,R_CSEG,02A7,0000
+_GetADC,R_CSEG,04B2,0000
+_distanceLeft,R_DSEG,000E,0002
+_Stage,R_DSEG,0014,0002
+_moveCar,R_CSEG,034E,0000
+_tether,R_DSEG,0008,0002
 _pwmCounter,R_CSEG,0001,0000
 _PRESETS,R_CONST,000A,0000
 _TURNSPEED,R_CONST,0002,0000
 _beaconSignal,R_CSEG,0000,0000
-_voltage,R_CSEG,0391,0000
-_turnCar,R_CSEG,022F,0000
-_wait1s,R_CSEG,0383,0000
-_leftSensor,R_DSEG,0006,0002
+_voltage,R_CSEG,0447,0000
+_turnCar,R_CSEG,02D0,0000
+_wait1s,R_CSEG,0439,0000
+_leftSensor,R_DSEG,000A,0002
 _MOVESPEED,R_CONST,0000,0000
-_distanceRight,R_DSEG,000C,0002
+_distanceRight,R_DSEG,0010,0002
 _pwmRight,R_DSEG,0004,0002
 _pwmLeft,R_DSEG,0002,0002
-_uTurn,R_CSEG,0352,0000
-_rightSensor,R_DSEG,0008,0002
+_uTurn,R_CSEG,0405,0000
+_rightSensor,R_DSEG,000C,0002
 </PUBLICS>
 
 <EXTERNALS>
@@ -280,7 +289,7 @@ D0 E0
 75 9A FA
 75 9B 1E
 75 89 01
-75 F4 FF
+75 F3 FF
 75 8C FF
 75 F2 48
 75 8A 48
@@ -289,6 +298,15 @@ D2 A9
 D2 A8
 D2 88
 D2 AF
+E4
+F5 data8(_tether;)
+F5 data8(_tether;0x0001;+;)
+75 data8(_direction;) 01
+E4
+F5 data8(_direction;0x0001;+;)
+D2 A2
+D2 A1
+D2 A0
 75 82 00
 22
 75 data8(_distanceLeft;) 0F
@@ -310,13 +328,14 @@ F5 data8(_instruction;)
 F5 data8(_instruction;0x0001;+;)
 E5 data8(_instruction;)
 45 data8(_instruction;0x0001;+;)
-70 rel2(L005005?;)
+70 rel2(L005003?;)
 E5 data8(_distanceRight;)
-B5 data8(_distanceLeft;) rel3(L005038?;)
 E5 data8(_distanceRight;0x0001;+;)
-B5 data8(_distanceLeft;0x0001;+;) rel3(L005038?;)
-80 rel2(L005002?;)
-D2 B3
+E5 data8(_distanceLeft;)
+E5 data8(_distanceLeft;0x0001;+;)
+D2 A2
+D2 A1
+C2 A0
 74 data8(__str_0;)
 C0 E0
 74 data8(__str_0;0x0008;>>;)
@@ -343,19 +362,19 @@ C0 E0
 E5 81
 24 FA
 F5 81
-80 rel2(L005003?;)
+80 rel2(L005001?;)
 74 01
-B5 data8(_instruction;) rel3(L005039?;)
+B5 data8(_instruction;) rel3(L005055?;)
 E4
-B5 data8(_instruction;0x0001;+;) rel3(L005039?;)
-80 rel2(L005040?;)
-80 rel2(L005020?;)
+B5 data8(_instruction;0x0001;+;) rel3(L005055?;)
+80 rel2(L005056?;)
+80 rel2(L005027?;)
 E5 data8(_Stage;)
 45 data8(_Stage;0x0001;+;)
-60 rel2(L005007?;)
+60 rel2(L005005?;)
 15 data8(_Stage;)
 74 FF
-B5 data8(_Stage;) rel3(L005042?;)
+B5 data8(_Stage;) rel3(L005058?;)
 15 data8(_Stage;0x0001;+;)
 74 data8(__str_2;)
 C0 E0
@@ -367,13 +386,13 @@ C0 E0
 15 81
 15 81
 15 81
-02 addr16(L005023?;)  
+02 addr16(L005030?;)  
 74 02
-B5 data8(_instruction;) rel3(L005043?;)
+B5 data8(_instruction;) rel3(L005059?;)
 E4
-B5 data8(_instruction;0x0001;+;) rel3(L005043?;)
-80 rel2(L005044?;)
-80 rel2(L005017?;)
+B5 data8(_instruction;0x0001;+;) rel3(L005059?;)
+80 rel2(L005060?;)
+80 rel2(L005024?;)
 90 data16(_NSTAGES;)  
 E4
 93
@@ -382,10 +401,10 @@ FA
 93
 FB
 EA
-B5 data8(_Stage;) rel3(L005045?;)
+B5 data8(_Stage;) rel3(L005061?;)
 EB
-B5 data8(_Stage;0x0001;+;) rel3(L005045?;)
-80 rel2(L005009?;)
+B5 data8(_Stage;0x0001;+;) rel3(L005061?;)
+80 rel2(L005007?;)
 74 01
 25 data8(_Stage;)
 F5 data8(_Stage;)
@@ -402,13 +421,13 @@ C0 E0
 15 81
 15 81
 15 81
-02 addr16(L005023?;)  
+02 addr16(L005030?;)  
 74 03
-B5 data8(_instruction;) rel3(L005046?;)
+B5 data8(_instruction;) rel3(L005062?;)
 E4
-B5 data8(_instruction;0x0001;+;) rel3(L005046?;)
-80 rel2(L005047?;)
-80 rel2(L005014?;)
+B5 data8(_instruction;0x0001;+;) rel3(L005062?;)
+80 rel2(L005063?;)
+80 rel2(L005021?;)
 12 addr16(_uTurn;)  
 74 data8(__str_4;)
 C0 E0
@@ -420,12 +439,100 @@ C0 E0
 15 81
 15 81
 15 81
-02 addr16(L005023?;)  
+02 addr16(L005030?;)  
 74 04
-B5 data8(_instruction;) rel3(L005048?;)
+B5 data8(_instruction;) rel3(L005064?;)
 E4
-B5 data8(_instruction;0x0001;+;) rel3(L005048?;)
-02 addr16(L005023?;)  
+B5 data8(_instruction;0x0001;+;) rel3(L005064?;)
+02 addr16(L005030?;)  
+74 05
+B5 data8(_instruction;) rel3(L005065?;)
+E4
+B5 data8(_instruction;0x0001;+;) rel3(L005065?;)
+80 rel2(L005066?;)
+02 addr16(L005015?;)  
+E4
+F5 data8(_instruction;)
+F5 data8(_instruction;0x0001;+;)
+74 05
+B5 data8(_instruction;) rel3(L005067?;)
+E4
+B5 data8(_instruction;0x0001;+;) rel3(L005067?;)
+80 rel2(L005068?;)
+80 rel2(L005008?;)
+7A 00
+7B 00
+90 data16(_NSTAGES;)  
+E4
+93
+FC
+74 01
+93
+FD
+C3
+EA
+9C
+EB
+64 80
+8D F0
+63 F0 80
+95 F0
+40 rel2(L005069?;)
+02 addr16(L005030?;)  
+8A 04
+EB
+CC
+25 E0
+CC
+33
+FD
+EC
+24 data8(_PRESETS;)
+F5 82
+ED
+34 data8(_PRESETS;0x0008;>>;)
+F5 83
+E4
+93
+FC
+A3
+E4
+93
+FD
+EC
+24 FD
+FE
+ED
+34 FF
+FF
+A8 data8(_distanceLeft;)
+A9 data8(_distanceLeft;0x0001;+;)
+C3
+EE
+98
+EF
+99
+50 rel2(L005034?;)
+74 03
+2C
+FC
+E4
+3D
+FD
+AE data8(_distanceLeft;)
+AF data8(_distanceLeft;0x0001;+;)
+C3
+EE
+9C
+EF
+9D
+50 rel2(L005034?;)
+8A data8(_Stage;)
+8B data8(_Stage;0x0001;+;)
+0A
+BA 00 rel3(L005032?;)
+0B
+80 rel2(L005032?;)
 74 data8(__str_5;)
 C0 E0
 74 data8(__str_5;0x0008;>>;)
@@ -436,8 +543,14 @@ C0 E0
 15 81
 15 81
 15 81
-02 addr16(L005023?;)  
+C2 A2
+D2 A1
+D2 A0
+02 addr16(L005030?;)  
 22
+D2 A2
+C2 A1
+D2 A0
 90 data16(_ANGLEBUFFER;)  
 E4
 93
@@ -557,6 +670,9 @@ E5 data8(_distanceRight;)
 B5 data8(_distanceLeft;) rel3(L008006?;)
 E5 data8(_distanceRight;0x0001;+;)
 B5 data8(_distanceLeft;0x0001;+;) rel3(L008006?;)
+D2 A2
+C2 A1
+D2 A0
 90 data16(_MOVESPEED;)  
 E4
 93
@@ -624,6 +740,9 @@ FD
 8D data8(_pwmLeft;0x0001;+;)
 8C data8(_pwmRight;)
 8D data8(_pwmRight;0x0001;+;)
+D2 A2
+C2 A1
+D2 A0
 80 rel2(L008006?;)
 E4
 F5 data8(_pwmRight;)
@@ -631,6 +750,9 @@ F5 data8(_pwmRight;0x0001;+;)
 F5 data8(_pwmLeft;)
 F5 data8(_pwmLeft;0x0001;+;)
 22
+D2 A2
+C2 A1
+D2 A0
 90 data16(_TURNSPEED;)  
 E4
 93
@@ -648,11 +770,10 @@ E4
 9B
 F5 data8(_pwmRight;0x0001;+;)
 12 addr16(_wait1s;)  
-75 data8(_pwmLeft;) 64
 E4
+F5 data8(_pwmLeft;)
 F5 data8(_pwmLeft;0x0001;+;)
-75 data8(_pwmRight;) 64
-E4
+F5 data8(_pwmRight;)
 F5 data8(_pwmRight;0x0001;+;)
 22
 7C 0A
@@ -661,9 +782,9 @@ DB rel2(J1;)
 DC rel2(J2;)
 22
 22
-7A 14
-79 F8
-78 B8
+7A 5A
+79 B4
+78 B4
 D8 rel2(L1;)
 D9 rel2(L2;)
 DA rel2(L3;)

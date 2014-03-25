@@ -5,7 +5,26 @@
 	Written for AT89LP51 on the LP51 microcontroller
 	
 	CodeName: Mr. Squiggles
+
+	PINS:
+	
+	P2_0 = Green Led
+	P2_1 = Yellow Led
+	P2_2 = Red Led
+	
+	P0_1 = Left Wheel
+	P0_0 = Left Wheel
+
+	P0_3 = Right Wheel
+	P0_4 = Right wheel
+
+	
 */
+
+
+
+
+
 
 //---Included Files---
 
@@ -62,6 +81,8 @@ const unsigned int PRESETS[] = {5,10,15,20,25,30,35,40,45,50,55,60};
 volatile unsigned int pwmCount = 0;
 volatile int pwmLeft;
 volatile int pwmRight;
+volatile int direction;
+volatile int tether;
 volatile unsigned int leftSensor = 0;
 volatile unsigned int rightSensor = 0;
 
@@ -103,7 +124,6 @@ void pwmCounter() interrupt 1
 	
 	//Get left and right distances
 	//getDistance();
-	
 	if(++pwmCount > 99)
 		pwmCount = 0;
 	//Left wheel
@@ -159,6 +179,11 @@ unsigned char _c51_external_startup(void)
 	EX0 = 1;	// Enable external interrupt 0
 	IT0 = 1;
 	EA = 1; 	// Enable global interrupts
+	tether=0;
+	direction=1;
+	P2_2=1;
+	P2_1=1;
+	P2_0=1;
     return 0;
 }
 
@@ -179,15 +204,15 @@ int main (void)
 			//inplace turning if car is not aligned
 			if(distanceLeft != distanceRight)
 			{	
-				P3_3 = 1;
 				//turnCar();
 			}
 			//moveCar();
-			
+			P2_2=1;
+			P2_1=1;
+			P2_0=0;
 			printf("\nIntstruction: ");
 			scanf("%ud", &instruction);
 		}
-		
 		//get instruction and go back to tether
 		if(instruction==1)                        //move forward
 		{
@@ -208,11 +233,23 @@ int main (void)
 			//park
 		}else if(instruction==5)
 		{
-			//break or re-initiate tether	
+			int i;
+			//break tether	
+			instruction=0;
+			while(instruction!=5);
+			//re-initiate tether at current distance
+			for(i=0;i<NSTAGES;i++)
+			{
+				if(distanceLeft>PRESETS[i]-3 && distanceLeft<PRESETS[i]+3)
+					Stage=i;
+			}
 		}
 		else
 		{
 			printf("\nERROR");
+			P2_2=0;
+			P2_1=1;
+			P2_0=1;
 		}
 	}
 	return 0;
@@ -239,6 +276,9 @@ void getDistance()
  */
 void turnCar()
 {
+	P2_2=1;
+	P2_1=0;
+	P2_0=1;
 	//turn towards beacon
 	while(distanceLeft < distanceRight+ANGLEBUFFER)
 	{
@@ -264,6 +304,9 @@ void moveCar()
 	//move forward if too far and aligned
 	while (distanceRight+DISTANCEBUFFER > PRESETS[Stage] && distanceLeft==distanceRight)
 	{
+		P2_2=1;
+		P2_1=0;
+		P2_0=1;
 		pwmLeft = MOVESPEED;
 		pwmRight = MOVESPEED;
 	}
@@ -272,6 +315,9 @@ void moveCar()
 	{
 		pwmLeft = (-MOVESPEED); 
 		pwmRight = (-MOVESPEED);		
+		P2_2=1;
+		P2_1=0;
+		P2_0=1;
 	}
 	//done, stop
 	pwmLeft=pwmRight=0;
@@ -280,6 +326,9 @@ void moveCar()
 
 void uTurn()
 {
+	P2_2=1;
+	P2_1=0;
+	P2_0=1;
 	pwmLeft=TURNSPEED;
 	pwmRight=(-TURNSPEED);
 	wait1s();
@@ -308,9 +357,9 @@ void wait1s (void)
 	_asm	
 		;For a 22.1184MHz crystal one machine cycle 
 		;takes 12/22.1184MHz=0.5425347us
-	    mov R2, #20
-	L3:	mov R1, #248
-	L2:	mov R0, #184
+	    mov R2, #90
+	L3:	mov R1, #180
+	L2:	mov R0, #180
 	L1:	djnz R0, L1 ; 2 machine cycles-> 2*0.5425347us*184=200us
 	    djnz R1, L2 ; 200us*250=0.05s
 	    djnz R2, L3 ; 0.05s*20=1s
