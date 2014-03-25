@@ -1,7 +1,7 @@
 0000              1   ;--------------------------------------------------------
 0000              2   ; File Created by C51
 0000              3   ; Version 1.0.0 #1034 (Dec 12 2012) (MSVC)
-0000              4   ; This file was generated Tue Mar 25 11:57:38 2014
+0000              4   ; This file was generated Tue Mar 25 12:09:55 2014
 0000              5   ;--------------------------------------------------------
                   5   $name core
                   6   $optc51 --model-small
@@ -119,8 +119,8 @@
 0000            119   _TL1            DATA 0x8b
 0000            120   _TH1            DATA 0x8d
 0000            121   _RL0            DATA 0xf2
-0000            122   _RH0            DATA 0xf3
-0000            123   _RTL1           DATA 0xf4
+0000            122   _RH0            DATA 0xf4
+0000            123   _RL1            DATA 0xf3
 0000            124   _RH1            DATA 0xf5
 0000            125   _WDTRST         DATA 0xa6
 0000            126   _WDTPRG         DATA 0xa7
@@ -497,1015 +497,1032 @@
 0065            497   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:138: P1_1 = 1;
 0065 D291       498            setb    _P1_1
 0067            499   L003006?:
-0067            500   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:142: if(pwmRight > 0)
-0067 C3         501            clr     c
-0068 E4         502            clr     a
-0069 9530       503            subb    a,_pwmRight
-006B E4         504            clr     a
-006C 6480       505            xrl     a,#0x80
-006E 8531F0     506            mov     b,(_pwmRight + 1)
-0071 63F080     507            xrl     b,#0x80
-0074 95F0       508            subb    a,b
-0076 5001       509            jnc     L003008?
-0078            510   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:144: P1_4 = (pwmRight > pwmCount) ? 0:1;
-0078 AA30       511            mov     r2,_pwmRight
-007A AB31       512            mov     r3,(_pwmRight + 1)
-007C C3         513            clr     c
-007D E5B0       514            mov     a,_pwmCount
-007F 9A         515            subb    a,r2
-0080 E5B1       516            mov     a,(_pwmCount + 1)
-0082 9B         517            subb    a,r3
-0083 9240       518            mov  _pwmCounter_sloc0_1_0,c
-0085 B3         519            cpl     c
-0086 9294       520            mov     _P1_4,c
-0088            521   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:145: P1_3 = 1;
-0088 D293       522            setb    _P1_3
-008A            523   L003008?:
-008A            524   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:147: if(pwmRight < 0)
-008A E531       525            mov     a,(_pwmRight + 1)
-008C 30E780     526            jnb     acc.7,L003011?
-008F            527   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:149: P1_3 = ((-1) * pwmRight > pwmCount) ? 0:1;
-008F C3         528            clr     c
-0090 E4         529            clr     a
-0091 9530       530            subb    a,_pwmRight
-0093 FA         531            mov     r2,a
-0094 E4         532            clr     a
-0095 9531       533            subb    a,(_pwmRight + 1)
-0097 FB         534            mov     r3,a
-0098 C3         535            clr     c
-0099 E5B0       536            mov     a,_pwmCount
-009B 9A         537            subb    a,r2
-009C E5B1       538            mov     a,(_pwmCount + 1)
-009E 9B         539            subb    a,r3
-009F 9240       540            mov  _pwmCounter_sloc0_1_0,c
-00A1 B3         541            cpl     c
-00A2 9293       542            mov     _P1_3,c
-00A4            543   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:150: P1_4 = 1;
-00A4 D294       544            setb    _P1_4
-00A6            545   L003011?:
-00A6 D0D0       546            pop     psw
-00A8 D003       547            pop     ar3
-00AA D002       548            pop     ar2
-00AC D0F0       549            pop     b
-00AE D0E0       550            pop     acc
-00B0 32         551            reti
-00B1            552   ;        eliminated unneeded push/pop dpl
-00B1            553   ;        eliminated unneeded push/pop dph
-00B1            554   ;------------------------------------------------------------
-00B1            555   ;Allocation info for local variables in function '_c51_external_startup'
-00B1            556   ;------------------------------------------------------------
-00B1            557   ;------------------------------------------------------------
-00B1            558   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:156: unsigned char _c51_external_startup(void)
-00B1            559   ;        -----------------------------------------
-00B1            560   ;         function _c51_external_startup
-00B1            561   ;        -----------------------------------------
-00B1            562   __c51_external_startup:
-00B1            563   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:159: P0M0 = 0;         P0M1 = 0;
-00B1 75E600     564            mov     _P0M0,#0x00
-00B4 75E700     565            mov     _P0M1,#0x00
-00B7            566   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:160: P1M0 = 0;         P1M1 = 0;
-00B7 75D600     567            mov     _P1M0,#0x00
-00BA 75D700     568            mov     _P1M1,#0x00
-00BD            569   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:161: P2M0 = 0;         P2M1 = 0;
-00BD 75CE00     570            mov     _P2M0,#0x00
-00C0 75CF00     571            mov     _P2M1,#0x00
-00C3            572   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:162: P3M0 = 0;         P3M1 = 0;
-00C3 75C600     573            mov     _P3M0,#0x00
-00C6 75C700     574            mov     _P3M1,#0x00
-00C9            575   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:163: AUXR = 0B_0001_0001; // 1152 bytes of internal XDATA, P4.4 is a general purpose I/O
-00C9 758E11     576            mov     _AUXR,#0x11
-00CC            577   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:164: P4M0 = 0;         P4M1 = 0;
-00CC 75BE00     578            mov     _P4M0,#0x00
-00CF 75BF00     579            mov     _P4M1,#0x00
-00D2            580   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:168: PCON |= 0x80;
-00D2 438780     581            orl     _PCON,#0x80
-00D5            582   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:169: SCON = 0x52;
-00D5 759852     583            mov     _SCON,#0x52
-00D8            584   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:170: BDRCON = 0;
-00D8 759B00     585            mov     _BDRCON,#0x00
-00DB            586   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:171: BRL = BRG_VAL;
-00DB 759AFA     587            mov     _BRL,#0xFA
-00DE            588   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:172: BDRCON = BRR | TBCK | RBCK | SPD;
-00DE 759B1E     589            mov     _BDRCON,#0x1E
-00E1            590   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:174: TMOD = 0x01;      // Timer 0 as 16-bit timer      
-00E1 758901     591            mov     _TMOD,#0x01
-00E4            592   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:175: TH0 = RH0 = TIMER0_RELOAD_VALUE / 0x100;
-00E4 75F3FF     593            mov     _RH0,#0xFF
-00E7 758CFF     594            mov     _TH0,#0xFF
-00EA            595   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:176: TL0 = RL0 = TIMER0_RELOAD_VALUE % 0x100;
-00EA 75F248     596            mov     _RL0,#0x48
-00ED 758A48     597            mov     _TL0,#0x48
-00F0            598   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:177: TR0 = 1;
-00F0 D28C       599            setb    _TR0
-00F2            600   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:178: ET0 = 1;  // Enable timer 0 interrupt
-00F2 D2A9       601            setb    _ET0
-00F4            602   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:179: EX0 = 1;  // Enable external interrupt 0
-00F4 D2A8       603            setb    _EX0
-00F6            604   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:180: IT0 = 1;
-00F6 D288       605            setb    _IT0
-00F8            606   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:181: EA = 1;   // Enable global interrupts
-00F8 D2AF       607            setb    _EA
-00FA            608   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:182: tether=0;
-00FA E4         609            clr     a
-00FB F5B0       610            mov     _tether,a
-00FD F5B1       611            mov     (_tether + 1),a
-00FF            612   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:183: direction=1;
-00FF 75F001     613            mov     _direction,#0x01
-0102 E4         614            clr     a
-0103 F5F1       615            mov     (_direction + 1),a
-0105            616   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:184: P2_2=1;
-0105 D2A2       617            setb    _P2_2
-0107            618   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:185: P2_1=1;
-0107 D2A1       619            setb    _P2_1
-0109            620   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:186: P2_0=1;
-0109 D2A0       621            setb    _P2_0
-010B            622   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:187: return 0;
-010B 758200     623            mov     dpl,#0x00
-010E 22         624            ret
-010F            625   ;------------------------------------------------------------
-010F            626   ;Allocation info for local variables in function 'main'
-010F            627   ;------------------------------------------------------------
-010F            628   ;i                         Allocated to registers r2 r3 
-010F            629   ;------------------------------------------------------------
-010F            630   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:191: int main (void)
-010F            631   ;        -----------------------------------------
-010F            632   ;         function main
-010F            633   ;        -----------------------------------------
-010F            634   _main:
-010F            635   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:193: distanceLeft=15;
-010F 75F00F     636            mov     _distanceLeft,#0x0F
-0112 E4         637            clr     a
-0113 F5F1       638            mov     (_distanceLeft + 1),a
-0115            639   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:194: distanceRight=15;         
-0115 75B00F     640            mov     _distanceRight,#0x0F
-0118 E4         641            clr     a
-0119 F5B1       642            mov     (_distanceRight + 1),a
-011B            643   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:195: Stage=2;
-011B 753002     644            mov     _Stage,#0x02
-011E E4         645            clr     a
-011F F531       646            mov     (_Stage + 1),a
-0121            647   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:196: pwmLeft=0;
-0121            648   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:197: pwmRight=0;
-0121 E4         649            clr     a
-0122 F570       650            mov     _pwmLeft,a
-0124 F571       651            mov     (_pwmLeft + 1),a
-0126 F530       652            mov     _pwmRight,a
-0128 F531       653            mov     (_pwmRight + 1),a
-012A            654   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:198: while (1)
-012A            655   L005030?:
-012A            656   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:200: instruction = 0;
-012A E4         657            clr     a
-012B F570       658            mov     _instruction,a
-012D F571       659            mov     (_instruction + 1),a
-012F            660   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:202: while (instruction == 0)
-012F            661   L005001?:
-012F E570       662            mov     a,_instruction
-0131 4571       663            orl     a,(_instruction + 1)
-0133 7001       664            jnz     L005003?
-0135            665   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:205: if(distanceLeft != distanceRight)
-0135 E5B0       666            mov     a,_distanceRight
-0137 E5B1       667            mov     a,(_distanceRight + 1)
-0139 E5F0       668            mov     a,_distanceLeft
-013B E5F1       669            mov     a,(_distanceLeft + 1)
-013D            670   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:210: P2_2=1;
-013D D2A2       671            setb    _P2_2
-013F            672   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:211: P2_1=1;
-013F D2A1       673            setb    _P2_1
-0141            674   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:212: P2_0=0;
-0141 C2A0       675            clr     _P2_0
-0143            676   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:213: printf("\nIntstruction: ");
-0143 74C0       677            mov     a,#__str_0
-0145 C0E0       678            push    acc
-0147 7484       679            mov     a,#(__str_0 >> 8)
-0149 C0E0       680            push    acc
-014B 7480       681            mov     a,#0x80
-014D C0E0       682            push    acc
-014F 120100     683            lcall   _printf
-0152 1581       684            dec     sp
-0154 1581       685            dec     sp
-0156 1581       686            dec     sp
-0158            687   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:214: scanf("%ud", &instruction);
-0158 7470       688            mov     a,#_instruction
-015A C0E0       689            push    acc
-015C 7440       690            mov     a,#(_instruction >> 8)
-015E C0E0       691            push    acc
-0160 7440       692            mov     a,#0x40
-0162 C0E0       693            push    acc
-0164 7480       694            mov     a,#__str_1
-0166 C0E0       695            push    acc
-0168 7485       696            mov     a,#(__str_1 >> 8)
-016A C0E0       697            push    acc
-016C 7480       698            mov     a,#0x80
-016E C0E0       699            push    acc
-0170 120100     700            lcall   _scanf
-0173 E581       701            mov     a,sp
-0175 24FA       702            add     a,#0xfa
-0177 F581       703            mov     sp,a
-0179 8001       704            sjmp    L005001?
-017B            705   L005003?:
-017B            706   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:217: if(instruction==1)                        //move forward
-017B 7401       707            mov     a,#0x01
-017D B57000     708            cjne    a,_instruction,L005055?
-0180 E4         709            clr     a
-0181 B57100     710            cjne    a,(_instruction + 1),L005055?
-0184 8001       711            sjmp    L005056?
-0186            712   L005055?:
-0186 8001       713            sjmp    L005027?
-0188            714   L005056?:
-0188            715   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:219: if(Stage!=0)
-0188 E530       716            mov     a,_Stage
-018A 4531       717            orl     a,(_Stage + 1)
-018C 6001       718            jz      L005005?
-018E            719   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:220: Stage--;
-018E 1530       720            dec     _Stage
-0190 74FF       721            mov     a,#0xff
-0192 B53000     722            cjne    a,_Stage,L005058?
-0195 1531       723            dec     (_Stage + 1)
-0197            724   L005058?:
-0197            725   L005005?:
-0197            726   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:221: printf("\nMove forwrds");
-0197 7440       727            mov     a,#__str_2
-0199 C0E0       728            push    acc
-019B 7487       729            mov     a,#(__str_2 >> 8)
-019D C0E0       730            push    acc
-019F 7480       731            mov     a,#0x80
-01A1 C0E0       732            push    acc
-01A3 120100     733            lcall   _printf
-01A6 1581       734            dec     sp
-01A8 1581       735            dec     sp
-01AA 1581       736            dec     sp
-01AC 020100     737            ljmp    L005030?
-01AF            738   L005027?:
-01AF            739   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:222: }else if(instruction==2)                  //move backwards
-01AF 7402       740            mov     a,#0x02
-01B1 B57080     741            cjne    a,_instruction,L005059?
-01B4 E4         742            clr     a
-01B5 B57180     743            cjne    a,(_instruction + 1),L005059?
-01B8 8001       744            sjmp    L005060?
-01BA            745   L005059?:
-01BA 8001       746            sjmp    L005024?
-01BC            747   L005060?:
-01BC            748   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:224: if(Stage!=NSTAGES)
-01BC 9012F0     749            mov     dptr,#_NSTAGES
-01BF E4         750            clr     a
-01C0 93         751            movc    a,@a+dptr
-01C1 FA         752            mov     r2,a
-01C2 7401       753            mov     a,#0x01
-01C4 93         754            movc    a,@a+dptr
-01C5 FB         755            mov     r3,a
-01C6 EA         756            mov     a,r2
-01C7 B53040     757            cjne    a,_Stage,L005061?
-01CA EB         758            mov     a,r3
-01CB B53140     759            cjne    a,(_Stage + 1),L005061?
-01CE 8001       760            sjmp    L005007?
-01D0            761   L005061?:
-01D0            762   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:225: Stage++;
-01D0 7401       763            mov     a,#0x01
-01D2 2530       764            add     a,_Stage
-01D4 F530       765            mov     _Stage,a
-01D6 E4         766            clr     a
-01D7 3531       767            addc    a,(_Stage + 1)
-01D9 F531       768            mov     (_Stage + 1),a
-01DB            769   L005007?:
-01DB            770   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:226: printf("\n Move back");   
-01DB 74C0       771            mov     a,#__str_3
-01DD C0E0       772            push    acc
-01DF 7488       773            mov     a,#(__str_3 >> 8)
-01E1 C0E0       774            push    acc
-01E3 7480       775            mov     a,#0x80
-01E5 C0E0       776            push    acc
-01E7 120100     777            lcall   _printf
-01EA 1581       778            dec     sp
-01EC 1581       779            dec     sp
-01EE 1581       780            dec     sp
-01F0 020100     781            ljmp    L005030?
-01F3            782   L005024?:
-01F3            783   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:227: }else if(instruction==3)                  //uturn
-01F3 7403       784            mov     a,#0x03
-01F5 B57000     785            cjne    a,_instruction,L005062?
-01F8 E4         786            clr     a
-01F9 B57100     787            cjne    a,(_instruction + 1),L005062?
-01FC 8001       788            sjmp    L005063?
-01FE            789   L005062?:
-01FE 8001       790            sjmp    L005021?
-0200            791   L005063?:
-0200            792   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:229: uTurn();
-0200 120100     793            lcall   _uTurn
-0203            794   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:230: printf("\nturned");
-0203 74C0       795            mov     a,#__str_4
-0205 C0E0       796            push    acc
-0207 7489       797            mov     a,#(__str_4 >> 8)
-0209 C0E0       798            push    acc
-020B 7480       799            mov     a,#0x80
-020D C0E0       800            push    acc
-020F 120100     801            lcall   _printf
-0212 1581       802            dec     sp
-0214 1581       803            dec     sp
-0216 1581       804            dec     sp
-0218 020100     805            ljmp    L005030?
-021B            806   L005021?:
-021B            807   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:231: }else if(instruction==4)                  //parralell park
-021B 7404       808            mov     a,#0x04
-021D B57000     809            cjne    a,_instruction,L005064?
-0220 E4         810            clr     a
-0221 B57100     811            cjne    a,(_instruction + 1),L005064?
-0224 020100     812            ljmp    L005030?
-0227            813   L005064?:
-0227            814   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:234: }else if(instruction==5)
-0227 7405       815            mov     a,#0x05
-0229 B57040     816            cjne    a,_instruction,L005065?
-022C E4         817            clr     a
-022D B57140     818            cjne    a,(_instruction + 1),L005065?
-0230 8001       819            sjmp    L005066?
-0232            820   L005065?:
-0232 020100     821            ljmp    L005015?
-0235            822   L005066?:
-0235            823   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:238: instruction=0;
-0235 E4         824            clr     a
-0236 F570       825            mov     _instruction,a
-0238 F571       826            mov     (_instruction + 1),a
-023A            827   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:239: while(instruction!=5);
-023A            828   L005008?:
-023A 7405       829            mov     a,#0x05
-023C B57040     830            cjne    a,_instruction,L005067?
-023F E4         831            clr     a
-0240 B57140     832            cjne    a,(_instruction + 1),L005067?
-0243 8001       833            sjmp    L005068?
-0245            834   L005067?:
-0245 8001       835            sjmp    L005008?
-0247            836   L005068?:
-0247            837   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:241: for(i=0;i<NSTAGES;i++)
-0247 7A00       838            mov     r2,#0x00
-0249 7B00       839            mov     r3,#0x00
-024B            840   L005032?:
-024B 9012F0     841            mov     dptr,#_NSTAGES
-024E E4         842            clr     a
-024F 93         843            movc    a,@a+dptr
-0250 FC         844            mov     r4,a
-0251 7401       845            mov     a,#0x01
-0253 93         846            movc    a,@a+dptr
-0254 FD         847            mov     r5,a
-0255 C3         848            clr     c
-0256 EA         849            mov     a,r2
-0257 9C         850            subb    a,r4
-0258 EB         851            mov     a,r3
-0259 6480       852            xrl     a,#0x80
-025B 8DF0       853            mov     b,r5
-025D 63F080     854            xrl     b,#0x80
-0260 95F0       855            subb    a,b
-0262 4001       856            jc      L005069?
-0264 020100     857            ljmp    L005030?
-0267            858   L005069?:
-0267            859   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:243: if(distanceLeft>PRESETS[i]-3 && distanceLeft<PRESETS[i]+3)
-0267 8A04       860            mov     ar4,r2
-0269 EB         861            mov     a,r3
-026A CC         862            xch     a,r4
-026B 25E0       863            add     a,acc
-026D CC         864            xch     a,r4
-026E 33         865            rlc     a
-026F FD         866            mov     r5,a
-0270 EC         867            mov     a,r4
-0271 24B0       868            add     a,#_PRESETS
-0273 F582       869            mov     dpl,a
-0275 ED         870            mov     a,r5
-0276 3412       871            addc    a,#(_PRESETS >> 8)
-0278 F583       872            mov     dph,a
-027A E4         873            clr     a
-027B 93         874            movc    a,@a+dptr
-027C FC         875            mov     r4,a
-027D A3         876            inc     dptr
-027E E4         877            clr     a
-027F 93         878            movc    a,@a+dptr
-0280 FD         879            mov     r5,a
-0281 EC         880            mov     a,r4
-0282 24FD       881            add     a,#0xfd
-0284 FE         882            mov     r6,a
-0285 ED         883            mov     a,r5
-0286 34FF       884            addc    a,#0xff
-0288 FF         885            mov     r7,a
-0289 A8F0       886            mov     r0,_distanceLeft
-028B A9F1       887            mov     r1,(_distanceLeft + 1)
-028D C3         888            clr     c
-028E EE         889            mov     a,r6
-028F 98         890            subb    a,r0
-0290 EF         891            mov     a,r7
-0291 99         892            subb    a,r1
-0292 5001       893            jnc     L005034?
-0294 7403       894            mov     a,#0x03
-0296 2C         895            add     a,r4
-0297 FC         896            mov     r4,a
-0298 E4         897            clr     a
-0299 3D         898            addc    a,r5
-029A FD         899            mov     r5,a
-029B AEF0       900            mov     r6,_distanceLeft
-029D AFF1       901            mov     r7,(_distanceLeft + 1)
-029F C3         902            clr     c
-02A0 EE         903            mov     a,r6
-02A1 9C         904            subb    a,r4
-02A2 EF         905            mov     a,r7
-02A3 9D         906            subb    a,r5
-02A4 5001       907            jnc     L005034?
-02A6            908   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:244: Stage=i;
-02A6 8A30       909            mov     _Stage,r2
-02A8 8B31       910            mov     (_Stage + 1),r3
-02AA            911   L005034?:
-02AA            912   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:241: for(i=0;i<NSTAGES;i++)
-02AA 0A         913            inc     r2
-02AB BA00C0     914            cjne    r2,#0x00,L005032?
-02AE 0B         915            inc     r3
-02AF 8001       916            sjmp    L005032?
-02B1            917   L005015?:
-02B1            918   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:249: printf("\nERROR");
-02B1 74C0       919            mov     a,#__str_5
-02B3 C0E0       920            push    acc
-02B5 748C       921            mov     a,#(__str_5 >> 8)
-02B7 C0E0       922            push    acc
-02B9 7480       923            mov     a,#0x80
-02BB C0E0       924            push    acc
-02BD 120100     925            lcall   _printf
-02C0 1581       926            dec     sp
-02C2 1581       927            dec     sp
-02C4 1581       928            dec     sp
-02C6            929   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:250: P2_2=0;
-02C6 C2A2       930            clr     _P2_2
-02C8            931   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:251: P2_1=1;
-02C8 D2A1       932            setb    _P2_1
-02CA            933   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:252: P2_0=1;
-02CA D2A0       934            setb    _P2_0
-02CC            935   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:255: return 0;
-02CC 020100     936            ljmp    L005030?
-02CF            937   ;------------------------------------------------------------
-02CF            938   ;Allocation info for local variables in function 'getDistance'
-02CF            939   ;------------------------------------------------------------
-02CF            940   ;------------------------------------------------------------
-02CF            941   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:266: void getDistance() 
-02CF            942   ;        -----------------------------------------
-02CF            943   ;         function getDistance
-02CF            944   ;        -----------------------------------------
-02CF            945   _getDistance:
-02CF            946   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:270: }
-02CF 22         947            ret
-02D0            948   ;------------------------------------------------------------
-02D0            949   ;Allocation info for local variables in function 'turnCar'
-02D0            950   ;------------------------------------------------------------
-02D0            951   ;------------------------------------------------------------
-02D0            952   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:277: void turnCar()
-02D0            953   ;        -----------------------------------------
-02D0            954   ;         function turnCar
-02D0            955   ;        -----------------------------------------
-02D0            956   _turnCar:
-02D0            957   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:279: P2_2=1;
-02D0 D2A2       958            setb    _P2_2
-02D2            959   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:280: P2_1=0;
-02D2 C2A1       960            clr     _P2_1
-02D4            961   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:281: P2_0=1;
-02D4 D2A0       962            setb    _P2_0
-02D6            963   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:283: while(distanceLeft < distanceRight+ANGLEBUFFER)
-02D6            964   L007001?:
-02D6 901330     965            mov     dptr,#_ANGLEBUFFER
-02D9 E4         966            clr     a
-02DA 93         967            movc    a,@a+dptr
-02DB FA         968            mov     r2,a
-02DC 7401       969            mov     a,#0x01
-02DE 93         970            movc    a,@a+dptr
-02DF FB         971            mov     r3,a
-02E0 EA         972            mov     a,r2
-02E1 25B0       973            add     a,_distanceRight
-02E3 FC         974            mov     r4,a
-02E4 EB         975            mov     a,r3
-02E5 35B1       976            addc    a,(_distanceRight + 1)
-02E7 FD         977            mov     r5,a
-02E8 C3         978            clr     c
-02E9 E5F0       979            mov     a,_distanceLeft
-02EB 9C         980            subb    a,r4
-02EC E5F1       981            mov     a,(_distanceLeft + 1)
-02EE 6480       982            xrl     a,#0x80
-02F0 8DF0       983            mov     b,r5
-02F2 63F080     984            xrl     b,#0x80
-02F5 95F0       985            subb    a,b
-02F7 5001       986            jnc     L007004?
-02F9            987   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:285: pwmLeft = TURNSPEED;
-02F9 9013B0     988            mov     dptr,#_TURNSPEED
-02FC E4         989            clr     a
-02FD 93         990            movc    a,@a+dptr
-02FE FC         991            mov     r4,a
-02FF 7401       992            mov     a,#0x01
-0301 93         993            movc    a,@a+dptr
-0302 FD         994            mov     r5,a
-0303 8C70       995            mov     _pwmLeft,r4
-0305 8D71       996            mov     (_pwmLeft + 1),r5
-0307            997   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:286: pwmRight = (-TURNSPEED);
-0307 C3         998            clr     c
-0308 E4         999            clr     a
-0309 9C        1000            subb    a,r4
-030A F530      1001            mov     _pwmRight,a
-030C E4        1002            clr     a
-030D 9D        1003            subb    a,r5
-030E F531      1004            mov     (_pwmRight + 1),a
-0310           1005   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:288: while(distanceLeft+ANGLEBUFFER > distanceRight)
-0310 8001      1006            sjmp    L007001?
-0312           1007   L007004?:
-0312 EA        1008            mov     a,r2
-0313 25F0      1009            add     a,_distanceLeft
-0315 FC        1010            mov     r4,a
-0316 EB        1011            mov     a,r3
-0317 35F1      1012            addc    a,(_distanceLeft + 1)
-0319 FD        1013            mov     r5,a
-031A C3        1014            clr     c
-031B E5B0      1015            mov     a,_distanceRight
-031D 9C        1016            subb    a,r4
-031E E5B1      1017            mov     a,(_distanceRight + 1)
-0320 6480      1018            xrl     a,#0x80
-0322 8DF0      1019            mov     b,r5
-0324 63F080    1020            xrl     b,#0x80
-0327 95F0      1021            subb    a,b
-0329 5001      1022            jnc     L007006?
-032B           1023   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:290: pwmLeft = (-TURNSPEED);
-032B 9013B0    1024            mov     dptr,#_TURNSPEED
-032E E4        1025            clr     a
-032F 93        1026            movc    a,@a+dptr
-0330 FC        1027            mov     r4,a
-0331 7401      1028            mov     a,#0x01
-0333 93        1029            movc    a,@a+dptr
-0334 FD        1030            mov     r5,a
-0335 C3        1031            clr     c
-0336 E4        1032            clr     a
-0337 9C        1033            subb    a,r4
-0338 F570      1034            mov     _pwmLeft,a
-033A E4        1035            clr     a
-033B 9D        1036            subb    a,r5
-033C F571      1037            mov     (_pwmLeft + 1),a
-033E           1038   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:291: pwmRight = TURNSPEED;
-033E 8C30      1039            mov     _pwmRight,r4
-0340 8D31      1040            mov     (_pwmRight + 1),r5
-0342 8001      1041            sjmp    L007004?
-0344           1042   L007006?:
-0344           1043   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:293: pwmLeft=pwmRight=0;
-0344 E4        1044            clr     a
-0345 F530      1045            mov     _pwmRight,a
-0347 F531      1046            mov     (_pwmRight + 1),a
-0349 F570      1047            mov     _pwmLeft,a
-034B F571      1048            mov     (_pwmLeft + 1),a
-034D           1049   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:294: return;
-034D 22        1050            ret
-034E           1051   ;------------------------------------------------------------
-034E           1052   ;Allocation info for local variables in function 'moveCar'
-034E           1053   ;------------------------------------------------------------
-034E           1054   ;------------------------------------------------------------
-034E           1055   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:302: void moveCar()
-034E           1056   ;        -----------------------------------------
-034E           1057   ;         function moveCar
-034E           1058   ;        -----------------------------------------
-034E           1059   _moveCar:
-034E           1060   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:305: while (distanceRight+DISTANCEBUFFER > PRESETS[Stage] && distanceLeft==distanceRight)
-034E           1061   L008002?:
-034E 901370    1062            mov     dptr,#_DISTANCEBUFFER
-0351 E4        1063            clr     a
-0352 93        1064            movc    a,@a+dptr
-0353 FA        1065            mov     r2,a
-0354 7401      1066            mov     a,#0x01
-0356 93        1067            movc    a,@a+dptr
-0357 FB        1068            mov     r3,a
-0358 EA        1069            mov     a,r2
-0359 25B0      1070            add     a,_distanceRight
-035B FC        1071            mov     r4,a
-035C EB        1072            mov     a,r3
-035D 35B1      1073            addc    a,(_distanceRight + 1)
-035F FD        1074            mov     r5,a
-0360 E530      1075            mov     a,_Stage
-0362 25E0      1076            add     a,acc
-0364 FE        1077            mov     r6,a
-0365 E531      1078            mov     a,(_Stage + 1)
-0367 33        1079            rlc     a
-0368 FF        1080            mov     r7,a
-0369 EE        1081            mov     a,r6
-036A 24B0      1082            add     a,#_PRESETS
-036C F582      1083            mov     dpl,a
-036E EF        1084            mov     a,r7
-036F 3412      1085            addc    a,#(_PRESETS >> 8)
-0371 F583      1086            mov     dph,a
-0373 E4        1087            clr     a
-0374 93        1088            movc    a,@a+dptr
-0375 FE        1089            mov     r6,a
-0376 A3        1090            inc     dptr
-0377 E4        1091            clr     a
-0378 93        1092            movc    a,@a+dptr
-0379 FF        1093            mov     r7,a
-037A C3        1094            clr     c
-037B EE        1095            mov     a,r6
-037C 9C        1096            subb    a,r4
-037D EF        1097            mov     a,r7
-037E 9D        1098            subb    a,r5
-037F 5001      1099            jnc     L008006?
-0381 E5B0      1100            mov     a,_distanceRight
-0383 B5F000    1101            cjne    a,_distanceLeft,L008006?
-0386 E5B1      1102            mov     a,(_distanceRight + 1)
-0388 B5F100    1103            cjne    a,(_distanceLeft + 1),L008006?
-038B           1104   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:307: P2_2=1;
-038B D2A2      1105            setb    _P2_2
-038D           1106   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:308: P2_1=0;
-038D C2A1      1107            clr     _P2_1
-038F           1108   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:309: P2_0=1;
-038F D2A0      1109            setb    _P2_0
-0391           1110   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:310: pwmLeft = MOVESPEED;
-0391 9013F0    1111            mov     dptr,#_MOVESPEED
-0394 E4        1112            clr     a
-0395 93        1113            movc    a,@a+dptr
-0396 FC        1114            mov     r4,a
-0397 7401      1115            mov     a,#0x01
-0399 93        1116            movc    a,@a+dptr
-039A FD        1117            mov     r5,a
-039B 8C70      1118            mov     _pwmLeft,r4
-039D 8D71      1119            mov     (_pwmLeft + 1),r5
-039F           1120   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:311: pwmRight = MOVESPEED;
-039F 8C30      1121            mov     _pwmRight,r4
-03A1 8D31      1122            mov     (_pwmRight + 1),r5
-03A3           1123   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:314: while(distanceRight < PRESETS[Stage]+DISTANCEBUFFER && distanceLeft==distanceRight)
-03A3 8001      1124            sjmp    L008002?
-03A5           1125   L008006?:
-03A5 E530      1126            mov     a,_Stage
-03A7 25E0      1127            add     a,acc
-03A9 FC        1128            mov     r4,a
-03AA E531      1129            mov     a,(_Stage + 1)
-03AC 33        1130            rlc     a
-03AD FD        1131            mov     r5,a
-03AE EC        1132            mov     a,r4
-03AF 24B0      1133            add     a,#_PRESETS
-03B1 F582      1134            mov     dpl,a
-03B3 ED        1135            mov     a,r5
-03B4 3412      1136            addc    a,#(_PRESETS >> 8)
-03B6 F583      1137            mov     dph,a
-03B8 E4        1138            clr     a
-03B9 93        1139            movc    a,@a+dptr
-03BA FC        1140            mov     r4,a
-03BB A3        1141            inc     dptr
-03BC E4        1142            clr     a
-03BD 93        1143            movc    a,@a+dptr
-03BE FD        1144            mov     r5,a
-03BF EA        1145            mov     a,r2
-03C0 2C        1146            add     a,r4
-03C1 FC        1147            mov     r4,a
-03C2 EB        1148            mov     a,r3
-03C3 3D        1149            addc    a,r5
-03C4 FD        1150            mov     r5,a
-03C5 AEB0      1151            mov     r6,_distanceRight
-03C7 AFB1      1152            mov     r7,(_distanceRight + 1)
-03C9 C3        1153            clr     c
-03CA EE        1154            mov     a,r6
-03CB 9C        1155            subb    a,r4
-03CC EF        1156            mov     a,r7
-03CD 9D        1157            subb    a,r5
-03CE 5001      1158            jnc     L008008?
-03D0 E5B0      1159            mov     a,_distanceRight
-03D2 B5F040    1160            cjne    a,_distanceLeft,L008008?
-03D5 E5B1      1161            mov     a,(_distanceRight + 1)
-03D7 B5F140    1162            cjne    a,(_distanceLeft + 1),L008008?
-03DA           1163   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:316: pwmLeft = (-MOVESPEED); 
-03DA 9013F0    1164            mov     dptr,#_MOVESPEED
-03DD E4        1165            clr     a
-03DE 93        1166            movc    a,@a+dptr
-03DF FC        1167            mov     r4,a
-03E0 7401      1168            mov     a,#0x01
-03E2 93        1169            movc    a,@a+dptr
-03E3 FD        1170            mov     r5,a
-03E4 C3        1171            clr     c
-03E5 E4        1172            clr     a
-03E6 9C        1173            subb    a,r4
-03E7 FC        1174            mov     r4,a
-03E8 E4        1175            clr     a
-03E9 9D        1176            subb    a,r5
-03EA FD        1177            mov     r5,a
-03EB 8C70      1178            mov     _pwmLeft,r4
-03ED 8D71      1179            mov     (_pwmLeft + 1),r5
-03EF           1180   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:317: pwmRight = (-MOVESPEED);          
-03EF 8C30      1181            mov     _pwmRight,r4
-03F1 8D31      1182            mov     (_pwmRight + 1),r5
-03F3           1183   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:318: P2_2=1;
-03F3 D2A2      1184            setb    _P2_2
-03F5           1185   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:319: P2_1=0;
-03F5 C2A1      1186            clr     _P2_1
-03F7           1187   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:320: P2_0=1;
-03F7 D2A0      1188            setb    _P2_0
-03F9 8001      1189            sjmp    L008006?
-03FB           1190   L008008?:
-03FB           1191   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:323: pwmLeft=pwmRight=0;
-03FB E4        1192            clr     a
-03FC F530      1193            mov     _pwmRight,a
-03FE F531      1194            mov     (_pwmRight + 1),a
-0400 F570      1195            mov     _pwmLeft,a
-0402 F571      1196            mov     (_pwmLeft + 1),a
-0404           1197   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:324: return;
-0404 22        1198            ret
-0405           1199   ;------------------------------------------------------------
-0405           1200   ;Allocation info for local variables in function 'uTurn'
-0405           1201   ;------------------------------------------------------------
-0405           1202   ;------------------------------------------------------------
-0405           1203   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:327: void uTurn()
-0405           1204   ;        -----------------------------------------
-0405           1205   ;         function uTurn
-0405           1206   ;        -----------------------------------------
-0405           1207   _uTurn:
-0405           1208   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:329: P2_2=1;
-0405 D2A2      1209            setb    _P2_2
-0407           1210   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:330: P2_1=0;
-0407 C2A1      1211            clr     _P2_1
-0409           1212   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:331: P2_0=1;
-0409 D2A0      1213            setb    _P2_0
-040B           1214   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:332: pwmLeft=TURNSPEED;
-040B 9013B0    1215            mov     dptr,#_TURNSPEED
-040E E4        1216            clr     a
-040F 93        1217            movc    a,@a+dptr
-0410 FA        1218            mov     r2,a
-0411 7401      1219            mov     a,#0x01
-0413 93        1220            movc    a,@a+dptr
-0414 FB        1221            mov     r3,a
-0415 8A70      1222            mov     _pwmLeft,r2
-0417 8B71      1223            mov     (_pwmLeft + 1),r3
-0419           1224   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:333: pwmRight=(-TURNSPEED);
-0419 C3        1225            clr     c
-041A E4        1226            clr     a
-041B 9A        1227            subb    a,r2
-041C F530      1228            mov     _pwmRight,a
-041E E4        1229            clr     a
-041F 9B        1230            subb    a,r3
-0420 F531      1231            mov     (_pwmRight + 1),a
-0422           1232   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:334: wait1s();
-0422 120100    1233            lcall   _wait1s
-0425           1234   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:335: pwmLeft=0;
-0425           1235   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:336: pwmRight=0;
-0425 E4        1236            clr     a
-0426 F570      1237            mov     _pwmLeft,a
-0428 F571      1238            mov     (_pwmLeft + 1),a
-042A F530      1239            mov     _pwmRight,a
-042C F531      1240            mov     (_pwmRight + 1),a
-042E           1241   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:337: return;
-042E 22        1242            ret
-042F           1243   ;------------------------------------------------------------
-042F           1244   ;Allocation info for local variables in function 'wait2ms'
-042F           1245   ;------------------------------------------------------------
-042F           1246   ;------------------------------------------------------------
-042F           1247   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:341: void wait2ms (void)
-042F           1248   ;        -----------------------------------------
-042F           1249   ;         function wait2ms
-042F           1250   ;        -----------------------------------------
-042F           1251   _wait2ms:
-042F           1252   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:351: _endasm;
-042F           1253            
-042F           1254     ;For a 22.1184MHz crystal one machine cycle
-042F           1255     ;takes 12/22.1184MHz=0.5425347us
-042F           1256             J3:
-042F 7C0A      1257            mov R4, #10
-0431           1258             J2:
-0431 7BB8      1259            mov R3, #184
-0433           1260             J1:
-0433 DB00      1261            djnz R3, J1 ; 2 machine cycles-> 2*0.5425347us*184=200us
-0435 DCC0      1262                 djnz R4, J2 ; 200us*250=0.05s
-0437 22        1263                 ret
-0438           1264                
-0438 22        1265            ret
-0439           1266   ;------------------------------------------------------------
-0439           1267   ;Allocation info for local variables in function 'wait1s'
-0439           1268   ;------------------------------------------------------------
-0439           1269   ;------------------------------------------------------------
-0439           1270   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:355: void wait1s (void)
-0439           1271   ;        -----------------------------------------
-0439           1272   ;         function wait1s
-0439           1273   ;        -----------------------------------------
-0439           1274   _wait1s:
-0439           1275   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:367: _endasm;
-0439           1276            
-0439           1277     ;For a 22.1184MHz crystal one machine cycle
-0439           1278     ;takes 12/22.1184MHz=0.5425347us
-0439 7A5A      1279                 mov R2, #90
-043B           1280             L3:
-043B 79B4      1281            mov R1, #180
-043D           1282             L2:
-043D 78B4      1283            mov R0, #180
-043F           1284             L1:
-043F D8C0      1285            djnz R0, L1 ; 2 machine cycles-> 2*0.5425347us*184=200us
-0441 D980      1286                 djnz R1, L2 ; 200us*250=0.05s
-0443 DA40      1287                 djnz R2, L3 ; 0.05s*20=1s
-0445 22        1288                 ret
-0446           1289                
-0446 22        1290            ret
-0447           1291   ;------------------------------------------------------------
-0447           1292   ;Allocation info for local variables in function 'voltage'
-0447           1293   ;------------------------------------------------------------
-0447           1294   ;channel                   Allocated to registers 
-0447           1295   ;------------------------------------------------------------
-0447           1296   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:375: float voltage (unsigned char channel)
-0447           1297   ;        -----------------------------------------
-0447           1298   ;         function voltage
-0447           1299   ;        -----------------------------------------
-0447           1300   _voltage:
-0447           1301   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:377: return ((GetADC(channel) * 4.84) / 1023.0); // VCC=4.84V (measured)
-0447 120100    1302            lcall   _GetADC
-044A 120100    1303            lcall   ___uint2fs
-044D AA82      1304            mov     r2,dpl
-044F AB83      1305            mov     r3,dph
-0451 ACF0      1306            mov     r4,b
-0453 FD        1307            mov     r5,a
-0454 C002      1308            push    ar2
-0456 C003      1309            push    ar3
-0458 C004      1310            push    ar4
-045A C005      1311            push    ar5
-045C 90E148    1312            mov     dptr,#0xE148
-045F 75F09A    1313            mov     b,#0x9A
-0462 7440      1314            mov     a,#0x40
-0464 120100    1315            lcall   ___fsmul
-0467 AA82      1316            mov     r2,dpl
-0469 AB83      1317            mov     r3,dph
-046B ACF0      1318            mov     r4,b
-046D FD        1319            mov     r5,a
-046E E581      1320            mov     a,sp
-0470 24FC      1321            add     a,#0xfc
-0472 F581      1322            mov     sp,a
-0474 E4        1323            clr     a
-0475 C0E0      1324            push    acc
-0477 74C0      1325            mov     a,#0xC0
-0479 C0E0      1326            push    acc
-047B 747F      1327            mov     a,#0x7F
-047D C0E0      1328            push    acc
-047F 7444      1329            mov     a,#0x44
-0481 C0E0      1330            push    acc
-0483 8A82      1331            mov     dpl,r2
-0485 8B83      1332            mov     dph,r3
-0487 8CF0      1333            mov     b,r4
-0489 ED        1334            mov     a,r5
-048A 120100    1335            lcall   ___fsdiv
-048D AA82      1336            mov     r2,dpl
-048F AB83      1337            mov     r3,dph
-0491 ACF0      1338            mov     r4,b
-0493 FD        1339            mov     r5,a
-0494 E581      1340            mov     a,sp
-0496 24FC      1341            add     a,#0xfc
-0498 F581      1342            mov     sp,a
-049A 8A82      1343            mov     dpl,r2
-049C 8B83      1344            mov     dph,r3
-049E 8CF0      1345            mov     b,r4
-04A0 ED        1346            mov     a,r5
-04A1 22        1347            ret
-04A2           1348   ;------------------------------------------------------------
-04A2           1349   ;Allocation info for local variables in function 'SPIWrite'
-04A2           1350   ;------------------------------------------------------------
-04A2           1351   ;value                     Allocated to registers r2 
-04A2           1352   ;------------------------------------------------------------
-04A2           1353   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:380: void SPIWrite(unsigned char value)
-04A2           1354   ;        -----------------------------------------
-04A2           1355   ;         function SPIWrite
-04A2           1356   ;        -----------------------------------------
-04A2           1357   _SPIWrite:
-04A2 AA82      1358            mov     r2,dpl
-04A4           1359   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:382: SPSTA &= (~SPIF); // Clear the SPIF flag in SPSTA
-04A4 53C47F    1360            anl     _SPSTA,#0x7F
-04A7           1361   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:383: SPDAT = value;
-04A7 8AC5      1362            mov     _SPDAT,r2
-04A9           1363   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:384: while ((SPSTA & SPIF) != SPIF); //Wait for transmission to end
-04A9           1364   L013001?:
-04A9 7480      1365            mov     a,#0x80
-04AB 55C4      1366            anl     a,_SPSTA
-04AD FA        1367            mov     r2,a
-04AE BA80C0    1368            cjne    r2,#0x80,L013001?
-04B1 22        1369            ret
-04B2           1370   ;------------------------------------------------------------
-04B2           1371   ;Allocation info for local variables in function 'GetADC'
-04B2           1372   ;------------------------------------------------------------
-04B2           1373   ;channel                   Allocated to registers r2 
-04B2           1374   ;adc                       Allocated to registers r2 r3 
-04B2           1375   ;------------------------------------------------------------
-04B2           1376   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:388: unsigned int GetADC(unsigned char channel)
-04B2           1377   ;        -----------------------------------------
-04B2           1378   ;         function GetADC
-04B2           1379   ;        -----------------------------------------
-04B2           1380   _GetADC:
-04B2 AA82      1381            mov     r2,dpl
-04B4           1382   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:393: SPCON &= (~SPEN); // Disable SPI
-04B4 53C3BF    1383            anl     _SPCON,#0xBF
-04B7           1384   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:394: SPCON = MSTR | CPOL | CPHA | SPR1 | SPR0 | SSDIS;
-04B7 75C33F    1385            mov     _SPCON,#0x3F
-04BA           1386   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:395: SPCON |= SPEN; // Enable SPI
-04BA 43C340    1387            orl     _SPCON,#0x40
-04BD           1388   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:397: P1_4 = 0; // Activate the MCP3004 ADC.
-04BD C294      1389            clr     _P1_4
-04BF           1390   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:398: SPIWrite(channel | 0x18);         // Send start bit, single/diff* bit, D2, D1, and D0 bits.
-04BF 7418      1391            mov     a,#0x18
-04C1 4A        1392            orl     a,r2
-04C2 F582      1393            mov     dpl,a
-04C4 120100    1394            lcall   _SPIWrite
-04C7           1395   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:399: for (adc=0; adc < 10; adc++); // Wait for S/H to setup
-04C7 7A0A      1396            mov     r2,#0x0A
-04C9 7B00      1397            mov     r3,#0x00
-04CB           1398   L014003?:
-04CB 1A        1399            dec     r2
-04CC BAFF40    1400            cjne    r2,#0xff,L014009?
-04CF 1B        1401            dec     r3
-04D0           1402   L014009?:
-04D0 EA        1403            mov     a,r2
-04D1 4B        1404            orl     a,r3
-04D2 7001      1405            jnz     L014003?
-04D4           1406   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:400: SPIWrite(0x55); // Read bits 9 down to 4
-04D4 758255    1407            mov     dpl,#0x55
-04D7 120100    1408            lcall   _SPIWrite
-04DA           1409   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:401: adc=((SPDAT & 0x3f) * 0x100);
-04DA 743F      1410            mov     a,#0x3F
-04DC 55C5      1411            anl     a,_SPDAT
-04DE FB        1412            mov     r3,a
-04DF 7A00      1413            mov     r2,#0x00
-04E1           1414   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:402: SPIWrite(0x55);// Read bits 3 down to 0
-04E1 758255    1415            mov     dpl,#0x55
-04E4 C002      1416            push    ar2
-04E6 C003      1417            push    ar3
-04E8 120100    1418            lcall   _SPIWrite
-04EB D003      1419            pop     ar3
-04ED D002      1420            pop     ar2
-04EF           1421   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:403: P1_4 = 1; // Deactivate the MCP3004 ADC.
-04EF D294      1422            setb    _P1_4
-04F1           1423   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:404: adc += (SPDAT & 0xf0); // SPDR contains the low part of the result. 
-04F1 74F0      1424            mov     a,#0xF0
-04F3 55C5      1425            anl     a,_SPDAT
-04F5 FC        1426            mov     r4,a
-04F6 7D00      1427            mov     r5,#0x00
-04F8 EC        1428            mov     a,r4
-04F9 2A        1429            add     a,r2
-04FA FA        1430            mov     r2,a
-04FB ED        1431            mov     a,r5
-04FC 3B        1432            addc    a,r3
-04FD           1433   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:405: adc >>= 4;
-04FD C4        1434            swap    a
-04FE CA        1435            xch     a,r2
-04FF C4        1436            swap    a
-0500 540F      1437            anl     a,#0x0f
-0502 6A        1438            xrl     a,r2
-0503 CA        1439            xch     a,r2
-0504 540F      1440            anl     a,#0x0f
-0506 CA        1441            xch     a,r2
-0507 6A        1442            xrl     a,r2
-0508 CA        1443            xch     a,r2
-0509           1444   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:407: return adc;
-0509 8A82      1445            mov     dpl,r2
-050B F583      1446            mov     dph,a
-050D 22        1447            ret
-050E           1448            rseg R_CSEG
-050E           1449   
-0000           1450            rseg R_XINIT
-0000           1451   
-0000           1452            rseg R_CONST
-0000           1453   _MOVESPEED:
-0000 5000      1454            db 0x50,0x00    ;  80
-0002           1455   _TURNSPEED:
-0002 5000      1456            db 0x50,0x00    ;  80
-0004           1457   _DISTANCEBUFFER:
-0004 0000      1458            db 0x00,0x00    ;  0
-0006           1459   _ANGLEBUFFER:
-0006 0000      1460            db 0x00,0x00    ;  0
-0008           1461   _NSTAGES:
-0008 0C00      1462            db 0x0C,0x00    ;  12
-000A           1463   _PRESETS:
-000A 0500      1464            db 0x05,0x00    ; 5
-000C 0A00      1465            db 0x0A,0x00    ; 10
-000E 0F00      1466            db 0x0F,0x00    ; 15
-0010 1400      1467            db 0x14,0x00    ; 20
-0012 1900      1468            db 0x19,0x00    ; 25
-0014 1E00      1469            db 0x1E,0x00    ; 30
-0016 2300      1470            db 0x23,0x00    ; 35
-0018 2800      1471            db 0x28,0x00    ; 40
-001A 2D00      1472            db 0x2D,0x00    ; 45
-001C 3200      1473            db 0x32,0x00    ; 50
-001E 3700      1474            db 0x37,0x00    ; 55
-0020 3C00      1475            db 0x3C,0x00    ; 60
-0022           1476   __str_0:
-0022 0A        1477            db 0x0A
-0023 496E7473  1478            db 'Intstruction: '
+0067            500   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:140: if(pwmLeft==0)
+0067 E570       501            mov     a,_pwmLeft
+0069 4571       502            orl     a,(_pwmLeft + 1)
+006B 7001       503            jnz     L003008?
+006D            504   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:142: P1_1 = P1_0 = 1;
+006D D290       505            setb    _P1_0
+006F A290       506            mov     c,_P1_0
+0071 9291       507            mov     _P1_1,c
+0073            508   L003008?:
+0073            509   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:145: if(pwmRight > 0)
+0073 C3         510            clr     c
+0074 E4         511            clr     a
+0075 9530       512            subb    a,_pwmRight
+0077 E4         513            clr     a
+0078 6480       514            xrl     a,#0x80
+007A 8531F0     515            mov     b,(_pwmRight + 1)
+007D 63F080     516            xrl     b,#0x80
+0080 95F0       517            subb    a,b
+0082 5001       518            jnc     L003010?
+0084            519   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:147: P1_4 = (pwmRight > pwmCount) ? 0:1;
+0084 AA30       520            mov     r2,_pwmRight
+0086 AB31       521            mov     r3,(_pwmRight + 1)
+0088 C3         522            clr     c
+0089 E5B0       523            mov     a,_pwmCount
+008B 9A         524            subb    a,r2
+008C E5B1       525            mov     a,(_pwmCount + 1)
+008E 9B         526            subb    a,r3
+008F 9240       527            mov  _pwmCounter_sloc0_1_0,c
+0091 B3         528            cpl     c
+0092 9294       529            mov     _P1_4,c
+0094            530   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:148: P1_3 = 1;
+0094 D293       531            setb    _P1_3
+0096            532   L003010?:
+0096            533   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:150: if(pwmRight < 0)
+0096 E531       534            mov     a,(_pwmRight + 1)
+0098 30E7C0     535            jnb     acc.7,L003012?
+009B            536   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:152: P1_3 = ((-1) * pwmRight > pwmCount) ? 0:1;
+009B C3         537            clr     c
+009C E4         538            clr     a
+009D 9530       539            subb    a,_pwmRight
+009F FA         540            mov     r2,a
+00A0 E4         541            clr     a
+00A1 9531       542            subb    a,(_pwmRight + 1)
+00A3 FB         543            mov     r3,a
+00A4 C3         544            clr     c
+00A5 E5B0       545            mov     a,_pwmCount
+00A7 9A         546            subb    a,r2
+00A8 E5B1       547            mov     a,(_pwmCount + 1)
+00AA 9B         548            subb    a,r3
+00AB 9240       549            mov  _pwmCounter_sloc0_1_0,c
+00AD B3         550            cpl     c
+00AE 9293       551            mov     _P1_3,c
+00B0            552   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:153: P1_4 = 1;
+00B0 D294       553            setb    _P1_4
+00B2            554   L003012?:
+00B2            555   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:155: if(pwmRight==0)
+00B2 E530       556            mov     a,_pwmRight
+00B4 4531       557            orl     a,(_pwmRight + 1)
+00B6 7001       558            jnz     L003015?
+00B8            559   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:157: P1_4 = P1_3 = 1;
+00B8 D293       560            setb    _P1_3
+00BA A293       561            mov     c,_P1_3
+00BC 9294       562            mov     _P1_4,c
+00BE            563   L003015?:
+00BE D0D0       564            pop     psw
+00C0 D003       565            pop     ar3
+00C2 D002       566            pop     ar2
+00C4 D0F0       567            pop     b
+00C6 D0E0       568            pop     acc
+00C8 32         569            reti
+00C9            570   ;        eliminated unneeded push/pop dpl
+00C9            571   ;        eliminated unneeded push/pop dph
+00C9            572   ;------------------------------------------------------------
+00C9            573   ;Allocation info for local variables in function '_c51_external_startup'
+00C9            574   ;------------------------------------------------------------
+00C9            575   ;------------------------------------------------------------
+00C9            576   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:163: unsigned char _c51_external_startup(void)
+00C9            577   ;        -----------------------------------------
+00C9            578   ;         function _c51_external_startup
+00C9            579   ;        -----------------------------------------
+00C9            580   __c51_external_startup:
+00C9            581   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:166: P0M0 = 0;         P0M1 = 0;
+00C9 75E600     582            mov     _P0M0,#0x00
+00CC 75E700     583            mov     _P0M1,#0x00
+00CF            584   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:167: P1M0 = 0;         P1M1 = 0;
+00CF 75D600     585            mov     _P1M0,#0x00
+00D2 75D700     586            mov     _P1M1,#0x00
+00D5            587   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:168: P2M0 = 0;         P2M1 = 0;
+00D5 75CE00     588            mov     _P2M0,#0x00
+00D8 75CF00     589            mov     _P2M1,#0x00
+00DB            590   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:169: P3M0 = 0;         P3M1 = 0;
+00DB 75C600     591            mov     _P3M0,#0x00
+00DE 75C700     592            mov     _P3M1,#0x00
+00E1            593   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:170: AUXR = 0B_0001_0001; // 1152 bytes of internal XDATA, P4.4 is a general purpose I/O
+00E1 758E11     594            mov     _AUXR,#0x11
+00E4            595   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:171: P4M0 = 0;         P4M1 = 0;
+00E4 75BE00     596            mov     _P4M0,#0x00
+00E7 75BF00     597            mov     _P4M1,#0x00
+00EA            598   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:175: PCON |= 0x80;
+00EA 438780     599            orl     _PCON,#0x80
+00ED            600   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:176: SCON = 0x52;
+00ED 759852     601            mov     _SCON,#0x52
+00F0            602   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:177: BDRCON = 0;
+00F0 759B00     603            mov     _BDRCON,#0x00
+00F3            604   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:178: BRL = BRG_VAL;
+00F3 759AFA     605            mov     _BRL,#0xFA
+00F6            606   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:179: BDRCON = BRR | TBCK | RBCK | SPD;
+00F6 759B1E     607            mov     _BDRCON,#0x1E
+00F9            608   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:181: TMOD = 0x01;      // Timer 0 as 16-bit timer      
+00F9 758901     609            mov     _TMOD,#0x01
+00FC            610   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:182: TH0 = RH0 = TIMER0_RELOAD_VALUE / 0x100;
+00FC 75F4FF     611            mov     _RH0,#0xFF
+00FF 758CFF     612            mov     _TH0,#0xFF
+0102            613   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:183: TL0 = RL0 = TIMER0_RELOAD_VALUE % 0x100;
+0102 75F248     614            mov     _RL0,#0x48
+0105 758A48     615            mov     _TL0,#0x48
+0108            616   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:184: TR0 = 1;
+0108 D28C       617            setb    _TR0
+010A            618   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:185: ET0 = 1;  // Enable timer 0 interrupt
+010A D2A9       619            setb    _ET0
+010C            620   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:186: EX0 = 1;  // Enable external interrupt 0
+010C D2A8       621            setb    _EX0
+010E            622   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:187: IT0 = 1;
+010E D288       623            setb    _IT0
+0110            624   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:188: EA = 1;   // Enable global interrupts
+0110 D2AF       625            setb    _EA
+0112            626   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:189: tether=0;
+0112 E4         627            clr     a
+0113 F5B0       628            mov     _tether,a
+0115 F5B1       629            mov     (_tether + 1),a
+0117            630   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:190: direction=1;
+0117 75F001     631            mov     _direction,#0x01
+011A E4         632            clr     a
+011B F5F1       633            mov     (_direction + 1),a
+011D            634   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:191: P2_2=1;
+011D D2A2       635            setb    _P2_2
+011F            636   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:192: P2_1=1;
+011F D2A1       637            setb    _P2_1
+0121            638   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:193: P2_0=1;
+0121 D2A0       639            setb    _P2_0
+0123            640   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:194: return 0;
+0123 758200     641            mov     dpl,#0x00
+0126 22         642            ret
+0127            643   ;------------------------------------------------------------
+0127            644   ;Allocation info for local variables in function 'main'
+0127            645   ;------------------------------------------------------------
+0127            646   ;i                         Allocated to registers r2 r3 
+0127            647   ;------------------------------------------------------------
+0127            648   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:198: int main (void)
+0127            649   ;        -----------------------------------------
+0127            650   ;         function main
+0127            651   ;        -----------------------------------------
+0127            652   _main:
+0127            653   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:200: distanceLeft=15;
+0127 75F00F     654            mov     _distanceLeft,#0x0F
+012A E4         655            clr     a
+012B F5F1       656            mov     (_distanceLeft + 1),a
+012D            657   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:201: distanceRight=15;         
+012D 75B00F     658            mov     _distanceRight,#0x0F
+0130 E4         659            clr     a
+0131 F5B1       660            mov     (_distanceRight + 1),a
+0133            661   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:202: Stage=2;
+0133 753002     662            mov     _Stage,#0x02
+0136 E4         663            clr     a
+0137 F531       664            mov     (_Stage + 1),a
+0139            665   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:203: pwmLeft=0;
+0139            666   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:204: pwmRight=0;
+0139 E4         667            clr     a
+013A F570       668            mov     _pwmLeft,a
+013C F571       669            mov     (_pwmLeft + 1),a
+013E F530       670            mov     _pwmRight,a
+0140 F531       671            mov     (_pwmRight + 1),a
+0142            672   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:205: while (1)
+0142            673   L005030?:
+0142            674   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:207: instruction = 0;
+0142 E4         675            clr     a
+0143 F570       676            mov     _instruction,a
+0145 F571       677            mov     (_instruction + 1),a
+0147            678   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:209: while (instruction == 0)
+0147            679   L005001?:
+0147 E570       680            mov     a,_instruction
+0149 4571       681            orl     a,(_instruction + 1)
+014B 7001       682            jnz     L005003?
+014D            683   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:212: if(distanceLeft != distanceRight)
+014D E5B0       684            mov     a,_distanceRight
+014F E5B1       685            mov     a,(_distanceRight + 1)
+0151 E5F0       686            mov     a,_distanceLeft
+0153 E5F1       687            mov     a,(_distanceLeft + 1)
+0155            688   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:217: P2_2=1;
+0155 D2A2       689            setb    _P2_2
+0157            690   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:218: P2_1=1;
+0157 D2A1       691            setb    _P2_1
+0159            692   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:219: P2_0=0;
+0159 C2A0       693            clr     _P2_0
+015B            694   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:220: printf("\nIntstruction: ");
+015B 7440       695            mov     a,#__str_0
+015D C0E0       696            push    acc
+015F 7485       697            mov     a,#(__str_0 >> 8)
+0161 C0E0       698            push    acc
+0163 7480       699            mov     a,#0x80
+0165 C0E0       700            push    acc
+0167 120100     701            lcall   _printf
+016A 1581       702            dec     sp
+016C 1581       703            dec     sp
+016E 1581       704            dec     sp
+0170            705   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:221: scanf("%ud", &instruction);
+0170 7470       706            mov     a,#_instruction
+0172 C0E0       707            push    acc
+0174 7440       708            mov     a,#(_instruction >> 8)
+0176 C0E0       709            push    acc
+0178 7440       710            mov     a,#0x40
+017A C0E0       711            push    acc
+017C 7400       712            mov     a,#__str_1
+017E C0E0       713            push    acc
+0180 7486       714            mov     a,#(__str_1 >> 8)
+0182 C0E0       715            push    acc
+0184 7480       716            mov     a,#0x80
+0186 C0E0       717            push    acc
+0188 120100     718            lcall   _scanf
+018B E581       719            mov     a,sp
+018D 24FA       720            add     a,#0xfa
+018F F581       721            mov     sp,a
+0191 8001       722            sjmp    L005001?
+0193            723   L005003?:
+0193            724   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:224: if(instruction==1)                        //move forward
+0193 7401       725            mov     a,#0x01
+0195 B57080     726            cjne    a,_instruction,L005055?
+0198 E4         727            clr     a
+0199 B57180     728            cjne    a,(_instruction + 1),L005055?
+019C 8001       729            sjmp    L005056?
+019E            730   L005055?:
+019E 8001       731            sjmp    L005027?
+01A0            732   L005056?:
+01A0            733   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:226: if(Stage!=0)
+01A0 E530       734            mov     a,_Stage
+01A2 4531       735            orl     a,(_Stage + 1)
+01A4 6001       736            jz      L005005?
+01A6            737   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:227: Stage--;
+01A6 1530       738            dec     _Stage
+01A8 74FF       739            mov     a,#0xff
+01AA B53080     740            cjne    a,_Stage,L005058?
+01AD 1531       741            dec     (_Stage + 1)
+01AF            742   L005058?:
+01AF            743   L005005?:
+01AF            744   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:228: printf("\nMove forwrds");
+01AF 74C0       745            mov     a,#__str_2
+01B1 C0E0       746            push    acc
+01B3 7487       747            mov     a,#(__str_2 >> 8)
+01B5 C0E0       748            push    acc
+01B7 7480       749            mov     a,#0x80
+01B9 C0E0       750            push    acc
+01BB 120100     751            lcall   _printf
+01BE 1581       752            dec     sp
+01C0 1581       753            dec     sp
+01C2 1581       754            dec     sp
+01C4 020100     755            ljmp    L005030?
+01C7            756   L005027?:
+01C7            757   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:229: }else if(instruction==2)                  //move backwards
+01C7 7402       758            mov     a,#0x02
+01C9 B57000     759            cjne    a,_instruction,L005059?
+01CC E4         760            clr     a
+01CD B57100     761            cjne    a,(_instruction + 1),L005059?
+01D0 8001       762            sjmp    L005060?
+01D2            763   L005059?:
+01D2 8001       764            sjmp    L005024?
+01D4            765   L005060?:
+01D4            766   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:231: if(Stage!=NSTAGES)
+01D4 9012F0     767            mov     dptr,#_NSTAGES
+01D7 E4         768            clr     a
+01D8 93         769            movc    a,@a+dptr
+01D9 FA         770            mov     r2,a
+01DA 7401       771            mov     a,#0x01
+01DC 93         772            movc    a,@a+dptr
+01DD FB         773            mov     r3,a
+01DE EA         774            mov     a,r2
+01DF B530C0     775            cjne    a,_Stage,L005061?
+01E2 EB         776            mov     a,r3
+01E3 B531C0     777            cjne    a,(_Stage + 1),L005061?
+01E6 8001       778            sjmp    L005007?
+01E8            779   L005061?:
+01E8            780   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:232: Stage++;
+01E8 7401       781            mov     a,#0x01
+01EA 2530       782            add     a,_Stage
+01EC F530       783            mov     _Stage,a
+01EE E4         784            clr     a
+01EF 3531       785            addc    a,(_Stage + 1)
+01F1 F531       786            mov     (_Stage + 1),a
+01F3            787   L005007?:
+01F3            788   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:233: printf("\n Move back");   
+01F3 7440       789            mov     a,#__str_3
+01F5 C0E0       790            push    acc
+01F7 7489       791            mov     a,#(__str_3 >> 8)
+01F9 C0E0       792            push    acc
+01FB 7480       793            mov     a,#0x80
+01FD C0E0       794            push    acc
+01FF 120100     795            lcall   _printf
+0202 1581       796            dec     sp
+0204 1581       797            dec     sp
+0206 1581       798            dec     sp
+0208 020100     799            ljmp    L005030?
+020B            800   L005024?:
+020B            801   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:234: }else if(instruction==3)                  //uturn
+020B 7403       802            mov     a,#0x03
+020D B57080     803            cjne    a,_instruction,L005062?
+0210 E4         804            clr     a
+0211 B57180     805            cjne    a,(_instruction + 1),L005062?
+0214 8001       806            sjmp    L005063?
+0216            807   L005062?:
+0216 8001       808            sjmp    L005021?
+0218            809   L005063?:
+0218            810   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:236: uTurn();
+0218 120100     811            lcall   _uTurn
+021B            812   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:237: printf("\nturned");
+021B 7440       813            mov     a,#__str_4
+021D C0E0       814            push    acc
+021F 748A       815            mov     a,#(__str_4 >> 8)
+0221 C0E0       816            push    acc
+0223 7480       817            mov     a,#0x80
+0225 C0E0       818            push    acc
+0227 120100     819            lcall   _printf
+022A 1581       820            dec     sp
+022C 1581       821            dec     sp
+022E 1581       822            dec     sp
+0230 020100     823            ljmp    L005030?
+0233            824   L005021?:
+0233            825   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:238: }else if(instruction==4)                  //parralell park
+0233 7404       826            mov     a,#0x04
+0235 B57080     827            cjne    a,_instruction,L005064?
+0238 E4         828            clr     a
+0239 B57180     829            cjne    a,(_instruction + 1),L005064?
+023C 020100     830            ljmp    L005030?
+023F            831   L005064?:
+023F            832   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:241: }else if(instruction==5)
+023F 7405       833            mov     a,#0x05
+0241 B570C0     834            cjne    a,_instruction,L005065?
+0244 E4         835            clr     a
+0245 B571C0     836            cjne    a,(_instruction + 1),L005065?
+0248 8001       837            sjmp    L005066?
+024A            838   L005065?:
+024A 020100     839            ljmp    L005015?
+024D            840   L005066?:
+024D            841   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:245: instruction=0;
+024D E4         842            clr     a
+024E F570       843            mov     _instruction,a
+0250 F571       844            mov     (_instruction + 1),a
+0252            845   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:246: while(instruction!=5);
+0252            846   L005008?:
+0252 7405       847            mov     a,#0x05
+0254 B570C0     848            cjne    a,_instruction,L005067?
+0257 E4         849            clr     a
+0258 B571C0     850            cjne    a,(_instruction + 1),L005067?
+025B 8001       851            sjmp    L005068?
+025D            852   L005067?:
+025D 8001       853            sjmp    L005008?
+025F            854   L005068?:
+025F            855   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:248: for(i=0;i<NSTAGES;i++)
+025F 7A00       856            mov     r2,#0x00
+0261 7B00       857            mov     r3,#0x00
+0263            858   L005032?:
+0263 9012F0     859            mov     dptr,#_NSTAGES
+0266 E4         860            clr     a
+0267 93         861            movc    a,@a+dptr
+0268 FC         862            mov     r4,a
+0269 7401       863            mov     a,#0x01
+026B 93         864            movc    a,@a+dptr
+026C FD         865            mov     r5,a
+026D C3         866            clr     c
+026E EA         867            mov     a,r2
+026F 9C         868            subb    a,r4
+0270 EB         869            mov     a,r3
+0271 6480       870            xrl     a,#0x80
+0273 8DF0       871            mov     b,r5
+0275 63F080     872            xrl     b,#0x80
+0278 95F0       873            subb    a,b
+027A 4001       874            jc      L005069?
+027C 020100     875            ljmp    L005030?
+027F            876   L005069?:
+027F            877   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:250: if(distanceLeft>PRESETS[i]-3 && distanceLeft<PRESETS[i]+3)
+027F 8A04       878            mov     ar4,r2
+0281 EB         879            mov     a,r3
+0282 CC         880            xch     a,r4
+0283 25E0       881            add     a,acc
+0285 CC         882            xch     a,r4
+0286 33         883            rlc     a
+0287 FD         884            mov     r5,a
+0288 EC         885            mov     a,r4
+0289 24B0       886            add     a,#_PRESETS
+028B F582       887            mov     dpl,a
+028D ED         888            mov     a,r5
+028E 3412       889            addc    a,#(_PRESETS >> 8)
+0290 F583       890            mov     dph,a
+0292 E4         891            clr     a
+0293 93         892            movc    a,@a+dptr
+0294 FC         893            mov     r4,a
+0295 A3         894            inc     dptr
+0296 E4         895            clr     a
+0297 93         896            movc    a,@a+dptr
+0298 FD         897            mov     r5,a
+0299 EC         898            mov     a,r4
+029A 24FD       899            add     a,#0xfd
+029C FE         900            mov     r6,a
+029D ED         901            mov     a,r5
+029E 34FF       902            addc    a,#0xff
+02A0 FF         903            mov     r7,a
+02A1 A8F0       904            mov     r0,_distanceLeft
+02A3 A9F1       905            mov     r1,(_distanceLeft + 1)
+02A5 C3         906            clr     c
+02A6 EE         907            mov     a,r6
+02A7 98         908            subb    a,r0
+02A8 EF         909            mov     a,r7
+02A9 99         910            subb    a,r1
+02AA 5001       911            jnc     L005034?
+02AC 7403       912            mov     a,#0x03
+02AE 2C         913            add     a,r4
+02AF FC         914            mov     r4,a
+02B0 E4         915            clr     a
+02B1 3D         916            addc    a,r5
+02B2 FD         917            mov     r5,a
+02B3 AEF0       918            mov     r6,_distanceLeft
+02B5 AFF1       919            mov     r7,(_distanceLeft + 1)
+02B7 C3         920            clr     c
+02B8 EE         921            mov     a,r6
+02B9 9C         922            subb    a,r4
+02BA EF         923            mov     a,r7
+02BB 9D         924            subb    a,r5
+02BC 5001       925            jnc     L005034?
+02BE            926   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:251: Stage=i;
+02BE 8A30       927            mov     _Stage,r2
+02C0 8B31       928            mov     (_Stage + 1),r3
+02C2            929   L005034?:
+02C2            930   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:248: for(i=0;i<NSTAGES;i++)
+02C2 0A         931            inc     r2
+02C3 BA0040     932            cjne    r2,#0x00,L005032?
+02C6 0B         933            inc     r3
+02C7 8001       934            sjmp    L005032?
+02C9            935   L005015?:
+02C9            936   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:256: printf("\nERROR");
+02C9 7440       937            mov     a,#__str_5
+02CB C0E0       938            push    acc
+02CD 748D       939            mov     a,#(__str_5 >> 8)
+02CF C0E0       940            push    acc
+02D1 7480       941            mov     a,#0x80
+02D3 C0E0       942            push    acc
+02D5 120100     943            lcall   _printf
+02D8 1581       944            dec     sp
+02DA 1581       945            dec     sp
+02DC 1581       946            dec     sp
+02DE            947   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:257: P2_2=0;
+02DE C2A2       948            clr     _P2_2
+02E0            949   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:258: P2_1=1;
+02E0 D2A1       950            setb    _P2_1
+02E2            951   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:259: P2_0=1;
+02E2 D2A0       952            setb    _P2_0
+02E4            953   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:262: return 0;
+02E4 020100     954            ljmp    L005030?
+02E7            955   ;------------------------------------------------------------
+02E7            956   ;Allocation info for local variables in function 'getDistance'
+02E7            957   ;------------------------------------------------------------
+02E7            958   ;------------------------------------------------------------
+02E7            959   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:273: void getDistance() 
+02E7            960   ;        -----------------------------------------
+02E7            961   ;         function getDistance
+02E7            962   ;        -----------------------------------------
+02E7            963   _getDistance:
+02E7            964   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:277: }
+02E7 22         965            ret
+02E8            966   ;------------------------------------------------------------
+02E8            967   ;Allocation info for local variables in function 'turnCar'
+02E8            968   ;------------------------------------------------------------
+02E8            969   ;------------------------------------------------------------
+02E8            970   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:284: void turnCar()
+02E8            971   ;        -----------------------------------------
+02E8            972   ;         function turnCar
+02E8            973   ;        -----------------------------------------
+02E8            974   _turnCar:
+02E8            975   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:286: P2_2=1;
+02E8 D2A2       976            setb    _P2_2
+02EA            977   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:287: P2_1=0;
+02EA C2A1       978            clr     _P2_1
+02EC            979   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:288: P2_0=1;
+02EC D2A0       980            setb    _P2_0
+02EE            981   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:290: while(distanceLeft < distanceRight+ANGLEBUFFER)
+02EE            982   L007001?:
+02EE 901330     983            mov     dptr,#_ANGLEBUFFER
+02F1 E4         984            clr     a
+02F2 93         985            movc    a,@a+dptr
+02F3 FA         986            mov     r2,a
+02F4 7401       987            mov     a,#0x01
+02F6 93         988            movc    a,@a+dptr
+02F7 FB         989            mov     r3,a
+02F8 EA         990            mov     a,r2
+02F9 25B0       991            add     a,_distanceRight
+02FB FC         992            mov     r4,a
+02FC EB         993            mov     a,r3
+02FD 35B1       994            addc    a,(_distanceRight + 1)
+02FF FD         995            mov     r5,a
+0300 C3         996            clr     c
+0301 E5F0       997            mov     a,_distanceLeft
+0303 9C         998            subb    a,r4
+0304 E5F1       999            mov     a,(_distanceLeft + 1)
+0306 6480      1000            xrl     a,#0x80
+0308 8DF0      1001            mov     b,r5
+030A 63F080    1002            xrl     b,#0x80
+030D 95F0      1003            subb    a,b
+030F 5001      1004            jnc     L007004?
+0311           1005   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:292: pwmLeft = TURNSPEED;
+0311 9013B0    1006            mov     dptr,#_TURNSPEED
+0314 E4        1007            clr     a
+0315 93        1008            movc    a,@a+dptr
+0316 FC        1009            mov     r4,a
+0317 7401      1010            mov     a,#0x01
+0319 93        1011            movc    a,@a+dptr
+031A FD        1012            mov     r5,a
+031B 8C70      1013            mov     _pwmLeft,r4
+031D 8D71      1014            mov     (_pwmLeft + 1),r5
+031F           1015   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:293: pwmRight = (-TURNSPEED);
+031F C3        1016            clr     c
+0320 E4        1017            clr     a
+0321 9C        1018            subb    a,r4
+0322 F530      1019            mov     _pwmRight,a
+0324 E4        1020            clr     a
+0325 9D        1021            subb    a,r5
+0326 F531      1022            mov     (_pwmRight + 1),a
+0328           1023   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:295: while(distanceLeft+ANGLEBUFFER > distanceRight)
+0328 8001      1024            sjmp    L007001?
+032A           1025   L007004?:
+032A EA        1026            mov     a,r2
+032B 25F0      1027            add     a,_distanceLeft
+032D FC        1028            mov     r4,a
+032E EB        1029            mov     a,r3
+032F 35F1      1030            addc    a,(_distanceLeft + 1)
+0331 FD        1031            mov     r5,a
+0332 C3        1032            clr     c
+0333 E5B0      1033            mov     a,_distanceRight
+0335 9C        1034            subb    a,r4
+0336 E5B1      1035            mov     a,(_distanceRight + 1)
+0338 6480      1036            xrl     a,#0x80
+033A 8DF0      1037            mov     b,r5
+033C 63F080    1038            xrl     b,#0x80
+033F 95F0      1039            subb    a,b
+0341 5001      1040            jnc     L007006?
+0343           1041   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:297: pwmLeft = (-TURNSPEED);
+0343 9013B0    1042            mov     dptr,#_TURNSPEED
+0346 E4        1043            clr     a
+0347 93        1044            movc    a,@a+dptr
+0348 FC        1045            mov     r4,a
+0349 7401      1046            mov     a,#0x01
+034B 93        1047            movc    a,@a+dptr
+034C FD        1048            mov     r5,a
+034D C3        1049            clr     c
+034E E4        1050            clr     a
+034F 9C        1051            subb    a,r4
+0350 F570      1052            mov     _pwmLeft,a
+0352 E4        1053            clr     a
+0353 9D        1054            subb    a,r5
+0354 F571      1055            mov     (_pwmLeft + 1),a
+0356           1056   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:298: pwmRight = TURNSPEED;
+0356 8C30      1057            mov     _pwmRight,r4
+0358 8D31      1058            mov     (_pwmRight + 1),r5
+035A 8001      1059            sjmp    L007004?
+035C           1060   L007006?:
+035C           1061   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:300: pwmLeft=pwmRight=0;
+035C E4        1062            clr     a
+035D F530      1063            mov     _pwmRight,a
+035F F531      1064            mov     (_pwmRight + 1),a
+0361 F570      1065            mov     _pwmLeft,a
+0363 F571      1066            mov     (_pwmLeft + 1),a
+0365           1067   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:301: return;
+0365 22        1068            ret
+0366           1069   ;------------------------------------------------------------
+0366           1070   ;Allocation info for local variables in function 'moveCar'
+0366           1071   ;------------------------------------------------------------
+0366           1072   ;------------------------------------------------------------
+0366           1073   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:309: void moveCar()
+0366           1074   ;        -----------------------------------------
+0366           1075   ;         function moveCar
+0366           1076   ;        -----------------------------------------
+0366           1077   _moveCar:
+0366           1078   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:312: while (distanceRight+DISTANCEBUFFER > PRESETS[Stage] && distanceLeft==distanceRight)
+0366           1079   L008002?:
+0366 901370    1080            mov     dptr,#_DISTANCEBUFFER
+0369 E4        1081            clr     a
+036A 93        1082            movc    a,@a+dptr
+036B FA        1083            mov     r2,a
+036C 7401      1084            mov     a,#0x01
+036E 93        1085            movc    a,@a+dptr
+036F FB        1086            mov     r3,a
+0370 EA        1087            mov     a,r2
+0371 25B0      1088            add     a,_distanceRight
+0373 FC        1089            mov     r4,a
+0374 EB        1090            mov     a,r3
+0375 35B1      1091            addc    a,(_distanceRight + 1)
+0377 FD        1092            mov     r5,a
+0378 E530      1093            mov     a,_Stage
+037A 25E0      1094            add     a,acc
+037C FE        1095            mov     r6,a
+037D E531      1096            mov     a,(_Stage + 1)
+037F 33        1097            rlc     a
+0380 FF        1098            mov     r7,a
+0381 EE        1099            mov     a,r6
+0382 24B0      1100            add     a,#_PRESETS
+0384 F582      1101            mov     dpl,a
+0386 EF        1102            mov     a,r7
+0387 3412      1103            addc    a,#(_PRESETS >> 8)
+0389 F583      1104            mov     dph,a
+038B E4        1105            clr     a
+038C 93        1106            movc    a,@a+dptr
+038D FE        1107            mov     r6,a
+038E A3        1108            inc     dptr
+038F E4        1109            clr     a
+0390 93        1110            movc    a,@a+dptr
+0391 FF        1111            mov     r7,a
+0392 C3        1112            clr     c
+0393 EE        1113            mov     a,r6
+0394 9C        1114            subb    a,r4
+0395 EF        1115            mov     a,r7
+0396 9D        1116            subb    a,r5
+0397 5001      1117            jnc     L008006?
+0399 E5B0      1118            mov     a,_distanceRight
+039B B5F080    1119            cjne    a,_distanceLeft,L008006?
+039E E5B1      1120            mov     a,(_distanceRight + 1)
+03A0 B5F180    1121            cjne    a,(_distanceLeft + 1),L008006?
+03A3           1122   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:314: P2_2=1;
+03A3 D2A2      1123            setb    _P2_2
+03A5           1124   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:315: P2_1=0;
+03A5 C2A1      1125            clr     _P2_1
+03A7           1126   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:316: P2_0=1;
+03A7 D2A0      1127            setb    _P2_0
+03A9           1128   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:317: pwmLeft = MOVESPEED;
+03A9 9013F0    1129            mov     dptr,#_MOVESPEED
+03AC E4        1130            clr     a
+03AD 93        1131            movc    a,@a+dptr
+03AE FC        1132            mov     r4,a
+03AF 7401      1133            mov     a,#0x01
+03B1 93        1134            movc    a,@a+dptr
+03B2 FD        1135            mov     r5,a
+03B3 8C70      1136            mov     _pwmLeft,r4
+03B5 8D71      1137            mov     (_pwmLeft + 1),r5
+03B7           1138   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:318: pwmRight = MOVESPEED;
+03B7 8C30      1139            mov     _pwmRight,r4
+03B9 8D31      1140            mov     (_pwmRight + 1),r5
+03BB           1141   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:321: while(distanceRight < PRESETS[Stage]+DISTANCEBUFFER && distanceLeft==distanceRight)
+03BB 8001      1142            sjmp    L008002?
+03BD           1143   L008006?:
+03BD E530      1144            mov     a,_Stage
+03BF 25E0      1145            add     a,acc
+03C1 FC        1146            mov     r4,a
+03C2 E531      1147            mov     a,(_Stage + 1)
+03C4 33        1148            rlc     a
+03C5 FD        1149            mov     r5,a
+03C6 EC        1150            mov     a,r4
+03C7 24B0      1151            add     a,#_PRESETS
+03C9 F582      1152            mov     dpl,a
+03CB ED        1153            mov     a,r5
+03CC 3412      1154            addc    a,#(_PRESETS >> 8)
+03CE F583      1155            mov     dph,a
+03D0 E4        1156            clr     a
+03D1 93        1157            movc    a,@a+dptr
+03D2 FC        1158            mov     r4,a
+03D3 A3        1159            inc     dptr
+03D4 E4        1160            clr     a
+03D5 93        1161            movc    a,@a+dptr
+03D6 FD        1162            mov     r5,a
+03D7 EA        1163            mov     a,r2
+03D8 2C        1164            add     a,r4
+03D9 FC        1165            mov     r4,a
+03DA EB        1166            mov     a,r3
+03DB 3D        1167            addc    a,r5
+03DC FD        1168            mov     r5,a
+03DD AEB0      1169            mov     r6,_distanceRight
+03DF AFB1      1170            mov     r7,(_distanceRight + 1)
+03E1 C3        1171            clr     c
+03E2 EE        1172            mov     a,r6
+03E3 9C        1173            subb    a,r4
+03E4 EF        1174            mov     a,r7
+03E5 9D        1175            subb    a,r5
+03E6 5001      1176            jnc     L008008?
+03E8 E5B0      1177            mov     a,_distanceRight
+03EA B5F0C0    1178            cjne    a,_distanceLeft,L008008?
+03ED E5B1      1179            mov     a,(_distanceRight + 1)
+03EF B5F1C0    1180            cjne    a,(_distanceLeft + 1),L008008?
+03F2           1181   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:323: pwmLeft = (-MOVESPEED); 
+03F2 9013F0    1182            mov     dptr,#_MOVESPEED
+03F5 E4        1183            clr     a
+03F6 93        1184            movc    a,@a+dptr
+03F7 FC        1185            mov     r4,a
+03F8 7401      1186            mov     a,#0x01
+03FA 93        1187            movc    a,@a+dptr
+03FB FD        1188            mov     r5,a
+03FC C3        1189            clr     c
+03FD E4        1190            clr     a
+03FE 9C        1191            subb    a,r4
+03FF FC        1192            mov     r4,a
+0400 E4        1193            clr     a
+0401 9D        1194            subb    a,r5
+0402 FD        1195            mov     r5,a
+0403 8C70      1196            mov     _pwmLeft,r4
+0405 8D71      1197            mov     (_pwmLeft + 1),r5
+0407           1198   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:324: pwmRight = (-MOVESPEED);          
+0407 8C30      1199            mov     _pwmRight,r4
+0409 8D31      1200            mov     (_pwmRight + 1),r5
+040B           1201   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:325: P2_2=1;
+040B D2A2      1202            setb    _P2_2
+040D           1203   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:326: P2_1=0;
+040D C2A1      1204            clr     _P2_1
+040F           1205   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:327: P2_0=1;
+040F D2A0      1206            setb    _P2_0
+0411 8001      1207            sjmp    L008006?
+0413           1208   L008008?:
+0413           1209   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:330: pwmLeft=pwmRight=0;
+0413 E4        1210            clr     a
+0414 F530      1211            mov     _pwmRight,a
+0416 F531      1212            mov     (_pwmRight + 1),a
+0418 F570      1213            mov     _pwmLeft,a
+041A F571      1214            mov     (_pwmLeft + 1),a
+041C           1215   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:331: return;
+041C 22        1216            ret
+041D           1217   ;------------------------------------------------------------
+041D           1218   ;Allocation info for local variables in function 'uTurn'
+041D           1219   ;------------------------------------------------------------
+041D           1220   ;------------------------------------------------------------
+041D           1221   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:334: void uTurn()
+041D           1222   ;        -----------------------------------------
+041D           1223   ;         function uTurn
+041D           1224   ;        -----------------------------------------
+041D           1225   _uTurn:
+041D           1226   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:336: P2_2=1;
+041D D2A2      1227            setb    _P2_2
+041F           1228   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:337: P2_1=0;
+041F C2A1      1229            clr     _P2_1
+0421           1230   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:338: P2_0=1;
+0421 D2A0      1231            setb    _P2_0
+0423           1232   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:339: pwmLeft=TURNSPEED;
+0423 9013B0    1233            mov     dptr,#_TURNSPEED
+0426 E4        1234            clr     a
+0427 93        1235            movc    a,@a+dptr
+0428 FA        1236            mov     r2,a
+0429 7401      1237            mov     a,#0x01
+042B 93        1238            movc    a,@a+dptr
+042C FB        1239            mov     r3,a
+042D 8A70      1240            mov     _pwmLeft,r2
+042F 8B71      1241            mov     (_pwmLeft + 1),r3
+0431           1242   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:340: pwmRight=(-TURNSPEED);
+0431 C3        1243            clr     c
+0432 E4        1244            clr     a
+0433 9A        1245            subb    a,r2
+0434 F530      1246            mov     _pwmRight,a
+0436 E4        1247            clr     a
+0437 9B        1248            subb    a,r3
+0438 F531      1249            mov     (_pwmRight + 1),a
+043A           1250   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:341: wait1s();
+043A 120100    1251            lcall   _wait1s
+043D           1252   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:342: pwmLeft=pwmRight=0;
+043D E4        1253            clr     a
+043E F530      1254            mov     _pwmRight,a
+0440 F531      1255            mov     (_pwmRight + 1),a
+0442 F570      1256            mov     _pwmLeft,a
+0444 F571      1257            mov     (_pwmLeft + 1),a
+0446           1258   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:343: return;
+0446 22        1259            ret
+0447           1260   ;------------------------------------------------------------
+0447           1261   ;Allocation info for local variables in function 'wait2ms'
+0447           1262   ;------------------------------------------------------------
+0447           1263   ;------------------------------------------------------------
+0447           1264   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:347: void wait2ms (void)
+0447           1265   ;        -----------------------------------------
+0447           1266   ;         function wait2ms
+0447           1267   ;        -----------------------------------------
+0447           1268   _wait2ms:
+0447           1269   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:357: _endasm;
+0447           1270            
+0447           1271     ;For a 22.1184MHz crystal one machine cycle
+0447           1272     ;takes 12/22.1184MHz=0.5425347us
+0447           1273             J3:
+0447 7C0A      1274            mov R4, #10
+0449           1275             J2:
+0449 7BB8      1276            mov R3, #184
+044B           1277             J1:
+044B DB80      1278            djnz R3, J1 ; 2 machine cycles-> 2*0.5425347us*184=200us
+044D DC40      1279                 djnz R4, J2 ; 200us*250=0.05s
+044F 22        1280                 ret
+0450           1281                
+0450 22        1282            ret
+0451           1283   ;------------------------------------------------------------
+0451           1284   ;Allocation info for local variables in function 'wait1s'
+0451           1285   ;------------------------------------------------------------
+0451           1286   ;------------------------------------------------------------
+0451           1287   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:361: void wait1s (void)
+0451           1288   ;        -----------------------------------------
+0451           1289   ;         function wait1s
+0451           1290   ;        -----------------------------------------
+0451           1291   _wait1s:
+0451           1292   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:373: _endasm;
+0451           1293            
+0451           1294     ;For a 22.1184MHz crystal one machine cycle
+0451           1295     ;takes 12/22.1184MHz=0.5425347us
+0451 7A1E      1296                 mov R2, #30
+0453           1297             L3:
+0453 79B4      1298            mov R1, #180
+0455           1299             L2:
+0455 78B4      1300            mov R0, #180
+0457           1301             L1:
+0457 D840      1302            djnz R0, L1 ; 2 machine cycles-> 2*0.5425347us*184=200us
+0459 D900      1303                 djnz R1, L2 ; 200us*250=0.05s
+045B DAC0      1304                 djnz R2, L3 ; 0.05s*20=1s
+045D 22        1305                 ret
+045E           1306                
+045E 22        1307            ret
+045F           1308   ;------------------------------------------------------------
+045F           1309   ;Allocation info for local variables in function 'voltage'
+045F           1310   ;------------------------------------------------------------
+045F           1311   ;channel                   Allocated to registers 
+045F           1312   ;------------------------------------------------------------
+045F           1313   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:381: float voltage (unsigned char channel)
+045F           1314   ;        -----------------------------------------
+045F           1315   ;         function voltage
+045F           1316   ;        -----------------------------------------
+045F           1317   _voltage:
+045F           1318   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:383: return ((GetADC(channel) * 4.84) / 1023.0); // VCC=4.84V (measured)
+045F 120100    1319            lcall   _GetADC
+0462 120100    1320            lcall   ___uint2fs
+0465 AA82      1321            mov     r2,dpl
+0467 AB83      1322            mov     r3,dph
+0469 ACF0      1323            mov     r4,b
+046B FD        1324            mov     r5,a
+046C C002      1325            push    ar2
+046E C003      1326            push    ar3
+0470 C004      1327            push    ar4
+0472 C005      1328            push    ar5
+0474 90E148    1329            mov     dptr,#0xE148
+0477 75F09A    1330            mov     b,#0x9A
+047A 7440      1331            mov     a,#0x40
+047C 120100    1332            lcall   ___fsmul
+047F AA82      1333            mov     r2,dpl
+0481 AB83      1334            mov     r3,dph
+0483 ACF0      1335            mov     r4,b
+0485 FD        1336            mov     r5,a
+0486 E581      1337            mov     a,sp
+0488 24FC      1338            add     a,#0xfc
+048A F581      1339            mov     sp,a
+048C E4        1340            clr     a
+048D C0E0      1341            push    acc
+048F 74C0      1342            mov     a,#0xC0
+0491 C0E0      1343            push    acc
+0493 747F      1344            mov     a,#0x7F
+0495 C0E0      1345            push    acc
+0497 7444      1346            mov     a,#0x44
+0499 C0E0      1347            push    acc
+049B 8A82      1348            mov     dpl,r2
+049D 8B83      1349            mov     dph,r3
+049F 8CF0      1350            mov     b,r4
+04A1 ED        1351            mov     a,r5
+04A2 120100    1352            lcall   ___fsdiv
+04A5 AA82      1353            mov     r2,dpl
+04A7 AB83      1354            mov     r3,dph
+04A9 ACF0      1355            mov     r4,b
+04AB FD        1356            mov     r5,a
+04AC E581      1357            mov     a,sp
+04AE 24FC      1358            add     a,#0xfc
+04B0 F581      1359            mov     sp,a
+04B2 8A82      1360            mov     dpl,r2
+04B4 8B83      1361            mov     dph,r3
+04B6 8CF0      1362            mov     b,r4
+04B8 ED        1363            mov     a,r5
+04B9 22        1364            ret
+04BA           1365   ;------------------------------------------------------------
+04BA           1366   ;Allocation info for local variables in function 'SPIWrite'
+04BA           1367   ;------------------------------------------------------------
+04BA           1368   ;value                     Allocated to registers r2 
+04BA           1369   ;------------------------------------------------------------
+04BA           1370   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:386: void SPIWrite(unsigned char value)
+04BA           1371   ;        -----------------------------------------
+04BA           1372   ;         function SPIWrite
+04BA           1373   ;        -----------------------------------------
+04BA           1374   _SPIWrite:
+04BA AA82      1375            mov     r2,dpl
+04BC           1376   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:388: SPSTA &= (~SPIF); // Clear the SPIF flag in SPSTA
+04BC 53C47F    1377            anl     _SPSTA,#0x7F
+04BF           1378   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:389: SPDAT = value;
+04BF 8AC5      1379            mov     _SPDAT,r2
+04C1           1380   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:390: while ((SPSTA & SPIF) != SPIF); //Wait for transmission to end
+04C1           1381   L013001?:
+04C1 7480      1382            mov     a,#0x80
+04C3 55C4      1383            anl     a,_SPSTA
+04C5 FA        1384            mov     r2,a
+04C6 BA8040    1385            cjne    r2,#0x80,L013001?
+04C9 22        1386            ret
+04CA           1387   ;------------------------------------------------------------
+04CA           1388   ;Allocation info for local variables in function 'GetADC'
+04CA           1389   ;------------------------------------------------------------
+04CA           1390   ;channel                   Allocated to registers r2 
+04CA           1391   ;adc                       Allocated to registers r2 r3 
+04CA           1392   ;------------------------------------------------------------
+04CA           1393   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:394: unsigned int GetADC(unsigned char channel)
+04CA           1394   ;        -----------------------------------------
+04CA           1395   ;         function GetADC
+04CA           1396   ;        -----------------------------------------
+04CA           1397   _GetADC:
+04CA AA82      1398            mov     r2,dpl
+04CC           1399   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:399: SPCON &= (~SPEN); // Disable SPI
+04CC 53C3BF    1400            anl     _SPCON,#0xBF
+04CF           1401   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:400: SPCON = MSTR | CPOL | CPHA | SPR1 | SPR0 | SSDIS;
+04CF 75C33F    1402            mov     _SPCON,#0x3F
+04D2           1403   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:401: SPCON |= SPEN; // Enable SPI
+04D2 43C340    1404            orl     _SPCON,#0x40
+04D5           1405   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:403: P1_4 = 0; // Activate the MCP3004 ADC.
+04D5 C294      1406            clr     _P1_4
+04D7           1407   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:404: SPIWrite(channel | 0x18);         // Send start bit, single/diff* bit, D2, D1, and D0 bits.
+04D7 7418      1408            mov     a,#0x18
+04D9 4A        1409            orl     a,r2
+04DA F582      1410            mov     dpl,a
+04DC 120100    1411            lcall   _SPIWrite
+04DF           1412   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:405: for (adc=0; adc < 10; adc++); // Wait for S/H to setup
+04DF 7A0A      1413            mov     r2,#0x0A
+04E1 7B00      1414            mov     r3,#0x00
+04E3           1415   L014003?:
+04E3 1A        1416            dec     r2
+04E4 BAFFC0    1417            cjne    r2,#0xff,L014009?
+04E7 1B        1418            dec     r3
+04E8           1419   L014009?:
+04E8 EA        1420            mov     a,r2
+04E9 4B        1421            orl     a,r3
+04EA 7001      1422            jnz     L014003?
+04EC           1423   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:406: SPIWrite(0x55); // Read bits 9 down to 4
+04EC 758255    1424            mov     dpl,#0x55
+04EF 120100    1425            lcall   _SPIWrite
+04F2           1426   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:407: adc=((SPDAT & 0x3f) * 0x100);
+04F2 743F      1427            mov     a,#0x3F
+04F4 55C5      1428            anl     a,_SPDAT
+04F6 FB        1429            mov     r3,a
+04F7 7A00      1430            mov     r2,#0x00
+04F9           1431   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:408: SPIWrite(0x55);// Read bits 3 down to 0
+04F9 758255    1432            mov     dpl,#0x55
+04FC C002      1433            push    ar2
+04FE C003      1434            push    ar3
+0500 120100    1435            lcall   _SPIWrite
+0503 D003      1436            pop     ar3
+0505 D002      1437            pop     ar2
+0507           1438   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:409: P1_4 = 1; // Deactivate the MCP3004 ADC.
+0507 D294      1439            setb    _P1_4
+0509           1440   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:410: adc += (SPDAT & 0xf0); // SPDR contains the low part of the result. 
+0509 74F0      1441            mov     a,#0xF0
+050B 55C5      1442            anl     a,_SPDAT
+050D FC        1443            mov     r4,a
+050E 7D00      1444            mov     r5,#0x00
+0510 EC        1445            mov     a,r4
+0511 2A        1446            add     a,r2
+0512 FA        1447            mov     r2,a
+0513 ED        1448            mov     a,r5
+0514 3B        1449            addc    a,r3
+0515           1450   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:411: adc >>= 4;
+0515 C4        1451            swap    a
+0516 CA        1452            xch     a,r2
+0517 C4        1453            swap    a
+0518 540F      1454            anl     a,#0x0f
+051A 6A        1455            xrl     a,r2
+051B CA        1456            xch     a,r2
+051C 540F      1457            anl     a,#0x0f
+051E CA        1458            xch     a,r2
+051F 6A        1459            xrl     a,r2
+0520 CA        1460            xch     a,r2
+0521           1461   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:413: return adc;
+0521 8A82      1462            mov     dpl,r2
+0523 F583      1463            mov     dph,a
+0525 22        1464            ret
+0526           1465            rseg R_CSEG
+0526           1466   
+0000           1467            rseg R_XINIT
+0000           1468   
+0000           1469            rseg R_CONST
+0000           1470   _MOVESPEED:
+0000 5000      1471            db 0x50,0x00    ;  80
+0002           1472   _TURNSPEED:
+0002 6400      1473            db 0x64,0x00    ;  100
+0004           1474   _DISTANCEBUFFER:
+0004 0000      1475            db 0x00,0x00    ;  0
+0006           1476   _ANGLEBUFFER:
+0006 0000      1477            db 0x00,0x00    ;  0
+0008           1478   _NSTAGES:
+0008 0C00      1479            db 0x0C,0x00    ;  12
+000A           1480   _PRESETS:
+000A 0500      1481            db 0x05,0x00    ; 5
+000C 0A00      1482            db 0x0A,0x00    ; 10
+000E 0F00      1483            db 0x0F,0x00    ; 15
+0010 1400      1484            db 0x14,0x00    ; 20
+0012 1900      1485            db 0x19,0x00    ; 25
+0014 1E00      1486            db 0x1E,0x00    ; 30
+0016 2300      1487            db 0x23,0x00    ; 35
+0018 2800      1488            db 0x28,0x00    ; 40
+001A 2D00      1489            db 0x2D,0x00    ; 45
+001C 3200      1490            db 0x32,0x00    ; 50
+001E 3700      1491            db 0x37,0x00    ; 55
+0020 3C00      1492            db 0x3C,0x00    ; 60
+0022           1493   __str_0:
+0022 0A        1494            db 0x0A
+0023 496E7473  1495            db 'Intstruction: '
      74727563
      74696F6E
      3A20
-0031 00        1479            db 0x00
-0032           1480   __str_1:
-0032 257564    1481            db '%ud'
-0035 00        1482            db 0x00
-0036           1483   __str_2:
-0036 0A        1484            db 0x0A
-0037 4D6F7665  1485            db 'Move forwrds'
+0031 00        1496            db 0x00
+0032           1497   __str_1:
+0032 257564    1498            db '%ud'
+0035 00        1499            db 0x00
+0036           1500   __str_2:
+0036 0A        1501            db 0x0A
+0037 4D6F7665  1502            db 'Move forwrds'
      20666F72
      77726473
-0043 00        1486            db 0x00
-0044           1487   __str_3:
-0044 0A        1488            db 0x0A
-0045 204D6F76  1489            db ' Move back'
+0043 00        1503            db 0x00
+0044           1504   __str_3:
+0044 0A        1505            db 0x0A
+0045 204D6F76  1506            db ' Move back'
      65206261
      636B
-004F 00        1490            db 0x00
-0050           1491   __str_4:
-0050 0A        1492            db 0x0A
-0051 7475726E  1493            db 'turned'
+004F 00        1507            db 0x00
+0050           1508   __str_4:
+0050 0A        1509            db 0x0A
+0051 7475726E  1510            db 'turned'
      6564
-0057 00        1494            db 0x00
-0058           1495   __str_5:
-0058 0A        1496            db 0x0A
-0059 4552524F  1497            db 'ERROR'
+0057 00        1511            db 0x00
+0058           1512   __str_5:
+0058 0A        1513            db 0x0A
+0059 4552524F  1514            db 'ERROR'
      52
-005E 00        1498            db 0x00
-005F           1499   
-000E           1500            CSEG
-000E           1501   
-000E           1502   end
+005E 00        1515            db 0x00
+005F           1516   
+000E           1517            CSEG
+000E           1518   
+000E           1519   end

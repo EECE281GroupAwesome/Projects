@@ -70,7 +70,7 @@
 //---Global Variables---
 //speed to move and turn
 const int MOVESPEED=80;
-const int TURNSPEED=80;
+const int TURNSPEED=100;
 //buffers of error for aligning and distance
 const int DISTANCEBUFFER=0;
 const int ANGLEBUFFER=0;
@@ -137,7 +137,10 @@ void pwmCounter() interrupt 1
 		P1_0 = ((-1) * pwmLeft > pwmCount) ? 0:1;
 		P1_1 = 1;
 	}
-	
+	if(pwmLeft==0)
+	{
+		P1_1 = P1_0 = 1;
+	}
 	//Right wheel
 	if(pwmRight > 0)
 	{	
@@ -148,6 +151,10 @@ void pwmCounter() interrupt 1
 	{	
 		P1_3 = ((-1) * pwmRight > pwmCount) ? 0:1;
 		P1_4 = 1;
+	}
+	if(pwmRight==0)
+	{
+		P1_4 = P1_3 = 1;
 	}
 }		
 
@@ -332,8 +339,7 @@ void uTurn()
 	pwmLeft=TURNSPEED;
 	pwmRight=(-TURNSPEED);
 	wait1s();
-	pwmLeft=0;
-	pwmRight=0;
+	pwmLeft=pwmRight=0;
 	return;
 }
 
@@ -357,7 +363,7 @@ void wait1s (void)
 	_asm	
 		;For a 22.1184MHz crystal one machine cycle 
 		;takes 12/22.1184MHz=0.5425347us
-	    mov R2, #90
+	    mov R2, #30
 	L3:	mov R1, #180
 	L2:	mov R0, #180
 	L1:	djnz R0, L1 ; 2 machine cycles-> 2*0.5425347us*184=200us

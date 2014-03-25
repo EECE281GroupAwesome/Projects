@@ -1,7 +1,7 @@
 ;--------------------------------------------------------
 ; File Created by C51
 ; Version 1.0.0 #1034 (Dec 12 2012) (MSVC)
-; This file was generated Tue Mar 25 11:57:38 2014
+; This file was generated Tue Mar 25 12:09:55 2014
 ;--------------------------------------------------------
 $name core
 $optc51 --model-small
@@ -119,8 +119,8 @@ _TH0            DATA 0x8c
 _TL1            DATA 0x8b
 _TH1            DATA 0x8d
 _RL0            DATA 0xf2
-_RH0            DATA 0xf3
-_RTL1           DATA 0xf4
+_RH0            DATA 0xf4
+_RL1            DATA 0xf3
 _RH1            DATA 0xf5
 _WDTRST         DATA 0xa6
 _WDTPRG         DATA 0xa7
@@ -497,7 +497,16 @@ L003004?:
 ;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:138: P1_1 = 1;
 	setb	_P1_1
 L003006?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:142: if(pwmRight > 0)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:140: if(pwmLeft==0)
+	mov	a,_pwmLeft
+	orl	a,(_pwmLeft + 1)
+	jnz	L003008?
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:142: P1_1 = P1_0 = 1;
+	setb	_P1_0
+	mov	c,_P1_0
+	mov	_P1_1,c
+L003008?:
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:145: if(pwmRight > 0)
 	clr	c
 	clr	a
 	subb	a,_pwmRight
@@ -506,8 +515,8 @@ L003006?:
 	mov	b,(_pwmRight + 1)
 	xrl	b,#0x80
 	subb	a,b
-	jnc	L003008?
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:144: P1_4 = (pwmRight > pwmCount) ? 0:1;
+	jnc	L003010?
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:147: P1_4 = (pwmRight > pwmCount) ? 0:1;
 	mov	r2,_pwmRight
 	mov	r3,(_pwmRight + 1)
 	clr	c
@@ -518,13 +527,13 @@ L003006?:
 	mov  _pwmCounter_sloc0_1_0,c
 	cpl	c
 	mov	_P1_4,c
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:145: P1_3 = 1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:148: P1_3 = 1;
 	setb	_P1_3
-L003008?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:147: if(pwmRight < 0)
+L003010?:
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:150: if(pwmRight < 0)
 	mov	a,(_pwmRight + 1)
-	jnb	acc.7,L003011?
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:149: P1_3 = ((-1) * pwmRight > pwmCount) ? 0:1;
+	jnb	acc.7,L003012?
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:152: P1_3 = ((-1) * pwmRight > pwmCount) ? 0:1;
 	clr	c
 	clr	a
 	subb	a,_pwmRight
@@ -540,9 +549,18 @@ L003008?:
 	mov  _pwmCounter_sloc0_1_0,c
 	cpl	c
 	mov	_P1_3,c
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:150: P1_4 = 1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:153: P1_4 = 1;
 	setb	_P1_4
-L003011?:
+L003012?:
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:155: if(pwmRight==0)
+	mov	a,_pwmRight
+	orl	a,(_pwmRight + 1)
+	jnz	L003015?
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:157: P1_4 = P1_3 = 1;
+	setb	_P1_3
+	mov	c,_P1_3
+	mov	_P1_4,c
+L003015?:
 	pop	psw
 	pop	ar3
 	pop	ar2
@@ -555,71 +573,71 @@ L003011?:
 ;Allocation info for local variables in function '_c51_external_startup'
 ;------------------------------------------------------------
 ;------------------------------------------------------------
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:156: unsigned char _c51_external_startup(void)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:163: unsigned char _c51_external_startup(void)
 ;	-----------------------------------------
 ;	 function _c51_external_startup
 ;	-----------------------------------------
 __c51_external_startup:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:159: P0M0 = 0;	P0M1 = 0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:166: P0M0 = 0;	P0M1 = 0;
 	mov	_P0M0,#0x00
 	mov	_P0M1,#0x00
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:160: P1M0 = 0;	P1M1 = 0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:167: P1M0 = 0;	P1M1 = 0;
 	mov	_P1M0,#0x00
 	mov	_P1M1,#0x00
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:161: P2M0 = 0;	P2M1 = 0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:168: P2M0 = 0;	P2M1 = 0;
 	mov	_P2M0,#0x00
 	mov	_P2M1,#0x00
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:162: P3M0 = 0;	P3M1 = 0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:169: P3M0 = 0;	P3M1 = 0;
 	mov	_P3M0,#0x00
 	mov	_P3M1,#0x00
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:163: AUXR = 0B_0001_0001; // 1152 bytes of internal XDATA, P4.4 is a general purpose I/O
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:170: AUXR = 0B_0001_0001; // 1152 bytes of internal XDATA, P4.4 is a general purpose I/O
 	mov	_AUXR,#0x11
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:164: P4M0 = 0;	P4M1 = 0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:171: P4M0 = 0;	P4M1 = 0;
 	mov	_P4M0,#0x00
 	mov	_P4M1,#0x00
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:168: PCON |= 0x80;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:175: PCON |= 0x80;
 	orl	_PCON,#0x80
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:169: SCON = 0x52;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:176: SCON = 0x52;
 	mov	_SCON,#0x52
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:170: BDRCON = 0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:177: BDRCON = 0;
 	mov	_BDRCON,#0x00
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:171: BRL = BRG_VAL;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:178: BRL = BRG_VAL;
 	mov	_BRL,#0xFA
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:172: BDRCON = BRR | TBCK | RBCK | SPD;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:179: BDRCON = BRR | TBCK | RBCK | SPD;
 	mov	_BDRCON,#0x1E
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:174: TMOD = 0x01;	// Timer 0 as 16-bit timer	
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:181: TMOD = 0x01;	// Timer 0 as 16-bit timer	
 	mov	_TMOD,#0x01
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:175: TH0 = RH0 = TIMER0_RELOAD_VALUE / 0x100;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:182: TH0 = RH0 = TIMER0_RELOAD_VALUE / 0x100;
 	mov	_RH0,#0xFF
 	mov	_TH0,#0xFF
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:176: TL0 = RL0 = TIMER0_RELOAD_VALUE % 0x100;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:183: TL0 = RL0 = TIMER0_RELOAD_VALUE % 0x100;
 	mov	_RL0,#0x48
 	mov	_TL0,#0x48
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:177: TR0 = 1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:184: TR0 = 1;
 	setb	_TR0
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:178: ET0 = 1;	// Enable timer 0 interrupt
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:185: ET0 = 1;	// Enable timer 0 interrupt
 	setb	_ET0
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:179: EX0 = 1;	// Enable external interrupt 0
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:186: EX0 = 1;	// Enable external interrupt 0
 	setb	_EX0
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:180: IT0 = 1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:187: IT0 = 1;
 	setb	_IT0
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:181: EA = 1; 	// Enable global interrupts
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:188: EA = 1; 	// Enable global interrupts
 	setb	_EA
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:182: tether=0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:189: tether=0;
 	clr	a
 	mov	_tether,a
 	mov	(_tether + 1),a
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:183: direction=1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:190: direction=1;
 	mov	_direction,#0x01
 	clr	a
 	mov	(_direction + 1),a
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:184: P2_2=1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:191: P2_2=1;
 	setb	_P2_2
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:185: P2_1=1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:192: P2_1=1;
 	setb	_P2_1
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:186: P2_0=1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:193: P2_0=1;
 	setb	_P2_0
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:187: return 0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:194: return 0;
 	mov	dpl,#0x00
 	ret
 ;------------------------------------------------------------
@@ -627,53 +645,53 @@ __c51_external_startup:
 ;------------------------------------------------------------
 ;i                         Allocated to registers r2 r3 
 ;------------------------------------------------------------
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:191: int main (void)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:198: int main (void)
 ;	-----------------------------------------
 ;	 function main
 ;	-----------------------------------------
 _main:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:193: distanceLeft=15;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:200: distanceLeft=15;
 	mov	_distanceLeft,#0x0F
 	clr	a
 	mov	(_distanceLeft + 1),a
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:194: distanceRight=15;	
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:201: distanceRight=15;	
 	mov	_distanceRight,#0x0F
 	clr	a
 	mov	(_distanceRight + 1),a
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:195: Stage=2;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:202: Stage=2;
 	mov	_Stage,#0x02
 	clr	a
 	mov	(_Stage + 1),a
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:196: pwmLeft=0;
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:197: pwmRight=0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:203: pwmLeft=0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:204: pwmRight=0;
 	clr	a
 	mov	_pwmLeft,a
 	mov	(_pwmLeft + 1),a
 	mov	_pwmRight,a
 	mov	(_pwmRight + 1),a
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:198: while (1)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:205: while (1)
 L005030?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:200: instruction = 0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:207: instruction = 0;
 	clr	a
 	mov	_instruction,a
 	mov	(_instruction + 1),a
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:202: while (instruction == 0)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:209: while (instruction == 0)
 L005001?:
 	mov	a,_instruction
 	orl	a,(_instruction + 1)
 	jnz	L005003?
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:205: if(distanceLeft != distanceRight)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:212: if(distanceLeft != distanceRight)
 	mov	a,_distanceRight
 	mov	a,(_distanceRight + 1)
 	mov	a,_distanceLeft
 	mov	a,(_distanceLeft + 1)
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:210: P2_2=1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:217: P2_2=1;
 	setb	_P2_2
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:211: P2_1=1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:218: P2_1=1;
 	setb	_P2_1
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:212: P2_0=0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:219: P2_0=0;
 	clr	_P2_0
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:213: printf("\nIntstruction: ");
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:220: printf("\nIntstruction: ");
 	mov	a,#__str_0
 	push	acc
 	mov	a,#(__str_0 >> 8)
@@ -684,7 +702,7 @@ L005001?:
 	dec	sp
 	dec	sp
 	dec	sp
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:214: scanf("%ud", &instruction);
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:221: scanf("%ud", &instruction);
 	mov	a,#_instruction
 	push	acc
 	mov	a,#(_instruction >> 8)
@@ -703,7 +721,7 @@ L005001?:
 	mov	sp,a
 	sjmp	L005001?
 L005003?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:217: if(instruction==1)                        //move forward
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:224: if(instruction==1)                        //move forward
 	mov	a,#0x01
 	cjne	a,_instruction,L005055?
 	clr	a
@@ -712,18 +730,18 @@ L005003?:
 L005055?:
 	sjmp	L005027?
 L005056?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:219: if(Stage!=0)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:226: if(Stage!=0)
 	mov	a,_Stage
 	orl	a,(_Stage + 1)
 	jz	L005005?
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:220: Stage--;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:227: Stage--;
 	dec	_Stage
 	mov	a,#0xff
 	cjne	a,_Stage,L005058?
 	dec	(_Stage + 1)
 L005058?:
 L005005?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:221: printf("\nMove forwrds");
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:228: printf("\nMove forwrds");
 	mov	a,#__str_2
 	push	acc
 	mov	a,#(__str_2 >> 8)
@@ -736,7 +754,7 @@ L005005?:
 	dec	sp
 	ljmp	L005030?
 L005027?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:222: }else if(instruction==2)                  //move backwards
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:229: }else if(instruction==2)                  //move backwards
 	mov	a,#0x02
 	cjne	a,_instruction,L005059?
 	clr	a
@@ -745,7 +763,7 @@ L005027?:
 L005059?:
 	sjmp	L005024?
 L005060?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:224: if(Stage!=NSTAGES)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:231: if(Stage!=NSTAGES)
 	mov	dptr,#_NSTAGES
 	clr	a
 	movc	a,@a+dptr
@@ -759,7 +777,7 @@ L005060?:
 	cjne	a,(_Stage + 1),L005061?
 	sjmp	L005007?
 L005061?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:225: Stage++;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:232: Stage++;
 	mov	a,#0x01
 	add	a,_Stage
 	mov	_Stage,a
@@ -767,7 +785,7 @@ L005061?:
 	addc	a,(_Stage + 1)
 	mov	(_Stage + 1),a
 L005007?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:226: printf("\n Move back");	
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:233: printf("\n Move back");	
 	mov	a,#__str_3
 	push	acc
 	mov	a,#(__str_3 >> 8)
@@ -780,7 +798,7 @@ L005007?:
 	dec	sp
 	ljmp	L005030?
 L005024?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:227: }else if(instruction==3)                  //uturn
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:234: }else if(instruction==3)                  //uturn
 	mov	a,#0x03
 	cjne	a,_instruction,L005062?
 	clr	a
@@ -789,9 +807,9 @@ L005024?:
 L005062?:
 	sjmp	L005021?
 L005063?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:229: uTurn();
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:236: uTurn();
 	lcall	_uTurn
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:230: printf("\nturned");
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:237: printf("\nturned");
 	mov	a,#__str_4
 	push	acc
 	mov	a,#(__str_4 >> 8)
@@ -804,14 +822,14 @@ L005063?:
 	dec	sp
 	ljmp	L005030?
 L005021?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:231: }else if(instruction==4)                  //parralell park
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:238: }else if(instruction==4)                  //parralell park
 	mov	a,#0x04
 	cjne	a,_instruction,L005064?
 	clr	a
 	cjne	a,(_instruction + 1),L005064?
 	ljmp	L005030?
 L005064?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:234: }else if(instruction==5)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:241: }else if(instruction==5)
 	mov	a,#0x05
 	cjne	a,_instruction,L005065?
 	clr	a
@@ -820,11 +838,11 @@ L005064?:
 L005065?:
 	ljmp	L005015?
 L005066?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:238: instruction=0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:245: instruction=0;
 	clr	a
 	mov	_instruction,a
 	mov	(_instruction + 1),a
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:239: while(instruction!=5);
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:246: while(instruction!=5);
 L005008?:
 	mov	a,#0x05
 	cjne	a,_instruction,L005067?
@@ -834,7 +852,7 @@ L005008?:
 L005067?:
 	sjmp	L005008?
 L005068?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:241: for(i=0;i<NSTAGES;i++)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:248: for(i=0;i<NSTAGES;i++)
 	mov	r2,#0x00
 	mov	r3,#0x00
 L005032?:
@@ -856,7 +874,7 @@ L005032?:
 	jc	L005069?
 	ljmp	L005030?
 L005069?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:243: if(distanceLeft>PRESETS[i]-3 && distanceLeft<PRESETS[i]+3)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:250: if(distanceLeft>PRESETS[i]-3 && distanceLeft<PRESETS[i]+3)
 	mov	ar4,r2
 	mov	a,r3
 	xch	a,r4
@@ -905,17 +923,17 @@ L005069?:
 	mov	a,r7
 	subb	a,r5
 	jnc	L005034?
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:244: Stage=i;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:251: Stage=i;
 	mov	_Stage,r2
 	mov	(_Stage + 1),r3
 L005034?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:241: for(i=0;i<NSTAGES;i++)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:248: for(i=0;i<NSTAGES;i++)
 	inc	r2
 	cjne	r2,#0x00,L005032?
 	inc	r3
 	sjmp	L005032?
 L005015?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:249: printf("\nERROR");
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:256: printf("\nERROR");
 	mov	a,#__str_5
 	push	acc
 	mov	a,#(__str_5 >> 8)
@@ -926,41 +944,41 @@ L005015?:
 	dec	sp
 	dec	sp
 	dec	sp
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:250: P2_2=0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:257: P2_2=0;
 	clr	_P2_2
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:251: P2_1=1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:258: P2_1=1;
 	setb	_P2_1
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:252: P2_0=1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:259: P2_0=1;
 	setb	_P2_0
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:255: return 0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:262: return 0;
 	ljmp	L005030?
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'getDistance'
 ;------------------------------------------------------------
 ;------------------------------------------------------------
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:266: void getDistance() 
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:273: void getDistance() 
 ;	-----------------------------------------
 ;	 function getDistance
 ;	-----------------------------------------
 _getDistance:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:270: }
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:277: }
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'turnCar'
 ;------------------------------------------------------------
 ;------------------------------------------------------------
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:277: void turnCar()
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:284: void turnCar()
 ;	-----------------------------------------
 ;	 function turnCar
 ;	-----------------------------------------
 _turnCar:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:279: P2_2=1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:286: P2_2=1;
 	setb	_P2_2
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:280: P2_1=0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:287: P2_1=0;
 	clr	_P2_1
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:281: P2_0=1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:288: P2_0=1;
 	setb	_P2_0
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:283: while(distanceLeft < distanceRight+ANGLEBUFFER)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:290: while(distanceLeft < distanceRight+ANGLEBUFFER)
 L007001?:
 	mov	dptr,#_ANGLEBUFFER
 	clr	a
@@ -984,7 +1002,7 @@ L007001?:
 	xrl	b,#0x80
 	subb	a,b
 	jnc	L007004?
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:285: pwmLeft = TURNSPEED;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:292: pwmLeft = TURNSPEED;
 	mov	dptr,#_TURNSPEED
 	clr	a
 	movc	a,@a+dptr
@@ -994,7 +1012,7 @@ L007001?:
 	mov	r5,a
 	mov	_pwmLeft,r4
 	mov	(_pwmLeft + 1),r5
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:286: pwmRight = (-TURNSPEED);
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:293: pwmRight = (-TURNSPEED);
 	clr	c
 	clr	a
 	subb	a,r4
@@ -1002,7 +1020,7 @@ L007001?:
 	clr	a
 	subb	a,r5
 	mov	(_pwmRight + 1),a
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:288: while(distanceLeft+ANGLEBUFFER > distanceRight)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:295: while(distanceLeft+ANGLEBUFFER > distanceRight)
 	sjmp	L007001?
 L007004?:
 	mov	a,r2
@@ -1020,7 +1038,7 @@ L007004?:
 	xrl	b,#0x80
 	subb	a,b
 	jnc	L007006?
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:290: pwmLeft = (-TURNSPEED);
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:297: pwmLeft = (-TURNSPEED);
 	mov	dptr,#_TURNSPEED
 	clr	a
 	movc	a,@a+dptr
@@ -1035,29 +1053,29 @@ L007004?:
 	clr	a
 	subb	a,r5
 	mov	(_pwmLeft + 1),a
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:291: pwmRight = TURNSPEED;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:298: pwmRight = TURNSPEED;
 	mov	_pwmRight,r4
 	mov	(_pwmRight + 1),r5
 	sjmp	L007004?
 L007006?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:293: pwmLeft=pwmRight=0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:300: pwmLeft=pwmRight=0;
 	clr	a
 	mov	_pwmRight,a
 	mov	(_pwmRight + 1),a
 	mov	_pwmLeft,a
 	mov	(_pwmLeft + 1),a
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:294: return;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:301: return;
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'moveCar'
 ;------------------------------------------------------------
 ;------------------------------------------------------------
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:302: void moveCar()
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:309: void moveCar()
 ;	-----------------------------------------
 ;	 function moveCar
 ;	-----------------------------------------
 _moveCar:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:305: while (distanceRight+DISTANCEBUFFER > PRESETS[Stage] && distanceLeft==distanceRight)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:312: while (distanceRight+DISTANCEBUFFER > PRESETS[Stage] && distanceLeft==distanceRight)
 L008002?:
 	mov	dptr,#_DISTANCEBUFFER
 	clr	a
@@ -1101,13 +1119,13 @@ L008002?:
 	cjne	a,_distanceLeft,L008006?
 	mov	a,(_distanceRight + 1)
 	cjne	a,(_distanceLeft + 1),L008006?
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:307: P2_2=1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:314: P2_2=1;
 	setb	_P2_2
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:308: P2_1=0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:315: P2_1=0;
 	clr	_P2_1
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:309: P2_0=1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:316: P2_0=1;
 	setb	_P2_0
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:310: pwmLeft = MOVESPEED;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:317: pwmLeft = MOVESPEED;
 	mov	dptr,#_MOVESPEED
 	clr	a
 	movc	a,@a+dptr
@@ -1117,10 +1135,10 @@ L008002?:
 	mov	r5,a
 	mov	_pwmLeft,r4
 	mov	(_pwmLeft + 1),r5
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:311: pwmRight = MOVESPEED;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:318: pwmRight = MOVESPEED;
 	mov	_pwmRight,r4
 	mov	(_pwmRight + 1),r5
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:314: while(distanceRight < PRESETS[Stage]+DISTANCEBUFFER && distanceLeft==distanceRight)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:321: while(distanceRight < PRESETS[Stage]+DISTANCEBUFFER && distanceLeft==distanceRight)
 	sjmp	L008002?
 L008006?:
 	mov	a,_Stage
@@ -1160,7 +1178,7 @@ L008006?:
 	cjne	a,_distanceLeft,L008008?
 	mov	a,(_distanceRight + 1)
 	cjne	a,(_distanceLeft + 1),L008008?
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:316: pwmLeft = (-MOVESPEED); 
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:323: pwmLeft = (-MOVESPEED); 
 	mov	dptr,#_MOVESPEED
 	clr	a
 	movc	a,@a+dptr
@@ -1177,41 +1195,41 @@ L008006?:
 	mov	r5,a
 	mov	_pwmLeft,r4
 	mov	(_pwmLeft + 1),r5
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:317: pwmRight = (-MOVESPEED);		
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:324: pwmRight = (-MOVESPEED);		
 	mov	_pwmRight,r4
 	mov	(_pwmRight + 1),r5
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:318: P2_2=1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:325: P2_2=1;
 	setb	_P2_2
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:319: P2_1=0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:326: P2_1=0;
 	clr	_P2_1
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:320: P2_0=1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:327: P2_0=1;
 	setb	_P2_0
 	sjmp	L008006?
 L008008?:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:323: pwmLeft=pwmRight=0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:330: pwmLeft=pwmRight=0;
 	clr	a
 	mov	_pwmRight,a
 	mov	(_pwmRight + 1),a
 	mov	_pwmLeft,a
 	mov	(_pwmLeft + 1),a
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:324: return;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:331: return;
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'uTurn'
 ;------------------------------------------------------------
 ;------------------------------------------------------------
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:327: void uTurn()
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:334: void uTurn()
 ;	-----------------------------------------
 ;	 function uTurn
 ;	-----------------------------------------
 _uTurn:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:329: P2_2=1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:336: P2_2=1;
 	setb	_P2_2
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:330: P2_1=0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:337: P2_1=0;
 	clr	_P2_1
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:331: P2_0=1;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:338: P2_0=1;
 	setb	_P2_0
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:332: pwmLeft=TURNSPEED;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:339: pwmLeft=TURNSPEED;
 	mov	dptr,#_TURNSPEED
 	clr	a
 	movc	a,@a+dptr
@@ -1221,7 +1239,7 @@ _uTurn:
 	mov	r3,a
 	mov	_pwmLeft,r2
 	mov	(_pwmLeft + 1),r3
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:333: pwmRight=(-TURNSPEED);
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:340: pwmRight=(-TURNSPEED);
 	clr	c
 	clr	a
 	subb	a,r2
@@ -1229,27 +1247,26 @@ _uTurn:
 	clr	a
 	subb	a,r3
 	mov	(_pwmRight + 1),a
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:334: wait1s();
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:341: wait1s();
 	lcall	_wait1s
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:335: pwmLeft=0;
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:336: pwmRight=0;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:342: pwmLeft=pwmRight=0;
 	clr	a
-	mov	_pwmLeft,a
-	mov	(_pwmLeft + 1),a
 	mov	_pwmRight,a
 	mov	(_pwmRight + 1),a
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:337: return;
+	mov	_pwmLeft,a
+	mov	(_pwmLeft + 1),a
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:343: return;
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'wait2ms'
 ;------------------------------------------------------------
 ;------------------------------------------------------------
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:341: void wait2ms (void)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:347: void wait2ms (void)
 ;	-----------------------------------------
 ;	 function wait2ms
 ;	-----------------------------------------
 _wait2ms:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:351: _endasm;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:357: _endasm;
 	
   ;For a 22.1184MHz crystal one machine cycle
   ;takes 12/22.1184MHz=0.5425347us
@@ -1267,16 +1284,16 @@ _wait2ms:
 ;Allocation info for local variables in function 'wait1s'
 ;------------------------------------------------------------
 ;------------------------------------------------------------
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:355: void wait1s (void)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:361: void wait1s (void)
 ;	-----------------------------------------
 ;	 function wait1s
 ;	-----------------------------------------
 _wait1s:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:367: _endasm;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:373: _endasm;
 	
   ;For a 22.1184MHz crystal one machine cycle
   ;takes 12/22.1184MHz=0.5425347us
-	     mov R2, #90
+	     mov R2, #30
 	 L3:
 	mov R1, #180
 	 L2:
@@ -1293,12 +1310,12 @@ _wait1s:
 ;------------------------------------------------------------
 ;channel                   Allocated to registers 
 ;------------------------------------------------------------
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:375: float voltage (unsigned char channel)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:381: float voltage (unsigned char channel)
 ;	-----------------------------------------
 ;	 function voltage
 ;	-----------------------------------------
 _voltage:
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:377: return ((GetADC(channel) * 4.84) / 1023.0); // VCC=4.84V (measured)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:383: return ((GetADC(channel) * 4.84) / 1023.0); // VCC=4.84V (measured)
 	lcall	_GetADC
 	lcall	___uint2fs
 	mov	r2,dpl
@@ -1350,17 +1367,17 @@ _voltage:
 ;------------------------------------------------------------
 ;value                     Allocated to registers r2 
 ;------------------------------------------------------------
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:380: void SPIWrite(unsigned char value)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:386: void SPIWrite(unsigned char value)
 ;	-----------------------------------------
 ;	 function SPIWrite
 ;	-----------------------------------------
 _SPIWrite:
 	mov	r2,dpl
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:382: SPSTA &= (~SPIF); // Clear the SPIF flag in SPSTA
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:388: SPSTA &= (~SPIF); // Clear the SPIF flag in SPSTA
 	anl	_SPSTA,#0x7F
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:383: SPDAT = value;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:389: SPDAT = value;
 	mov	_SPDAT,r2
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:384: while ((SPSTA & SPIF) != SPIF); //Wait for transmission to end
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:390: while ((SPSTA & SPIF) != SPIF); //Wait for transmission to end
 L013001?:
 	mov	a,#0x80
 	anl	a,_SPSTA
@@ -1373,26 +1390,26 @@ L013001?:
 ;channel                   Allocated to registers r2 
 ;adc                       Allocated to registers r2 r3 
 ;------------------------------------------------------------
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:388: unsigned int GetADC(unsigned char channel)
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:394: unsigned int GetADC(unsigned char channel)
 ;	-----------------------------------------
 ;	 function GetADC
 ;	-----------------------------------------
 _GetADC:
 	mov	r2,dpl
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:393: SPCON &= (~SPEN); // Disable SPI
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:399: SPCON &= (~SPEN); // Disable SPI
 	anl	_SPCON,#0xBF
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:394: SPCON = MSTR | CPOL | CPHA | SPR1 | SPR0 | SSDIS;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:400: SPCON = MSTR | CPOL | CPHA | SPR1 | SPR0 | SSDIS;
 	mov	_SPCON,#0x3F
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:395: SPCON |= SPEN; // Enable SPI
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:401: SPCON |= SPEN; // Enable SPI
 	orl	_SPCON,#0x40
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:397: P1_4 = 0; // Activate the MCP3004 ADC.
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:403: P1_4 = 0; // Activate the MCP3004 ADC.
 	clr	_P1_4
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:398: SPIWrite(channel | 0x18);	// Send start bit, single/diff* bit, D2, D1, and D0 bits.
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:404: SPIWrite(channel | 0x18);	// Send start bit, single/diff* bit, D2, D1, and D0 bits.
 	mov	a,#0x18
 	orl	a,r2
 	mov	dpl,a
 	lcall	_SPIWrite
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:399: for (adc=0; adc < 10; adc++); // Wait for S/H to setup
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:405: for (adc=0; adc < 10; adc++); // Wait for S/H to setup
 	mov	r2,#0x0A
 	mov	r3,#0x00
 L014003?:
@@ -1403,24 +1420,24 @@ L014009?:
 	mov	a,r2
 	orl	a,r3
 	jnz	L014003?
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:400: SPIWrite(0x55); // Read bits 9 down to 4
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:406: SPIWrite(0x55); // Read bits 9 down to 4
 	mov	dpl,#0x55
 	lcall	_SPIWrite
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:401: adc=((SPDAT & 0x3f) * 0x100);
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:407: adc=((SPDAT & 0x3f) * 0x100);
 	mov	a,#0x3F
 	anl	a,_SPDAT
 	mov	r3,a
 	mov	r2,#0x00
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:402: SPIWrite(0x55);// Read bits 3 down to 0
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:408: SPIWrite(0x55);// Read bits 3 down to 0
 	mov	dpl,#0x55
 	push	ar2
 	push	ar3
 	lcall	_SPIWrite
 	pop	ar3
 	pop	ar2
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:403: P1_4 = 1; // Deactivate the MCP3004 ADC.
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:409: P1_4 = 1; // Deactivate the MCP3004 ADC.
 	setb	_P1_4
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:404: adc += (SPDAT & 0xf0); // SPDR contains the low part of the result. 
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:410: adc += (SPDAT & 0xf0); // SPDR contains the low part of the result. 
 	mov	a,#0xF0
 	anl	a,_SPDAT
 	mov	r4,a
@@ -1430,7 +1447,7 @@ L014009?:
 	mov	r2,a
 	mov	a,r5
 	addc	a,r3
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:405: adc >>= 4;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:411: adc >>= 4;
 	swap	a
 	xch	a,r2
 	swap	a
@@ -1441,7 +1458,7 @@ L014009?:
 	xch	a,r2
 	xrl	a,r2
 	xch	a,r2
-;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:407: return adc;
+;	C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\core.c:413: return adc;
 	mov	dpl,r2
 	mov	dph,a
 	ret
@@ -1453,7 +1470,7 @@ L014009?:
 _MOVESPEED:
 	db 0x50,0x00	;  80
 _TURNSPEED:
-	db 0x50,0x00	;  80
+	db 0x64,0x00	;  100
 _DISTANCEBUFFER:
 	db 0x00,0x00	;  0
 _ANGLEBUFFER:
