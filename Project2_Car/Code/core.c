@@ -7,24 +7,15 @@
 	CodeName: Mr. Squiggles
 
 	PINS:
+		P2_0 = Green Led
+		P2_1 = Yellow Led
+		P2_2 = Red Led
 	
-	P2_0 = Green Led
-	P2_1 = Yellow Led
-	P2_2 = Red Led
-	
-	P0_1 = Left Wheel
-	P0_0 = Left Wheel
-
-	P0_3 = Right Wheel
-	P0_4 = Right wheel
-
-	
+		P0_1 = Left Wheel
+		P0_0 = Left Wheel
+		P0_3 = Right Wheel
+		P0_4 = Right wheel	
 */
-
-
-
-
-
 
 //---Included Files---
 
@@ -87,11 +78,12 @@ volatile unsigned int leftSensor = 0;
 volatile unsigned int rightSensor = 0;
 
 //left and right coil distances
-volatile int distanceLeft;
-volatile int distanceRight;
+volatile float distanceLeft;
+volatile float distanceRight;
 
 //current instruction
 volatile unsigned int instruction;
+volatile unsigned int gotInst;
 
 //Start up preset distance
 volatile unsigned int Stage;
@@ -102,6 +94,7 @@ void getDistance();
 void turnCar();
 void moveCar();
 void uTurn();
+unsigned int getByte(int min);
 void wait2ms();
 void wait1s();
 float voltage (unsigned char channel);
@@ -110,18 +103,8 @@ unsigned int GetADC(unsigned char channel);
 
 //---Interrupts---
 
-void beaconSignal() interrupt 0
-{
-	//if(voltage(0)>MINREAD)
-	//	return;
-	//else
-	// getmessage();
-    //	alters instruction variable
-}
-
 void pwmCounter() interrupt 1
-{
-	
+{		
 	//Get left and right distances
 	//getDistance();
 	if(++pwmCount > 99)
@@ -129,32 +112,48 @@ void pwmCounter() interrupt 1
 	//Left wheel
 	if(pwmLeft > 0)
 	{	
-		P1_1 = (pwmLeft > pwmCount) ? 0:1;
-		P1_0 = 1;
+		P0_1 = (pwmLeft > pwmCount) ? 0:1;
+		P0_0 = 1;
 	}
 	if(pwmLeft < 0)
 	{	
-		P1_0 = ((-1) * pwmLeft > pwmCount) ? 0:1;
-		P1_1 = 1;
+		P0_0 = ((-1) * pwmLeft > pwmCount) ? 0:1;
+		P0_1 = 1;
 	}
 	if(pwmLeft==0)
 	{
-		P1_1 = P1_0 = 1;
+		P0_1 = P0_0 = 1;
 	}
 	//Right wheel
 	if(pwmRight > 0)
 	{	
-		P1_4 = (pwmRight > pwmCount) ? 0:1;
-		P1_3 = 1;
+		P0_4 = (pwmRight > pwmCount) ? 0:1;
+		P0_3 = 1;
 	}
 	if(pwmRight < 0)
 	{	
-		P1_3 = ((-1) * pwmRight > pwmCount) ? 0:1;
-		P1_4 = 1;
+		P0_3 = ((-1) * pwmRight > pwmCount) ? 0:1;
+		P0_4 = 1;
 	}
 	if(pwmRight==0)
 	{
-		P1_4 = P1_3 = 1;
+		P0_4 = P0_3 = 1;
+	}
+}
+
+
+void beaconSignal() interrupt 3
+{
+	if (gotInst == 1 && voltage(0) == 0) {
+		instruction = getByte(0);
+		gotInst = 0;
+	}
+
+	if (voltage(0) == 0) {
+		gotInst = 1;
+	}
+	else {
+		gotInst = 0;
 	}
 }		
 
@@ -178,13 +177,14 @@ unsigned char _c51_external_startup(void)
     BRL = BRG_VAL;
     BDRCON = BRR | TBCK | RBCK | SPD;
 	
-	TMOD = 0x01;	// Timer 0 as 16-bit timer	
+	TMOD = 0B_0001_0001;	// Timer 0 as 16-bit timer	
 	TH0 = RH0 = TIMER0_RELOAD_VALUE / 0x100;
 	TL0 = RL0 = TIMER0_RELOAD_VALUE % 0x100;
 	TR0 = 1;
-	ET0 = 1;	// Enable timer 0 interrupt
-	EX0 = 1;	// Enable external interrupt 0
-	IT0 = 1;
+	TR1 = 1;
+	//ET0 = 1;	// Enable timer 0 interrupt
+	//EX0 = 1;	// Enable external interrupt 0
+	//IT0 = 1;
 	EA = 1; 	// Enable global interrupts
 	tether=0;
 	direction=1;
@@ -197,17 +197,21 @@ unsigned char _c51_external_startup(void)
 //---MAIN---
 int main (void)
 {	
-	distanceLeft=15;
-	distanceRight=15;	
-	Stage=2;
-	pwmLeft=0;
-	pwmRight=0;
+	distanceLeft = 15;
+	distanceRight = 15;	
+	Stage = 2;
+	pwmLeft = 0;
+	pwmRight = 0;
+	gotInst = 0;
+	
 	while (1)
 	{	
 		instruction = 0;
 		//stay on tether until instruction is read
 		while (instruction == 0)
-		{
+		{	
+			wait1s();
+			getDistance();
 			//inplace turning if car is not aligned
 			if(distanceLeft != distanceRight)
 			{	
@@ -217,8 +221,8 @@ int main (void)
 			P2_2=1;
 			P2_1=1;
 			P2_0=0;
-			printf("\nIntstruction: ");
-			scanf("%ud", &instruction);
+			//printf("\nIntstruction: ");
+			//scanf("%ud", &instruction);
 		}
 		//get instruction and go back to tether
 		if(instruction==1)                        //move forward
@@ -272,8 +276,17 @@ int main (void)
  */
 void getDistance() 
 {
-	//distanceRight=voltage(0);
-	//distanceLeft=voltage(1); 
+	//distanceRight = voltage(0);
+	//distanceLeft = voltage(1);
+	printf(GOTO_YX,10,10);
+	printf(CLR_TO_END_LINE); 
+	printf("Volt[R]: %2.2f --- Volt[L]: %2.2f\n", voltage(0), voltage(1));
+	printf(GOTO_YX,11,10);
+	printf(CLR_TO_END_LINE);
+	printf("PWM[R]: %d --- PWM[L]: %d\n", pwmRight, pwmLeft);
+	printf(GOTO_YX, 12, 10);
+	printf(CLR_TO_END_LINE); 
+	printf("Instruction: %d", instruction);
 }
 
 /*	turnCar(): turn both wheels individually to align vehicle with angle
@@ -343,6 +356,26 @@ void uTurn()
 	return;
 }
 
+unsigned int getByte(int min)
+{
+	unsigned int j, val;
+	unsigned int v;
+	
+	// skip the start bit
+	val = 0;
+	//wait_one_and_half_bit_time();
+	
+	for (j = 0; j < 8; j++) {
+		v = GetADC(0);
+		val |= (v > min) ? (0x01 << j) : 0x00;
+		//wait_bit_time();
+	}
+	
+	// wait for stop bits
+	//wait_one_and_half_bit_time();
+	return val;
+}
+
 // wait for 2 milliseconds
 void wait2ms (void)
 {
@@ -363,7 +396,7 @@ void wait1s (void)
 	_asm	
 		;For a 22.1184MHz crystal one machine cycle 
 		;takes 12/22.1184MHz=0.5425347us
-	    mov R2, #30
+	    mov R2, #10
 	L3:	mov R1, #180
 	L2:	mov R0, #180
 	L1:	djnz R0, L1 ; 2 machine cycles-> 2*0.5425347us*184=200us
