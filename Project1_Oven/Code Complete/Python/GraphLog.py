@@ -13,7 +13,7 @@ pencolour       = 'black'
 
 turtle.bgcolor('black')
 turtle.title('Reflow Oven Log')
-file = open('log_dump.dat', 'r')
+file = open('memorable_dump.dat', 'r')
 #date = file.readline()
 
 def getTime():

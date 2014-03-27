@@ -23,7 +23,7 @@ pencolour       = 'grey'
 # core settings and file read selection
 turtle.bgcolor('grey')
 turtle.title('Reflow Oven Log')
-file = open('brad_log_dump.dat', 'r')
+file = open('josh_log_dump.dat', 'r')
 theDate = file.readline()
 theDate = theDate[:10]
 
