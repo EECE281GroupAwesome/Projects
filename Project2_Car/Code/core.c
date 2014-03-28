@@ -11,10 +11,15 @@
 		P2_1 = Yellow Led
 		P2_2 = Red Led
 	
-		P0_1 = Left Wheel
 		P0_0 = Left Wheel
+		P0_1 = Left Wheel  
 		P0_3 = Right Wheel
 		P0_4 = Right wheel	
+		
+		P1_4 = MCP3004 pin 8
+		P1_5 = MCP3004 pin 10
+		P1_6 = MCP3004 pin 11
+		P1_7 = MCP3004 pin 9
 */
 
 //---Included Files---
@@ -31,21 +36,13 @@
 #define BAUD 115200L
 #define BRG_VAL (0x100-(CLK/(32L*BAUD)))
 #define TIMER0_RELOAD_VALUE (65536L-(CLK/(12L*FREQ)))
+#define TIMER1_RELOAD_VALUE (65536L-(CLK/(12L*FREQ1)))
 #define TIMER_2_RELOAD (0x10000L-(CLK/(32L*BAUD)))
 #define FREQ 10000L
+#define FREQ1 5000L
 #define RED P0_0
 #define GRN P0_1
 #define YLW P0_2
-
-/* ANSI colors */
-#define	COLOR_BLACK		0
-#define	COLOR_RED		1
-#define	COLOR_GREEN		2
-#define	COLOR_YELLOW	3
-#define	COLOR_BLUE		4
-#define	COLOR_MAGENTA	5
-#define	COLOR_CYAN		6
-#define	COLOR_WHITE		7
 
 /* Some ANSI escape sequences */
 #define CURSOR_ON "\x1b[?25h"
@@ -59,16 +56,23 @@
 #define FONT_SELECT "\x1B[%dm"
 
 //---Global Variables---
-//speed to move and turn
-const int MOVESPEED=80;
-const int TURNSPEED=100;
-//buffers of error for aligning and distance
-const int DISTANCEBUFFER=0;
-const int ANGLEBUFFER=0;
-//preset distances
+
+// minimum voltage for signal sendage
+const float MINVOLT = 0.1;
+
+// speed to move and turn
+const int MOVESPEED = 80;
+const int TURNSPEED = 100;
+
+// buffers of error for aligning and distance
+const int DISTANCEBUFFER = 0;
+const int ANGLEBUFFER = 0;
+
+// preset distances
 const int NSTAGES=12;
 const unsigned int PRESETS[] = {5,10,15,20,25,30,35,40,45,50,55,60};
-//pwm modulation
+
+// pwm modulation
 volatile unsigned int pwmCount = 0;
 volatile int pwmLeft;
 volatile int pwmRight;
@@ -76,6 +80,8 @@ volatile int direction;
 volatile int tether;
 volatile unsigned int leftSensor = 0;
 volatile unsigned int rightSensor = 0;
+volatile int pwmLeftTemp = 0;
+volatile int pwmRightTemp = 0;
 
 //left and right coil distances
 volatile float distanceLeft;
@@ -94,17 +100,19 @@ void getDistance();
 void turnCar();
 void moveCar();
 void uTurn();
-unsigned int getByte(int min);
-void wait2ms();
+unsigned int getSig();
 void wait1s();
 float voltage (unsigned char channel);
 void SPIWrite(unsigned char value);
 unsigned int GetADC(unsigned char channel);
+//void wait_bit_time();
+//void wait_one_and_half_bit_time();
 
 //---Interrupts---
 
 void pwmCounter() interrupt 1
 {		
+	P1_1 = !P1_1;
 	//Get left and right distances
 	//getDistance();
 	if(++pwmCount > 99)
@@ -115,14 +123,23 @@ void pwmCounter() interrupt 1
 		P0_1 = (pwmLeft > pwmCount) ? 0:1;
 		P0_0 = 1;
 	}
-	if(pwmLeft < 0)
+	else if(pwmLeft < 0)
 	{	
+
 		P0_0 = ((-1) * pwmLeft > pwmCount) ? 0:1;
 		P0_1 = 1;
 	}
 	if(pwmLeft==0)
 	{
 		P0_1 = P0_0 = 1;
+
+		P1_0 = ((-1) * pwmLeft > pwmCount) ? 0:1;
+		P1_1 = 1;
+	}else
+	{
+		P1_0 = 1;
+		P1_1 = 1;
+
 	}
 	//Right wheel
 	if(pwmRight > 0)
@@ -130,8 +147,9 @@ void pwmCounter() interrupt 1
 		P0_4 = (pwmRight > pwmCount) ? 0:1;
 		P0_3 = 1;
 	}
-	if(pwmRight < 0)
+	else if(pwmRight < 0)
 	{	
+
 		P0_3 = ((-1) * pwmRight > pwmCount) ? 0:1;
 		P0_4 = 1;
 	}
@@ -144,16 +162,16 @@ void pwmCounter() interrupt 1
 
 void beaconSignal() interrupt 3
 {
-	if (gotInst == 1 && voltage(0) == 0) {
-		instruction = getByte(0);
-		gotInst = 0;
-	}
-
-	if (voltage(0) == 0) {
-		gotInst = 1;
-	}
-	else {
-		gotInst = 0;
+	if (voltage(0) < 0.1) 
+	{
+		ET0 = 0;
+		pwmLeftTemp = pwmLeft;
+		pwmRightTemp = pwmRight;
+		while(voltage(0) < 0.1);
+		instruction = getSig();
+		pwmLeft = pwmLeftTemp;
+		pwmRight = pwmRightTemp;
+		ET0 =  1;
 	}
 }		
 
@@ -180,9 +198,11 @@ unsigned char _c51_external_startup(void)
 	TMOD = 0B_0001_0001;	// Timer 0 as 16-bit timer	
 	TH0 = RH0 = TIMER0_RELOAD_VALUE / 0x100;
 	TL0 = RL0 = TIMER0_RELOAD_VALUE % 0x100;
+	TH1 = RH1 = TIMER1_RELOAD_VALUE / 0x100;
+	TL1 = RL1 = TIMER1_RELOAD_VALUE % 0x100;
 	TR0 = 1;
-	TR1 = 1;
-	//ET0 = 1;	// Enable timer 0 interrupt
+	//TR1 = 1;
+	ET0 = 1;	// Enable timer 0 interrupt
 	//EX0 = 1;	// Enable external interrupt 0
 	//IT0 = 1;
 	EA = 1; 	// Enable global interrupts
@@ -191,17 +211,18 @@ unsigned char _c51_external_startup(void)
 	P2_2=1;
 	P2_1=1;
 	P2_0=1;
+	printf(CLEAR_SCREEN);
     return 0;
 }
 
 //---MAIN---
 int main (void)
 {	
-	distanceLeft = 15;
-	distanceRight = 15;	
-	Stage = 2;
-	pwmLeft = 0;
-	pwmRight = 0;
+	distanceLeft = 10;
+	distanceRight = 10;	
+	Stage = 0;
+	pwmLeft = -50;
+	pwmRight = -50;
 	gotInst = 0;
 	
 	while (1)
@@ -221,8 +242,6 @@ int main (void)
 			P2_2=1;
 			P2_1=1;
 			P2_0=0;
-			//printf("\nIntstruction: ");
-			//scanf("%ud", &instruction);
 		}
 		//get instruction and go back to tether
 		if(instruction==1)                        //move forward
@@ -284,9 +303,6 @@ void getDistance()
 	printf(GOTO_YX,11,10);
 	printf(CLR_TO_END_LINE);
 	printf("PWM[R]: %d --- PWM[L]: %d\n", pwmRight, pwmLeft);
-	printf(GOTO_YX, 12, 10);
-	printf(CLR_TO_END_LINE); 
-	printf("Instruction: %d", instruction);
 }
 
 /*	turnCar(): turn both wheels individually to align vehicle with angle
@@ -352,42 +368,27 @@ void uTurn()
 	pwmLeft=TURNSPEED;
 	pwmRight=(-TURNSPEED);
 	wait1s();
+	wait1s();
 	pwmLeft=pwmRight=0;
 	return;
 }
 
-unsigned int getByte(int min)
+unsigned int getSig()
 {
 	unsigned int j, val;
-	unsigned int v;
+	float v;
 	
 	// skip the start bit
 	val = 0;
 	//wait_one_and_half_bit_time();
 	
-	for (j = 0; j < 8; j++) {
+	for (j = 0; j < 3; j++) {
 		v = GetADC(0);
-		val |= (v > min) ? (0x01 << j) : 0x00;
+		val |= (v > MINVOLT) ? (0x01 << j) : 0x00;
 		//wait_bit_time();
 	}
 	
-	// wait for stop bits
-	//wait_one_and_half_bit_time();
 	return val;
-}
-
-// wait for 2 milliseconds
-void wait2ms (void)
-{
-	_asm	
-		;For a 22.1184MHz crystal one machine cycle 
-		;takes 12/22.1184MHz=0.5425347us
-	J3:	mov R4, #10
-	J2:	mov R3, #184
-	J1:	djnz R3, J1 ; 2 machine cycles-> 2*0.5425347us*184=200us
-	    djnz R4, J2 ; 200us*250=0.05s
-	    ret
-    _endasm;
 }
 
 // wait for one second
@@ -418,9 +419,9 @@ float voltage (unsigned char channel)
 
 void SPIWrite(unsigned char value)
 {
-	SPSTA &= (~SPIF); // Clear the SPIF flag in SPSTA
-	SPDAT = value;
-	while ((SPSTA & SPIF) != SPIF); //Wait for transmission to end
+	SPSTA&=(~SPIF); // Clear the SPIF flag in SPSTA
+	SPDAT=value;
+	while((SPSTA & SPIF)!=SPIF); //Wait for transmission to end
 }
 
 // Read 10 bits from the MCP3004 ADC converter
@@ -429,19 +430,19 @@ unsigned int GetADC(unsigned char channel)
 	unsigned int adc;
 
 	// initialize the SPI port to read the MCP3004 ADC attached to it.
-	SPCON &= (~SPEN); // Disable SPI
-	SPCON = MSTR | CPOL | CPHA | SPR1 | SPR0 | SSDIS;
-	SPCON |= SPEN; // Enable SPI
+	SPCON&=(~SPEN); // Disable SPI
+	SPCON=MSTR|CPOL|CPHA|SPR1|SPR0|SSDIS;
+	SPCON|=SPEN; // Enable SPI
 	
-	P1_4 = 0; // Activate the MCP3004 ADC.
-	SPIWrite(channel | 0x18);	// Send start bit, single/diff* bit, D2, D1, and D0 bits.
-	for (adc=0; adc < 10; adc++); // Wait for S/H to setup
+	P1_4=0; // Activate the MCP3004 ADC.
+	SPIWrite(channel|0x18);	// Send start bit, single/diff* bit, D2, D1, and D0 bits.
+	for(adc=0; adc<10; adc++); // Wait for S/H to setup
 	SPIWrite(0x55); // Read bits 9 down to 4
-	adc=((SPDAT & 0x3f) * 0x100);
+	adc=((SPDAT&0x3f)*0x100);
 	SPIWrite(0x55);// Read bits 3 down to 0
-	P1_4 = 1; // Deactivate the MCP3004 ADC.
-	adc += (SPDAT & 0xf0); // SPDR contains the low part of the result. 
-	adc >>= 4;
+	P1_4=1; // Deactivate the MCP3004 ADC.
+	adc+=(SPDAT&0xf0); // SPDR contains the low part of the result. 
+	adc>>=4;
 		
 	return adc;
 }
