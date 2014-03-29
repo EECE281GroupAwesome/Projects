@@ -95,9 +95,9 @@ volatile unsigned int Stage;
 
 //---Function Prototypes---
 
+int smooth_move(int * history, int target);
 float getDistance();
 int turnRatio();
-void turnCar();
 void moveCar();
 void uTurn();
 unsigned int getSig();
@@ -225,9 +225,13 @@ unsigned char _c51_external_startup(void)
     return 0;
 }
 
+	int leftHistory[] = {0, 0, 0};
+	int rightHistory[] = {0, 0, 0};
+
 //---MAIN---
 int main (void)
 {	
+
 	pwmLeft = 0;
 	pwmRight = 0;
 	instruction = 0;
@@ -320,33 +324,6 @@ int turnRatio()
 	return 0;
 }
 
-/*	turnCar(): turn both wheels individually to align vehicle with angle
- *	Requires: nada, looks at globals
- *	Modify:	 n/a
- *	Returns:  n/a
- */
-void turnCar()
-{
-	P2_2=1;
-	P2_1=0;
-	P2_0=1;
-	
-	//turn towards beacon
-	if(turnRatio() == 1)
-	{
-		pwmLeft = TURNSPEED;
-		pwmRight = (-TURNSPEED);
-	}
-	else if(turnRatio() == -1)//(distanceLeft > distanceRight+ANGLEBUFFER)
-	{
-		pwmLeft = (-TURNSPEED);
-		pwmRight = TURNSPEED;
-	}
-	else
-		pwmLeft = pwmRight = 0;
-	return;
-}
-
 /*	moveCar(): move the car towards the beacon if neccessarry
  *  Requires: distanceRight, distanceLeft
  *  Modify:   pwmRight, pwmLeft
@@ -358,16 +335,17 @@ void moveCar()
 	//turn towards beacon
 	if(turnRatio() == 1)
 	{
-		pwmLeft = TURNSPEED;
-		pwmRight = (-TURNSPEED);
+		pwmLeft = smooth_move(leftHistory, TURNSPEED);
+		pwmRight= smooth_move(rightHistory, -TURNSPEED);
 	}
 	else if(turnRatio() == -1)//(distanceLeft > distanceRight+ANGLEBUFFER)
 	{
-		pwmLeft = (-TURNSPEED);
-		pwmRight = TURNSPEED;
+		pwmLeft = smooth_move(leftHistory, -TURNSPEED);
+		pwmRight = smooth_move(rightHistory, TURNSPEED);
 	}
 	else
-		pwmLeft = pwmRight = 0;
+		pwmLeft = smooth_move(leftHistory, 0);
+		pwmRight = smooth_move(rightHistory, 0);
 	
 	//move forward if too far and aligned
 	if ((getDistance()+DISTANCEBUFFER) < PRESETS[Stage])
@@ -375,8 +353,8 @@ void moveCar()
 		P2_2=1;
 		P2_1=0;
 		P2_0=1;
-		pwmLeft = MOVESPEED;
-		pwmRight = MOVESPEED;
+		pwmLeft = smooth_move(leftHistory, MOVESPEED);
+		pwmRight = smooth_move(rightHistory, MOVESPEED);
 	}
 	//move back if too close and aligned
 	else if (getDistance() > (PRESETS[Stage]+DISTANCEBUFFER))
@@ -384,16 +362,26 @@ void moveCar()
 		P2_2=1;
 		P2_1=0;
 		P2_0=1;
-		pwmLeft = (-MOVESPEED); 
-		pwmRight = (-MOVESPEED);
+		pwmLeft = smooth_move(leftHistory, -MOVESPEED);
+		pwmRight = smooth_move(rightHistory, -MOVESPEED);
 	}
 	else
 	{
-		pwmLeft=pwmRight=0;
-	}
+		pwmLeft = smooth_move(leftHistory, 0);
+		pwmRight = smooth_move(rightHistory, 0);
+	}		
+
 	return;
 }
 
+int smooth_move(int * history, int target)
+{
+	history[2] = history[1];	
+	history[1] = history[0];
+	history[0] = (target + history[1] + history[2])/3;
+	
+	return history[0];
+}
 
 void uTurn()
 {
