@@ -108,8 +108,6 @@ void wait1s();
 float voltage (unsigned char channel);
 void SPIWrite(unsigned char value);
 unsigned int GetADC(unsigned char channel);
-//void wait_bit_time();
-//void wait_one_and_half_bit_time();
 
 //---Interrupts---
 
@@ -246,13 +244,6 @@ int main (void)
 		//stay on tether until instruction is read
 		while (instruction == 0)
 		{	
-			//getDistance();
-			//in place turning if car is not aligned
-			//if(distanceLeft != distanceRight)
-			//{	
-				//turnCar();
-			//}
-			//turnCar();
 			moveCar();
 			P2_2=1;
 			P2_1=1;
@@ -380,6 +371,10 @@ void moveCar()
 	return;
 }
 
+//	smooth_move(int *, int): calculates the moving average 
+//  Requires: MEMORY_LENGTH >= 0
+//  Modify:  passed integer array of size MEMORY_LENGTH+1 
+//  Returns:  moving average
 int smooth_move(int * history, int target)
 {
 	int N = MEMORY_LENGTH;
@@ -482,4 +477,34 @@ unsigned int GetADC(unsigned char channel)
 	adc>>=4;
 		
 	return adc;
+}
+
+void wait_bit_time (void)
+{
+	_asm	
+		;For a 22.1184MHz crystal one machine cycle 
+		;takes 12/22.1184MHz=0.5425347us
+	    mov R2, #2
+	K3:	mov R1, #248
+	K2:	mov R0, #184
+	K1:	djnz R0, K1 ; 2 machine cycKes-> 2*0.5425347us*184=200us
+	    djnz R1, K2 ; 200us*250=0.05s
+	    djnz R2, K3 ; 0.05s*20=1s
+	    ret
+    _endasm;
+}
+
+void wait_one_and_half_bit_time(void)
+{
+	_asm	
+		;For a 22.1184MHz crystal one machine cycle 
+		;takes 12/22.1184MHz=0.5425347us
+	    mov R2, #3
+	J3:	mov R1, #248
+	J2:	mov R0, #184
+	J1:	djnz R0, J1 ; 2 machine cycJes-> 2*0.5425347us*184=200us
+	    djnz R1, J2 ; 200us*250=0.05s
+	    djnz R2, J3 ; 0.05s*20=1s
+	    ret
+    _endasm;
 }
