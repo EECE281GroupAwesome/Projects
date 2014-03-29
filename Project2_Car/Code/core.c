@@ -57,23 +57,22 @@
 
 //---Global Variables---
 
-// minimum voltage for signal sendage
-const float MINVOLT = 0.1;
-
 // speed to move and turn
-const int MOVESPEED = 80;
-const int TURNSPEED = 100;
+const int MOVESPEED = 100; //80;
+const int TURNSPEED = 100; //100;
+const float MINVOLT = 0.05;
 
 // buffers of error for aligning and distance
-const int DISTANCEBUFFER = 0;
-const int ANGLEBUFFER = 0;
+const float DISTANCEBUFFER = 15;
+const float ANGLEBUFFER = 0.1;
 
 // preset distances
 const int NSTAGES=12;
-const unsigned int PRESETS[] = {5,10,15,20,25,30,35,40,45,50,55,60};
+const float PRESETS[] = {600, 550, 500, 450, 400, 350, 300, 250, 200, 150, 100, 50};
 
 // pwm modulation
 volatile unsigned int pwmCount = 0;
+volatile unsigned int distCount = 0;
 volatile int pwmLeft;
 volatile int pwmRight;
 volatile int direction;
@@ -96,7 +95,8 @@ volatile unsigned int Stage;
 
 //---Function Prototypes---
 
-void getDistance();
+float getDistance();
+int turnRatio();
 void turnCar();
 void moveCar();
 void uTurn();
@@ -110,13 +110,23 @@ unsigned int GetADC(unsigned char channel);
 
 //---Interrupts---
 
+volatile char turn;
+
 void pwmCounter() interrupt 1
 {		
-	P1_1 = !P1_1;
-	//Get left and right distances
-	//getDistance();
 	if(++pwmCount > 99)
+	{
 		pwmCount = 0;
+	}	
+	
+	// get left and right sensor voltages every 0.1 sec
+	if (++distCount > 999)
+	{
+		distCount = 0;	
+		Stage = 6;
+		printf("DL %3.1f - DR %3.1f - Stage %3.1f(%d)\r", distanceLeft, distanceRight, PRESETS[Stage], Stage);
+	}
+	
 	//Left wheel
 	if(pwmLeft > 0)
 	{	
@@ -201,7 +211,7 @@ unsigned char _c51_external_startup(void)
 	TH1 = RH1 = TIMER1_RELOAD_VALUE / 0x100;
 	TL1 = RL1 = TIMER1_RELOAD_VALUE % 0x100;
 	TR0 = 1;
-	//TR1 = 1;
+	TR1 = 0;
 	ET0 = 1;	// Enable timer 0 interrupt
 	//EX0 = 1;	// Enable external interrupt 0
 	//IT0 = 1;
@@ -218,31 +228,27 @@ unsigned char _c51_external_startup(void)
 //---MAIN---
 int main (void)
 {	
-	distanceLeft = 10;
-	distanceRight = 10;	
-	Stage = 0;
-	pwmLeft = -50;
-	pwmRight = -50;
-	gotInst = 0;
-	
+	pwmLeft = 0;
+	pwmRight = 0;
+	instruction = 0;
 	while (1)
 	{	
-		instruction = 0;
 		//stay on tether until instruction is read
 		while (instruction == 0)
 		{	
-			wait1s();
-			getDistance();
-			//inplace turning if car is not aligned
-			if(distanceLeft != distanceRight)
-			{	
+			//getDistance();
+			//in place turning if car is not aligned
+			//if(distanceLeft != distanceRight)
+			//{	
 				//turnCar();
-			}
-			//moveCar();
+			//}
+			//turnCar();
+			moveCar();
 			P2_2=1;
 			P2_1=1;
 			P2_0=0;
 		}
+		/*
 		//get instruction and go back to tether
 		if(instruction==1)                        //move forward
 		{
@@ -280,7 +286,7 @@ int main (void)
 			P2_2=0;
 			P2_1=1;
 			P2_0=1;
-		}
+		}*/
 	}
 	return 0;
 }
@@ -293,16 +299,25 @@ int main (void)
  *	Modify:	  distance(L and R)
  *	Returns:  nothing, changes global variables left and right distance  
  */
-void getDistance() 
+float getDistance() 
 {
-	//distanceRight = voltage(0);
-	//distanceLeft = voltage(1);
-	printf(GOTO_YX,10,10);
-	printf(CLR_TO_END_LINE); 
-	printf("Volt[R]: %2.2f --- Volt[L]: %2.2f\n", voltage(0), voltage(1));
-	printf(GOTO_YX,11,10);
-	printf(CLR_TO_END_LINE);
-	printf("PWM[R]: %d --- PWM[L]: %d\n", pwmRight, pwmLeft);
+	distanceRight = (float)GetADC(0)*1.2;
+	distanceLeft = (float)GetADC(1);
+	return ((distanceRight + distanceLeft)/2);
+}
+
+int turnRatio()
+{	
+	if (getDistance() < 50.0)
+		return 0;
+	
+	if ( ((distanceRight - distanceLeft)/(distanceRight + distanceLeft)) > 0.2 )
+		return -1;
+		
+	if ( ((distanceLeft - distanceRight)/(distanceRight + distanceLeft)) > 0.1 )
+		return 1;
+		
+	return 0;
 }
 
 /*	turnCar(): turn both wheels individually to align vehicle with angle
@@ -315,18 +330,20 @@ void turnCar()
 	P2_2=1;
 	P2_1=0;
 	P2_0=1;
+	
 	//turn towards beacon
-	while(distanceLeft < distanceRight+ANGLEBUFFER)
+	if(turnRatio() == 1)
 	{
 		pwmLeft = TURNSPEED;
 		pwmRight = (-TURNSPEED);
 	}
-	while(distanceLeft+ANGLEBUFFER > distanceRight)
+	else if(turnRatio() == -1)//(distanceLeft > distanceRight+ANGLEBUFFER)
 	{
 		pwmLeft = (-TURNSPEED);
 		pwmRight = TURNSPEED;
 	}
-	pwmLeft=pwmRight=0;
+	else
+		pwmLeft = pwmRight = 0;
 	return;
 }
 
@@ -335,10 +352,25 @@ void turnCar()
  *  Modify:   pwmRight, pwmLeft
  *  Returns:  n/a
  */
+
 void moveCar()
 {	
+	//turn towards beacon
+	if(turnRatio() == 1)
+	{
+		pwmLeft = TURNSPEED;
+		pwmRight = (-TURNSPEED);
+	}
+	else if(turnRatio() == -1)//(distanceLeft > distanceRight+ANGLEBUFFER)
+	{
+		pwmLeft = (-TURNSPEED);
+		pwmRight = TURNSPEED;
+	}
+	else
+		pwmLeft = pwmRight = 0;
+	
 	//move forward if too far and aligned
-	while (distanceRight+DISTANCEBUFFER > PRESETS[Stage] && distanceLeft==distanceRight)
+	if ((getDistance()+DISTANCEBUFFER) < PRESETS[Stage])
 	{
 		P2_2=1;
 		P2_1=0;
@@ -347,18 +379,21 @@ void moveCar()
 		pwmRight = MOVESPEED;
 	}
 	//move back if too close and aligned
-	while(distanceRight < PRESETS[Stage]+DISTANCEBUFFER && distanceLeft==distanceRight)
-	{
-		pwmLeft = (-MOVESPEED); 
-		pwmRight = (-MOVESPEED);		
+	else if (getDistance() > (PRESETS[Stage]+DISTANCEBUFFER))
+	{		
 		P2_2=1;
 		P2_1=0;
 		P2_0=1;
+		pwmLeft = (-MOVESPEED); 
+		pwmRight = (-MOVESPEED);
 	}
-	//done, stop
-	pwmLeft=pwmRight=0;
+	else
+	{
+		pwmLeft=pwmRight=0;
+	}
 	return;
 }
+
 
 void uTurn()
 {
