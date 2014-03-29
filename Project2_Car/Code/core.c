@@ -59,6 +59,7 @@
 
 // speed to move and turn
 const int MOVESPEED = 100; //80;
+<<<<<<< HEAD
 const int TURNSPEED = 80; //100;
 const float MINVOLT = 0.05;
 
@@ -69,6 +70,18 @@ float ANGLEBUFFER = 20;
 // preset distances
 const int NSTAGES=12;
 const int PRESETS[] = {600, 550, 500, 450, 400, 350, 300, 250, 200, 150, 100, 50};
+=======
+const int TURNSPEED = 100; //100;
+const float MINVOLT = 0.05;
+
+// buffers of error for aligning and distance
+const float DISTANCEBUFFER = 15;
+const float ANGLEBUFFER = 0.1;
+
+// preset distances
+const int NSTAGES=12;
+const float PRESETS[] = {600, 550, 500, 450, 400, 350, 300, 250, 200, 150, 100, 50};
+>>>>>>> f4fadc9a7873ba6d2d795b8b98217d99ad101622
 
 // pwm modulation
 volatile unsigned int pwmCount = 0;
@@ -101,7 +114,12 @@ volatile unsigned int Stage;
 
 //---Function Prototypes---
 
+<<<<<<< HEAD
 void getDistance();
+=======
+int smooth_move(int * history, int target);
+float getDistance();
+>>>>>>> f4fadc9a7873ba6d2d795b8b98217d99ad101622
 int turnRatio();
 void moveCar();
 void uTurn();
@@ -128,7 +146,11 @@ void pwmCounter() interrupt 1
 	{
 		distCount = 0;	
 		Stage = 6;
+<<<<<<< HEAD
 		printf("DL %3d - DR %3d - Stage %3d(%d)\r", distanceLeft, distanceRight, PRESETS[Stage], Stage);
+=======
+		printf("DL %3.1f - DR %3.1f - Stage %3.1f(%d)\r", distanceLeft, distanceRight, PRESETS[Stage], Stage);
+>>>>>>> f4fadc9a7873ba6d2d795b8b98217d99ad101622
 	}
 	
 	//Left wheel
@@ -229,6 +251,9 @@ unsigned char _c51_external_startup(void)
     return 0;
 }
 
+	int * leftHistory;
+	int * rightHistory;
+
 //---MAIN---
 int main (void)
 {	
@@ -236,6 +261,11 @@ int main (void)
 	pwmLeft = 0;
 	pwmRight = 0;
 	instruction = 0;
+<<<<<<< HEAD
+=======
+	leftHistory = (int *)calloc(MEMORY_LENGTH, sizeof(int));
+	rightHistory = (int *)calloc(MEMORY_LENGTH, sizeof(int));
+>>>>>>> f4fadc9a7873ba6d2d795b8b98217d99ad101622
 	
 	while (1)
 	{	
@@ -243,6 +273,12 @@ int main (void)
 		while (instruction == 0)
 		{	
 			moveCar();
+<<<<<<< HEAD
+=======
+			P2_2=1;
+			P2_1=1;
+			P2_0=0;
+>>>>>>> f4fadc9a7873ba6d2d795b8b98217d99ad101622
 		}
 		/*
 		//get instruction and go back to tether
@@ -295,8 +331,9 @@ int main (void)
  *	Modify:	  distance(L and R)
  *	Returns:  nothing, changes global variables left and right distance  
  */
-void getDistance() 
+float getDistance() 
 {
+<<<<<<< HEAD
 	EA = 0;
 	tempL = GetADC(1);
 	if (tempL > 10)
@@ -316,6 +353,25 @@ void getDistance()
 		ANGLEBUFFER = 10;
 	}	
 	EA = 1;
+=======
+	distanceRight = (float)GetADC(0)*1.2;
+	distanceLeft = (float)GetADC(1);
+	return ((distanceRight + distanceLeft)/2);
+}
+
+int turnRatio()
+{	
+	if (getDistance() < 50.0)
+		return 0;
+	
+	if ( ((distanceRight - distanceLeft)/(distanceRight + distanceLeft)) > 0.2 )
+		return -1;
+		
+	if ( ((distanceLeft - distanceRight)/(distanceRight + distanceLeft)) > 0.1 )
+		return 1;
+		
+	return 0;
+>>>>>>> f4fadc9a7873ba6d2d795b8b98217d99ad101622
 }
 
 /*	moveCar(): move the car towards the beacon if neccessarry
@@ -326,6 +382,7 @@ void getDistance()
 
 void moveCar()
 {	
+<<<<<<< HEAD
 	getDistance();
 	
 	//turn towards beacon
@@ -356,19 +413,47 @@ void moveCar()
 	getDistance();
 	//move forward if too far and aligned
 	if ((distanceRight+DISTANCEBUFFER) < PRESETS[Stage])
+=======
+	//turn towards beacon
+	if(turnRatio() == 1)
+	{
+		pwmLeft = smooth_move(leftHistory, TURNSPEED);
+		pwmRight= smooth_move(rightHistory, -TURNSPEED);
+	}
+	else if(turnRatio() == -1)//(distanceLeft > distanceRight+ANGLEBUFFER)
+	{
+		pwmLeft = smooth_move(leftHistory, -TURNSPEED);
+		pwmRight = smooth_move(rightHistory, TURNSPEED);
+	}
+	else
+		pwmLeft = smooth_move(leftHistory, 0);
+		pwmRight = smooth_move(rightHistory, 0);
+	
+	//move forward if too far and aligned
+	if ((getDistance()+DISTANCEBUFFER) < PRESETS[Stage])
+>>>>>>> f4fadc9a7873ba6d2d795b8b98217d99ad101622
 	{
 		P2_2=1;
 		P2_1=0;
 		P2_0=1;
+<<<<<<< HEAD
 		pwmLeft = (MOVESPEED);
 		pwmRight = (MOVESPEED);
 	}
 	//move back if too close and aligned
 	else if (distanceRight > (PRESETS[Stage]+DISTANCEBUFFER))
+=======
+		pwmLeft = smooth_move(leftHistory, MOVESPEED);
+		pwmRight = smooth_move(rightHistory, MOVESPEED);
+	}
+	//move back if too close and aligned
+	else if (getDistance() > (PRESETS[Stage]+DISTANCEBUFFER))
+>>>>>>> f4fadc9a7873ba6d2d795b8b98217d99ad101622
 	{		
 		P2_2=1;
 		P2_1=0;
 		P2_0=1;
+<<<<<<< HEAD
 		pwmLeft = (-MOVESPEED);
 		pwmRight = (-MOVESPEED);
 	}
@@ -380,6 +465,17 @@ void moveCar()
 		pwmLeft = pwmRight = 0;
 	}
 			
+=======
+		pwmLeft = smooth_move(leftHistory, -MOVESPEED);
+		pwmRight = smooth_move(rightHistory, -MOVESPEED);
+	}
+	else
+	{
+		pwmLeft = smooth_move(leftHistory, 0);
+		pwmRight = smooth_move(rightHistory, 0);
+	}		
+
+>>>>>>> f4fadc9a7873ba6d2d795b8b98217d99ad101622
 	return;
 }
 

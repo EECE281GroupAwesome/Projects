@@ -1,6 +1,7 @@
 0000              1   ;--------------------------------------------------------
 0000              2   ; File Created by C51
 0000              3   ; Version 1.0.0 #1034 (Dec 12 2012) (MSVC)
+<<<<<<< HEAD
 0000              4   ; This file was generated Sat Mar 29 14:48:08 2014
 0000              5   ;--------------------------------------------------------
                   5   $name core
@@ -2050,3 +2051,2218 @@
 001E           2043            CSEG
 001E           2044   
 001E           2045   end
+=======
+0000              4   ; This file was generated Sat Mar 29 00:48:08 2014
+0000              5   ;--------------------------------------------------------
+                  5   $name core
+                  6   $optc51 --model-small
+                  7   $printf_float
+0000              9            R_DSEG    segment data
+0000             10            R_CSEG    segment code
+0000             11            R_BSEG    segment bit
+0000             12            R_XSEG    segment xdata
+0000             13            R_PSEG    segment xdata
+0000             14            R_ISEG    segment idata
+0000             15            R_OSEG    segment data overlay
+0000             16            BIT_BANK  segment data overlay
+0000             17            R_HOME    segment code
+0000             18            R_GSINIT  segment code
+0000             19            R_IXSEG   segment xdata
+0000             20            R_CONST   segment code
+0000             21            R_XINIT   segment code
+0000             22            R_DINIT   segment code
+0000             23   
+0000             24   ;--------------------------------------------------------
+0000             25   ; Public variables in this module
+0000             26   ;--------------------------------------------------------
+0000             27            public _MEMORY_LENGTH
+0000             28            public _PRESETS
+0000             29            public _NSTAGES
+0000             30            public _ANGLEBUFFER
+0000             31            public _DISTANCEBUFFER
+0000             32            public _MINVOLT
+0000             33            public _TURNSPEED
+0000             34            public _MOVESPEED
+0000             35            public _main
+0000             36            public __c51_external_startup
+0000             37            public _beaconSignal
+0000             38            public _pwmCounter
+0000             39            public _smooth_move_PARM_2
+0000             40            public _rightHistory
+0000             41            public _leftHistory
+0000             42            public _turn
+0000             43            public _Stage
+0000             44            public _gotInst
+0000             45            public _instruction
+0000             46            public _distanceRight
+0000             47            public _distanceLeft
+0000             48            public _pwmRightTemp
+0000             49            public _pwmLeftTemp
+0000             50            public _rightSensor
+0000             51            public _leftSensor
+0000             52            public _tether
+0000             53            public _direction
+0000             54            public _pwmRight
+0000             55            public _pwmLeft
+0000             56            public _distCount
+0000             57            public _pwmCount
+0000             58            public _getDistance
+0000             59            public _turnRatio
+0000             60            public _moveCar
+0000             61            public _smooth_move
+0000             62            public _uTurn
+0000             63            public _getSig
+0000             64            public _wait1s
+0000             65            public _voltage
+0000             66            public _SPIWrite
+0000             67            public _GetADC
+0000             68   ;--------------------------------------------------------
+0000             69   ; Special Function Registers
+0000             70   ;--------------------------------------------------------
+0000             71   _ACC            DATA 0xe0
+0000             72   _B              DATA 0xf0
+0000             73   _PSW            DATA 0xd0
+0000             74   _SP             DATA 0x81
+0000             75   _SPX            DATA 0xef
+0000             76   _DPL            DATA 0x82
+0000             77   _DPH            DATA 0x83
+0000             78   _DPLB           DATA 0xd4
+0000             79   _DPHB           DATA 0xd5
+0000             80   _PAGE           DATA 0xf6
+0000             81   _AX             DATA 0xe1
+0000             82   _BX             DATA 0xf7
+0000             83   _DSPR           DATA 0xe2
+0000             84   _FIRD           DATA 0xe3
+0000             85   _MACL           DATA 0xe4
+0000             86   _MACH           DATA 0xe5
+0000             87   _PCON           DATA 0x87
+0000             88   _AUXR           DATA 0x8e
+0000             89   _AUXR1          DATA 0xa2
+0000             90   _DPCF           DATA 0xa1
+0000             91   _CKRL           DATA 0x97
+0000             92   _CKCKON0        DATA 0x8f
+0000             93   _CKCKON1        DATA 0xaf
+0000             94   _CKSEL          DATA 0x85
+0000             95   _CLKREG         DATA 0xae
+0000             96   _OSCCON         DATA 0x85
+0000             97   _IE             DATA 0xa8
+0000             98   _IEN0           DATA 0xa8
+0000             99   _IEN1           DATA 0xb1
+0000            100   _IPH0           DATA 0xb7
+0000            101   _IP             DATA 0xb8
+0000            102   _IPL0           DATA 0xb8
+0000            103   _IPH1           DATA 0xb3
+0000            104   _IPL1           DATA 0xb2
+0000            105   _P0             DATA 0x80
+0000            106   _P1             DATA 0x90
+0000            107   _P2             DATA 0xa0
+0000            108   _P3             DATA 0xb0
+0000            109   _P4             DATA 0xc0
+0000            110   _P0M0           DATA 0xe6
+0000            111   _P0M1           DATA 0xe7
+0000            112   _P1M0           DATA 0xd6
+0000            113   _P1M1           DATA 0xd7
+0000            114   _P2M0           DATA 0xce
+0000            115   _P2M1           DATA 0xcf
+0000            116   _P3M0           DATA 0xc6
+0000            117   _P3M1           DATA 0xc7
+0000            118   _P4M0           DATA 0xbe
+0000            119   _P4M1           DATA 0xbf
+0000            120   _SCON           DATA 0x98
+0000            121   _SBUF           DATA 0x99
+0000            122   _SADEN          DATA 0xb9
+0000            123   _SADDR          DATA 0xa9
+0000            124   _BDRCON         DATA 0x9b
+0000            125   _BRL            DATA 0x9a
+0000            126   _TCON           DATA 0x88
+0000            127   _TMOD           DATA 0x89
+0000            128   _TCONB          DATA 0x91
+0000            129   _TL0            DATA 0x8a
+0000            130   _TH0            DATA 0x8c
+0000            131   _TL1            DATA 0x8b
+0000            132   _TH1            DATA 0x8d
+0000            133   _RL0            DATA 0xf2
+0000            134   _RH0            DATA 0xf4
+0000            135   _RL1            DATA 0xf3
+0000            136   _RH1            DATA 0xf5
+0000            137   _WDTRST         DATA 0xa6
+0000            138   _WDTPRG         DATA 0xa7
+0000            139   _T2CON          DATA 0xc8
+0000            140   _T2MOD          DATA 0xc9
+0000            141   _RCAP2H         DATA 0xcb
+0000            142   _RCAP2L         DATA 0xca
+0000            143   _TH2            DATA 0xcd
+0000            144   _TL2            DATA 0xcc
+0000            145   _SPCON          DATA 0xc3
+0000            146   _SPSTA          DATA 0xc4
+0000            147   _SPDAT          DATA 0xc5
+0000            148   _SSCON          DATA 0x93
+0000            149   _SSCS           DATA 0x94
+0000            150   _SSDAT          DATA 0x95
+0000            151   _SSADR          DATA 0x96
+0000            152   _KBLS           DATA 0x9c
+0000            153   _KBE            DATA 0x9d
+0000            154   _KBF            DATA 0x9e
+0000            155   _KBMOD          DATA 0x9f
+0000            156   _BMSEL          DATA 0x92
+0000            157   _FCON           DATA 0xd2
+0000            158   _EECON          DATA 0xd2
+0000            159   _ACSRA          DATA 0xa3
+0000            160   _ACSRB          DATA 0xab
+0000            161   _AREF           DATA 0xbd
+0000            162   _DADC           DATA 0xa4
+0000            163   _DADI           DATA 0xa5
+0000            164   _DADL           DATA 0xac
+0000            165   _DADH           DATA 0xad
+0000            166   _CCON           DATA 0xd8
+0000            167   _CMOD           DATA 0xd9
+0000            168   _CL             DATA 0xe9
+0000            169   _CH             DATA 0xf9
+0000            170   _CCAPM0         DATA 0xda
+0000            171   _CCAPM1         DATA 0xdb
+0000            172   _CCAPM2         DATA 0xdc
+0000            173   _CCAPM3         DATA 0xdd
+0000            174   _CCAPM4         DATA 0xde
+0000            175   _CCAP0H         DATA 0xfa
+0000            176   _CCAP1H         DATA 0xfb
+0000            177   _CCAP2H         DATA 0xfc
+0000            178   _CCAP3H         DATA 0xfd
+0000            179   _CCAP4H         DATA 0xfe
+0000            180   _CCAP0L         DATA 0xea
+0000            181   _CCAP1L         DATA 0xeb
+0000            182   _CCAP2L         DATA 0xec
+0000            183   _CCAP3L         DATA 0xed
+0000            184   _CCAP4L         DATA 0xee
+0000            185   ;--------------------------------------------------------
+0000            186   ; special function bits
+0000            187   ;--------------------------------------------------------
+0000            188   _ACC_0          BIT 0xe0
+0000            189   _ACC_1          BIT 0xe1
+0000            190   _ACC_2          BIT 0xe2
+0000            191   _ACC_3          BIT 0xe3
+0000            192   _ACC_4          BIT 0xe4
+0000            193   _ACC_5          BIT 0xe5
+0000            194   _ACC_6          BIT 0xe6
+0000            195   _ACC_7          BIT 0xe7
+0000            196   _B_0            BIT 0xf0
+0000            197   _B_1            BIT 0xf1
+0000            198   _B_2            BIT 0xf2
+0000            199   _B_3            BIT 0xf3
+0000            200   _B_4            BIT 0xf4
+0000            201   _B_5            BIT 0xf5
+0000            202   _B_6            BIT 0xf6
+0000            203   _B_7            BIT 0xf7
+0000            204   _P              BIT 0xd0
+0000            205   _F1             BIT 0xd1
+0000            206   _OV             BIT 0xd2
+0000            207   _RS0            BIT 0xd3
+0000            208   _RS1            BIT 0xd4
+0000            209   _F0             BIT 0xd5
+0000            210   _AC             BIT 0xd6
+0000            211   _CY             BIT 0xd7
+0000            212   _EX0            BIT 0xa8
+0000            213   _ET0            BIT 0xa9
+0000            214   _EX1            BIT 0xaa
+0000            215   _ET1            BIT 0xab
+0000            216   _ES             BIT 0xac
+0000            217   _ET2            BIT 0xad
+0000            218   _EC             BIT 0xae
+0000            219   _EA             BIT 0xaf
+0000            220   _PX0            BIT 0xb8
+0000            221   _PT0            BIT 0xb9
+0000            222   _PX1            BIT 0xba
+0000            223   _PT1            BIT 0xbb
+0000            224   _PS             BIT 0xbc
+0000            225   _PT2            BIT 0xbd
+0000            226   _IP0D           BIT 0xbf
+0000            227   _PPCL           BIT 0xbe
+0000            228   _PT2L           BIT 0xbd
+0000            229   _PLS            BIT 0xbc
+0000            230   _PT1L           BIT 0xbb
+0000            231   _PX1L           BIT 0xba
+0000            232   _PT0L           BIT 0xb9
+0000            233   _PX0L           BIT 0xb8
+0000            234   _P0_0           BIT 0x80
+0000            235   _P0_1           BIT 0x81
+0000            236   _P0_2           BIT 0x82
+0000            237   _P0_3           BIT 0x83
+0000            238   _P0_4           BIT 0x84
+0000            239   _P0_5           BIT 0x85
+0000            240   _P0_6           BIT 0x86
+0000            241   _P0_7           BIT 0x87
+0000            242   _P1_0           BIT 0x90
+0000            243   _P1_1           BIT 0x91
+0000            244   _P1_2           BIT 0x92
+0000            245   _P1_3           BIT 0x93
+0000            246   _P1_4           BIT 0x94
+0000            247   _P1_5           BIT 0x95
+0000            248   _P1_6           BIT 0x96
+0000            249   _P1_7           BIT 0x97
+0000            250   _P2_0           BIT 0xa0
+0000            251   _P2_1           BIT 0xa1
+0000            252   _P2_2           BIT 0xa2
+0000            253   _P2_3           BIT 0xa3
+0000            254   _P2_4           BIT 0xa4
+0000            255   _P2_5           BIT 0xa5
+0000            256   _P2_6           BIT 0xa6
+0000            257   _P2_7           BIT 0xa7
+0000            258   _P3_0           BIT 0xb0
+0000            259   _P3_1           BIT 0xb1
+0000            260   _P3_2           BIT 0xb2
+0000            261   _P3_3           BIT 0xb3
+0000            262   _P3_4           BIT 0xb4
+0000            263   _P3_5           BIT 0xb5
+0000            264   _P3_6           BIT 0xb6
+0000            265   _P3_7           BIT 0xb7
+0000            266   _RXD            BIT 0xb0
+0000            267   _TXD            BIT 0xb1
+0000            268   _INT0           BIT 0xb2
+0000            269   _INT1           BIT 0xb3
+0000            270   _T0             BIT 0xb4
+0000            271   _T1             BIT 0xb5
+0000            272   _WR             BIT 0xb6
+0000            273   _RD             BIT 0xb7
+0000            274   _P4_0           BIT 0xc0
+0000            275   _P4_1           BIT 0xc1
+0000            276   _P4_2           BIT 0xc2
+0000            277   _P4_3           BIT 0xc3
+0000            278   _P4_4           BIT 0xc4
+0000            279   _P4_5           BIT 0xc5
+0000            280   _P4_6           BIT 0xc6
+0000            281   _P4_7           BIT 0xc7
+0000            282   _RI             BIT 0x98
+0000            283   _TI             BIT 0x99
+0000            284   _RB8            BIT 0x9a
+0000            285   _TB8            BIT 0x9b
+0000            286   _REN            BIT 0x9c
+0000            287   _SM2            BIT 0x9d
+0000            288   _SM1            BIT 0x9e
+0000            289   _SM0            BIT 0x9f
+0000            290   _IT0            BIT 0x88
+0000            291   _IE0            BIT 0x89
+0000            292   _IT1            BIT 0x8a
+0000            293   _IE1            BIT 0x8b
+0000            294   _TR0            BIT 0x8c
+0000            295   _TF0            BIT 0x8d
+0000            296   _TR1            BIT 0x8e
+0000            297   _TF1            BIT 0x8f
+0000            298   _CP_RL2         BIT 0xc8
+0000            299   _C_T2           BIT 0xc9
+0000            300   _TR2            BIT 0xca
+0000            301   _EXEN2          BIT 0xcb
+0000            302   _TCLK           BIT 0xcc
+0000            303   _RCLK           BIT 0xcd
+0000            304   _EXF2           BIT 0xce
+0000            305   _TF2            BIT 0xcf
+0000            306   _CF             BIT 0xdf
+0000            307   _CR             BIT 0xde
+0000            308   _CCF4           BIT 0xdc
+0000            309   _CCF3           BIT 0xdb
+0000            310   _CCF2           BIT 0xda
+0000            311   _CCF1           BIT 0xd9
+0000            312   _CCF0           BIT 0xd8
+0000            313   ;--------------------------------------------------------
+0000            314   ; overlayable register banks
+0000            315   ;--------------------------------------------------------
+0000            316            rbank0 segment data overlay
+0000            317   ;--------------------------------------------------------
+0000            318   ; overlayable bit register bank
+0000            319   ;--------------------------------------------------------
+0000            320            rseg BIT_BANK
+0000            321   bits:
+0000            322            ds 1
+0001            323            b0 equ  bits.0 
+0001            324            b1 equ  bits.1 
+0001            325            b2 equ  bits.2 
+0001            326            b3 equ  bits.3 
+0001            327            b4 equ  bits.4 
+0001            328            b5 equ  bits.5 
+0001            329            b6 equ  bits.6 
+0001            330            b7 equ  bits.7 
+0001            331   ;--------------------------------------------------------
+0001            332   ; internal ram data
+0001            333   ;--------------------------------------------------------
+0000            334            rseg R_DSEG
+0000            335   _pwmCount:
+0000            336            ds 2
+0002            337   _distCount:
+0002            338            ds 2
+0004            339   _pwmLeft:
+0004            340            ds 2
+0006            341   _pwmRight:
+0006            342            ds 2
+0008            343   _direction:
+0008            344            ds 2
+000A            345   _tether:
+000A            346            ds 2
+000C            347   _leftSensor:
+000C            348            ds 2
+000E            349   _rightSensor:
+000E            350            ds 2
+0010            351   _pwmLeftTemp:
+0010            352            ds 2
+0012            353   _pwmRightTemp:
+0012            354            ds 2
+0014            355   _distanceLeft:
+0014            356            ds 4
+0018            357   _distanceRight:
+0018            358            ds 4
+001C            359   _instruction:
+001C            360            ds 2
+001E            361   _gotInst:
+001E            362            ds 2
+0020            363   _Stage:
+0020            364            ds 2
+0022            365   _turn:
+0022            366            ds 1
+0023            367   _leftHistory:
+0023            368            ds 3
+0026            369   _rightHistory:
+0026            370            ds 3
+0029            371   _smooth_move_PARM_2:
+0029            372            ds 2
+002B            373   _smooth_move_history_1_113:
+002B            374            ds 3
+002E            375   _smooth_move_N_1_114:
+002E            376            ds 2
+0030            377   _smooth_move_sloc0_1_0:
+0030            378            ds 2
+0032            379   ;--------------------------------------------------------
+0032            380   ; overlayable items in internal ram 
+0032            381   ;--------------------------------------------------------
+0000            382            rseg    R_OSEG
+0000            383   ;--------------------------------------------------------
+0000            384   ; indirectly addressable internal ram data
+0000            385   ;--------------------------------------------------------
+0000            386            rseg R_ISEG
+0000            387   ;--------------------------------------------------------
+0000            388   ; absolute internal ram data
+0000            389   ;--------------------------------------------------------
+0000            390            DSEG
+0000            391   ;--------------------------------------------------------
+0000            392   ; bit data
+0000            393   ;--------------------------------------------------------
+0000            394            rseg R_BSEG
+0000            395   _pwmCounter_sloc0_1_0:
+0000            396            DBIT    1
+0001            397   ;--------------------------------------------------------
+0001            398   ; paged external ram data
+0001            399   ;--------------------------------------------------------
+0000            400            rseg R_PSEG
+0000            401   ;--------------------------------------------------------
+0000            402   ; external ram data
+0000            403   ;--------------------------------------------------------
+0000            404            rseg R_XSEG
+0000            405   ;--------------------------------------------------------
+0000            406   ; absolute external ram data
+0000            407   ;--------------------------------------------------------
+0000            408            XSEG
+0000            409   ;--------------------------------------------------------
+0000            410   ; external initialized ram data
+0000            411   ;--------------------------------------------------------
+0000            412            rseg R_IXSEG
+0000            413            rseg R_HOME
+0000            414            rseg R_GSINIT
+0000            415            rseg R_CSEG
+0000            416   ;--------------------------------------------------------
+0000            417   ; Reset entry point and interrupt vectors
+0000            418   ;--------------------------------------------------------
+0000            419            CSEG at 0x0000
+0000 020100     420            ljmp    _crt0
+000B            421            CSEG at 0x000b
+000B 020100     422            ljmp    _pwmCounter
+001B            423            CSEG at 0x001b
+001B 020100     424            ljmp    _beaconSignal
+001E            425   ;--------------------------------------------------------
+001E            426   ; global & static initialisations
+001E            427   ;--------------------------------------------------------
+0000            428            rseg R_HOME
+0000            429            rseg R_GSINIT
+0000            430            rseg R_GSINIT
+0000            431   ;--------------------------------------------------------
+0000            432   ; data variables initialization
+0000            433   ;--------------------------------------------------------
+0000            434            rseg R_DINIT
+0000            435   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:74: volatile unsigned int pwmCount = 0;
+0000 E4         436            clr     a
+0001 F568       437            mov     _pwmCount,a
+0003 F569       438            mov     (_pwmCount + 1),a
+0005            439   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:75: volatile unsigned int distCount = 0;
+0005 E4         440            clr     a
+0006 F528       441            mov     _distCount,a
+0008 F529       442            mov     (_distCount + 1),a
+000A            443   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:80: volatile unsigned int leftSensor = 0;
+000A E4         444            clr     a
+000B F5E8       445            mov     _leftSensor,a
+000D F5E9       446            mov     (_leftSensor + 1),a
+000F            447   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:81: volatile unsigned int rightSensor = 0;
+000F E4         448            clr     a
+0010 F5A8       449            mov     _rightSensor,a
+0012 F5A9       450            mov     (_rightSensor + 1),a
+0014            451   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:82: volatile int pwmLeftTemp = 0;
+0014 E4         452            clr     a
+0015 F568       453            mov     _pwmLeftTemp,a
+0017 F569       454            mov     (_pwmLeftTemp + 1),a
+0019            455   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:83: volatile int pwmRightTemp = 0;
+0019 E4         456            clr     a
+001A F528       457            mov     _pwmRightTemp,a
+001C F529       458            mov     (_pwmRightTemp + 1),a
+001E            459            ; The linker places a 'ret' at the end of segment R_DINIT.
+001E            460   ;--------------------------------------------------------
+001E            461   ; code
+001E            462   ;--------------------------------------------------------
+0000            463            rseg R_CSEG
+0000            464   ;------------------------------------------------------------
+0000            465   ;Allocation info for local variables in function 'pwmCounter'
+0000            466   ;------------------------------------------------------------
+0000            467   ;------------------------------------------------------------
+0000            468   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:118: void pwmCounter() interrupt 1
+0000            469   ;        -----------------------------------------
+0000            470   ;         function pwmCounter
+0000            471   ;        -----------------------------------------
+0000            472   _pwmCounter:
+0000            473            using   0
+0000 C028       474            push    bits
+0002 C0E0       475            push    acc
+0004 C0F0       476            push    b
+0006 C082       477            push    dpl
+0008 C083       478            push    dph
+000A C002       479            push    (0+2)
+000C C003       480            push    (0+3)
+000E C004       481            push    (0+4)
+0010 C005       482            push    (0+5)
+0012 C006       483            push    (0+6)
+0014 C007       484            push    (0+7)
+0016 C000       485            push    (0+0)
+0018 C001       486            push    (0+1)
+001A C0D0       487            push    psw
+001C 75D000     488            mov     psw,#0x00
+001F            489   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:120: if(++pwmCount > 99)
+001F 7401       490            mov     a,#0x01
+0021 2568       491            add     a,_pwmCount
+0023 F568       492            mov     _pwmCount,a
+0025 E4         493            clr     a
+0026 3569       494            addc    a,(_pwmCount + 1)
+0028 F569       495            mov     (_pwmCount + 1),a
+002A C3         496            clr     c
+002B 7463       497            mov     a,#0x63
+002D 9568       498            subb    a,_pwmCount
+002F E4         499            clr     a
+0030 9569       500            subb    a,(_pwmCount + 1)
+0032 5001       501            jnc     L002002?
+0034            502   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:122: pwmCount = 0;
+0034 E4         503            clr     a
+0035 F568       504            mov     _pwmCount,a
+0037 F569       505            mov     (_pwmCount + 1),a
+0039            506   L002002?:
+0039            507   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:126: if (++distCount > 999)
+0039 7401       508            mov     a,#0x01
+003B 2528       509            add     a,_distCount
+003D F528       510            mov     _distCount,a
+003F E4         511            clr     a
+0040 3529       512            addc    a,(_distCount + 1)
+0042 F529       513            mov     (_distCount + 1),a
+0044 C3         514            clr     c
+0045 74E7       515            mov     a,#0xE7
+0047 9528       516            subb    a,_distCount
+0049 7403       517            mov     a,#0x03
+004B 9529       518            subb    a,(_distCount + 1)
+004D 5001       519            jnc     L002004?
+004F            520   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:128: distCount = 0;   
+004F E4         521            clr     a
+0050 F528       522            mov     _distCount,a
+0052 F529       523            mov     (_distCount + 1),a
+0054            524   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:129: Stage = 6;
+0054 75E806     525            mov     _Stage,#0x06
+0057 E4         526            clr     a
+0058 F5E9       527            mov     (_Stage + 1),a
+005A            528   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:130: printf("DL %3.1f - DR %3.1f - Stage %3.1f(%d)\r", distanceLeft, distanceRight, PRESETS[Stage], Stage);
+005A AAE8       529            mov     r2,_Stage
+005C E5E9       530            mov     a,(_Stage + 1)
+005E CA         531            xch     a,r2
+005F 25E0       532            add     a,acc
+0061 CA         533            xch     a,r2
+0062 33         534            rlc     a
+0063 CA         535            xch     a,r2
+0064 25E0       536            add     a,acc
+0066 CA         537            xch     a,r2
+0067 33         538            rlc     a
+0068 FB         539            mov     r3,a
+0069 EA         540            mov     a,r2
+006A 2408       541            add     a,#_PRESETS
+006C F582       542            mov     dpl,a
+006E EB         543            mov     a,r3
+006F 3442       544            addc    a,#(_PRESETS >> 8)
+0071 F583       545            mov     dph,a
+0073 E4         546            clr     a
+0074 93         547            movc    a,@a+dptr
+0075 FA         548            mov     r2,a
+0076 A3         549            inc     dptr
+0077 E4         550            clr     a
+0078 93         551            movc    a,@a+dptr
+0079 FB         552            mov     r3,a
+007A A3         553            inc     dptr
+007B E4         554            clr     a
+007C 93         555            movc    a,@a+dptr
+007D FC         556            mov     r4,a
+007E A3         557            inc     dptr
+007F E4         558            clr     a
+0080 93         559            movc    a,@a+dptr
+0081 FD         560            mov     r5,a
+0082 C0E8       561            push    _Stage
+0084 C0E9       562            push    (_Stage + 1)
+0086 C002       563            push    ar2
+0088 C003       564            push    ar3
+008A C004       565            push    ar4
+008C C005       566            push    ar5
+008E C0A8       567            push    _distanceRight
+0090 C0A9       568            push    (_distanceRight + 1)
+0092 C0AA       569            push    (_distanceRight + 2)
+0094 C0AB       570            push    (_distanceRight + 3)
+0096 C0E8       571            push    _distanceLeft
+0098 C0E9       572            push    (_distanceLeft + 1)
+009A C0EA       573            push    (_distanceLeft + 2)
+009C C0EB       574            push    (_distanceLeft + 3)
+009E 7468       575            mov     a,#__str_0
+00A0 C0E0       576            push    acc
+00A2 748E       577            mov     a,#(__str_0 >> 8)
+00A4 C0E0       578            push    acc
+00A6 7480       579            mov     a,#0x80
+00A8 C0E0       580            push    acc
+00AA 120100     581            lcall   _printf
+00AD E581       582            mov     a,sp
+00AF 24EF       583            add     a,#0xef
+00B1 F581       584            mov     sp,a
+00B3            585   L002004?:
+00B3            586   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:134: if(pwmLeft > 0)
+00B3 C3         587            clr     c
+00B4 E4         588            clr     a
+00B5 95E8       589            subb    a,_pwmLeft
+00B7 E4         590            clr     a
+00B8 6480       591            xrl     a,#0x80
+00BA 85E9F0     592            mov     b,(_pwmLeft + 1)
+00BD 63F080     593            xrl     b,#0x80
+00C0 95F0       594            subb    a,b
+00C2 5001       595            jnc     L002008?
+00C4            596   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:136: P0_1 = (pwmLeft > pwmCount) ? 0:1;
+00C4 AAE8       597            mov     r2,_pwmLeft
+00C6 ABE9       598            mov     r3,(_pwmLeft + 1)
+00C8 C3         599            clr     c
+00C9 E568       600            mov     a,_pwmCount
+00CB 9A         601            subb    a,r2
+00CC E569       602            mov     a,(_pwmCount + 1)
+00CE 9B         603            subb    a,r3
+00CF 9228       604            mov  _pwmCounter_sloc0_1_0,c
+00D1 B3         605            cpl     c
+00D2 9281       606            mov     _P0_1,c
+00D4            607   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:137: P0_0 = 1;
+00D4 D280       608            setb    _P0_0
+00D6 8001       609            sjmp    L002009?
+00D8            610   L002008?:
+00D8            611   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:139: else if(pwmLeft < 0)
+00D8 E5E9       612            mov     a,(_pwmLeft + 1)
+00DA 30E768     613            jnb     acc.7,L002009?
+00DD            614   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:142: P0_0 = ((-1) * pwmLeft > pwmCount) ? 0:1;
+00DD C3         615            clr     c
+00DE E4         616            clr     a
+00DF 95E8       617            subb    a,_pwmLeft
+00E1 FA         618            mov     r2,a
+00E2 E4         619            clr     a
+00E3 95E9       620            subb    a,(_pwmLeft + 1)
+00E5 FB         621            mov     r3,a
+00E6 C3         622            clr     c
+00E7 E568       623            mov     a,_pwmCount
+00E9 9A         624            subb    a,r2
+00EA E569       625            mov     a,(_pwmCount + 1)
+00EC 9B         626            subb    a,r3
+00ED 9228       627            mov  _pwmCounter_sloc0_1_0,c
+00EF B3         628            cpl     c
+00F0 9280       629            mov     _P0_0,c
+00F2            630   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:143: P0_1 = 1;
+00F2 D281       631            setb    _P0_1
+00F4            632   L002009?:
+00F4            633   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:145: if(pwmLeft==0)
+00F4 E5E8       634            mov     a,_pwmLeft
+00F6 45E9       635            orl     a,(_pwmLeft + 1)
+00F8 7001       636            jnz     L002011?
+00FA            637   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:147: P0_1 = P0_0 = 1;
+00FA D280       638            setb    _P0_0
+00FC A280       639            mov     c,_P0_0
+00FE 9281       640            mov     _P0_1,c
+0100            641   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:149: P1_0 = ((-1) * pwmLeft > pwmCount) ? 0:1;
+0100 C3         642            clr     c
+0101 E4         643            clr     a
+0102 95E8       644            subb    a,_pwmLeft
+0104 FA         645            mov     r2,a
+0105 E4         646            clr     a
+0106 95E9       647            subb    a,(_pwmLeft + 1)
+0108 FB         648            mov     r3,a
+0109 C3         649            clr     c
+010A E568       650            mov     a,_pwmCount
+010C 9A         651            subb    a,r2
+010D E569       652            mov     a,(_pwmCount + 1)
+010F 9B         653            subb    a,r3
+0110 9228       654            mov  _pwmCounter_sloc0_1_0,c
+0112 B3         655            cpl     c
+0113 9290       656            mov     _P1_0,c
+0115            657   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:150: P1_1 = 1;
+0115 D291       658            setb    _P1_1
+0117 8001       659            sjmp    L002012?
+0119            660   L002011?:
+0119            661   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:153: P1_0 = 1;
+0119 D290       662            setb    _P1_0
+011B            663   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:154: P1_1 = 1;
+011B D291       664            setb    _P1_1
+011D            665   L002012?:
+011D            666   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:158: if(pwmRight > 0)
+011D C3         667            clr     c
+011E E4         668            clr     a
+011F 95A8       669            subb    a,_pwmRight
+0121 E4         670            clr     a
+0122 6480       671            xrl     a,#0x80
+0124 85A9F0     672            mov     b,(_pwmRight + 1)
+0127 63F080     673            xrl     b,#0x80
+012A 95F0       674            subb    a,b
+012C 5001       675            jnc     L002016?
+012E            676   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:160: P0_4 = (pwmRight > pwmCount) ? 0:1;
+012E AAA8       677            mov     r2,_pwmRight
+0130 ABA9       678            mov     r3,(_pwmRight + 1)
+0132 C3         679            clr     c
+0133 E568       680            mov     a,_pwmCount
+0135 9A         681            subb    a,r2
+0136 E569       682            mov     a,(_pwmCount + 1)
+0138 9B         683            subb    a,r3
+0139 9228       684            mov  _pwmCounter_sloc0_1_0,c
+013B B3         685            cpl     c
+013C 9284       686            mov     _P0_4,c
+013E            687   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:161: P0_3 = 1;
+013E D283       688            setb    _P0_3
+0140 8001       689            sjmp    L002017?
+0142            690   L002016?:
+0142            691   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:163: else if(pwmRight < 0)
+0142 E5A9       692            mov     a,(_pwmRight + 1)
+0144 30E768     693            jnb     acc.7,L002017?
+0147            694   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:166: P0_3 = ((-1) * pwmRight > pwmCount) ? 0:1;
+0147 C3         695            clr     c
+0148 E4         696            clr     a
+0149 95A8       697            subb    a,_pwmRight
+014B FA         698            mov     r2,a
+014C E4         699            clr     a
+014D 95A9       700            subb    a,(_pwmRight + 1)
+014F FB         701            mov     r3,a
+0150 C3         702            clr     c
+0151 E568       703            mov     a,_pwmCount
+0153 9A         704            subb    a,r2
+0154 E569       705            mov     a,(_pwmCount + 1)
+0156 9B         706            subb    a,r3
+0157 9228       707            mov  _pwmCounter_sloc0_1_0,c
+0159 B3         708            cpl     c
+015A 9283       709            mov     _P0_3,c
+015C            710   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:167: P0_4 = 1;
+015C D284       711            setb    _P0_4
+015E            712   L002017?:
+015E            713   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:169: if(pwmRight==0)
+015E E5A8       714            mov     a,_pwmRight
+0160 45A9       715            orl     a,(_pwmRight + 1)
+0162 7001       716            jnz     L002020?
+0164            717   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:171: P0_4 = P0_3 = 1;
+0164 D283       718            setb    _P0_3
+0166 A283       719            mov     c,_P0_3
+0168 9284       720            mov     _P0_4,c
+016A            721   L002020?:
+016A D0D0       722            pop     psw
+016C D001       723            pop     (0+1)
+016E D000       724            pop     (0+0)
+0170 D007       725            pop     (0+7)
+0172 D006       726            pop     (0+6)
+0174 D005       727            pop     (0+5)
+0176 D004       728            pop     (0+4)
+0178 D003       729            pop     (0+3)
+017A D002       730            pop     (0+2)
+017C D083       731            pop     dph
+017E D082       732            pop     dpl
+0180 D0F0       733            pop     b
+0182 D0E0       734            pop     acc
+0184 D028       735            pop     bits
+0186 32         736            reti
+0187            737   ;------------------------------------------------------------
+0187            738   ;Allocation info for local variables in function 'beaconSignal'
+0187            739   ;------------------------------------------------------------
+0187            740   ;------------------------------------------------------------
+0187            741   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:176: void beaconSignal() interrupt 3
+0187            742   ;        -----------------------------------------
+0187            743   ;         function beaconSignal
+0187            744   ;        -----------------------------------------
+0187            745   _beaconSignal:
+0187 C028       746            push    bits
+0189 C0E0       747            push    acc
+018B C0F0       748            push    b
+018D C082       749            push    dpl
+018F C083       750            push    dph
+0191 C002       751            push    (0+2)
+0193 C003       752            push    (0+3)
+0195 C004       753            push    (0+4)
+0197 C005       754            push    (0+5)
+0199 C006       755            push    (0+6)
+019B C007       756            push    (0+7)
+019D C000       757            push    (0+0)
+019F C001       758            push    (0+1)
+01A1 C0D0       759            push    psw
+01A3 75D000     760            mov     psw,#0x00
+01A6            761   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:178: if (voltage(0) < 0.1) 
+01A6 758200     762            mov     dpl,#0x00
+01A9 120100     763            lcall   _voltage
+01AC AA82       764            mov     r2,dpl
+01AE AB83       765            mov     r3,dph
+01B0 ACF0       766            mov     r4,b
+01B2 FD         767            mov     r5,a
+01B3 74CD       768            mov     a,#0xCD
+01B5 C0E0       769            push    acc
+01B7 74CC       770            mov     a,#0xCC
+01B9 C0E0       771            push    acc
+01BB C0E0       772            push    acc
+01BD 743D       773            mov     a,#0x3D
+01BF C0E0       774            push    acc
+01C1 8A82       775            mov     dpl,r2
+01C3 8B83       776            mov     dph,r3
+01C5 8CF0       777            mov     b,r4
+01C7 ED         778            mov     a,r5
+01C8 120100     779            lcall   ___fslt
+01CB AA82       780            mov     r2,dpl
+01CD E581       781            mov     a,sp
+01CF 24FC       782            add     a,#0xfc
+01D1 F581       783            mov     sp,a
+01D3 EA         784            mov     a,r2
+01D4 6001       785            jz      L003006?
+01D6            786   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:180: ET0 = 0;
+01D6 C2A9       787            clr     _ET0
+01D8            788   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:181: pwmLeftTemp = pwmLeft;
+01D8 85E868     789            mov     _pwmLeftTemp,_pwmLeft
+01DB 85E969     790            mov     (_pwmLeftTemp + 1),(_pwmLeft + 1)
+01DE            791   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:182: pwmRightTemp = pwmRight;
+01DE 85A828     792            mov     _pwmRightTemp,_pwmRight
+01E1 85A929     793            mov     (_pwmRightTemp + 1),(_pwmRight + 1)
+01E4            794   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:183: while(voltage(0) < 0.1);
+01E4            795   L003001?:
+01E4 758200     796            mov     dpl,#0x00
+01E7 120100     797            lcall   _voltage
+01EA AA82       798            mov     r2,dpl
+01EC AB83       799            mov     r3,dph
+01EE ACF0       800            mov     r4,b
+01F0 FD         801            mov     r5,a
+01F1 74CD       802            mov     a,#0xCD
+01F3 C0E0       803            push    acc
+01F5 74CC       804            mov     a,#0xCC
+01F7 C0E0       805            push    acc
+01F9 C0E0       806            push    acc
+01FB 743D       807            mov     a,#0x3D
+01FD C0E0       808            push    acc
+01FF 8A82       809            mov     dpl,r2
+0201 8B83       810            mov     dph,r3
+0203 8CF0       811            mov     b,r4
+0205 ED         812            mov     a,r5
+0206 120100     813            lcall   ___fslt
+0209 AA82       814            mov     r2,dpl
+020B E581       815            mov     a,sp
+020D 24FC       816            add     a,#0xfc
+020F F581       817            mov     sp,a
+0211 EA         818            mov     a,r2
+0212 7001       819            jnz     L003001?
+0214            820   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:184: instruction = getSig();
+0214 120100     821            lcall   _getSig
+0217 858268     822            mov     _instruction,dpl
+021A 858369     823            mov     (_instruction + 1),dph
+021D            824   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:185: pwmLeft = pwmLeftTemp;
+021D 8568E8     825            mov     _pwmLeft,_pwmLeftTemp
+0220 8569E9     826            mov     (_pwmLeft + 1),(_pwmLeftTemp + 1)
+0223            827   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:186: pwmRight = pwmRightTemp;
+0223 8528A8     828            mov     _pwmRight,_pwmRightTemp
+0226 8529A9     829            mov     (_pwmRight + 1),(_pwmRightTemp + 1)
+0229            830   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:187: ET0 =  1;
+0229 D2A9       831            setb    _ET0
+022B            832   L003006?:
+022B D0D0       833            pop     psw
+022D D001       834            pop     (0+1)
+022F D000       835            pop     (0+0)
+0231 D007       836            pop     (0+7)
+0233 D006       837            pop     (0+6)
+0235 D005       838            pop     (0+5)
+0237 D004       839            pop     (0+4)
+0239 D003       840            pop     (0+3)
+023B D002       841            pop     (0+2)
+023D D083       842            pop     dph
+023F D082       843            pop     dpl
+0241 D0F0       844            pop     b
+0243 D0E0       845            pop     acc
+0245 D028       846            pop     bits
+0247 32         847            reti
+0248            848   ;------------------------------------------------------------
+0248            849   ;Allocation info for local variables in function '_c51_external_startup'
+0248            850   ;------------------------------------------------------------
+0248            851   ;------------------------------------------------------------
+0248            852   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:193: unsigned char _c51_external_startup(void)
+0248            853   ;        -----------------------------------------
+0248            854   ;         function _c51_external_startup
+0248            855   ;        -----------------------------------------
+0248            856   __c51_external_startup:
+0248            857   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:196: P0M0 = 0;        P0M1 = 0;
+0248 75E600     858            mov     _P0M0,#0x00
+024B 75E700     859            mov     _P0M1,#0x00
+024E            860   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:197: P1M0 = 0;        P1M1 = 0;
+024E 75D600     861            mov     _P1M0,#0x00
+0251 75D700     862            mov     _P1M1,#0x00
+0254            863   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:198: P2M0 = 0;        P2M1 = 0;
+0254 75CE00     864            mov     _P2M0,#0x00
+0257 75CF00     865            mov     _P2M1,#0x00
+025A            866   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:199: P3M0 = 0;        P3M1 = 0;
+025A 75C600     867            mov     _P3M0,#0x00
+025D 75C700     868            mov     _P3M1,#0x00
+0260            869   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:200: AUXR = 0B_0001_0001; // 1152 bytes of internal XDATA, P4.4 is a general purpose I/O
+0260 758E11     870            mov     _AUXR,#0x11
+0263            871   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:201: P4M0 = 0;        P4M1 = 0;
+0263 75BE00     872            mov     _P4M0,#0x00
+0266 75BF00     873            mov     _P4M1,#0x00
+0269            874   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:205: PCON |= 0x80;
+0269 438780     875            orl     _PCON,#0x80
+026C            876   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:206: SCON = 0x52;
+026C 759852     877            mov     _SCON,#0x52
+026F            878   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:207: BDRCON = 0;
+026F 759B00     879            mov     _BDRCON,#0x00
+0272            880   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:208: BRL = BRG_VAL;
+0272 759AFA     881            mov     _BRL,#0xFA
+0275            882   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:209: BDRCON = BRR | TBCK | RBCK | SPD;
+0275 759B1E     883            mov     _BDRCON,#0x1E
+0278            884   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:211: TMOD = 0B_0001_0001;     // Timer 0 as 16-bit timer      
+0278 758911     885            mov     _TMOD,#0x11
+027B            886   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:212: TH0 = RH0 = TIMER0_RELOAD_VALUE / 0x100;
+027B 75F4FF     887            mov     _RH0,#0xFF
+027E 758CFF     888            mov     _TH0,#0xFF
+0281            889   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:213: TL0 = RL0 = TIMER0_RELOAD_VALUE % 0x100;
+0281 75F248     890            mov     _RL0,#0x48
+0284 758A48     891            mov     _TL0,#0x48
+0287            892   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:214: TH1 = RH1 = TIMER1_RELOAD_VALUE / 0x100;
+0287 75F5FE     893            mov     _RH1,#0xFE
+028A 758DFE     894            mov     _TH1,#0xFE
+028D            895   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:215: TL1 = RL1 = TIMER1_RELOAD_VALUE % 0x100;
+028D 75F390     896            mov     _RL1,#0x90
+0290 758B90     897            mov     _TL1,#0x90
+0293            898   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:216: TR0 = 1;
+0293 D28C       899            setb    _TR0
+0295            900   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:217: TR1 = 0;
+0295 C28E       901            clr     _TR1
+0297            902   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:218: ET0 = 1;         // Enable timer 0 interrupt
+0297 D2A9       903            setb    _ET0
+0299            904   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:221: EA = 1;          // Enable global interrupts
+0299 D2AF       905            setb    _EA
+029B            906   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:222: tether=0;
+029B E4         907            clr     a
+029C F528       908            mov     _tether,a
+029E F529       909            mov     (_tether + 1),a
+02A0            910   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:223: direction=1;
+02A0 756801     911            mov     _direction,#0x01
+02A3 E4         912            clr     a
+02A4 F569       913            mov     (_direction + 1),a
+02A6            914   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:224: P2_2=1;
+02A6 D2A2       915            setb    _P2_2
+02A8            916   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:225: P2_1=1;
+02A8 D2A1       917            setb    _P2_1
+02AA            918   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:226: P2_0=1;
+02AA D2A0       919            setb    _P2_0
+02AC            920   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:227: printf(CLEAR_SCREEN);
+02AC 74A8       921            mov     a,#__str_1
+02AE C0E0       922            push    acc
+02B0 7491       923            mov     a,#(__str_1 >> 8)
+02B2 C0E0       924            push    acc
+02B4 7480       925            mov     a,#0x80
+02B6 C0E0       926            push    acc
+02B8 120100     927            lcall   _printf
+02BB 1581       928            dec     sp
+02BD 1581       929            dec     sp
+02BF 1581       930            dec     sp
+02C1            931   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:228: return 0;
+02C1 758200     932            mov     dpl,#0x00
+02C4 22         933            ret
+02C5            934   ;------------------------------------------------------------
+02C5            935   ;Allocation info for local variables in function 'main'
+02C5            936   ;------------------------------------------------------------
+02C5            937   ;------------------------------------------------------------
+02C5            938   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:235: int main (void)
+02C5            939   ;        -----------------------------------------
+02C5            940   ;         function main
+02C5            941   ;        -----------------------------------------
+02C5            942   _main:
+02C5            943   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:238: pwmLeft = 0;
+02C5            944   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:239: pwmRight = 0;
+02C5            945   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:240: instruction = 0;
+02C5 E4         946            clr     a
+02C6 F5E8       947            mov     _pwmLeft,a
+02C8 F5E9       948            mov     (_pwmLeft + 1),a
+02CA F5A8       949            mov     _pwmRight,a
+02CC F5A9       950            mov     (_pwmRight + 1),a
+02CE F568       951            mov     _instruction,a
+02D0 F569       952            mov     (_instruction + 1),a
+02D2            953   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:241: leftHistory = (int *)calloc(MEMORY_LENGTH, sizeof(int));
+02D2 9041C8     954            mov     dptr,#_MEMORY_LENGTH
+02D5 E4         955            clr     a
+02D6 93         956            movc    a,@a+dptr
+02D7 FA         957            mov     r2,a
+02D8 7401       958            mov     a,#0x01
+02DA 93         959            movc    a,@a+dptr
+02DB FB         960            mov     r3,a
+02DC 750002     961            mov     _calloc_PARM_2,#0x02
+02DF E4         962            clr     a
+02E0 F501       963            mov     (_calloc_PARM_2 + 1),a
+02E2 8A82       964            mov     dpl,r2
+02E4 8B83       965            mov     dph,r3
+02E6 120100     966            lcall   _calloc
+02E9 AA82       967            mov     r2,dpl
+02EB AB83       968            mov     r3,dph
+02ED 8A68       969            mov     _leftHistory,r2
+02EF 8B69       970            mov     (_leftHistory + 1),r3
+02F1 756A00     971            mov     (_leftHistory + 2),#0x00
+02F4            972   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:242: rightHistory = (int *)calloc(MEMORY_LENGTH, sizeof(int));
+02F4 9041C8     973            mov     dptr,#_MEMORY_LENGTH
+02F7 E4         974            clr     a
+02F8 93         975            movc    a,@a+dptr
+02F9 FA         976            mov     r2,a
+02FA 7401       977            mov     a,#0x01
+02FC 93         978            movc    a,@a+dptr
+02FD FB         979            mov     r3,a
+02FE 750002     980            mov     _calloc_PARM_2,#0x02
+0301 E4         981            clr     a
+0302 F501       982            mov     (_calloc_PARM_2 + 1),a
+0304 8A82       983            mov     dpl,r2
+0306 8B83       984            mov     dph,r3
+0308 120100     985            lcall   _calloc
+030B AA82       986            mov     r2,dpl
+030D AB83       987            mov     r3,dph
+030F 8A28       988            mov     _rightHistory,r2
+0311 8B29       989            mov     (_rightHistory + 1),r3
+0313 752A00     990            mov     (_rightHistory + 2),#0x00
+0316            991   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:247: while (instruction == 0)
+0316            992   L005001?:
+0316 E568       993            mov     a,_instruction
+0318 4569       994            orl     a,(_instruction + 1)
+031A 7001       995            jnz     L005001?
+031C            996   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:256: moveCar();
+031C 120100     997            lcall   _moveCar
+031F            998   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:257: P2_2=1;
+031F D2A2       999            setb    _P2_2
+0321           1000   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:258: P2_1=1;
+0321 D2A1      1001            setb    _P2_1
+0323           1002   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:259: P2_0=0;
+0323 C2A0      1003            clr     _P2_0
+0325           1004   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:301: return 0;
+0325 8001      1005            sjmp    L005001?
+0327           1006   ;------------------------------------------------------------
+0327           1007   ;Allocation info for local variables in function 'getDistance'
+0327           1008   ;------------------------------------------------------------
+0327           1009   ;------------------------------------------------------------
+0327           1010   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:312: float getDistance() 
+0327           1011   ;        -----------------------------------------
+0327           1012   ;         function getDistance
+0327           1013   ;        -----------------------------------------
+0327           1014   _getDistance:
+0327           1015   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:314: distanceRight = (float)GetADC(0)*1.2;
+0327 758200    1016            mov     dpl,#0x00
+032A 120100    1017            lcall   _GetADC
+032D 120100    1018            lcall   ___uint2fs
+0330 AA82      1019            mov     r2,dpl
+0332 AB83      1020            mov     r3,dph
+0334 ACF0      1021            mov     r4,b
+0336 FD        1022            mov     r5,a
+0337 C002      1023            push    ar2
+0339 C003      1024            push    ar3
+033B C004      1025            push    ar4
+033D C005      1026            push    ar5
+033F 90999A    1027            mov     dptr,#0x999A
+0342 75F099    1028            mov     b,#0x99
+0345 743F      1029            mov     a,#0x3F
+0347 120100    1030            lcall   ___fsmul
+034A 8582A8    1031            mov     _distanceRight,dpl
+034D 8583A9    1032            mov     (_distanceRight + 1),dph
+0350 85F0AA    1033            mov     (_distanceRight + 2),b
+0353 F5AB      1034            mov     (_distanceRight + 3),a
+0355 E581      1035            mov     a,sp
+0357 24FC      1036            add     a,#0xfc
+0359 F581      1037            mov     sp,a
+035B           1038   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:315: distanceLeft = (float)GetADC(1);
+035B 758201    1039            mov     dpl,#0x01
+035E 120100    1040            lcall   _GetADC
+0361 120100    1041            lcall   ___uint2fs
+0364 8582E8    1042            mov     _distanceLeft,dpl
+0367 8583E9    1043            mov     (_distanceLeft + 1),dph
+036A 85F0EA    1044            mov     (_distanceLeft + 2),b
+036D F5EB      1045            mov     (_distanceLeft + 3),a
+036F           1046   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:316: return ((distanceRight + distanceLeft)/2);
+036F C0E8      1047            push    _distanceLeft
+0371 C0E9      1048            push    (_distanceLeft + 1)
+0373 C0EA      1049            push    (_distanceLeft + 2)
+0375 C0EB      1050            push    (_distanceLeft + 3)
+0377 85A882    1051            mov     dpl,_distanceRight
+037A 85A983    1052            mov     dph,(_distanceRight + 1)
+037D 85AAF0    1053            mov     b,(_distanceRight + 2)
+0380 E5AB      1054            mov     a,(_distanceRight + 3)
+0382 120100    1055            lcall   ___fsadd
+0385 AA82      1056            mov     r2,dpl
+0387 AB83      1057            mov     r3,dph
+0389 ACF0      1058            mov     r4,b
+038B FD        1059            mov     r5,a
+038C E581      1060            mov     a,sp
+038E 24FC      1061            add     a,#0xfc
+0390 F581      1062            mov     sp,a
+0392 E4        1063            clr     a
+0393 C0E0      1064            push    acc
+0395 C0E0      1065            push    acc
+0397 C0E0      1066            push    acc
+0399 7440      1067            mov     a,#0x40
+039B C0E0      1068            push    acc
+039D 8A82      1069            mov     dpl,r2
+039F 8B83      1070            mov     dph,r3
+03A1 8CF0      1071            mov     b,r4
+03A3 ED        1072            mov     a,r5
+03A4 120100    1073            lcall   ___fsdiv
+03A7 AA82      1074            mov     r2,dpl
+03A9 AB83      1075            mov     r3,dph
+03AB ACF0      1076            mov     r4,b
+03AD FD        1077            mov     r5,a
+03AE E581      1078            mov     a,sp
+03B0 24FC      1079            add     a,#0xfc
+03B2 F581      1080            mov     sp,a
+03B4 8A82      1081            mov     dpl,r2
+03B6 8B83      1082            mov     dph,r3
+03B8 8CF0      1083            mov     b,r4
+03BA ED        1084            mov     a,r5
+03BB 22        1085            ret
+03BC           1086   ;------------------------------------------------------------
+03BC           1087   ;Allocation info for local variables in function 'turnRatio'
+03BC           1088   ;------------------------------------------------------------
+03BC           1089   ;------------------------------------------------------------
+03BC           1090   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:319: int turnRatio()
+03BC           1091   ;        -----------------------------------------
+03BC           1092   ;         function turnRatio
+03BC           1093   ;        -----------------------------------------
+03BC           1094   _turnRatio:
+03BC           1095   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:321: if (getDistance() < 50.0)
+03BC 120100    1096            lcall   _getDistance
+03BF AA82      1097            mov     r2,dpl
+03C1 AB83      1098            mov     r3,dph
+03C3 ACF0      1099            mov     r4,b
+03C5 FD        1100            mov     r5,a
+03C6 E4        1101            clr     a
+03C7 C0E0      1102            push    acc
+03C9 C0E0      1103            push    acc
+03CB 7448      1104            mov     a,#0x48
+03CD C0E0      1105            push    acc
+03CF 7442      1106            mov     a,#0x42
+03D1 C0E0      1107            push    acc
+03D3 8A82      1108            mov     dpl,r2
+03D5 8B83      1109            mov     dph,r3
+03D7 8CF0      1110            mov     b,r4
+03D9 ED        1111            mov     a,r5
+03DA 120100    1112            lcall   ___fslt
+03DD AA82      1113            mov     r2,dpl
+03DF E581      1114            mov     a,sp
+03E1 24FC      1115            add     a,#0xfc
+03E3 F581      1116            mov     sp,a
+03E5 EA        1117            mov     a,r2
+03E6 6001      1118            jz      L007002?
+03E8           1119   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:322: return 0;
+03E8 900000    1120            mov     dptr,#0x0000
+03EB 22        1121            ret
+03EC           1122   L007002?:
+03EC           1123   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:324: if ( ((distanceRight - distanceLeft)/(distanceRight + distanceLeft)) > 0.2 )
+03EC C0E8      1124            push    _distanceLeft
+03EE C0E9      1125            push    (_distanceLeft + 1)
+03F0 C0EA      1126            push    (_distanceLeft + 2)
+03F2 C0EB      1127            push    (_distanceLeft + 3)
+03F4 85A882    1128            mov     dpl,_distanceRight
+03F7 85A983    1129            mov     dph,(_distanceRight + 1)
+03FA 85AAF0    1130            mov     b,(_distanceRight + 2)
+03FD E5AB      1131            mov     a,(_distanceRight + 3)
+03FF 120100    1132            lcall   ___fssub
+0402 AA82      1133            mov     r2,dpl
+0404 AB83      1134            mov     r3,dph
+0406 ACF0      1135            mov     r4,b
+0408 FD        1136            mov     r5,a
+0409 E581      1137            mov     a,sp
+040B 24FC      1138            add     a,#0xfc
+040D F581      1139            mov     sp,a
+040F C002      1140            push    ar2
+0411 C003      1141            push    ar3
+0413 C004      1142            push    ar4
+0415 C005      1143            push    ar5
+0417 C0E8      1144            push    _distanceLeft
+0419 C0E9      1145            push    (_distanceLeft + 1)
+041B C0EA      1146            push    (_distanceLeft + 2)
+041D C0EB      1147            push    (_distanceLeft + 3)
+041F 85A882    1148            mov     dpl,_distanceRight
+0422 85A983    1149            mov     dph,(_distanceRight + 1)
+0425 85AAF0    1150            mov     b,(_distanceRight + 2)
+0428 E5AB      1151            mov     a,(_distanceRight + 3)
+042A 120100    1152            lcall   ___fsadd
+042D AE82      1153            mov     r6,dpl
+042F AF83      1154            mov     r7,dph
+0431 A8F0      1155            mov     r0,b
+0433 F9        1156            mov     r1,a
+0434 E581      1157            mov     a,sp
+0436 24FC      1158            add     a,#0xfc
+0438 F581      1159            mov     sp,a
+043A D005      1160            pop     ar5
+043C D004      1161            pop     ar4
+043E D003      1162            pop     ar3
+0440 D002      1163            pop     ar2
+0442 C006      1164            push    ar6
+0444 C007      1165            push    ar7
+0446 C000      1166            push    ar0
+0448 C001      1167            push    ar1
+044A 8A82      1168            mov     dpl,r2
+044C 8B83      1169            mov     dph,r3
+044E 8CF0      1170            mov     b,r4
+0450 ED        1171            mov     a,r5
+0451 120100    1172            lcall   ___fsdiv
+0454 AA82      1173            mov     r2,dpl
+0456 AB83      1174            mov     r3,dph
+0458 ACF0      1175            mov     r4,b
+045A FD        1176            mov     r5,a
+045B E581      1177            mov     a,sp
+045D 24FC      1178            add     a,#0xfc
+045F F581      1179            mov     sp,a
+0461 74CD      1180            mov     a,#0xCD
+0463 C0E0      1181            push    acc
+0465 74CC      1182            mov     a,#0xCC
+0467 C0E0      1183            push    acc
+0469 744C      1184            mov     a,#0x4C
+046B C0E0      1185            push    acc
+046D 743E      1186            mov     a,#0x3E
+046F C0E0      1187            push    acc
+0471 8A82      1188            mov     dpl,r2
+0473 8B83      1189            mov     dph,r3
+0475 8CF0      1190            mov     b,r4
+0477 ED        1191            mov     a,r5
+0478 120100    1192            lcall   ___fsgt
+047B AA82      1193            mov     r2,dpl
+047D E581      1194            mov     a,sp
+047F 24FC      1195            add     a,#0xfc
+0481 F581      1196            mov     sp,a
+0483 EA        1197            mov     a,r2
+0484 6001      1198            jz      L007004?
+0486           1199   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:325: return -1;
+0486 90FFFF    1200            mov     dptr,#0xFFFF
+0489 22        1201            ret
+048A           1202   L007004?:
+048A           1203   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:327: if ( ((distanceLeft - distanceRight)/(distanceRight + distanceLeft)) > 0.1 )
+048A C0A8      1204            push    _distanceRight
+048C C0A9      1205            push    (_distanceRight + 1)
+048E C0AA      1206            push    (_distanceRight + 2)
+0490 C0AB      1207            push    (_distanceRight + 3)
+0492 85E882    1208            mov     dpl,_distanceLeft
+0495 85E983    1209            mov     dph,(_distanceLeft + 1)
+0498 85EAF0    1210            mov     b,(_distanceLeft + 2)
+049B E5EB      1211            mov     a,(_distanceLeft + 3)
+049D 120100    1212            lcall   ___fssub
+04A0 AA82      1213            mov     r2,dpl
+04A2 AB83      1214            mov     r3,dph
+04A4 ACF0      1215            mov     r4,b
+04A6 FD        1216            mov     r5,a
+04A7 E581      1217            mov     a,sp
+04A9 24FC      1218            add     a,#0xfc
+04AB F581      1219            mov     sp,a
+04AD C002      1220            push    ar2
+04AF C003      1221            push    ar3
+04B1 C004      1222            push    ar4
+04B3 C005      1223            push    ar5
+04B5 C0E8      1224            push    _distanceLeft
+04B7 C0E9      1225            push    (_distanceLeft + 1)
+04B9 C0EA      1226            push    (_distanceLeft + 2)
+04BB C0EB      1227            push    (_distanceLeft + 3)
+04BD 85A882    1228            mov     dpl,_distanceRight
+04C0 85A983    1229            mov     dph,(_distanceRight + 1)
+04C3 85AAF0    1230            mov     b,(_distanceRight + 2)
+04C6 E5AB      1231            mov     a,(_distanceRight + 3)
+04C8 120100    1232            lcall   ___fsadd
+04CB AE82      1233            mov     r6,dpl
+04CD AF83      1234            mov     r7,dph
+04CF A8F0      1235            mov     r0,b
+04D1 F9        1236            mov     r1,a
+04D2 E581      1237            mov     a,sp
+04D4 24FC      1238            add     a,#0xfc
+04D6 F581      1239            mov     sp,a
+04D8 D005      1240            pop     ar5
+04DA D004      1241            pop     ar4
+04DC D003      1242            pop     ar3
+04DE D002      1243            pop     ar2
+04E0 C006      1244            push    ar6
+04E2 C007      1245            push    ar7
+04E4 C000      1246            push    ar0
+04E6 C001      1247            push    ar1
+04E8 8A82      1248            mov     dpl,r2
+04EA 8B83      1249            mov     dph,r3
+04EC 8CF0      1250            mov     b,r4
+04EE ED        1251            mov     a,r5
+04EF 120100    1252            lcall   ___fsdiv
+04F2 AA82      1253            mov     r2,dpl
+04F4 AB83      1254            mov     r3,dph
+04F6 ACF0      1255            mov     r4,b
+04F8 FD        1256            mov     r5,a
+04F9 E581      1257            mov     a,sp
+04FB 24FC      1258            add     a,#0xfc
+04FD F581      1259            mov     sp,a
+04FF 74CD      1260            mov     a,#0xCD
+0501 C0E0      1261            push    acc
+0503 74CC      1262            mov     a,#0xCC
+0505 C0E0      1263            push    acc
+0507 C0E0      1264            push    acc
+0509 743D      1265            mov     a,#0x3D
+050B C0E0      1266            push    acc
+050D 8A82      1267            mov     dpl,r2
+050F 8B83      1268            mov     dph,r3
+0511 8CF0      1269            mov     b,r4
+0513 ED        1270            mov     a,r5
+0514 120100    1271            lcall   ___fsgt
+0517 AA82      1272            mov     r2,dpl
+0519 E581      1273            mov     a,sp
+051B 24FC      1274            add     a,#0xfc
+051D F581      1275            mov     sp,a
+051F EA        1276            mov     a,r2
+0520 6001      1277            jz      L007006?
+0522           1278   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:328: return 1;
+0522 900001    1279            mov     dptr,#0x0001
+0525           1280   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:330: return 0;
+0525 22        1281            ret
+0526           1282   L007006?:
+0526 900000    1283            mov     dptr,#0x0000
+0529 22        1284            ret
+052A           1285   ;------------------------------------------------------------
+052A           1286   ;Allocation info for local variables in function 'moveCar'
+052A           1287   ;------------------------------------------------------------
+052A           1288   ;------------------------------------------------------------
+052A           1289   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:339: void moveCar()
+052A           1290   ;        -----------------------------------------
+052A           1291   ;         function moveCar
+052A           1292   ;        -----------------------------------------
+052A           1293   _moveCar:
+052A           1294   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:342: if(turnRatio() == 1)
+052A 120100    1295            lcall   _turnRatio
+052D AA82      1296            mov     r2,dpl
+052F AB83      1297            mov     r3,dph
+0531 BA01E8    1298            cjne    r2,#0x01,L008005?
+0534 BB00E8    1299            cjne    r3,#0x00,L008005?
+0537           1300   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:344: pwmLeft = smooth_move(leftHistory, TURNSPEED);
+0537 904348    1301            mov     dptr,#_TURNSPEED
+053A E4        1302            clr     a
+053B 93        1303            movc    a,@a+dptr
+053C F5E8      1304            mov     _smooth_move_PARM_2,a
+053E 7401      1305            mov     a,#0x01
+0540 93        1306            movc    a,@a+dptr
+0541 F5E9      1307            mov     (_smooth_move_PARM_2 + 1),a
+0543 856882    1308            mov     dpl,_leftHistory
+0546 856983    1309            mov     dph,(_leftHistory + 1)
+0549 856AF0    1310            mov     b,(_leftHistory + 2)
+054C 120100    1311            lcall   _smooth_move
+054F 8582E8    1312            mov     _pwmLeft,dpl
+0552 8583E9    1313            mov     (_pwmLeft + 1),dph
+0555           1314   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:345: pwmRight= smooth_move(rightHistory, -TURNSPEED);
+0555 904348    1315            mov     dptr,#_TURNSPEED
+0558 E4        1316            clr     a
+0559 93        1317            movc    a,@a+dptr
+055A FA        1318            mov     r2,a
+055B 7401      1319            mov     a,#0x01
+055D 93        1320            movc    a,@a+dptr
+055E FB        1321            mov     r3,a
+055F C3        1322            clr     c
+0560 E4        1323            clr     a
+0561 9A        1324            subb    a,r2
+0562 F5E8      1325            mov     _smooth_move_PARM_2,a
+0564 E4        1326            clr     a
+0565 9B        1327            subb    a,r3
+0566 F5E9      1328            mov     (_smooth_move_PARM_2 + 1),a
+0568 852882    1329            mov     dpl,_rightHistory
+056B 852983    1330            mov     dph,(_rightHistory + 1)
+056E 852AF0    1331            mov     b,(_rightHistory + 2)
+0571 120100    1332            lcall   _smooth_move
+0574 8582A8    1333            mov     _pwmRight,dpl
+0577 8583A9    1334            mov     (_pwmRight + 1),dph
+057A 8001      1335            sjmp    L008006?
+057C           1336   L008005?:
+057C           1337   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:347: else if(turnRatio() == -1)//(distanceLeft > distanceRight+ANGLEBUFFER)
+057C 120100    1338            lcall   _turnRatio
+057F AA82      1339            mov     r2,dpl
+0581 AB83      1340            mov     r3,dph
+0583 BAFF68    1341            cjne    r2,#0xFF,L008002?
+0586 BBFF68    1342            cjne    r3,#0xFF,L008002?
+0589           1343   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:349: pwmLeft = smooth_move(leftHistory, -TURNSPEED);
+0589 904348    1344            mov     dptr,#_TURNSPEED
+058C E4        1345            clr     a
+058D 93        1346            movc    a,@a+dptr
+058E FA        1347            mov     r2,a
+058F 7401      1348            mov     a,#0x01
+0591 93        1349            movc    a,@a+dptr
+0592 FB        1350            mov     r3,a
+0593 C3        1351            clr     c
+0594 E4        1352            clr     a
+0595 9A        1353            subb    a,r2
+0596 F5E8      1354            mov     _smooth_move_PARM_2,a
+0598 E4        1355            clr     a
+0599 9B        1356            subb    a,r3
+059A F5E9      1357            mov     (_smooth_move_PARM_2 + 1),a
+059C 856882    1358            mov     dpl,_leftHistory
+059F 856983    1359            mov     dph,(_leftHistory + 1)
+05A2 856AF0    1360            mov     b,(_leftHistory + 2)
+05A5 120100    1361            lcall   _smooth_move
+05A8 8582E8    1362            mov     _pwmLeft,dpl
+05AB 8583E9    1363            mov     (_pwmLeft + 1),dph
+05AE           1364   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:350: pwmRight = smooth_move(rightHistory, TURNSPEED);
+05AE 904348    1365            mov     dptr,#_TURNSPEED
+05B1 E4        1366            clr     a
+05B2 93        1367            movc    a,@a+dptr
+05B3 F5E8      1368            mov     _smooth_move_PARM_2,a
+05B5 7401      1369            mov     a,#0x01
+05B7 93        1370            movc    a,@a+dptr
+05B8 F5E9      1371            mov     (_smooth_move_PARM_2 + 1),a
+05BA 852882    1372            mov     dpl,_rightHistory
+05BD 852983    1373            mov     dph,(_rightHistory + 1)
+05C0 852AF0    1374            mov     b,(_rightHistory + 2)
+05C3 120100    1375            lcall   _smooth_move
+05C6 8582A8    1376            mov     _pwmRight,dpl
+05C9 8583A9    1377            mov     (_pwmRight + 1),dph
+05CC 8001      1378            sjmp    L008006?
+05CE           1379   L008002?:
+05CE           1380   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:353: pwmLeft = smooth_move(leftHistory, 0);
+05CE E4        1381            clr     a
+05CF F5E8      1382            mov     _smooth_move_PARM_2,a
+05D1 F5E9      1383            mov     (_smooth_move_PARM_2 + 1),a
+05D3 856882    1384            mov     dpl,_leftHistory
+05D6 856983    1385            mov     dph,(_leftHistory + 1)
+05D9 856AF0    1386            mov     b,(_leftHistory + 2)
+05DC 120100    1387            lcall   _smooth_move
+05DF 8582E8    1388            mov     _pwmLeft,dpl
+05E2 8583E9    1389            mov     (_pwmLeft + 1),dph
+05E5           1390   L008006?:
+05E5           1391   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:354: pwmRight = smooth_move(rightHistory, 0);
+05E5 E4        1392            clr     a
+05E6 F5E8      1393            mov     _smooth_move_PARM_2,a
+05E8 F5E9      1394            mov     (_smooth_move_PARM_2 + 1),a
+05EA 852882    1395            mov     dpl,_rightHistory
+05ED 852983    1396            mov     dph,(_rightHistory + 1)
+05F0 852AF0    1397            mov     b,(_rightHistory + 2)
+05F3 120100    1398            lcall   _smooth_move
+05F6 8582A8    1399            mov     _pwmRight,dpl
+05F9 8583A9    1400            mov     (_pwmRight + 1),dph
+05FC           1401   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:357: if ((getDistance()+DISTANCEBUFFER) < PRESETS[Stage])
+05FC 120100    1402            lcall   _getDistance
+05FF AA82      1403            mov     r2,dpl
+0601 AB83      1404            mov     r3,dph
+0603 ACF0      1405            mov     r4,b
+0605 FD        1406            mov     r5,a
+0606 9042C8    1407            mov     dptr,#_DISTANCEBUFFER
+0609 E4        1408            clr     a
+060A 93        1409            movc    a,@a+dptr
+060B C0E0      1410            push    acc
+060D 7401      1411            mov     a,#0x01
+060F 93        1412            movc    a,@a+dptr
+0610 C0E0      1413            push    acc
+0612 7402      1414            mov     a,#0x02
+0614 93        1415            movc    a,@a+dptr
+0615 C0E0      1416            push    acc
+0617 7403      1417            mov     a,#0x03
+0619 93        1418            movc    a,@a+dptr
+061A C0E0      1419            push    acc
+061C 8A82      1420            mov     dpl,r2
+061E 8B83      1421            mov     dph,r3
+0620 8CF0      1422            mov     b,r4
+0622 ED        1423            mov     a,r5
+0623 120100    1424            lcall   ___fsadd
+0626 AA82      1425            mov     r2,dpl
+0628 AB83      1426            mov     r3,dph
+062A ACF0      1427            mov     r4,b
+062C FD        1428            mov     r5,a
+062D E581      1429            mov     a,sp
+062F 24FC      1430            add     a,#0xfc
+0631 F581      1431            mov     sp,a
+0633 AEE8      1432            mov     r6,_Stage
+0635 E5E9      1433            mov     a,(_Stage + 1)
+0637 CE        1434            xch     a,r6
+0638 25E0      1435            add     a,acc
+063A CE        1436            xch     a,r6
+063B 33        1437            rlc     a
+063C CE        1438            xch     a,r6
+063D 25E0      1439            add     a,acc
+063F CE        1440            xch     a,r6
+0640 33        1441            rlc     a
+0641 FF        1442            mov     r7,a
+0642 EE        1443            mov     a,r6
+0643 2408      1444            add     a,#_PRESETS
+0645 F582      1445            mov     dpl,a
+0647 EF        1446            mov     a,r7
+0648 3442      1447            addc    a,#(_PRESETS >> 8)
+064A F583      1448            mov     dph,a
+064C E4        1449            clr     a
+064D 93        1450            movc    a,@a+dptr
+064E FE        1451            mov     r6,a
+064F A3        1452            inc     dptr
+0650 E4        1453            clr     a
+0651 93        1454            movc    a,@a+dptr
+0652 FF        1455            mov     r7,a
+0653 A3        1456            inc     dptr
+0654 E4        1457            clr     a
+0655 93        1458            movc    a,@a+dptr
+0656 F8        1459            mov     r0,a
+0657 A3        1460            inc     dptr
+0658 E4        1461            clr     a
+0659 93        1462            movc    a,@a+dptr
+065A F9        1463            mov     r1,a
+065B C006      1464            push    ar6
+065D C007      1465            push    ar7
+065F C000      1466            push    ar0
+0661 C001      1467            push    ar1
+0663 8A82      1468            mov     dpl,r2
+0665 8B83      1469            mov     dph,r3
+0667 8CF0      1470            mov     b,r4
+0669 ED        1471            mov     a,r5
+066A 120100    1472            lcall   ___fslt
+066D AA82      1473            mov     r2,dpl
+066F E581      1474            mov     a,sp
+0671 24FC      1475            add     a,#0xfc
+0673 F581      1476            mov     sp,a
+0675 EA        1477            mov     a,r2
+0676 6001      1478            jz      L008011?
+0678           1479   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:359: P2_2=1;
+0678 D2A2      1480            setb    _P2_2
+067A           1481   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:360: P2_1=0;
+067A C2A1      1482            clr     _P2_1
+067C           1483   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:361: P2_0=1;
+067C D2A0      1484            setb    _P2_0
+067E           1485   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:362: pwmLeft = smooth_move(leftHistory, MOVESPEED);
+067E 904388    1486            mov     dptr,#_MOVESPEED
+0681 E4        1487            clr     a
+0682 93        1488            movc    a,@a+dptr
+0683 F5E8      1489            mov     _smooth_move_PARM_2,a
+0685 7401      1490            mov     a,#0x01
+0687 93        1491            movc    a,@a+dptr
+0688 F5E9      1492            mov     (_smooth_move_PARM_2 + 1),a
+068A 856882    1493            mov     dpl,_leftHistory
+068D 856983    1494            mov     dph,(_leftHistory + 1)
+0690 856AF0    1495            mov     b,(_leftHistory + 2)
+0693 120100    1496            lcall   _smooth_move
+0696 8582E8    1497            mov     _pwmLeft,dpl
+0699 8583E9    1498            mov     (_pwmLeft + 1),dph
+069C           1499   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:363: pwmRight = smooth_move(rightHistory, MOVESPEED);
+069C 904388    1500            mov     dptr,#_MOVESPEED
+069F E4        1501            clr     a
+06A0 93        1502            movc    a,@a+dptr
+06A1 F5E8      1503            mov     _smooth_move_PARM_2,a
+06A3 7401      1504            mov     a,#0x01
+06A5 93        1505            movc    a,@a+dptr
+06A6 F5E9      1506            mov     (_smooth_move_PARM_2 + 1),a
+06A8 852882    1507            mov     dpl,_rightHistory
+06AB 852983    1508            mov     dph,(_rightHistory + 1)
+06AE 852AF0    1509            mov     b,(_rightHistory + 2)
+06B1 120100    1510            lcall   _smooth_move
+06B4 8582A8    1511            mov     _pwmRight,dpl
+06B7 8583A9    1512            mov     (_pwmRight + 1),dph
+06BA 020100    1513            ljmp    L008012?
+06BD           1514   L008011?:
+06BD           1515   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:366: else if (getDistance() > (PRESETS[Stage]+DISTANCEBUFFER))
+06BD 120100    1516            lcall   _getDistance
+06C0 AA82      1517            mov     r2,dpl
+06C2 AB83      1518            mov     r3,dph
+06C4 ACF0      1519            mov     r4,b
+06C6 FD        1520            mov     r5,a
+06C7 AEE8      1521            mov     r6,_Stage
+06C9 E5E9      1522            mov     a,(_Stage + 1)
+06CB CE        1523            xch     a,r6
+06CC 25E0      1524            add     a,acc
+06CE CE        1525            xch     a,r6
+06CF 33        1526            rlc     a
+06D0 CE        1527            xch     a,r6
+06D1 25E0      1528            add     a,acc
+06D3 CE        1529            xch     a,r6
+06D4 33        1530            rlc     a
+06D5 FF        1531            mov     r7,a
+06D6 EE        1532            mov     a,r6
+06D7 2408      1533            add     a,#_PRESETS
+06D9 F582      1534            mov     dpl,a
+06DB EF        1535            mov     a,r7
+06DC 3442      1536            addc    a,#(_PRESETS >> 8)
+06DE F583      1537            mov     dph,a
+06E0 E4        1538            clr     a
+06E1 93        1539            movc    a,@a+dptr
+06E2 FE        1540            mov     r6,a
+06E3 A3        1541            inc     dptr
+06E4 E4        1542            clr     a
+06E5 93        1543            movc    a,@a+dptr
+06E6 FF        1544            mov     r7,a
+06E7 A3        1545            inc     dptr
+06E8 E4        1546            clr     a
+06E9 93        1547            movc    a,@a+dptr
+06EA F8        1548            mov     r0,a
+06EB A3        1549            inc     dptr
+06EC E4        1550            clr     a
+06ED 93        1551            movc    a,@a+dptr
+06EE F9        1552            mov     r1,a
+06EF C002      1553            push    ar2
+06F1 C003      1554            push    ar3
+06F3 C004      1555            push    ar4
+06F5 C005      1556            push    ar5
+06F7 9042C8    1557            mov     dptr,#_DISTANCEBUFFER
+06FA E4        1558            clr     a
+06FB 93        1559            movc    a,@a+dptr
+06FC C0E0      1560            push    acc
+06FE 7401      1561            mov     a,#0x01
+0700 93        1562            movc    a,@a+dptr
+0701 C0E0      1563            push    acc
+0703 7402      1564            mov     a,#0x02
+0705 93        1565            movc    a,@a+dptr
+0706 C0E0      1566            push    acc
+0708 7403      1567            mov     a,#0x03
+070A 93        1568            movc    a,@a+dptr
+070B C0E0      1569            push    acc
+070D 8E82      1570            mov     dpl,r6
+070F 8F83      1571            mov     dph,r7
+0711 88F0      1572            mov     b,r0
+0713 E9        1573            mov     a,r1
+0714 120100    1574            lcall   ___fsadd
+0717 AE82      1575            mov     r6,dpl
+0719 AF83      1576            mov     r7,dph
+071B A8F0      1577            mov     r0,b
+071D F9        1578            mov     r1,a
+071E E581      1579            mov     a,sp
+0720 24FC      1580            add     a,#0xfc
+0722 F581      1581            mov     sp,a
+0724 D005      1582            pop     ar5
+0726 D004      1583            pop     ar4
+0728 D003      1584            pop     ar3
+072A D002      1585            pop     ar2
+072C C006      1586            push    ar6
+072E C007      1587            push    ar7
+0730 C000      1588            push    ar0
+0732 C001      1589            push    ar1
+0734 8A82      1590            mov     dpl,r2
+0736 8B83      1591            mov     dph,r3
+0738 8CF0      1592            mov     b,r4
+073A ED        1593            mov     a,r5
+073B 120100    1594            lcall   ___fsgt
+073E AA82      1595            mov     r2,dpl
+0740 E581      1596            mov     a,sp
+0742 24FC      1597            add     a,#0xfc
+0744 F581      1598            mov     sp,a
+0746 EA        1599            mov     a,r2
+0747 6001      1600            jz      L008008?
+0749           1601   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:368: P2_2=1;
+0749 D2A2      1602            setb    _P2_2
+074B           1603   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:369: P2_1=0;
+074B C2A1      1604            clr     _P2_1
+074D           1605   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:370: P2_0=1;
+074D D2A0      1606            setb    _P2_0
+074F           1607   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:371: pwmLeft = smooth_move(leftHistory, -MOVESPEED);
+074F 904388    1608            mov     dptr,#_MOVESPEED
+0752 E4        1609            clr     a
+0753 93        1610            movc    a,@a+dptr
+0754 FA        1611            mov     r2,a
+0755 7401      1612            mov     a,#0x01
+0757 93        1613            movc    a,@a+dptr
+0758 FB        1614            mov     r3,a
+0759 C3        1615            clr     c
+075A E4        1616            clr     a
+075B 9A        1617            subb    a,r2
+075C F5E8      1618            mov     _smooth_move_PARM_2,a
+075E E4        1619            clr     a
+075F 9B        1620            subb    a,r3
+0760 F5E9      1621            mov     (_smooth_move_PARM_2 + 1),a
+0762 856882    1622            mov     dpl,_leftHistory
+0765 856983    1623            mov     dph,(_leftHistory + 1)
+0768 856AF0    1624            mov     b,(_leftHistory + 2)
+076B 120100    1625            lcall   _smooth_move
+076E 8582E8    1626            mov     _pwmLeft,dpl
+0771 8583E9    1627            mov     (_pwmLeft + 1),dph
+0774           1628   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:372: pwmRight = smooth_move(rightHistory, -MOVESPEED);
+0774 904388    1629            mov     dptr,#_MOVESPEED
+0777 E4        1630            clr     a
+0778 93        1631            movc    a,@a+dptr
+0779 FA        1632            mov     r2,a
+077A 7401      1633            mov     a,#0x01
+077C 93        1634            movc    a,@a+dptr
+077D FB        1635            mov     r3,a
+077E C3        1636            clr     c
+077F E4        1637            clr     a
+0780 9A        1638            subb    a,r2
+0781 F5E8      1639            mov     _smooth_move_PARM_2,a
+0783 E4        1640            clr     a
+0784 9B        1641            subb    a,r3
+0785 F5E9      1642            mov     (_smooth_move_PARM_2 + 1),a
+0787 852882    1643            mov     dpl,_rightHistory
+078A 852983    1644            mov     dph,(_rightHistory + 1)
+078D 852AF0    1645            mov     b,(_rightHistory + 2)
+0790 120100    1646            lcall   _smooth_move
+0793 8582A8    1647            mov     _pwmRight,dpl
+0796 8583A9    1648            mov     (_pwmRight + 1),dph
+0799 8001      1649            sjmp    L008012?
+079B           1650   L008008?:
+079B           1651   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:376: pwmLeft = smooth_move(leftHistory, 0);
+079B E4        1652            clr     a
+079C F5E8      1653            mov     _smooth_move_PARM_2,a
+079E F5E9      1654            mov     (_smooth_move_PARM_2 + 1),a
+07A0 856882    1655            mov     dpl,_leftHistory
+07A3 856983    1656            mov     dph,(_leftHistory + 1)
+07A6 856AF0    1657            mov     b,(_leftHistory + 2)
+07A9 120100    1658            lcall   _smooth_move
+07AC 8582E8    1659            mov     _pwmLeft,dpl
+07AF 8583E9    1660            mov     (_pwmLeft + 1),dph
+07B2           1661   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:377: pwmRight = smooth_move(rightHistory, 0);
+07B2 E4        1662            clr     a
+07B3 F5E8      1663            mov     _smooth_move_PARM_2,a
+07B5 F5E9      1664            mov     (_smooth_move_PARM_2 + 1),a
+07B7 852882    1665            mov     dpl,_rightHistory
+07BA 852983    1666            mov     dph,(_rightHistory + 1)
+07BD 852AF0    1667            mov     b,(_rightHistory + 2)
+07C0 120100    1668            lcall   _smooth_move
+07C3 8582A8    1669            mov     _pwmRight,dpl
+07C6 8583A9    1670            mov     (_pwmRight + 1),dph
+07C9           1671   L008012?:
+07C9           1672   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:380: return;
+07C9 22        1673            ret
+07CA           1674   ;------------------------------------------------------------
+07CA           1675   ;Allocation info for local variables in function 'smooth_move'
+07CA           1676   ;------------------------------------------------------------
+07CA           1677   ;target                    Allocated with name '_smooth_move_PARM_2'
+07CA           1678   ;history                   Allocated with name '_smooth_move_history_1_113'
+07CA           1679   ;N                         Allocated with name '_smooth_move_N_1_114'
+07CA           1680   ;sloc0                     Allocated with name '_smooth_move_sloc0_1_0'
+07CA           1681   ;------------------------------------------------------------
+07CA           1682   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:383: int smooth_move(int * history, int target)
+07CA           1683   ;        -----------------------------------------
+07CA           1684   ;         function smooth_move
+07CA           1685   ;        -----------------------------------------
+07CA           1686   _smooth_move:
+07CA 858238    1687            mov     _smooth_move_history_1_113,dpl
+07CD 858339    1688            mov     (_smooth_move_history_1_113 + 1),dph
+07D0 85F03A    1689            mov     (_smooth_move_history_1_113 + 2),b
+07D3           1690   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:385: int N = MEMORY_LENGTH;
+07D3 9041C8    1691            mov     dptr,#_MEMORY_LENGTH
+07D6 E4        1692            clr     a
+07D7 93        1693            movc    a,@a+dptr
+07D8 F588      1694            mov     _smooth_move_N_1_114,a
+07DA 7401      1695            mov     a,#0x01
+07DC 93        1696            movc    a,@a+dptr
+07DD F589      1697            mov     (_smooth_move_N_1_114 + 1),a
+07DF AF88      1698            mov     r7,_smooth_move_N_1_114
+07E1 A889      1699            mov     r0,(_smooth_move_N_1_114 + 1)
+07E3           1700   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:387: history[0] = 0;
+07E3 853882    1701            mov     dpl,_smooth_move_history_1_113
+07E6 853983    1702            mov     dph,(_smooth_move_history_1_113 + 1)
+07E9 853AF0    1703            mov     b,(_smooth_move_history_1_113 + 2)
+07EC E4        1704            clr     a
+07ED 120100    1705            lcall   __gptrput
+07F0 A3        1706            inc     dptr
+07F1 E4        1707            clr     a
+07F2 120100    1708            lcall   __gptrput
+07F5           1709   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:389: while(N-- > 1)
+07F5           1710   L009001?:
+07F5 8F01      1711            mov     ar1,r7
+07F7 8805      1712            mov     ar5,r0
+07F9 1F        1713            dec     r7
+07FA BFFFE8    1714            cjne    r7,#0xff,L009009?
+07FD 18        1715            dec     r0
+07FE           1716   L009009?:
+07FE C3        1717            clr     c
+07FF 7401      1718            mov     a,#0x01
+0801 99        1719            subb    a,r1
+0802 E4        1720            clr     a
+0803 6480      1721            xrl     a,#0x80
+0805 8DF0      1722            mov     b,r5
+0807 63F080    1723            xrl     b,#0x80
+080A 95F0      1724            subb    a,b
+080C 4001      1725            jc      L009010?
+080E 020100    1726            ljmp    L009003?
+0811           1727   L009010?:
+0811           1728   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:391: history[0] += history[N];
+0811 853882    1729            mov     dpl,_smooth_move_history_1_113
+0814 853983    1730            mov     dph,(_smooth_move_history_1_113 + 1)
+0817 853AF0    1731            mov     b,(_smooth_move_history_1_113 + 2)
+081A 120100    1732            lcall   __gptrget
+081D F5D8      1733            mov     _smooth_move_sloc0_1_0,a
+081F A3        1734            inc     dptr
+0820 120100    1735            lcall   __gptrget
+0823 F5D9      1736            mov     (_smooth_move_sloc0_1_0 + 1),a
+0825 8F01      1737            mov     ar1,r7
+0827 E8        1738            mov     a,r0
+0828 C9        1739            xch     a,r1
+0829 25E0      1740            add     a,acc
+082B C9        1741            xch     a,r1
+082C 33        1742            rlc     a
+082D FA        1743            mov     r2,a
+082E E9        1744            mov     a,r1
+082F 2538      1745            add     a,_smooth_move_history_1_113
+0831 F9        1746            mov     r1,a
+0832 EA        1747            mov     a,r2
+0833 3539      1748            addc    a,(_smooth_move_history_1_113 + 1)
+0835 FA        1749            mov     r2,a
+0836 AB3A      1750            mov     r3,(_smooth_move_history_1_113 + 2)
+0838 8982      1751            mov     dpl,r1
+083A 8A83      1752            mov     dph,r2
+083C 8BF0      1753            mov     b,r3
+083E 120100    1754            lcall   __gptrget
+0841 FC        1755            mov     r4,a
+0842 A3        1756            inc     dptr
+0843 120100    1757            lcall   __gptrget
+0846 FD        1758            mov     r5,a
+0847 EC        1759            mov     a,r4
+0848 25D8      1760            add     a,_smooth_move_sloc0_1_0
+084A FC        1761            mov     r4,a
+084B ED        1762            mov     a,r5
+084C 35D9      1763            addc    a,(_smooth_move_sloc0_1_0 + 1)
+084E FD        1764            mov     r5,a
+084F 853882    1765            mov     dpl,_smooth_move_history_1_113
+0852 853983    1766            mov     dph,(_smooth_move_history_1_113 + 1)
+0855 853AF0    1767            mov     b,(_smooth_move_history_1_113 + 2)
+0858 EC        1768            mov     a,r4
+0859 120100    1769            lcall   __gptrput
+085C A3        1770            inc     dptr
+085D ED        1771            mov     a,r5
+085E 120100    1772            lcall   __gptrput
+0861           1773   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:392: history[N] = history[N-1];       
+0861 EF        1774            mov     a,r7
+0862 24FF      1775            add     a,#0xff
+0864 FC        1776            mov     r4,a
+0865 E8        1777            mov     a,r0
+0866 34FF      1778            addc    a,#0xff
+0868 CC        1779            xch     a,r4
+0869 25E0      1780            add     a,acc
+086B CC        1781            xch     a,r4
+086C 33        1782            rlc     a
+086D FD        1783            mov     r5,a
+086E EC        1784            mov     a,r4
+086F 2538      1785            add     a,_smooth_move_history_1_113
+0871 FC        1786            mov     r4,a
+0872 ED        1787            mov     a,r5
+0873 3539      1788            addc    a,(_smooth_move_history_1_113 + 1)
+0875 FD        1789            mov     r5,a
+0876 AE3A      1790            mov     r6,(_smooth_move_history_1_113 + 2)
+0878 8C82      1791            mov     dpl,r4
+087A 8D83      1792            mov     dph,r5
+087C 8EF0      1793            mov     b,r6
+087E 120100    1794            lcall   __gptrget
+0881 FC        1795            mov     r4,a
+0882 A3        1796            inc     dptr
+0883 120100    1797            lcall   __gptrget
+0886 FD        1798            mov     r5,a
+0887 8982      1799            mov     dpl,r1
+0889 8A83      1800            mov     dph,r2
+088B 8BF0      1801            mov     b,r3
+088D EC        1802            mov     a,r4
+088E 120100    1803            lcall   __gptrput
+0891 A3        1804            inc     dptr
+0892 ED        1805            mov     a,r5
+0893 120100    1806            lcall   __gptrput
+0896 020100    1807            ljmp    L009001?
+0899           1808   L009003?:
+0899           1809   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:395: history[0] += target;
+0899 853882    1810            mov     dpl,_smooth_move_history_1_113
+089C 853983    1811            mov     dph,(_smooth_move_history_1_113 + 1)
+089F 853AF0    1812            mov     b,(_smooth_move_history_1_113 + 2)
+08A2 120100    1813            lcall   __gptrget
+08A5 FA        1814            mov     r2,a
+08A6 A3        1815            inc     dptr
+08A7 120100    1816            lcall   __gptrget
+08AA FB        1817            mov     r3,a
+08AB E5E8      1818            mov     a,_smooth_move_PARM_2
+08AD 2A        1819            add     a,r2
+08AE FA        1820            mov     r2,a
+08AF E5E9      1821            mov     a,(_smooth_move_PARM_2 + 1)
+08B1 3B        1822            addc    a,r3
+08B2 FB        1823            mov     r3,a
+08B3 853882    1824            mov     dpl,_smooth_move_history_1_113
+08B6 853983    1825            mov     dph,(_smooth_move_history_1_113 + 1)
+08B9 853AF0    1826            mov     b,(_smooth_move_history_1_113 + 2)
+08BC EA        1827            mov     a,r2
+08BD 120100    1828            lcall   __gptrput
+08C0 A3        1829            inc     dptr
+08C1 EB        1830            mov     a,r3
+08C2 120100    1831            lcall   __gptrput
+08C5           1832   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:397: return history[0] / MEMORY_LENGTH;
+08C5 858800    1833            mov     __divsint_PARM_2,_smooth_move_N_1_114
+08C8 858901    1834            mov     (__divsint_PARM_2 + 1),(_smooth_move_N_1_114 + 1)
+08CB 8A82      1835            mov     dpl,r2
+08CD 8B83      1836            mov     dph,r3
+08CF 020100    1837            ljmp    __divsint
+08D2           1838   ;------------------------------------------------------------
+08D2           1839   ;Allocation info for local variables in function 'uTurn'
+08D2           1840   ;------------------------------------------------------------
+08D2           1841   ;------------------------------------------------------------
+08D2           1842   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:400: void uTurn()
+08D2           1843   ;        -----------------------------------------
+08D2           1844   ;         function uTurn
+08D2           1845   ;        -----------------------------------------
+08D2           1846   _uTurn:
+08D2           1847   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:402: P2_2=1;
+08D2 D2A2      1848            setb    _P2_2
+08D4           1849   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:403: P2_1=0;
+08D4 C2A1      1850            clr     _P2_1
+08D6           1851   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:404: P2_0=1;
+08D6 D2A0      1852            setb    _P2_0
+08D8           1853   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:405: pwmLeft=TURNSPEED;
+08D8 904348    1854            mov     dptr,#_TURNSPEED
+08DB E4        1855            clr     a
+08DC 93        1856            movc    a,@a+dptr
+08DD FA        1857            mov     r2,a
+08DE 7401      1858            mov     a,#0x01
+08E0 93        1859            movc    a,@a+dptr
+08E1 FB        1860            mov     r3,a
+08E2 8AE8      1861            mov     _pwmLeft,r2
+08E4 8BE9      1862            mov     (_pwmLeft + 1),r3
+08E6           1863   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:406: pwmRight=(-TURNSPEED);
+08E6 C3        1864            clr     c
+08E7 E4        1865            clr     a
+08E8 9A        1866            subb    a,r2
+08E9 F5A8      1867            mov     _pwmRight,a
+08EB E4        1868            clr     a
+08EC 9B        1869            subb    a,r3
+08ED F5A9      1870            mov     (_pwmRight + 1),a
+08EF           1871   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:407: wait1s();
+08EF 120100    1872            lcall   _wait1s
+08F2           1873   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:408: wait1s();
+08F2 120100    1874            lcall   _wait1s
+08F5           1875   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:409: pwmLeft=pwmRight=0;
+08F5 E4        1876            clr     a
+08F6 F5A8      1877            mov     _pwmRight,a
+08F8 F5A9      1878            mov     (_pwmRight + 1),a
+08FA F5E8      1879            mov     _pwmLeft,a
+08FC F5E9      1880            mov     (_pwmLeft + 1),a
+08FE           1881   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:410: return;
+08FE 22        1882            ret
+08FF           1883   ;------------------------------------------------------------
+08FF           1884   ;Allocation info for local variables in function 'getSig'
+08FF           1885   ;------------------------------------------------------------
+08FF           1886   ;j                         Allocated to registers r4 r5 
+08FF           1887   ;val                       Allocated to registers r2 r3 
+08FF           1888   ;v                         Allocated to registers r6 r7 r0 r1 
+08FF           1889   ;------------------------------------------------------------
+08FF           1890   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:413: unsigned int getSig()
+08FF           1891   ;        -----------------------------------------
+08FF           1892   ;         function getSig
+08FF           1893   ;        -----------------------------------------
+08FF           1894   _getSig:
+08FF           1895   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:419: val = 0;
+08FF 7A00      1896            mov     r2,#0x00
+0901 7B00      1897            mov     r3,#0x00
+0903           1898   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:422: for (j = 0; j < 3; j++) {
+0903 7C00      1899            mov     r4,#0x00
+0905 7D00      1900            mov     r5,#0x00
+0907           1901   L011001?:
+0907 C3        1902            clr     c
+0908 EC        1903            mov     a,r4
+0909 9403      1904            subb    a,#0x03
+090B ED        1905            mov     a,r5
+090C 9400      1906            subb    a,#0x00
+090E 5001      1907            jnc     L011004?
+0910           1908   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:423: v = GetADC(0);
+0910 758200    1909            mov     dpl,#0x00
+0913 C002      1910            push    ar2
+0915 C003      1911            push    ar3
+0917 C004      1912            push    ar4
+0919 C005      1913            push    ar5
+091B 120100    1914            lcall   _GetADC
+091E 120100    1915            lcall   ___uint2fs
+0921 AE82      1916            mov     r6,dpl
+0923 AF83      1917            mov     r7,dph
+0925 A8F0      1918            mov     r0,b
+0927 F9        1919            mov     r1,a
+0928           1920   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:424: val |= (v > MINVOLT) ? (0x01 << j) : 0x00;
+0928 904308    1921            mov     dptr,#_MINVOLT
+092B E4        1922            clr     a
+092C 93        1923            movc    a,@a+dptr
+092D C0E0      1924            push    acc
+092F 7401      1925            mov     a,#0x01
+0931 93        1926            movc    a,@a+dptr
+0932 C0E0      1927            push    acc
+0934 7402      1928            mov     a,#0x02
+0936 93        1929            movc    a,@a+dptr
+0937 C0E0      1930            push    acc
+0939 7403      1931            mov     a,#0x03
+093B 93        1932            movc    a,@a+dptr
+093C C0E0      1933            push    acc
+093E 8E82      1934            mov     dpl,r6
+0940 8F83      1935            mov     dph,r7
+0942 88F0      1936            mov     b,r0
+0944 E9        1937            mov     a,r1
+0945 120100    1938            lcall   ___fsgt
+0948 AE82      1939            mov     r6,dpl
+094A E581      1940            mov     a,sp
+094C 24FC      1941            add     a,#0xfc
+094E F581      1942            mov     sp,a
+0950 D005      1943            pop     ar5
+0952 D004      1944            pop     ar4
+0954 D003      1945            pop     ar3
+0956 D002      1946            pop     ar2
+0958 EE        1947            mov     a,r6
+0959 6001      1948            jz      L011007?
+095B 8CF0      1949            mov     b,r4
+095D 05F0      1950            inc     b
+095F 7E01      1951            mov     r6,#0x01
+0961 7F00      1952            mov     r7,#0x00
+0963 8001      1953            sjmp    L011016?
+0965           1954   L011015?:
+0965 EE        1955            mov     a,r6
+0966 2E        1956            add     a,r6
+0967 FE        1957            mov     r6,a
+0968 EF        1958            mov     a,r7
+0969 33        1959            rlc     a
+096A FF        1960            mov     r7,a
+096B           1961   L011016?:
+096B D5F078    1962            djnz    b,L011015?
+096E 8001      1963            sjmp    L011008?
+0970           1964   L011007?:
+0970 7E00      1965            mov     r6,#0x00
+0972 7F00      1966            mov     r7,#0x00
+0974           1967   L011008?:
+0974 EE        1968            mov     a,r6
+0975 4202      1969            orl     ar2,a
+0977 EF        1970            mov     a,r7
+0978 4203      1971            orl     ar3,a
+097A           1972   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:422: for (j = 0; j < 3; j++) {
+097A 0C        1973            inc     r4
+097B BC0078    1974            cjne    r4,#0x00,L011001?
+097E 0D        1975            inc     r5
+097F 8001      1976            sjmp    L011001?
+0981           1977   L011004?:
+0981           1978   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:428: return val;
+0981 8A82      1979            mov     dpl,r2
+0983 8B83      1980            mov     dph,r3
+0985 22        1981            ret
+0986           1982   ;------------------------------------------------------------
+0986           1983   ;Allocation info for local variables in function 'wait1s'
+0986           1984   ;------------------------------------------------------------
+0986           1985   ;------------------------------------------------------------
+0986           1986   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:432: void wait1s (void)
+0986           1987   ;        -----------------------------------------
+0986           1988   ;         function wait1s
+0986           1989   ;        -----------------------------------------
+0986           1990   _wait1s:
+0986           1991   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:444: _endasm;
+0986           1992            
+0986           1993     ;For a 22.1184MHz crystal one machine cycle
+0986           1994     ;takes 12/22.1184MHz=0.5425347us
+0986 7A0A      1995                 mov R2, #10
+0988           1996             L3:
+0988 79B4      1997            mov R1, #180
+098A           1998             L2:
+098A 78B4      1999            mov R0, #180
+098C           2000             L1:
+098C D878      2001            djnz R0, L1 ; 2 machine cycles-> 2*0.5425347us*184=200us
+098E D938      2002                 djnz R1, L2 ; 200us*250=0.05s
+0990 DAF8      2003                 djnz R2, L3 ; 0.05s*20=1s
+0992 22        2004                 ret
+0993           2005                
+0993 22        2006            ret
+0994           2007   ;------------------------------------------------------------
+0994           2008   ;Allocation info for local variables in function 'voltage'
+0994           2009   ;------------------------------------------------------------
+0994           2010   ;channel                   Allocated to registers 
+0994           2011   ;------------------------------------------------------------
+0994           2012   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:452: float voltage (unsigned char channel)
+0994           2013   ;        -----------------------------------------
+0994           2014   ;         function voltage
+0994           2015   ;        -----------------------------------------
+0994           2016   _voltage:
+0994           2017   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:454: return ((GetADC(channel) * 4.84) / 1023.0); // VCC=4.84V (measured)
+0994 120100    2018            lcall   _GetADC
+0997 120100    2019            lcall   ___uint2fs
+099A AA82      2020            mov     r2,dpl
+099C AB83      2021            mov     r3,dph
+099E ACF0      2022            mov     r4,b
+09A0 FD        2023            mov     r5,a
+09A1 C002      2024            push    ar2
+09A3 C003      2025            push    ar3
+09A5 C004      2026            push    ar4
+09A7 C005      2027            push    ar5
+09A9 90E148    2028            mov     dptr,#0xE148
+09AC 75F09A    2029            mov     b,#0x9A
+09AF 7440      2030            mov     a,#0x40
+09B1 120100    2031            lcall   ___fsmul
+09B4 AA82      2032            mov     r2,dpl
+09B6 AB83      2033            mov     r3,dph
+09B8 ACF0      2034            mov     r4,b
+09BA FD        2035            mov     r5,a
+09BB E581      2036            mov     a,sp
+09BD 24FC      2037            add     a,#0xfc
+09BF F581      2038            mov     sp,a
+09C1 E4        2039            clr     a
+09C2 C0E0      2040            push    acc
+09C4 74C0      2041            mov     a,#0xC0
+09C6 C0E0      2042            push    acc
+09C8 747F      2043            mov     a,#0x7F
+09CA C0E0      2044            push    acc
+09CC 7444      2045            mov     a,#0x44
+09CE C0E0      2046            push    acc
+09D0 8A82      2047            mov     dpl,r2
+09D2 8B83      2048            mov     dph,r3
+09D4 8CF0      2049            mov     b,r4
+09D6 ED        2050            mov     a,r5
+09D7 120100    2051            lcall   ___fsdiv
+09DA AA82      2052            mov     r2,dpl
+09DC AB83      2053            mov     r3,dph
+09DE ACF0      2054            mov     r4,b
+09E0 FD        2055            mov     r5,a
+09E1 E581      2056            mov     a,sp
+09E3 24FC      2057            add     a,#0xfc
+09E5 F581      2058            mov     sp,a
+09E7 8A82      2059            mov     dpl,r2
+09E9 8B83      2060            mov     dph,r3
+09EB 8CF0      2061            mov     b,r4
+09ED ED        2062            mov     a,r5
+09EE 22        2063            ret
+09EF           2064   ;------------------------------------------------------------
+09EF           2065   ;Allocation info for local variables in function 'SPIWrite'
+09EF           2066   ;------------------------------------------------------------
+09EF           2067   ;value                     Allocated to registers r2 
+09EF           2068   ;------------------------------------------------------------
+09EF           2069   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:457: void SPIWrite(unsigned char value)
+09EF           2070   ;        -----------------------------------------
+09EF           2071   ;         function SPIWrite
+09EF           2072   ;        -----------------------------------------
+09EF           2073   _SPIWrite:
+09EF AA82      2074            mov     r2,dpl
+09F1           2075   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:459: SPSTA&=(~SPIF); // Clear the SPIF flag in SPSTA
+09F1 53C47F    2076            anl     _SPSTA,#0x7F
+09F4           2077   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:460: SPDAT=value;
+09F4 8AC5      2078            mov     _SPDAT,r2
+09F6           2079   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:461: while((SPSTA & SPIF)!=SPIF); //Wait for transmission to end
+09F6           2080   L014001?:
+09F6 7480      2081            mov     a,#0x80
+09F8 55C4      2082            anl     a,_SPSTA
+09FA FA        2083            mov     r2,a
+09FB BA80B8    2084            cjne    r2,#0x80,L014001?
+09FE 22        2085            ret
+09FF           2086   ;------------------------------------------------------------
+09FF           2087   ;Allocation info for local variables in function 'GetADC'
+09FF           2088   ;------------------------------------------------------------
+09FF           2089   ;channel                   Allocated to registers r2 
+09FF           2090   ;adc                       Allocated to registers r2 r3 
+09FF           2091   ;------------------------------------------------------------
+09FF           2092   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:465: unsigned int GetADC(unsigned char channel)
+09FF           2093   ;        -----------------------------------------
+09FF           2094   ;         function GetADC
+09FF           2095   ;        -----------------------------------------
+09FF           2096   _GetADC:
+09FF AA82      2097            mov     r2,dpl
+0A01           2098   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:470: SPCON&=(~SPEN); // Disable SPI
+0A01 53C3BF    2099            anl     _SPCON,#0xBF
+0A04           2100   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:471: SPCON=MSTR|CPOL|CPHA|SPR1|SPR0|SSDIS;
+0A04 75C33F    2101            mov     _SPCON,#0x3F
+0A07           2102   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:472: SPCON|=SPEN; // Enable SPI
+0A07 43C340    2103            orl     _SPCON,#0x40
+0A0A           2104   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:474: P1_4=0; // Activate the MCP3004 ADC.
+0A0A C294      2105            clr     _P1_4
+0A0C           2106   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:475: SPIWrite(channel|0x18);  // Send start bit, single/diff* bit, D2, D1, and D0 bits.
+0A0C 7418      2107            mov     a,#0x18
+0A0E 4A        2108            orl     a,r2
+0A0F F582      2109            mov     dpl,a
+0A11 120100    2110            lcall   _SPIWrite
+0A14           2111   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:476: for(adc=0; adc<10; adc++); // Wait for S/H to setup
+0A14 7A0A      2112            mov     r2,#0x0A
+0A16 7B00      2113            mov     r3,#0x00
+0A18           2114   L015003?:
+0A18 1A        2115            dec     r2
+0A19 BAFF38    2116            cjne    r2,#0xff,L015009?
+0A1C 1B        2117            dec     r3
+0A1D           2118   L015009?:
+0A1D EA        2119            mov     a,r2
+0A1E 4B        2120            orl     a,r3
+0A1F 7001      2121            jnz     L015003?
+0A21           2122   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:477: SPIWrite(0x55); // Read bits 9 down to 4
+0A21 758255    2123            mov     dpl,#0x55
+0A24 120100    2124            lcall   _SPIWrite
+0A27           2125   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:478: adc=((SPDAT&0x3f)*0x100);
+0A27 743F      2126            mov     a,#0x3F
+0A29 55C5      2127            anl     a,_SPDAT
+0A2B FB        2128            mov     r3,a
+0A2C 7A00      2129            mov     r2,#0x00
+0A2E           2130   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:479: SPIWrite(0x55);// Read bits 3 down to 0
+0A2E 758255    2131            mov     dpl,#0x55
+0A31 C002      2132            push    ar2
+0A33 C003      2133            push    ar3
+0A35 120100    2134            lcall   _SPIWrite
+0A38 D003      2135            pop     ar3
+0A3A D002      2136            pop     ar2
+0A3C           2137   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:480: P1_4=1; // Deactivate the MCP3004 ADC.
+0A3C D294      2138            setb    _P1_4
+0A3E           2139   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:481: adc+=(SPDAT&0xf0); // SPDR contains the low part of the result. 
+0A3E 74F0      2140            mov     a,#0xF0
+0A40 55C5      2141            anl     a,_SPDAT
+0A42 FC        2142            mov     r4,a
+0A43 7D00      2143            mov     r5,#0x00
+0A45 EC        2144            mov     a,r4
+0A46 2A        2145            add     a,r2
+0A47 FA        2146            mov     r2,a
+0A48 ED        2147            mov     a,r5
+0A49 3B        2148            addc    a,r3
+0A4A           2149   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:482: adc>>=4;
+0A4A C4        2150            swap    a
+0A4B CA        2151            xch     a,r2
+0A4C C4        2152            swap    a
+0A4D 540F      2153            anl     a,#0x0f
+0A4F 6A        2154            xrl     a,r2
+0A50 CA        2155            xch     a,r2
+0A51 540F      2156            anl     a,#0x0f
+0A53 CA        2157            xch     a,r2
+0A54 6A        2158            xrl     a,r2
+0A55 CA        2159            xch     a,r2
+0A56           2160   ;        C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:484: return adc;
+0A56 8A82      2161            mov     dpl,r2
+0A58 F583      2162            mov     dph,a
+0A5A 22        2163            ret
+0A5B           2164            rseg R_CSEG
+0A5B           2165   
+0000           2166            rseg R_XINIT
+0000           2167   
+0000           2168            rseg R_CONST
+0000           2169   _MOVESPEED:
+0000 6400      2170            db 0x64,0x00    ;  100
+0002           2171   _TURNSPEED:
+0002 6400      2172            db 0x64,0x00    ;  100
+0004           2173   _MINVOLT:
+0004 CDCC4C3D  2174            db 0xCD,0xCC,0x4C,0x3D  ;  5.000000e-002
+0008           2175   _DISTANCEBUFFER:
+0008 00007041  2176            db 0x00,0x00,0x70,0x41  ;  1.500000e+001
+000C           2177   _ANGLEBUFFER:
+000C CDCCCC3D  2178            db 0xCD,0xCC,0xCC,0x3D  ;  1.000000e-001
+0010           2179   _NSTAGES:
+0010 0C00      2180            db 0x0C,0x00    ;  12
+0012           2181   _PRESETS:
+0012 00001644  2182            db 0x00,0x00,0x16,0x44  ;  6.000000e+002
+0016 00800944  2183            db 0x00,0x80,0x09,0x44  ;  5.500000e+002
+001A 0000FA43  2184            db 0x00,0x00,0xFA,0x43  ;  5.000000e+002
+001E 0000E143  2185            db 0x00,0x00,0xE1,0x43  ;  4.500000e+002
+0022 0000C843  2186            db 0x00,0x00,0xC8,0x43  ;  4.000000e+002
+0026 0000AF43  2187            db 0x00,0x00,0xAF,0x43  ;  3.500000e+002
+002A 00009643  2188            db 0x00,0x00,0x96,0x43  ;  3.000000e+002
+002E 00007A43  2189            db 0x00,0x00,0x7A,0x43  ;  2.500000e+002
+0032 00004843  2190            db 0x00,0x00,0x48,0x43  ;  2.000000e+002
+0036 00001643  2191            db 0x00,0x00,0x16,0x43  ;  1.500000e+002
+003A 0000C842  2192            db 0x00,0x00,0xC8,0x42  ;  1.000000e+002
+003E 00004842  2193            db 0x00,0x00,0x48,0x42  ;  5.000000e+001
+0042           2194   _MEMORY_LENGTH:
+0042 0400      2195            db 0x04,0x00    ;  4
+0044           2196   __str_0:
+0044 444C2025  2197            db 'DL %3.1f - DR %3.1f - Stage %3.1f(%d)'
+     332E3166
+     202D2044
+     52202533
+     2E316620
+     2D205374
+     61676520
+     25332E31
+     66282564
+     29
+0069 0D        2198            db 0x0D
+006A 00        2199            db 0x00
+006B           2200   __str_1:
+006B 1B        2201            db 0x1B
+006C 5B324A    2202            db '[2J'
+006F 00        2203            db 0x00
+0070           2204   
+001E           2205            CSEG
+001E           2206   
+001E           2207   end
+>>>>>>> f4fadc9a7873ba6d2d795b8b98217d99ad101622
