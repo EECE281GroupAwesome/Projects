@@ -1,7 +1,7 @@
 ;--------------------------------------------------------
 ; File Created by C51
 ; Version 1.0.0 #1034 (Dec 12 2012) (MSVC)
-; This file was generated Sat Mar 29 00:13:42 2014
+; This file was generated Sat Mar 29 00:48:08 2014
 ;--------------------------------------------------------
 $name core
 $optc51 --model-small
@@ -24,6 +24,7 @@ $printf_float
 ;--------------------------------------------------------
 ; Public variables in this module
 ;--------------------------------------------------------
+	public _MEMORY_LENGTH
 	public _PRESETS
 	public _NSTAGES
 	public _ANGLEBUFFER
@@ -364,13 +365,17 @@ _Stage:
 _turn:
 	ds 1
 _leftHistory:
-	ds 6
+	ds 3
 _rightHistory:
-	ds 6
+	ds 3
 _smooth_move_PARM_2:
 	ds 2
 _smooth_move_history_1_113:
 	ds 3
+_smooth_move_N_1_114:
+	ds 2
+_smooth_move_sloc0_1_0:
+	ds 2
 ;--------------------------------------------------------
 ; overlayable items in internal ram 
 ;--------------------------------------------------------
@@ -451,20 +456,6 @@ _pwmCounter_sloc0_1_0:
 	clr	a
 	mov	_pwmRightTemp,a
 	mov	(_pwmRightTemp + 1),a
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:228: int leftHistory[] = {0, 0, 0};
-	mov	_leftHistory,#0x00
-	mov	(_leftHistory + 1),#0x00
-	mov	(_leftHistory + 0x0002),#0x00
-	mov	((_leftHistory + 0x0002) + 1),#0x00
-	mov	(_leftHistory + 0x0004),#0x00
-	mov	((_leftHistory + 0x0004) + 1),#0x00
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:229: int rightHistory[] = {0, 0, 0};
-	mov	_rightHistory,#0x00
-	mov	(_rightHistory + 1),#0x00
-	mov	(_rightHistory + 0x0002),#0x00
-	mov	((_rightHistory + 0x0002) + 1),#0x00
-	mov	(_rightHistory + 0x0004),#0x00
-	mov	((_rightHistory + 0x0004) + 1),#0x00
 	; The linker places a 'ret' at the end of segment R_DINIT.
 ;--------------------------------------------------------
 ; code
@@ -474,7 +465,7 @@ _pwmCounter_sloc0_1_0:
 ;Allocation info for local variables in function 'pwmCounter'
 ;------------------------------------------------------------
 ;------------------------------------------------------------
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:115: void pwmCounter() interrupt 1
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:118: void pwmCounter() interrupt 1
 ;	-----------------------------------------
 ;	 function pwmCounter
 ;	-----------------------------------------
@@ -495,7 +486,7 @@ _pwmCounter:
 	push	(0+1)
 	push	psw
 	mov	psw,#0x00
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:117: if(++pwmCount > 99)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:120: if(++pwmCount > 99)
 	mov	a,#0x01
 	add	a,_pwmCount
 	mov	_pwmCount,a
@@ -508,12 +499,12 @@ _pwmCounter:
 	clr	a
 	subb	a,(_pwmCount + 1)
 	jnc	L002002?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:119: pwmCount = 0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:122: pwmCount = 0;
 	clr	a
 	mov	_pwmCount,a
 	mov	(_pwmCount + 1),a
 L002002?:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:123: if (++distCount > 999)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:126: if (++distCount > 999)
 	mov	a,#0x01
 	add	a,_distCount
 	mov	_distCount,a
@@ -526,15 +517,15 @@ L002002?:
 	mov	a,#0x03
 	subb	a,(_distCount + 1)
 	jnc	L002004?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:125: distCount = 0;	
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:128: distCount = 0;	
 	clr	a
 	mov	_distCount,a
 	mov	(_distCount + 1),a
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:126: Stage = 6;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:129: Stage = 6;
 	mov	_Stage,#0x06
 	clr	a
 	mov	(_Stage + 1),a
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:127: printf("DL %3.1f - DR %3.1f - Stage %3.1f(%d)\r", distanceLeft, distanceRight, PRESETS[Stage], Stage);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:130: printf("DL %3.1f - DR %3.1f - Stage %3.1f(%d)\r", distanceLeft, distanceRight, PRESETS[Stage], Stage);
 	mov	r2,_Stage
 	mov	a,(_Stage + 1)
 	xch	a,r2
@@ -592,7 +583,7 @@ L002002?:
 	add	a,#0xef
 	mov	sp,a
 L002004?:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:131: if(pwmLeft > 0)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:134: if(pwmLeft > 0)
 	clr	c
 	clr	a
 	subb	a,_pwmLeft
@@ -602,7 +593,7 @@ L002004?:
 	xrl	b,#0x80
 	subb	a,b
 	jnc	L002008?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:133: P0_1 = (pwmLeft > pwmCount) ? 0:1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:136: P0_1 = (pwmLeft > pwmCount) ? 0:1;
 	mov	r2,_pwmLeft
 	mov	r3,(_pwmLeft + 1)
 	clr	c
@@ -613,14 +604,14 @@ L002004?:
 	mov  _pwmCounter_sloc0_1_0,c
 	cpl	c
 	mov	_P0_1,c
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:134: P0_0 = 1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:137: P0_0 = 1;
 	setb	_P0_0
 	sjmp	L002009?
 L002008?:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:136: else if(pwmLeft < 0)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:139: else if(pwmLeft < 0)
 	mov	a,(_pwmLeft + 1)
 	jnb	acc.7,L002009?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:139: P0_0 = ((-1) * pwmLeft > pwmCount) ? 0:1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:142: P0_0 = ((-1) * pwmLeft > pwmCount) ? 0:1;
 	clr	c
 	clr	a
 	subb	a,_pwmLeft
@@ -636,18 +627,18 @@ L002008?:
 	mov  _pwmCounter_sloc0_1_0,c
 	cpl	c
 	mov	_P0_0,c
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:140: P0_1 = 1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:143: P0_1 = 1;
 	setb	_P0_1
 L002009?:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:142: if(pwmLeft==0)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:145: if(pwmLeft==0)
 	mov	a,_pwmLeft
 	orl	a,(_pwmLeft + 1)
 	jnz	L002011?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:144: P0_1 = P0_0 = 1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:147: P0_1 = P0_0 = 1;
 	setb	_P0_0
 	mov	c,_P0_0
 	mov	_P0_1,c
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:146: P1_0 = ((-1) * pwmLeft > pwmCount) ? 0:1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:149: P1_0 = ((-1) * pwmLeft > pwmCount) ? 0:1;
 	clr	c
 	clr	a
 	subb	a,_pwmLeft
@@ -663,16 +654,16 @@ L002009?:
 	mov  _pwmCounter_sloc0_1_0,c
 	cpl	c
 	mov	_P1_0,c
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:147: P1_1 = 1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:150: P1_1 = 1;
 	setb	_P1_1
 	sjmp	L002012?
 L002011?:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:150: P1_0 = 1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:153: P1_0 = 1;
 	setb	_P1_0
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:151: P1_1 = 1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:154: P1_1 = 1;
 	setb	_P1_1
 L002012?:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:155: if(pwmRight > 0)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:158: if(pwmRight > 0)
 	clr	c
 	clr	a
 	subb	a,_pwmRight
@@ -682,7 +673,7 @@ L002012?:
 	xrl	b,#0x80
 	subb	a,b
 	jnc	L002016?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:157: P0_4 = (pwmRight > pwmCount) ? 0:1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:160: P0_4 = (pwmRight > pwmCount) ? 0:1;
 	mov	r2,_pwmRight
 	mov	r3,(_pwmRight + 1)
 	clr	c
@@ -693,14 +684,14 @@ L002012?:
 	mov  _pwmCounter_sloc0_1_0,c
 	cpl	c
 	mov	_P0_4,c
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:158: P0_3 = 1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:161: P0_3 = 1;
 	setb	_P0_3
 	sjmp	L002017?
 L002016?:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:160: else if(pwmRight < 0)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:163: else if(pwmRight < 0)
 	mov	a,(_pwmRight + 1)
 	jnb	acc.7,L002017?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:163: P0_3 = ((-1) * pwmRight > pwmCount) ? 0:1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:166: P0_3 = ((-1) * pwmRight > pwmCount) ? 0:1;
 	clr	c
 	clr	a
 	subb	a,_pwmRight
@@ -716,14 +707,14 @@ L002016?:
 	mov  _pwmCounter_sloc0_1_0,c
 	cpl	c
 	mov	_P0_3,c
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:164: P0_4 = 1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:167: P0_4 = 1;
 	setb	_P0_4
 L002017?:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:166: if(pwmRight==0)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:169: if(pwmRight==0)
 	mov	a,_pwmRight
 	orl	a,(_pwmRight + 1)
 	jnz	L002020?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:168: P0_4 = P0_3 = 1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:171: P0_4 = P0_3 = 1;
 	setb	_P0_3
 	mov	c,_P0_3
 	mov	_P0_4,c
@@ -747,7 +738,7 @@ L002020?:
 ;Allocation info for local variables in function 'beaconSignal'
 ;------------------------------------------------------------
 ;------------------------------------------------------------
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:173: void beaconSignal() interrupt 3
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:176: void beaconSignal() interrupt 3
 ;	-----------------------------------------
 ;	 function beaconSignal
 ;	-----------------------------------------
@@ -767,7 +758,7 @@ _beaconSignal:
 	push	(0+1)
 	push	psw
 	mov	psw,#0x00
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:175: if (voltage(0) < 0.1) 
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:178: if (voltage(0) < 0.1) 
 	mov	dpl,#0x00
 	lcall	_voltage
 	mov	r2,dpl
@@ -792,15 +783,15 @@ _beaconSignal:
 	mov	sp,a
 	mov	a,r2
 	jz	L003006?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:177: ET0 = 0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:180: ET0 = 0;
 	clr	_ET0
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:178: pwmLeftTemp = pwmLeft;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:181: pwmLeftTemp = pwmLeft;
 	mov	_pwmLeftTemp,_pwmLeft
 	mov	(_pwmLeftTemp + 1),(_pwmLeft + 1)
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:179: pwmRightTemp = pwmRight;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:182: pwmRightTemp = pwmRight;
 	mov	_pwmRightTemp,_pwmRight
 	mov	(_pwmRightTemp + 1),(_pwmRight + 1)
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:180: while(voltage(0) < 0.1);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:183: while(voltage(0) < 0.1);
 L003001?:
 	mov	dpl,#0x00
 	lcall	_voltage
@@ -826,17 +817,17 @@ L003001?:
 	mov	sp,a
 	mov	a,r2
 	jnz	L003001?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:181: instruction = getSig();
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:184: instruction = getSig();
 	lcall	_getSig
 	mov	_instruction,dpl
 	mov	(_instruction + 1),dph
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:182: pwmLeft = pwmLeftTemp;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:185: pwmLeft = pwmLeftTemp;
 	mov	_pwmLeft,_pwmLeftTemp
 	mov	(_pwmLeft + 1),(_pwmLeftTemp + 1)
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:183: pwmRight = pwmRightTemp;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:186: pwmRight = pwmRightTemp;
 	mov	_pwmRight,_pwmRightTemp
 	mov	(_pwmRight + 1),(_pwmRightTemp + 1)
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:184: ET0 =  1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:187: ET0 =  1;
 	setb	_ET0
 L003006?:
 	pop	psw
@@ -858,75 +849,75 @@ L003006?:
 ;Allocation info for local variables in function '_c51_external_startup'
 ;------------------------------------------------------------
 ;------------------------------------------------------------
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:190: unsigned char _c51_external_startup(void)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:193: unsigned char _c51_external_startup(void)
 ;	-----------------------------------------
 ;	 function _c51_external_startup
 ;	-----------------------------------------
 __c51_external_startup:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:193: P0M0 = 0;	P0M1 = 0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:196: P0M0 = 0;	P0M1 = 0;
 	mov	_P0M0,#0x00
 	mov	_P0M1,#0x00
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:194: P1M0 = 0;	P1M1 = 0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:197: P1M0 = 0;	P1M1 = 0;
 	mov	_P1M0,#0x00
 	mov	_P1M1,#0x00
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:195: P2M0 = 0;	P2M1 = 0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:198: P2M0 = 0;	P2M1 = 0;
 	mov	_P2M0,#0x00
 	mov	_P2M1,#0x00
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:196: P3M0 = 0;	P3M1 = 0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:199: P3M0 = 0;	P3M1 = 0;
 	mov	_P3M0,#0x00
 	mov	_P3M1,#0x00
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:197: AUXR = 0B_0001_0001; // 1152 bytes of internal XDATA, P4.4 is a general purpose I/O
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:200: AUXR = 0B_0001_0001; // 1152 bytes of internal XDATA, P4.4 is a general purpose I/O
 	mov	_AUXR,#0x11
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:198: P4M0 = 0;	P4M1 = 0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:201: P4M0 = 0;	P4M1 = 0;
 	mov	_P4M0,#0x00
 	mov	_P4M1,#0x00
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:202: PCON |= 0x80;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:205: PCON |= 0x80;
 	orl	_PCON,#0x80
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:203: SCON = 0x52;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:206: SCON = 0x52;
 	mov	_SCON,#0x52
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:204: BDRCON = 0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:207: BDRCON = 0;
 	mov	_BDRCON,#0x00
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:205: BRL = BRG_VAL;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:208: BRL = BRG_VAL;
 	mov	_BRL,#0xFA
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:206: BDRCON = BRR | TBCK | RBCK | SPD;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:209: BDRCON = BRR | TBCK | RBCK | SPD;
 	mov	_BDRCON,#0x1E
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:208: TMOD = 0B_0001_0001;	// Timer 0 as 16-bit timer	
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:211: TMOD = 0B_0001_0001;	// Timer 0 as 16-bit timer	
 	mov	_TMOD,#0x11
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:209: TH0 = RH0 = TIMER0_RELOAD_VALUE / 0x100;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:212: TH0 = RH0 = TIMER0_RELOAD_VALUE / 0x100;
 	mov	_RH0,#0xFF
 	mov	_TH0,#0xFF
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:210: TL0 = RL0 = TIMER0_RELOAD_VALUE % 0x100;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:213: TL0 = RL0 = TIMER0_RELOAD_VALUE % 0x100;
 	mov	_RL0,#0x48
 	mov	_TL0,#0x48
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:211: TH1 = RH1 = TIMER1_RELOAD_VALUE / 0x100;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:214: TH1 = RH1 = TIMER1_RELOAD_VALUE / 0x100;
 	mov	_RH1,#0xFE
 	mov	_TH1,#0xFE
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:212: TL1 = RL1 = TIMER1_RELOAD_VALUE % 0x100;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:215: TL1 = RL1 = TIMER1_RELOAD_VALUE % 0x100;
 	mov	_RL1,#0x90
 	mov	_TL1,#0x90
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:213: TR0 = 1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:216: TR0 = 1;
 	setb	_TR0
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:214: TR1 = 0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:217: TR1 = 0;
 	clr	_TR1
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:215: ET0 = 1;	// Enable timer 0 interrupt
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:218: ET0 = 1;	// Enable timer 0 interrupt
 	setb	_ET0
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:218: EA = 1; 	// Enable global interrupts
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:221: EA = 1; 	// Enable global interrupts
 	setb	_EA
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:219: tether=0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:222: tether=0;
 	clr	a
 	mov	_tether,a
 	mov	(_tether + 1),a
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:220: direction=1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:223: direction=1;
 	mov	_direction,#0x01
 	clr	a
 	mov	(_direction + 1),a
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:221: P2_2=1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:224: P2_2=1;
 	setb	_P2_2
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:222: P2_1=1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:225: P2_1=1;
 	setb	_P2_1
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:223: P2_0=1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:226: P2_0=1;
 	setb	_P2_0
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:224: printf(CLEAR_SCREEN);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:227: printf(CLEAR_SCREEN);
 	mov	a,#__str_1
 	push	acc
 	mov	a,#(__str_1 >> 8)
@@ -937,21 +928,21 @@ __c51_external_startup:
 	dec	sp
 	dec	sp
 	dec	sp
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:225: return 0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:228: return 0;
 	mov	dpl,#0x00
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'main'
 ;------------------------------------------------------------
 ;------------------------------------------------------------
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:232: int main (void)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:235: int main (void)
 ;	-----------------------------------------
 ;	 function main
 ;	-----------------------------------------
 _main:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:235: pwmLeft = 0;
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:236: pwmRight = 0;
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:237: instruction = 0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:238: pwmLeft = 0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:239: pwmRight = 0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:240: instruction = 0;
 	clr	a
 	mov	_pwmLeft,a
 	mov	(_pwmLeft + 1),a
@@ -959,31 +950,69 @@ _main:
 	mov	(_pwmRight + 1),a
 	mov	_instruction,a
 	mov	(_instruction + 1),a
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:241: while (instruction == 0)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:241: leftHistory = (int *)calloc(MEMORY_LENGTH, sizeof(int));
+	mov	dptr,#_MEMORY_LENGTH
+	clr	a
+	movc	a,@a+dptr
+	mov	r2,a
+	mov	a,#0x01
+	movc	a,@a+dptr
+	mov	r3,a
+	mov	_calloc_PARM_2,#0x02
+	clr	a
+	mov	(_calloc_PARM_2 + 1),a
+	mov	dpl,r2
+	mov	dph,r3
+	lcall	_calloc
+	mov	r2,dpl
+	mov	r3,dph
+	mov	_leftHistory,r2
+	mov	(_leftHistory + 1),r3
+	mov	(_leftHistory + 2),#0x00
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:242: rightHistory = (int *)calloc(MEMORY_LENGTH, sizeof(int));
+	mov	dptr,#_MEMORY_LENGTH
+	clr	a
+	movc	a,@a+dptr
+	mov	r2,a
+	mov	a,#0x01
+	movc	a,@a+dptr
+	mov	r3,a
+	mov	_calloc_PARM_2,#0x02
+	clr	a
+	mov	(_calloc_PARM_2 + 1),a
+	mov	dpl,r2
+	mov	dph,r3
+	lcall	_calloc
+	mov	r2,dpl
+	mov	r3,dph
+	mov	_rightHistory,r2
+	mov	(_rightHistory + 1),r3
+	mov	(_rightHistory + 2),#0x00
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:247: while (instruction == 0)
 L005001?:
 	mov	a,_instruction
 	orl	a,(_instruction + 1)
 	jnz	L005001?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:250: moveCar();
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:256: moveCar();
 	lcall	_moveCar
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:251: P2_2=1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:257: P2_2=1;
 	setb	_P2_2
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:252: P2_1=1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:258: P2_1=1;
 	setb	_P2_1
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:253: P2_0=0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:259: P2_0=0;
 	clr	_P2_0
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:295: return 0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:301: return 0;
 	sjmp	L005001?
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'getDistance'
 ;------------------------------------------------------------
 ;------------------------------------------------------------
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:306: float getDistance() 
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:312: float getDistance() 
 ;	-----------------------------------------
 ;	 function getDistance
 ;	-----------------------------------------
 _getDistance:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:308: distanceRight = (float)GetADC(0)*1.2;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:314: distanceRight = (float)GetADC(0)*1.2;
 	mov	dpl,#0x00
 	lcall	_GetADC
 	lcall	___uint2fs
@@ -1006,7 +1035,7 @@ _getDistance:
 	mov	a,sp
 	add	a,#0xfc
 	mov	sp,a
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:309: distanceLeft = (float)GetADC(1);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:315: distanceLeft = (float)GetADC(1);
 	mov	dpl,#0x01
 	lcall	_GetADC
 	lcall	___uint2fs
@@ -1014,7 +1043,7 @@ _getDistance:
 	mov	(_distanceLeft + 1),dph
 	mov	(_distanceLeft + 2),b
 	mov	(_distanceLeft + 3),a
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:310: return ((distanceRight + distanceLeft)/2);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:316: return ((distanceRight + distanceLeft)/2);
 	push	_distanceLeft
 	push	(_distanceLeft + 1)
 	push	(_distanceLeft + 2)
@@ -1058,12 +1087,12 @@ _getDistance:
 ;Allocation info for local variables in function 'turnRatio'
 ;------------------------------------------------------------
 ;------------------------------------------------------------
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:313: int turnRatio()
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:319: int turnRatio()
 ;	-----------------------------------------
 ;	 function turnRatio
 ;	-----------------------------------------
 _turnRatio:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:315: if (getDistance() < 50.0)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:321: if (getDistance() < 50.0)
 	lcall	_getDistance
 	mov	r2,dpl
 	mov	r3,dph
@@ -1087,11 +1116,11 @@ _turnRatio:
 	mov	sp,a
 	mov	a,r2
 	jz	L007002?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:316: return 0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:322: return 0;
 	mov	dptr,#0x0000
 	ret
 L007002?:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:318: if ( ((distanceRight - distanceLeft)/(distanceRight + distanceLeft)) > 0.2 )
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:324: if ( ((distanceRight - distanceLeft)/(distanceRight + distanceLeft)) > 0.2 )
 	push	_distanceLeft
 	push	(_distanceLeft + 1)
 	push	(_distanceLeft + 2)
@@ -1167,11 +1196,11 @@ L007002?:
 	mov	sp,a
 	mov	a,r2
 	jz	L007004?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:319: return -1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:325: return -1;
 	mov	dptr,#0xFFFF
 	ret
 L007004?:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:321: if ( ((distanceLeft - distanceRight)/(distanceRight + distanceLeft)) > 0.1 )
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:327: if ( ((distanceLeft - distanceRight)/(distanceRight + distanceLeft)) > 0.1 )
 	push	_distanceRight
 	push	(_distanceRight + 1)
 	push	(_distanceRight + 2)
@@ -1246,9 +1275,9 @@ L007004?:
 	mov	sp,a
 	mov	a,r2
 	jz	L007006?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:322: return 1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:328: return 1;
 	mov	dptr,#0x0001
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:324: return 0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:330: return 0;
 	ret
 L007006?:
 	mov	dptr,#0x0000
@@ -1257,18 +1286,18 @@ L007006?:
 ;Allocation info for local variables in function 'moveCar'
 ;------------------------------------------------------------
 ;------------------------------------------------------------
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:333: void moveCar()
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:339: void moveCar()
 ;	-----------------------------------------
 ;	 function moveCar
 ;	-----------------------------------------
 _moveCar:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:336: if(turnRatio() == 1)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:342: if(turnRatio() == 1)
 	lcall	_turnRatio
 	mov	r2,dpl
 	mov	r3,dph
 	cjne	r2,#0x01,L008005?
 	cjne	r3,#0x00,L008005?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:338: pwmLeft = smooth_move(leftHistory, TURNSPEED);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:344: pwmLeft = smooth_move(leftHistory, TURNSPEED);
 	mov	dptr,#_TURNSPEED
 	clr	a
 	movc	a,@a+dptr
@@ -1276,12 +1305,13 @@ _moveCar:
 	mov	a,#0x01
 	movc	a,@a+dptr
 	mov	(_smooth_move_PARM_2 + 1),a
-	mov	dptr,#_leftHistory
-	mov	b,#0x40
+	mov	dpl,_leftHistory
+	mov	dph,(_leftHistory + 1)
+	mov	b,(_leftHistory + 2)
 	lcall	_smooth_move
 	mov	_pwmLeft,dpl
 	mov	(_pwmLeft + 1),dph
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:339: pwmRight= smooth_move(rightHistory, -TURNSPEED);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:345: pwmRight= smooth_move(rightHistory, -TURNSPEED);
 	mov	dptr,#_TURNSPEED
 	clr	a
 	movc	a,@a+dptr
@@ -1296,20 +1326,21 @@ _moveCar:
 	clr	a
 	subb	a,r3
 	mov	(_smooth_move_PARM_2 + 1),a
-	mov	dptr,#_rightHistory
-	mov	b,#0x40
+	mov	dpl,_rightHistory
+	mov	dph,(_rightHistory + 1)
+	mov	b,(_rightHistory + 2)
 	lcall	_smooth_move
 	mov	_pwmRight,dpl
 	mov	(_pwmRight + 1),dph
 	sjmp	L008006?
 L008005?:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:341: else if(turnRatio() == -1)//(distanceLeft > distanceRight+ANGLEBUFFER)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:347: else if(turnRatio() == -1)//(distanceLeft > distanceRight+ANGLEBUFFER)
 	lcall	_turnRatio
 	mov	r2,dpl
 	mov	r3,dph
 	cjne	r2,#0xFF,L008002?
 	cjne	r3,#0xFF,L008002?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:343: pwmLeft = smooth_move(leftHistory, -TURNSPEED);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:349: pwmLeft = smooth_move(leftHistory, -TURNSPEED);
 	mov	dptr,#_TURNSPEED
 	clr	a
 	movc	a,@a+dptr
@@ -1324,12 +1355,13 @@ L008005?:
 	clr	a
 	subb	a,r3
 	mov	(_smooth_move_PARM_2 + 1),a
-	mov	dptr,#_leftHistory
-	mov	b,#0x40
+	mov	dpl,_leftHistory
+	mov	dph,(_leftHistory + 1)
+	mov	b,(_leftHistory + 2)
 	lcall	_smooth_move
 	mov	_pwmLeft,dpl
 	mov	(_pwmLeft + 1),dph
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:344: pwmRight = smooth_move(rightHistory, TURNSPEED);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:350: pwmRight = smooth_move(rightHistory, TURNSPEED);
 	mov	dptr,#_TURNSPEED
 	clr	a
 	movc	a,@a+dptr
@@ -1337,33 +1369,36 @@ L008005?:
 	mov	a,#0x01
 	movc	a,@a+dptr
 	mov	(_smooth_move_PARM_2 + 1),a
-	mov	dptr,#_rightHistory
-	mov	b,#0x40
+	mov	dpl,_rightHistory
+	mov	dph,(_rightHistory + 1)
+	mov	b,(_rightHistory + 2)
 	lcall	_smooth_move
 	mov	_pwmRight,dpl
 	mov	(_pwmRight + 1),dph
 	sjmp	L008006?
 L008002?:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:347: pwmLeft = smooth_move(leftHistory, 0);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:353: pwmLeft = smooth_move(leftHistory, 0);
 	clr	a
 	mov	_smooth_move_PARM_2,a
 	mov	(_smooth_move_PARM_2 + 1),a
-	mov	dptr,#_leftHistory
-	mov	b,#0x40
+	mov	dpl,_leftHistory
+	mov	dph,(_leftHistory + 1)
+	mov	b,(_leftHistory + 2)
 	lcall	_smooth_move
 	mov	_pwmLeft,dpl
 	mov	(_pwmLeft + 1),dph
 L008006?:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:348: pwmRight = smooth_move(rightHistory, 0);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:354: pwmRight = smooth_move(rightHistory, 0);
 	clr	a
 	mov	_smooth_move_PARM_2,a
 	mov	(_smooth_move_PARM_2 + 1),a
-	mov	dptr,#_rightHistory
-	mov	b,#0x40
+	mov	dpl,_rightHistory
+	mov	dph,(_rightHistory + 1)
+	mov	b,(_rightHistory + 2)
 	lcall	_smooth_move
 	mov	_pwmRight,dpl
 	mov	(_pwmRight + 1),dph
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:351: if ((getDistance()+DISTANCEBUFFER) < PRESETS[Stage])
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:357: if ((getDistance()+DISTANCEBUFFER) < PRESETS[Stage])
 	lcall	_getDistance
 	mov	r2,dpl
 	mov	r3,dph
@@ -1441,13 +1476,13 @@ L008006?:
 	mov	sp,a
 	mov	a,r2
 	jz	L008011?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:353: P2_2=1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:359: P2_2=1;
 	setb	_P2_2
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:354: P2_1=0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:360: P2_1=0;
 	clr	_P2_1
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:355: P2_0=1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:361: P2_0=1;
 	setb	_P2_0
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:356: pwmLeft = smooth_move(leftHistory, MOVESPEED);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:362: pwmLeft = smooth_move(leftHistory, MOVESPEED);
 	mov	dptr,#_MOVESPEED
 	clr	a
 	movc	a,@a+dptr
@@ -1455,12 +1490,13 @@ L008006?:
 	mov	a,#0x01
 	movc	a,@a+dptr
 	mov	(_smooth_move_PARM_2 + 1),a
-	mov	dptr,#_leftHistory
-	mov	b,#0x40
+	mov	dpl,_leftHistory
+	mov	dph,(_leftHistory + 1)
+	mov	b,(_leftHistory + 2)
 	lcall	_smooth_move
 	mov	_pwmLeft,dpl
 	mov	(_pwmLeft + 1),dph
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:357: pwmRight = smooth_move(rightHistory, MOVESPEED);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:363: pwmRight = smooth_move(rightHistory, MOVESPEED);
 	mov	dptr,#_MOVESPEED
 	clr	a
 	movc	a,@a+dptr
@@ -1468,14 +1504,15 @@ L008006?:
 	mov	a,#0x01
 	movc	a,@a+dptr
 	mov	(_smooth_move_PARM_2 + 1),a
-	mov	dptr,#_rightHistory
-	mov	b,#0x40
+	mov	dpl,_rightHistory
+	mov	dph,(_rightHistory + 1)
+	mov	b,(_rightHistory + 2)
 	lcall	_smooth_move
 	mov	_pwmRight,dpl
 	mov	(_pwmRight + 1),dph
 	ljmp	L008012?
 L008011?:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:360: else if (getDistance() > (PRESETS[Stage]+DISTANCEBUFFER))
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:366: else if (getDistance() > (PRESETS[Stage]+DISTANCEBUFFER))
 	lcall	_getDistance
 	mov	r2,dpl
 	mov	r3,dph
@@ -1561,13 +1598,13 @@ L008011?:
 	mov	sp,a
 	mov	a,r2
 	jz	L008008?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:362: P2_2=1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:368: P2_2=1;
 	setb	_P2_2
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:363: P2_1=0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:369: P2_1=0;
 	clr	_P2_1
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:364: P2_0=1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:370: P2_0=1;
 	setb	_P2_0
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:365: pwmLeft = smooth_move(leftHistory, -MOVESPEED);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:371: pwmLeft = smooth_move(leftHistory, -MOVESPEED);
 	mov	dptr,#_MOVESPEED
 	clr	a
 	movc	a,@a+dptr
@@ -1582,12 +1619,13 @@ L008011?:
 	clr	a
 	subb	a,r3
 	mov	(_smooth_move_PARM_2 + 1),a
-	mov	dptr,#_leftHistory
-	mov	b,#0x40
+	mov	dpl,_leftHistory
+	mov	dph,(_leftHistory + 1)
+	mov	b,(_leftHistory + 2)
 	lcall	_smooth_move
 	mov	_pwmLeft,dpl
 	mov	(_pwmLeft + 1),dph
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:366: pwmRight = smooth_move(rightHistory, -MOVESPEED);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:372: pwmRight = smooth_move(rightHistory, -MOVESPEED);
 	mov	dptr,#_MOVESPEED
 	clr	a
 	movc	a,@a+dptr
@@ -1602,41 +1640,46 @@ L008011?:
 	clr	a
 	subb	a,r3
 	mov	(_smooth_move_PARM_2 + 1),a
-	mov	dptr,#_rightHistory
-	mov	b,#0x40
+	mov	dpl,_rightHistory
+	mov	dph,(_rightHistory + 1)
+	mov	b,(_rightHistory + 2)
 	lcall	_smooth_move
 	mov	_pwmRight,dpl
 	mov	(_pwmRight + 1),dph
 	sjmp	L008012?
 L008008?:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:370: pwmLeft = smooth_move(leftHistory, 0);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:376: pwmLeft = smooth_move(leftHistory, 0);
 	clr	a
 	mov	_smooth_move_PARM_2,a
 	mov	(_smooth_move_PARM_2 + 1),a
-	mov	dptr,#_leftHistory
-	mov	b,#0x40
+	mov	dpl,_leftHistory
+	mov	dph,(_leftHistory + 1)
+	mov	b,(_leftHistory + 2)
 	lcall	_smooth_move
 	mov	_pwmLeft,dpl
 	mov	(_pwmLeft + 1),dph
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:371: pwmRight = smooth_move(rightHistory, 0);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:377: pwmRight = smooth_move(rightHistory, 0);
 	clr	a
 	mov	_smooth_move_PARM_2,a
 	mov	(_smooth_move_PARM_2 + 1),a
-	mov	dptr,#_rightHistory
-	mov	b,#0x40
+	mov	dpl,_rightHistory
+	mov	dph,(_rightHistory + 1)
+	mov	b,(_rightHistory + 2)
 	lcall	_smooth_move
 	mov	_pwmRight,dpl
 	mov	(_pwmRight + 1),dph
 L008012?:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:374: return;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:380: return;
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'smooth_move'
 ;------------------------------------------------------------
 ;target                    Allocated with name '_smooth_move_PARM_2'
 ;history                   Allocated with name '_smooth_move_history_1_113'
+;N                         Allocated with name '_smooth_move_N_1_114'
+;sloc0                     Allocated with name '_smooth_move_sloc0_1_0'
 ;------------------------------------------------------------
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:377: int smooth_move(int * history, int target)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:383: int smooth_move(int * history, int target)
 ;	-----------------------------------------
 ;	 function smooth_move
 ;	-----------------------------------------
@@ -1644,73 +1687,140 @@ _smooth_move:
 	mov	_smooth_move_history_1_113,dpl
 	mov	(_smooth_move_history_1_113 + 1),dph
 	mov	(_smooth_move_history_1_113 + 2),b
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:379: history[2] = history[1];	
-	mov	a,#0x04
-	add	a,_smooth_move_history_1_113
-	mov	r5,a
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:385: int N = MEMORY_LENGTH;
+	mov	dptr,#_MEMORY_LENGTH
 	clr	a
-	addc	a,(_smooth_move_history_1_113 + 1)
-	mov	r6,a
-	mov	r7,(_smooth_move_history_1_113 + 2)
-	mov	a,#0x02
-	add	a,_smooth_move_history_1_113
-	mov	r0,a
+	movc	a,@a+dptr
+	mov	_smooth_move_N_1_114,a
+	mov	a,#0x01
+	movc	a,@a+dptr
+	mov	(_smooth_move_N_1_114 + 1),a
+	mov	r7,_smooth_move_N_1_114
+	mov	r0,(_smooth_move_N_1_114 + 1)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:387: history[0] = 0;
+	mov	dpl,_smooth_move_history_1_113
+	mov	dph,(_smooth_move_history_1_113 + 1)
+	mov	b,(_smooth_move_history_1_113 + 2)
 	clr	a
-	addc	a,(_smooth_move_history_1_113 + 1)
-	mov	r1,a
-	mov	r2,(_smooth_move_history_1_113 + 2)
-	mov	dpl,r0
-	mov	dph,r1
-	mov	b,r2
-	lcall	__gptrget
-	mov	r3,a
-	inc	dptr
-	lcall	__gptrget
-	mov	r4,a
-	mov	dpl,r5
-	mov	dph,r6
-	mov	b,r7
-	mov	a,r3
 	lcall	__gptrput
 	inc	dptr
-	mov	a,r4
+	clr	a
 	lcall	__gptrput
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:380: history[1] = history[0];
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:389: while(N-- > 1)
+L009001?:
+	mov	ar1,r7
+	mov	ar5,r0
+	dec	r7
+	cjne	r7,#0xff,L009009?
+	dec	r0
+L009009?:
+	clr	c
+	mov	a,#0x01
+	subb	a,r1
+	clr	a
+	xrl	a,#0x80
+	mov	b,r5
+	xrl	b,#0x80
+	subb	a,b
+	jc	L009010?
+	ljmp	L009003?
+L009010?:
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:391: history[0] += history[N];
 	mov	dpl,_smooth_move_history_1_113
 	mov	dph,(_smooth_move_history_1_113 + 1)
 	mov	b,(_smooth_move_history_1_113 + 2)
 	lcall	__gptrget
-	mov	r5,a
+	mov	_smooth_move_sloc0_1_0,a
 	inc	dptr
 	lcall	__gptrget
-	mov	r6,a
-	mov	dpl,r0
-	mov	dph,r1
-	mov	b,r2
+	mov	(_smooth_move_sloc0_1_0 + 1),a
+	mov	ar1,r7
+	mov	a,r0
+	xch	a,r1
+	add	a,acc
+	xch	a,r1
+	rlc	a
+	mov	r2,a
+	mov	a,r1
+	add	a,_smooth_move_history_1_113
+	mov	r1,a
+	mov	a,r2
+	addc	a,(_smooth_move_history_1_113 + 1)
+	mov	r2,a
+	mov	r3,(_smooth_move_history_1_113 + 2)
+	mov	dpl,r1
+	mov	dph,r2
+	mov	b,r3
+	lcall	__gptrget
+	mov	r4,a
+	inc	dptr
+	lcall	__gptrget
+	mov	r5,a
+	mov	a,r4
+	add	a,_smooth_move_sloc0_1_0
+	mov	r4,a
 	mov	a,r5
+	addc	a,(_smooth_move_sloc0_1_0 + 1)
+	mov	r5,a
+	mov	dpl,_smooth_move_history_1_113
+	mov	dph,(_smooth_move_history_1_113 + 1)
+	mov	b,(_smooth_move_history_1_113 + 2)
+	mov	a,r4
 	lcall	__gptrput
 	inc	dptr
-	mov	a,r6
-	lcall	__gptrput
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:381: history[0] = (target + history[1] + history[2])/3;
 	mov	a,r5
-	add	a,_smooth_move_PARM_2
+	lcall	__gptrput
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:392: history[N] = history[N-1];	
+	mov	a,r7
+	add	a,#0xff
+	mov	r4,a
+	mov	a,r0
+	addc	a,#0xff
+	xch	a,r4
+	add	a,acc
+	xch	a,r4
+	rlc	a
 	mov	r5,a
-	mov	a,r6
-	addc	a,(_smooth_move_PARM_2 + 1)
-	mov	r6,a
-	mov	a,r3
-	add	a,r5
-	mov	dpl,a
 	mov	a,r4
-	addc	a,r6
-	mov	dph,a
-	mov	__divsint_PARM_2,#0x03
-	clr	a
-	mov	(__divsint_PARM_2 + 1),a
-	lcall	__divsint
-	mov	r2,dpl
-	mov	r3,dph
+	add	a,_smooth_move_history_1_113
+	mov	r4,a
+	mov	a,r5
+	addc	a,(_smooth_move_history_1_113 + 1)
+	mov	r5,a
+	mov	r6,(_smooth_move_history_1_113 + 2)
+	mov	dpl,r4
+	mov	dph,r5
+	mov	b,r6
+	lcall	__gptrget
+	mov	r4,a
+	inc	dptr
+	lcall	__gptrget
+	mov	r5,a
+	mov	dpl,r1
+	mov	dph,r2
+	mov	b,r3
+	mov	a,r4
+	lcall	__gptrput
+	inc	dptr
+	mov	a,r5
+	lcall	__gptrput
+	ljmp	L009001?
+L009003?:
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:395: history[0] += target;
+	mov	dpl,_smooth_move_history_1_113
+	mov	dph,(_smooth_move_history_1_113 + 1)
+	mov	b,(_smooth_move_history_1_113 + 2)
+	lcall	__gptrget
+	mov	r2,a
+	inc	dptr
+	lcall	__gptrget
+	mov	r3,a
+	mov	a,_smooth_move_PARM_2
+	add	a,r2
+	mov	r2,a
+	mov	a,(_smooth_move_PARM_2 + 1)
+	addc	a,r3
+	mov	r3,a
 	mov	dpl,_smooth_move_history_1_113
 	mov	dph,(_smooth_move_history_1_113 + 1)
 	mov	b,(_smooth_move_history_1_113 + 2)
@@ -1719,26 +1829,28 @@ _smooth_move:
 	inc	dptr
 	mov	a,r3
 	lcall	__gptrput
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:383: return history[0];
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:397: return history[0] / MEMORY_LENGTH;
+	mov	__divsint_PARM_2,_smooth_move_N_1_114
+	mov	(__divsint_PARM_2 + 1),(_smooth_move_N_1_114 + 1)
 	mov	dpl,r2
 	mov	dph,r3
-	ret
+	ljmp	__divsint
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'uTurn'
 ;------------------------------------------------------------
 ;------------------------------------------------------------
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:386: void uTurn()
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:400: void uTurn()
 ;	-----------------------------------------
 ;	 function uTurn
 ;	-----------------------------------------
 _uTurn:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:388: P2_2=1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:402: P2_2=1;
 	setb	_P2_2
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:389: P2_1=0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:403: P2_1=0;
 	clr	_P2_1
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:390: P2_0=1;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:404: P2_0=1;
 	setb	_P2_0
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:391: pwmLeft=TURNSPEED;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:405: pwmLeft=TURNSPEED;
 	mov	dptr,#_TURNSPEED
 	clr	a
 	movc	a,@a+dptr
@@ -1748,7 +1860,7 @@ _uTurn:
 	mov	r3,a
 	mov	_pwmLeft,r2
 	mov	(_pwmLeft + 1),r3
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:392: pwmRight=(-TURNSPEED);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:406: pwmRight=(-TURNSPEED);
 	clr	c
 	clr	a
 	subb	a,r2
@@ -1756,17 +1868,17 @@ _uTurn:
 	clr	a
 	subb	a,r3
 	mov	(_pwmRight + 1),a
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:393: wait1s();
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:407: wait1s();
 	lcall	_wait1s
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:394: wait1s();
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:408: wait1s();
 	lcall	_wait1s
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:395: pwmLeft=pwmRight=0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:409: pwmLeft=pwmRight=0;
 	clr	a
 	mov	_pwmRight,a
 	mov	(_pwmRight + 1),a
 	mov	_pwmLeft,a
 	mov	(_pwmLeft + 1),a
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:396: return;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:410: return;
 	ret
 ;------------------------------------------------------------
 ;Allocation info for local variables in function 'getSig'
@@ -1775,15 +1887,15 @@ _uTurn:
 ;val                       Allocated to registers r2 r3 
 ;v                         Allocated to registers r6 r7 r0 r1 
 ;------------------------------------------------------------
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:399: unsigned int getSig()
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:413: unsigned int getSig()
 ;	-----------------------------------------
 ;	 function getSig
 ;	-----------------------------------------
 _getSig:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:405: val = 0;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:419: val = 0;
 	mov	r2,#0x00
 	mov	r3,#0x00
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:408: for (j = 0; j < 3; j++) {
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:422: for (j = 0; j < 3; j++) {
 	mov	r4,#0x00
 	mov	r5,#0x00
 L011001?:
@@ -1793,7 +1905,7 @@ L011001?:
 	mov	a,r5
 	subb	a,#0x00
 	jnc	L011004?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:409: v = GetADC(0);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:423: v = GetADC(0);
 	mov	dpl,#0x00
 	push	ar2
 	push	ar3
@@ -1805,7 +1917,7 @@ L011001?:
 	mov	r7,dph
 	mov	r0,b
 	mov	r1,a
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:410: val |= (v > MINVOLT) ? (0x01 << j) : 0x00;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:424: val |= (v > MINVOLT) ? (0x01 << j) : 0x00;
 	mov	dptr,#_MINVOLT
 	clr	a
 	movc	a,@a+dptr
@@ -1857,13 +1969,13 @@ L011008?:
 	orl	ar2,a
 	mov	a,r7
 	orl	ar3,a
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:408: for (j = 0; j < 3; j++) {
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:422: for (j = 0; j < 3; j++) {
 	inc	r4
 	cjne	r4,#0x00,L011001?
 	inc	r5
 	sjmp	L011001?
 L011004?:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:414: return val;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:428: return val;
 	mov	dpl,r2
 	mov	dph,r3
 	ret
@@ -1871,12 +1983,12 @@ L011004?:
 ;Allocation info for local variables in function 'wait1s'
 ;------------------------------------------------------------
 ;------------------------------------------------------------
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:418: void wait1s (void)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:432: void wait1s (void)
 ;	-----------------------------------------
 ;	 function wait1s
 ;	-----------------------------------------
 _wait1s:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:430: _endasm;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:444: _endasm;
 	
   ;For a 22.1184MHz crystal one machine cycle
   ;takes 12/22.1184MHz=0.5425347us
@@ -1897,12 +2009,12 @@ _wait1s:
 ;------------------------------------------------------------
 ;channel                   Allocated to registers 
 ;------------------------------------------------------------
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:438: float voltage (unsigned char channel)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:452: float voltage (unsigned char channel)
 ;	-----------------------------------------
 ;	 function voltage
 ;	-----------------------------------------
 _voltage:
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:440: return ((GetADC(channel) * 4.84) / 1023.0); // VCC=4.84V (measured)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:454: return ((GetADC(channel) * 4.84) / 1023.0); // VCC=4.84V (measured)
 	lcall	_GetADC
 	lcall	___uint2fs
 	mov	r2,dpl
@@ -1954,17 +2066,17 @@ _voltage:
 ;------------------------------------------------------------
 ;value                     Allocated to registers r2 
 ;------------------------------------------------------------
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:443: void SPIWrite(unsigned char value)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:457: void SPIWrite(unsigned char value)
 ;	-----------------------------------------
 ;	 function SPIWrite
 ;	-----------------------------------------
 _SPIWrite:
 	mov	r2,dpl
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:445: SPSTA&=(~SPIF); // Clear the SPIF flag in SPSTA
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:459: SPSTA&=(~SPIF); // Clear the SPIF flag in SPSTA
 	anl	_SPSTA,#0x7F
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:446: SPDAT=value;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:460: SPDAT=value;
 	mov	_SPDAT,r2
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:447: while((SPSTA & SPIF)!=SPIF); //Wait for transmission to end
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:461: while((SPSTA & SPIF)!=SPIF); //Wait for transmission to end
 L014001?:
 	mov	a,#0x80
 	anl	a,_SPSTA
@@ -1977,26 +2089,26 @@ L014001?:
 ;channel                   Allocated to registers r2 
 ;adc                       Allocated to registers r2 r3 
 ;------------------------------------------------------------
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:451: unsigned int GetADC(unsigned char channel)
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:465: unsigned int GetADC(unsigned char channel)
 ;	-----------------------------------------
 ;	 function GetADC
 ;	-----------------------------------------
 _GetADC:
 	mov	r2,dpl
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:456: SPCON&=(~SPEN); // Disable SPI
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:470: SPCON&=(~SPEN); // Disable SPI
 	anl	_SPCON,#0xBF
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:457: SPCON=MSTR|CPOL|CPHA|SPR1|SPR0|SSDIS;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:471: SPCON=MSTR|CPOL|CPHA|SPR1|SPR0|SSDIS;
 	mov	_SPCON,#0x3F
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:458: SPCON|=SPEN; // Enable SPI
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:472: SPCON|=SPEN; // Enable SPI
 	orl	_SPCON,#0x40
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:460: P1_4=0; // Activate the MCP3004 ADC.
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:474: P1_4=0; // Activate the MCP3004 ADC.
 	clr	_P1_4
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:461: SPIWrite(channel|0x18);	// Send start bit, single/diff* bit, D2, D1, and D0 bits.
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:475: SPIWrite(channel|0x18);	// Send start bit, single/diff* bit, D2, D1, and D0 bits.
 	mov	a,#0x18
 	orl	a,r2
 	mov	dpl,a
 	lcall	_SPIWrite
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:462: for(adc=0; adc<10; adc++); // Wait for S/H to setup
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:476: for(adc=0; adc<10; adc++); // Wait for S/H to setup
 	mov	r2,#0x0A
 	mov	r3,#0x00
 L015003?:
@@ -2007,24 +2119,24 @@ L015009?:
 	mov	a,r2
 	orl	a,r3
 	jnz	L015003?
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:463: SPIWrite(0x55); // Read bits 9 down to 4
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:477: SPIWrite(0x55); // Read bits 9 down to 4
 	mov	dpl,#0x55
 	lcall	_SPIWrite
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:464: adc=((SPDAT&0x3f)*0x100);
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:478: adc=((SPDAT&0x3f)*0x100);
 	mov	a,#0x3F
 	anl	a,_SPDAT
 	mov	r3,a
 	mov	r2,#0x00
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:465: SPIWrite(0x55);// Read bits 3 down to 0
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:479: SPIWrite(0x55);// Read bits 3 down to 0
 	mov	dpl,#0x55
 	push	ar2
 	push	ar3
 	lcall	_SPIWrite
 	pop	ar3
 	pop	ar2
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:466: P1_4=1; // Deactivate the MCP3004 ADC.
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:480: P1_4=1; // Deactivate the MCP3004 ADC.
 	setb	_P1_4
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:467: adc+=(SPDAT&0xf0); // SPDR contains the low part of the result. 
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:481: adc+=(SPDAT&0xf0); // SPDR contains the low part of the result. 
 	mov	a,#0xF0
 	anl	a,_SPDAT
 	mov	r4,a
@@ -2034,7 +2146,7 @@ L015009?:
 	mov	r2,a
 	mov	a,r5
 	addc	a,r3
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:468: adc>>=4;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:482: adc>>=4;
 	swap	a
 	xch	a,r2
 	swap	a
@@ -2045,7 +2157,7 @@ L015009?:
 	xch	a,r2
 	xrl	a,r2
 	xch	a,r2
-;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:470: return adc;
+;	C:\Users\Maxim\Documents\GitHub\Projects\Project2_Car\Code\core.c:484: return adc;
 	mov	dpl,r2
 	mov	dph,a
 	ret
@@ -2079,6 +2191,8 @@ _PRESETS:
 	db 0x00,0x00,0x16,0x43	;  1.500000e+002
 	db 0x00,0x00,0xC8,0x42	;  1.000000e+002
 	db 0x00,0x00,0x48,0x42	;  5.000000e+001
+_MEMORY_LENGTH:
+	db 0x04,0x00	;  4
 __str_0:
 	db 'DL %3.1f - DR %3.1f - Stage %3.1f(%d)'
 	db 0x0D

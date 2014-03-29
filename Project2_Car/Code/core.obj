@@ -15,34 +15,35 @@ R_GSINIT,code,0000,NO
 R_BSEG,bit,0001,NO
 R_XSEG,xdata,0000,NO
 BIT_BANK,data,0001,OV
-R_CONST,code,006E,NO
+R_CONST,code,0070,NO
 rbank0,data,0000,OV
 R_PSEG,xdata,0000,NO
-R_DINIT,code,0042,NO
-R_DSEG,data,0034,NO
+R_DINIT,code,001E,NO
+R_DSEG,data,0032,NO
 R_OSEG,data,0000,OV
 R_IXSEG,xdata,0000,NO
 R_ISEG,idata,0000,NO
 R_HOME,code,0000,NO
 R_XINIT,code,0000,NO
-R_CSEG,code,097D,NO
+R_CSEG,code,0A5B,NO
 </SEGMENTS>
 
 <LOCALS>
 L002004?,R_CSEG,00B3,0000
 L002002?,R_CSEG,0039,0000
+_smooth_move_sloc0_1_0,R_DSEG,0030,0002
 bits,BIT_BANK,0000,0001
-L015009?,R_CSEG,093F,0000
-L015003?,R_CSEG,093A,0000
+L015009?,R_CSEG,0A1D,0000
+L015003?,R_CSEG,0A18,0000
 L003006?,R_CSEG,022B,0000
 L003001?,R_CSEG,01E4,0000
-L1,R_CSEG,08AE,0000
-L2,R_CSEG,08AC,0000
-L3,R_CSEG,08AA,0000
-L011016?,R_CSEG,088D,0000
-L011015?,R_CSEG,0887,0000
-L008012?,R_CSEG,0761,0000
-L008011?,R_CSEG,0661,0000
+L1,R_CSEG,098C,0000
+L2,R_CSEG,098A,0000
+L3,R_CSEG,0988,0000
+L011016?,R_CSEG,096B,0000
+L011015?,R_CSEG,0965,0000
+L008012?,R_CSEG,07C9,0000
+L008011?,R_CSEG,06BD,0000
 b0,BIT_BANK,0000,0000
 b1,BIT_BANK,0000,0000
 b2,BIT_BANK,0000,0000
@@ -51,64 +52,70 @@ b4,BIT_BANK,0000,0000
 b5,BIT_BANK,0000,0000
 b6,BIT_BANK,0000,0000
 b7,BIT_BANK,0000,0000
-L005001?,R_CSEG,02D2,0000
-L007006?,R_CSEG,04E2,0000
-L007004?,R_CSEG,0446,0000
-L007002?,R_CSEG,03A8,0000
+L005001?,R_CSEG,0316,0000
+L009010?,R_CSEG,0811,0000
+_smooth_move_N_1_114,R_DSEG,002E,0002
+L007006?,R_CSEG,0526,0000
+L007004?,R_CSEG,048A,0000
+L007002?,R_CSEG,03EC,0000
 L002017?,R_CSEG,015E,0000
-L011008?,R_CSEG,0896,0000
+L011008?,R_CSEG,0974,0000
 L002016?,R_CSEG,0142,0000
-L011007?,R_CSEG,0892,0000
-__str_0,R_CONST,0042,0000
-__str_1,R_CONST,0069,0000
-L008008?,R_CSEG,0739,0000
-L011004?,R_CSEG,08A3,0000
+L011007?,R_CSEG,0970,0000
+__str_0,R_CONST,0044,0000
+__str_1,R_CONST,006B,0000
+L008008?,R_CSEG,079B,0000
+L011004?,R_CSEG,0981,0000
 L002012?,R_CSEG,011D,0000
 L002011?,R_CSEG,0119,0000
-L008006?,R_CSEG,0592,0000
-L008005?,R_CSEG,0532,0000
-L011001?,R_CSEG,0829,0000
-L008002?,R_CSEG,057E,0000
+L008006?,R_CSEG,05E5,0000
+L008005?,R_CSEG,057C,0000
+L011001?,R_CSEG,0907,0000
+L008002?,R_CSEG,05CE,0000
 L002020?,R_CSEG,016A,0000
+L009009?,R_CSEG,07FE,0000
+L009003?,R_CSEG,0899,0000
+L009001?,R_CSEG,07F5,0000
 _pwmCounter_sloc0_1_0,R_BSEG,0000,0001
-_smooth_move_history_1_113,R_DSEG,0031,0003
+_smooth_move_history_1_113,R_DSEG,002B,0003
 L002009?,R_CSEG,00F4,0000
-L014001?,R_CSEG,0918,0000
+L014001?,R_CSEG,09F6,0000
 L002008?,R_CSEG,00D8,0000
 </LOCALS>
 
 <PUBLICS>
 _main,R_CSEG,02C5,0000
 _NSTAGES,R_CONST,0010,0000
-_SPIWrite,R_CSEG,0911,0000
+_SPIWrite,R_CSEG,09EF,0000
 _direction,R_DSEG,0008,0002
 _pwmLeftTemp,R_DSEG,0010,0002
 _pwmCount,R_DSEG,0000,0002
 __c51_external_startup,R_CSEG,0248,0000
-_getDistance,R_CSEG,02E3,0000
+_getDistance,R_CSEG,0327,0000
 _ANGLEBUFFER,R_CONST,000C,0000
 _instruction,R_DSEG,001C,0002
 _DISTANCEBUFFER,R_CONST,0008,0000
 _gotInst,R_DSEG,001E,0002
-_GetADC,R_CSEG,0921,0000
-_turnRatio,R_CSEG,0378,0000
+_GetADC,R_CSEG,09FF,0000
+_turnRatio,R_CSEG,03BC,0000
 _MINVOLT,R_CONST,0004,0000
 _distanceLeft,R_DSEG,0014,0004
 _Stage,R_DSEG,0020,0002
 _distCount,R_DSEG,0002,0002
-_moveCar,R_CSEG,04E6,0000
+_moveCar,R_CSEG,052A,0000
 _tether,R_DSEG,000A,0002
 _pwmCounter,R_CSEG,0000,0000
-_getSig,R_CSEG,0821,0000
+_getSig,R_CSEG,08FF,0000
 _PRESETS,R_CONST,0012,0000
 _TURNSPEED,R_CONST,0002,0000
 _beaconSignal,R_CSEG,0187,0000
-_voltage,R_CSEG,08B6,0000
-_leftHistory,R_DSEG,0023,0006
-_rightHistory,R_DSEG,0029,0006
-_smooth_move,R_CSEG,0762,0000
-_smooth_move_PARM_2,R_DSEG,002F,0002
-_wait1s,R_CSEG,08A8,0000
+_voltage,R_CSEG,0994,0000
+_leftHistory,R_DSEG,0023,0003
+_rightHistory,R_DSEG,0026,0003
+_smooth_move,R_CSEG,07CA,0000
+_smooth_move_PARM_2,R_DSEG,0029,0002
+_wait1s,R_CSEG,0986,0000
+_MEMORY_LENGTH,R_CONST,0042,0000
 _leftSensor,R_DSEG,000C,0002
 _turn,R_DSEG,0022,0001
 _MOVESPEED,R_CONST,0000,0000
@@ -116,7 +123,7 @@ _pwmRightTemp,R_DSEG,0012,0002
 _distanceRight,R_DSEG,0018,0004
 _pwmRight,R_DSEG,0006,0002
 _pwmLeft,R_DSEG,0004,0002
-_uTurn,R_CSEG,07F4,0000
+_uTurn,R_CSEG,08D2,0000
 _rightSensor,R_DSEG,000E,0002
 </PUBLICS>
 
@@ -126,6 +133,7 @@ ___uint2fs,any,0000,0000
 ___fsgt,any,0000,0000
 ___fslt,any,0000,0000
 ___fsmul,any,0000,0000
+_calloc_PARM_2,any,0000,0000
 ___fsadd,any,0000,0000
 _printf,any,0000,0000
 __gptrput,any,0000,0000
@@ -133,6 +141,7 @@ __divsint,any,0000,0000
 ___fssub,any,0000,0000
 _crt0,any,0000,0000
 ___fsdiv,any,0000,0000
+_calloc,any,0000,0000
 __divsint_PARM_2,any,0000,0000
 </EXTERNALS>
 
@@ -188,18 +197,6 @@ F5 data8(_pwmLeftTemp;0x0001;+;)
 E4
 F5 data8(_pwmRightTemp;)
 F5 data8(_pwmRightTemp;0x0001;+;)
-75 data8(_leftHistory;) 00
-75 data8(_leftHistory;0x0001;+;) 00
-75 data8(_leftHistory;0x0002;+;) 00
-75 data8(_leftHistory;0x0002;+;0x0001;+;) 00
-75 data8(_leftHistory;0x0004;+;) 00
-75 data8(_leftHistory;0x0004;+;0x0001;+;) 00
-75 data8(_rightHistory;) 00
-75 data8(_rightHistory;0x0001;+;) 00
-75 data8(_rightHistory;0x0002;+;) 00
-75 data8(_rightHistory;0x0002;+;0x0001;+;) 00
-75 data8(_rightHistory;0x0004;+;) 00
-75 data8(_rightHistory;0x0004;+;0x0001;+;) 00
 </CODE>
 
 <CODE R_CSEG>
@@ -579,6 +576,42 @@ F5 data8(_pwmRight;)
 F5 data8(_pwmRight;0x0001;+;)
 F5 data8(_instruction;)
 F5 data8(_instruction;0x0001;+;)
+90 data16(_MEMORY_LENGTH;)  
+E4
+93
+FA
+74 01
+93
+FB
+75 data8(_calloc_PARM_2;) 02
+E4
+F5 data8(_calloc_PARM_2;0x0001;+;)
+8A 82
+8B 83
+12 addr16(_calloc;)  
+AA 82
+AB 83
+8A data8(_leftHistory;)
+8B data8(_leftHistory;0x0001;+;)
+75 data8(_leftHistory;0x0002;+;) 00
+90 data16(_MEMORY_LENGTH;)  
+E4
+93
+FA
+74 01
+93
+FB
+75 data8(_calloc_PARM_2;) 02
+E4
+F5 data8(_calloc_PARM_2;0x0001;+;)
+8A 82
+8B 83
+12 addr16(_calloc;)  
+AA 82
+AB 83
+8A data8(_rightHistory;)
+8B data8(_rightHistory;0x0001;+;)
+75 data8(_rightHistory;0x0002;+;) 00
 E5 data8(_instruction;)
 45 data8(_instruction;0x0001;+;)
 70 rel2(L005001?;)
@@ -847,8 +880,9 @@ F5 data8(_smooth_move_PARM_2;)
 74 01
 93
 F5 data8(_smooth_move_PARM_2;0x0001;+;)
-90 data16(_leftHistory;)  
-75 F0 40
+85 data8(_leftHistory;) 82
+85 data8(_leftHistory;0x0001;+;) 83
+85 data8(_leftHistory;0x0002;+;) F0
 12 addr16(_smooth_move;)  
 85 82 data8(_pwmLeft;)
 85 83 data8(_pwmLeft;0x0001;+;)
@@ -866,8 +900,9 @@ F5 data8(_smooth_move_PARM_2;)
 E4
 9B
 F5 data8(_smooth_move_PARM_2;0x0001;+;)
-90 data16(_rightHistory;)  
-75 F0 40
+85 data8(_rightHistory;) 82
+85 data8(_rightHistory;0x0001;+;) 83
+85 data8(_rightHistory;0x0002;+;) F0
 12 addr16(_smooth_move;)  
 85 82 data8(_pwmRight;)
 85 83 data8(_pwmRight;0x0001;+;)
@@ -891,8 +926,9 @@ F5 data8(_smooth_move_PARM_2;)
 E4
 9B
 F5 data8(_smooth_move_PARM_2;0x0001;+;)
-90 data16(_leftHistory;)  
-75 F0 40
+85 data8(_leftHistory;) 82
+85 data8(_leftHistory;0x0001;+;) 83
+85 data8(_leftHistory;0x0002;+;) F0
 12 addr16(_smooth_move;)  
 85 82 data8(_pwmLeft;)
 85 83 data8(_pwmLeft;0x0001;+;)
@@ -903,8 +939,9 @@ F5 data8(_smooth_move_PARM_2;)
 74 01
 93
 F5 data8(_smooth_move_PARM_2;0x0001;+;)
-90 data16(_rightHistory;)  
-75 F0 40
+85 data8(_rightHistory;) 82
+85 data8(_rightHistory;0x0001;+;) 83
+85 data8(_rightHistory;0x0002;+;) F0
 12 addr16(_smooth_move;)  
 85 82 data8(_pwmRight;)
 85 83 data8(_pwmRight;0x0001;+;)
@@ -912,16 +949,18 @@ F5 data8(_smooth_move_PARM_2;0x0001;+;)
 E4
 F5 data8(_smooth_move_PARM_2;)
 F5 data8(_smooth_move_PARM_2;0x0001;+;)
-90 data16(_leftHistory;)  
-75 F0 40
+85 data8(_leftHistory;) 82
+85 data8(_leftHistory;0x0001;+;) 83
+85 data8(_leftHistory;0x0002;+;) F0
 12 addr16(_smooth_move;)  
 85 82 data8(_pwmLeft;)
 85 83 data8(_pwmLeft;0x0001;+;)
 E4
 F5 data8(_smooth_move_PARM_2;)
 F5 data8(_smooth_move_PARM_2;0x0001;+;)
-90 data16(_rightHistory;)  
-75 F0 40
+85 data8(_rightHistory;) 82
+85 data8(_rightHistory;0x0001;+;) 83
+85 data8(_rightHistory;0x0002;+;) F0
 12 addr16(_smooth_move;)  
 85 82 data8(_pwmRight;)
 85 83 data8(_pwmRight;0x0001;+;)
@@ -1012,8 +1051,9 @@ F5 data8(_smooth_move_PARM_2;)
 74 01
 93
 F5 data8(_smooth_move_PARM_2;0x0001;+;)
-90 data16(_leftHistory;)  
-75 F0 40
+85 data8(_leftHistory;) 82
+85 data8(_leftHistory;0x0001;+;) 83
+85 data8(_leftHistory;0x0002;+;) F0
 12 addr16(_smooth_move;)  
 85 82 data8(_pwmLeft;)
 85 83 data8(_pwmLeft;0x0001;+;)
@@ -1024,8 +1064,9 @@ F5 data8(_smooth_move_PARM_2;)
 74 01
 93
 F5 data8(_smooth_move_PARM_2;0x0001;+;)
-90 data16(_rightHistory;)  
-75 F0 40
+85 data8(_rightHistory;) 82
+85 data8(_rightHistory;0x0001;+;) 83
+85 data8(_rightHistory;0x0002;+;) F0
 12 addr16(_smooth_move;)  
 85 82 data8(_pwmRight;)
 85 83 data8(_pwmRight;0x0001;+;)
@@ -1132,8 +1173,9 @@ F5 data8(_smooth_move_PARM_2;)
 E4
 9B
 F5 data8(_smooth_move_PARM_2;0x0001;+;)
-90 data16(_leftHistory;)  
-75 F0 40
+85 data8(_leftHistory;) 82
+85 data8(_leftHistory;0x0001;+;) 83
+85 data8(_leftHistory;0x0002;+;) F0
 12 addr16(_smooth_move;)  
 85 82 data8(_pwmLeft;)
 85 83 data8(_pwmLeft;0x0001;+;)
@@ -1151,8 +1193,9 @@ F5 data8(_smooth_move_PARM_2;)
 E4
 9B
 F5 data8(_smooth_move_PARM_2;0x0001;+;)
-90 data16(_rightHistory;)  
-75 F0 40
+85 data8(_rightHistory;) 82
+85 data8(_rightHistory;0x0001;+;) 83
+85 data8(_rightHistory;0x0002;+;) F0
 12 addr16(_smooth_move;)  
 85 82 data8(_pwmRight;)
 85 83 data8(_pwmRight;0x0001;+;)
@@ -1160,16 +1203,18 @@ F5 data8(_smooth_move_PARM_2;0x0001;+;)
 E4
 F5 data8(_smooth_move_PARM_2;)
 F5 data8(_smooth_move_PARM_2;0x0001;+;)
-90 data16(_leftHistory;)  
-75 F0 40
+85 data8(_leftHistory;) 82
+85 data8(_leftHistory;0x0001;+;) 83
+85 data8(_leftHistory;0x0002;+;) F0
 12 addr16(_smooth_move;)  
 85 82 data8(_pwmLeft;)
 85 83 data8(_pwmLeft;0x0001;+;)
 E4
 F5 data8(_smooth_move_PARM_2;)
 F5 data8(_smooth_move_PARM_2;0x0001;+;)
-90 data16(_rightHistory;)  
-75 F0 40
+85 data8(_rightHistory;) 82
+85 data8(_rightHistory;0x0001;+;) 83
+85 data8(_rightHistory;0x0002;+;) F0
 12 addr16(_smooth_move;)  
 85 82 data8(_pwmRight;)
 85 83 data8(_pwmRight;0x0001;+;)
@@ -1177,70 +1222,130 @@ F5 data8(_smooth_move_PARM_2;0x0001;+;)
 85 82 data8(_smooth_move_history_1_113;)
 85 83 data8(_smooth_move_history_1_113;0x0001;+;)
 85 F0 data8(_smooth_move_history_1_113;0x0002;+;)
-74 04
-25 data8(_smooth_move_history_1_113;)
-FD
+90 data16(_MEMORY_LENGTH;)  
 E4
-35 data8(_smooth_move_history_1_113;0x0001;+;)
-FE
-AF data8(_smooth_move_history_1_113;0x0002;+;)
-74 02
-25 data8(_smooth_move_history_1_113;)
-F8
+93
+F5 data8(_smooth_move_N_1_114;)
+74 01
+93
+F5 data8(_smooth_move_N_1_114;0x0001;+;)
+AF data8(_smooth_move_N_1_114;)
+A8 data8(_smooth_move_N_1_114;0x0001;+;)
+85 data8(_smooth_move_history_1_113;) 82
+85 data8(_smooth_move_history_1_113;0x0001;+;) 83
+85 data8(_smooth_move_history_1_113;0x0002;+;) F0
 E4
-35 data8(_smooth_move_history_1_113;0x0001;+;)
-F9
-AA data8(_smooth_move_history_1_113;0x0002;+;)
-88 82
-89 83
-8A F0
-12 addr16(__gptrget;)  
-FB
-A3
-12 addr16(__gptrget;)  
-FC
-8D 82
-8E 83
-8F F0
-EB
 12 addr16(__gptrput;)  
 A3
-EC
+E4
 12 addr16(__gptrput;)  
+8F 01
+88 05
+1F
+BF FF rel3(L009009?;)
+18
+C3
+74 01
+99
+E4
+64 80
+8D F0
+63 F0 80
+95 F0
+40 rel2(L009010?;)
+02 addr16(L009003?;)  
 85 data8(_smooth_move_history_1_113;) 82
 85 data8(_smooth_move_history_1_113;0x0001;+;) 83
 85 data8(_smooth_move_history_1_113;0x0002;+;) F0
 12 addr16(__gptrget;)  
-FD
+F5 data8(_smooth_move_sloc0_1_0;)
 A3
 12 addr16(__gptrget;)  
-FE
-88 82
-89 83
-8A F0
+F5 data8(_smooth_move_sloc0_1_0;0x0001;+;)
+8F 01
+E8
+C9
+25 E0
+C9
+33
+FA
+E9
+25 data8(_smooth_move_history_1_113;)
+F9
+EA
+35 data8(_smooth_move_history_1_113;0x0001;+;)
+FA
+AB data8(_smooth_move_history_1_113;0x0002;+;)
+89 82
+8A 83
+8B F0
+12 addr16(__gptrget;)  
+FC
+A3
+12 addr16(__gptrget;)  
+FD
+EC
+25 data8(_smooth_move_sloc0_1_0;)
+FC
 ED
+35 data8(_smooth_move_sloc0_1_0;0x0001;+;)
+FD
+85 data8(_smooth_move_history_1_113;) 82
+85 data8(_smooth_move_history_1_113;0x0001;+;) 83
+85 data8(_smooth_move_history_1_113;0x0002;+;) F0
+EC
 12 addr16(__gptrput;)  
 A3
-EE
-12 addr16(__gptrput;)  
 ED
-25 data8(_smooth_move_PARM_2;)
+12 addr16(__gptrput;)  
+EF
+24 FF
+FC
+E8
+34 FF
+CC
+25 E0
+CC
+33
 FD
-EE
-35 data8(_smooth_move_PARM_2;0x0001;+;)
-FE
-EB
-2D
-F5 82
 EC
-3E
-F5 83
-75 data8(__divsint_PARM_2;) 03
-E4
-F5 data8(__divsint_PARM_2;0x0001;+;)
-12 addr16(__divsint;)  
-AA 82
-AB 83
+25 data8(_smooth_move_history_1_113;)
+FC
+ED
+35 data8(_smooth_move_history_1_113;0x0001;+;)
+FD
+AE data8(_smooth_move_history_1_113;0x0002;+;)
+8C 82
+8D 83
+8E F0
+12 addr16(__gptrget;)  
+FC
+A3
+12 addr16(__gptrget;)  
+FD
+89 82
+8A 83
+8B F0
+EC
+12 addr16(__gptrput;)  
+A3
+ED
+12 addr16(__gptrput;)  
+02 addr16(L009001?;)  
+85 data8(_smooth_move_history_1_113;) 82
+85 data8(_smooth_move_history_1_113;0x0001;+;) 83
+85 data8(_smooth_move_history_1_113;0x0002;+;) F0
+12 addr16(__gptrget;)  
+FA
+A3
+12 addr16(__gptrget;)  
+FB
+E5 data8(_smooth_move_PARM_2;)
+2A
+FA
+E5 data8(_smooth_move_PARM_2;0x0001;+;)
+3B
+FB
 85 data8(_smooth_move_history_1_113;) 82
 85 data8(_smooth_move_history_1_113;0x0001;+;) 83
 85 data8(_smooth_move_history_1_113;0x0002;+;) F0
@@ -1249,9 +1354,11 @@ EA
 A3
 EB
 12 addr16(__gptrput;)  
+85 data8(_smooth_move_N_1_114;) data8(__divsint_PARM_2;)
+85 data8(_smooth_move_N_1_114;0x0001;+;) data8(__divsint_PARM_2;0x0001;+;)
 8A 82
 8B 83
-22
+02 addr16(__divsint;)  
 D2 A2
 C2 A1
 D2 A0
@@ -1543,6 +1650,8 @@ C8
 00
 48
 42
+04
+00
 44 4C 20 25 33 2E 31 66 20 2D 20 44 52 20 25 33 2E
 31 66 20 2D 20 53 74 61 67 65 20 25 33 2E 31 66
 28 25 64 29 

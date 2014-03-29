@@ -82,6 +82,9 @@ volatile unsigned int rightSensor = 0;
 volatile int pwmLeftTemp = 0;
 volatile int pwmRightTemp = 0;
 
+// smooth_move moving average
+const int MEMORY_LENGTH = 4;
+
 //left and right coil distances
 volatile float distanceLeft;
 volatile float distanceRight;
@@ -225,8 +228,8 @@ unsigned char _c51_external_startup(void)
     return 0;
 }
 
-	int leftHistory[] = {0, 0, 0};
-	int rightHistory[] = {0, 0, 0};
+	int * leftHistory;
+	int * rightHistory;
 
 //---MAIN---
 int main (void)
@@ -235,6 +238,9 @@ int main (void)
 	pwmLeft = 0;
 	pwmRight = 0;
 	instruction = 0;
+	leftHistory = (int *)calloc(MEMORY_LENGTH, sizeof(int));
+	rightHistory = (int *)calloc(MEMORY_LENGTH, sizeof(int));
+	
 	while (1)
 	{	
 		//stay on tether until instruction is read
@@ -376,11 +382,19 @@ void moveCar()
 
 int smooth_move(int * history, int target)
 {
-	history[2] = history[1];	
-	history[1] = history[0];
-	history[0] = (target + history[1] + history[2])/3;
+	int N = MEMORY_LENGTH;
 	
-	return history[0];
+	history[0] = 0;
+	
+	while(N-- > 1)
+	{ 
+		history[0] += history[N];
+		history[N] = history[N-1];	
+	}
+	
+	history[0] += target;
+	
+	return history[0] / MEMORY_LENGTH;
 }
 
 void uTurn()
