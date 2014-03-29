@@ -584,7 +584,7 @@
 0B6B            130   Set_Soak_Time:
 0B6B 7597FF     131            mov HEX7, #0FFH
 0B6E 754D05     132            mov LCD_state, #5
-0B71 120D24     133            lcall Set_Soak_Time_Relay
+0B71 120D23     133            lcall Set_Soak_Time_Relay
 0B74 20EBF4     134            jb SWA.3, Set_Soak_Time
 0B77 1208DC     135            lcall clear_hex
 0B7A 80B7       136            Sjmp Idle
@@ -830,10 +830,10 @@
 0D14            268       ; Display Digit 2
 0D14 E53F       268       mov A, bcd+1
 0D16 540F       268       anl a, #0fh
-0D18 6006       268       jz Ender_Soak_Temp
+0D18 6005       268       jz Ender_Soak_Temp
 0D1A 93         268       movc A, @A+dptr
 0D1B F596       268       mov HEX6, A
-0D1D 020D23     268       jmp Exit_Soak_Temp
+0D1D 020D22     268       jmp Exit_Soak_Temp
 0D20            268       Ender_Soak_Temp:
 0D20 7596FF     268       mov HEX6, #0FFH
 0D23            268       Exit_Soak_Temp:
@@ -842,16 +842,16 @@
 0D24            271            Inc_Soak_Time:
 0D24 E544       271                    mov A, Soak_Time
 0D26            271            
-0D26 20FA08     271                    jb KEY.2, Dec_Soak_Time
+0D26 20FA07     271                    jb KEY.2, Dec_Soak_Time
 0D29 30FAFD     271            jnb KEY.2, $
 0D2C 04         271                    inc A
-0D2D B45B0C     271                    cjne A, #91, Done_Soak_Time
+0D2D B45B0B     271                    cjne A, #91, Done_Soak_Time
 0D30 14         271                    dec A
 0D31            271            Dec_Soak_Time:  
-0D31 20FB08     271                jb KEY.3, Done_Soak_Time
+0D31 20FB07     271                jb KEY.3, Done_Soak_Time
 0D34 30FBFD     271                jnb KEY.3, $
 0D37 14         271                    dec A
-0D38 B43B01     271                cjne A, #59, Done_Soak_Time
+0D38 B43B00     271                cjne A, #59, Done_Soak_Time
 0D3B 04         271           inc A
 0D3C            271            Done_Soak_Time:
 0D3C F544       271                    mov Soak_Time, A

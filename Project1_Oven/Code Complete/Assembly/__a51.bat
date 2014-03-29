@@ -1,5 +1,5 @@
 @echo off
-Z:
-cd "\home\champ\Engineering\GitHub\Projects\CodeCopy\Assembly\Project1\"
-"Z:\home\champ\Engineering\EECE_281\AlteraBoardStuff\a51.exe" -l "Z:\home\champ\Engineering\GitHub\Projects\CodeCopy\Assembly\Project1\State Machine.asm"
-echo Crosside_Action Set_Hex_File Z:\home\champ\Engineering\GitHub\Projects\CodeCopy\Assembly\Project1\State Machine.HEX
+C:
+cd "\Users\q9x8\Documents\GitHub\Projects\Project1_Oven\Code Complete\Assembly\"
+"Z:\CrossIDE\Call51\Bin\a51.exe" -l "C:\Users\q9x8\Documents\GitHub\Projects\Project1_Oven\Code Complete\Assembly\State Machine.asm"
+echo Crosside_Action Set_Hex_File C:\Users\q9x8\Documents\GitHub\Projects\Project1_Oven\Code Complete\Assembly\State Machine.HEX

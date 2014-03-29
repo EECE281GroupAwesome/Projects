@@ -594,7 +594,7 @@
 0B7A 754D05     140            mov LCD_state, #5
 0B7D 00         141            nop
 0B7E 00         142            nop
-0B7F 120D2F     143            lcall Set_Soak_Time_Relay
+0B7F 120D2E     143            lcall Set_Soak_Time_Relay
 0B82 20EBF2     144            jb SWA.3, Set_Soak_Time
 0B85 1208DC     145            lcall clear_hex
 0B88 80AB       146            Sjmp Idle
@@ -841,10 +841,10 @@
 0D1F            279       ; Display Digit 2
 0D1F E53F       279       mov A, bcd+1
 0D21 540F       279       anl a, #0fh
-0D23 6006       279       jz Ender_Soak_Temp
+0D23 6005       279       jz Ender_Soak_Temp
 0D25 93         279       movc A, @A+dptr
 0D26 F596       279       mov HEX6, A
-0D28 020D2E     279       jmp Exit_Soak_Temp
+0D28 020D2D     279       jmp Exit_Soak_Temp
 0D2B            279       Ender_Soak_Temp:
 0D2B 7596FF     279       mov HEX6, #0FFH
 0D2E            279       Exit_Soak_Temp:
@@ -853,16 +853,16 @@
 0D2F            282            Inc_Soak_Time:
 0D2F E544       282                    mov A, Soak_Time
 0D31            282            
-0D31 20FA08     282                    jb KEY.2, Dec_Soak_Time
+0D31 20FA07     282                    jb KEY.2, Dec_Soak_Time
 0D34 30FAFD     282            jnb KEY.2, $
 0D37 04         282                    inc A
-0D38 B45B0C     282                    cjne A, #91, Done_Soak_Time
+0D38 B45B0B     282                    cjne A, #91, Done_Soak_Time
 0D3B 14         282                    dec A
 0D3C            282            Dec_Soak_Time:  
-0D3C 20FB08     282                jb KEY.3, Done_Soak_Time
+0D3C 20FB07     282                jb KEY.3, Done_Soak_Time
 0D3F 30FBFD     282                jnb KEY.3, $
 0D42 14         282                    dec A
-0D43 B43B01     282                cjne A, #59, Done_Soak_Time
+0D43 B43B00     282                cjne A, #59, Done_Soak_Time
 0D46 04         282           inc A
 0D47            282            Done_Soak_Time:
 0D47 F544       282                    mov Soak_Time, A

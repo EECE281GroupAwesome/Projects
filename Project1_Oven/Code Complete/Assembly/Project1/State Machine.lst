@@ -840,10 +840,10 @@
 0D19            244       ; Display Digit 2
 0D19 E53F       244       mov A, bcd+1
 0D1B 540F       244       anl a, #0fh
-0D1D 6005       244       jz Ender_Soak_Time
+0D1D 6006       244       jz Ender_Soak_Time
 0D1F 93         244       movc A, @A+dptr
 0D20 F596       244       mov HEX6, A
-0D22 020D27     244       jmp Exit_Soak_Time
+0D22 020D28     244       jmp Exit_Soak_Time
 0D25            244       Ender_Soak_Time:
 0D25 7596FF     244       mov HEX6, #0FFH
 0D28            244       Exit_Soak_Time:

@@ -160,18 +160,20 @@
                  -1   $include(math16.asm)
                 428   $LIST
                  -1   $include(LCDlib.asm)
-01F8              1   ;This is a library with LCD functions 
-01F8              2   ;
-01F8              3   
-01F8              4   
+01F8              1   ;---------------------------------------------------
+01F8              2   ;This is a library with LCD functions to write commands 
+01F8              3   ;characters, LCD initialization, character creation   
+01F8              4   ;
 01F8              5   
 01F8              6   
 01F8              7   
+01F8              8   
+01F8              9   
                  61   $LIST
 03D8             63   
-                665   $LIST
-08E0            667   
-08E0            668            
+                720   $LIST
+08E0            722   
+08E0            723            
                  -1   $include(DisplayandMacros.asm)	
 08E0              1   ;
 08E0              2   ;Functions for displaying the time using seconds
