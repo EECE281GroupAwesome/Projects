@@ -381,7 +381,7 @@ int smooth_move(int * history, int target)
 	
 	history[0] = 0;
 	
-	while(N-- > 1)
+	while(N-- > 0)
 	{ 
 		history[0] += history[N];
 		history[N] = history[N-1];	
