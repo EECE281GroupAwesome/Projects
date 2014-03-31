@@ -120,53 +120,44 @@ void pwmCounter() interrupt 1
 		pwmCount = 0;
 	}	
 	
-	// get left and right sensor voltages every 0.1 sec
-	if (++distCount > 999)
-	{
-		distCount = 0;	
-		Stage = 6;
-		printf("DL %3d - DR %3d - Stage %3d(%d) - Inst %d\r", distanceLeft, distanceRight, PRESETS[Stage], Stage, instruction);
-	}
+	// getprint stuff ever .1secc
+	//if (++distCount > 999)
+	//{
+	//	distCount = 0;	
+	//	Stage = 6;
+	//	printf("DL %3d - DR %3d - Stage %3d(%d) - Inst %d\r", distanceLeft, distanceRight, PRESETS[Stage], Stage, instruction);
+	//}
 	
 	//Left wheel
-	if(pwmLeft > 0)
+	if(pwmLeft > 0) //forwards
 	{	
 		P0_1 = (pwmLeft > pwmCount) ? 0:1;
 		P0_0 = 1;
 	}
-	else if(pwmLeft < 0)
+	else if(pwmLeft < 0) //reverse
 	{	
 
 		P0_0 = ((-1) * pwmLeft > pwmCount) ? 0:1;
 		P0_1 = 1;
 	}
-	if(pwmLeft == 0)
+	else if(pwmLeft == 0) //stop
 	{
 		P0_1 = P0_0 = 1;
-
-		P1_0 = ((-1) * pwmLeft > pwmCount) ? 0:1;
-		P1_1 = 1;
-	}
-	else
-	{
-		P1_0 = 1;
-		P1_1 = 1;
 	}
 	
 	//Right wheel
-	if(pwmRight > 0)
+	if(pwmRight > 0)   //forwards
 	{	
 		P0_4 = (pwmRight > pwmCount) ? 0:1;
 		P0_3 = 1;
 	}
-	else if(pwmRight < 0)
+	else if(pwmRight < 0) //reverse
 	{	
 
 		P0_3 = ((-1) * pwmRight > pwmCount) ? 0:1;
 		P0_4 = 1;
 	}
-	
-	if(pwmRight == 0)
+	else if(pwmRight == 0)   //stop
 	{
 		P0_4 = P0_3 = 1;
 	}
@@ -179,7 +170,7 @@ void beaconSignal() interrupt 3
 	{
 		pwmLeft = pwmRight = 0;
 		
-		ET0 = 0;
+		ET0 = 0;                   //make sure pwm doesnt fuck anything up
 		while(GetADC(0) < 10);
 		instruction = getSig();
 		ET0 =  1;
@@ -238,10 +229,6 @@ int main()
 		//stay on tether until instruction is read
 		while (instruction == 0)
 		{	
-			P2_2=1;
-			P2_1=1; // blue
-			P2_0=0;
-			
 			moveCar();
 		}
 		/*
@@ -285,7 +272,6 @@ int main()
 		}
 		else
 		{
-			printf("\nERROR");
 			P2_2=0;
 			P2_1=1;
 			P2_0=1;
@@ -304,14 +290,14 @@ int main()
  */
 void getDistance() 
 {
-	EA = 0;
-	tempL = GetADC(1);
-	if (tempL > 10)
+	EA = 0;                                     //make sure pwm doesnt fuck anything up
+	tempL = GetADC(1);                     
+	if (tempL > 10)                             //toss away very low reads and keep old
 	{
 		distanceLeft = tempL;
 	}
 		
-	tempR = GetADC(0);
+	tempR = GetADC(0);                          //handle bad inductor angle with some offset
 	if (tempR > 13 && tempR < 250)
 	{
 		distanceRight = tempR * 1.15;
@@ -344,69 +330,66 @@ void moveCar()
 	
 	good = 0;
 	
-	getDistance();
-	//turn towards beacon
-	if(distanceRight > (distanceLeft+ANGLEBUFFER))
+	getDistance();                                          //if there is no wave, turn on red and sit tight
+	if(distanceLeft==0 && distanceRight==0)
 	{
-		P2_2=1;
-		P2_1=0; // yellow
+		pwmLeft=pwmRight=0;
+		P2_2=0;
+		P2_1=1;
 		P2_0=1;
-		pwmLeft = (-TURNSPEED);
-		pwmRight= (TURNSPEED);
 	}
-	else if(distanceLeft > (distanceRight+ANGLEBUFFER))
+	else                                                   //were getting a reading, move and turn
 	{
-		P2_2=1;
-		P2_1=0; // yellow
-		P2_0=1;
-		pwmLeft = (TURNSPEED);
-		pwmRight = (-TURNSPEED);
-	}
-	else
-	{
-		good++;
-	}
-	
-	getDistance();
-	//move forward if too far and aligned
-	if ((distanceRight+DISTANCEBUFFER) < PRESETS[Stage])
-	{
-		P2_2=1;
-		P2_1=0; // yellow
-		P2_0=1;
-		pwmLeft = (MOVESPEED);
-		pwmRight = (MOVESPEED);
-	}
-	//move back if too close and aligned
-	else if (distanceRight > (PRESETS[Stage]+DISTANCEBUFFER))
-	{		
-		P2_2=1;
-		P2_1=0; // yellow
-		P2_0=1;
-		pwmLeft = (-MOVESPEED);
-		pwmRight = (-MOVESPEED);
-	}
-	else
-	{
-		good++;
-	}
-			
-	// check to see if car is completely stable and ready to accept a signal
-	if (good < 2)
-	{
-		P2_2=1;
-		P2_1=0; // yellow
-		P2_0=1;
-		ET1 = 0;
+		//turn towards beacon
+		if(distanceRight > (distanceLeft+ANGLEBUFFER))
+		{
+			pwmLeft = (-TURNSPEED);
+			pwmRight= (TURNSPEED);
+		}
+		else if(distanceLeft > (distanceRight+ANGLEBUFFER))
+		{
+			pwmLeft = (TURNSPEED);
+			pwmRight = (-TURNSPEED);
+		}
+		else
+		{
+			good++;                                        //both angle tests passed 
+		}
+		
+		getDistance();
+		//move forward if too far and aligned
+		if ((distanceRight+DISTANCEBUFFER) < PRESETS[Stage])
+		{
+			pwmLeft = (MOVESPEED);
+			pwmRight = (MOVESPEED);
+		}
+		//move back if too close and aligned
+		else if (distanceRight > (PRESETS[Stage]+DISTANCEBUFFER))
+		{		
+			pwmLeft = (-MOVESPEED);
+			pwmRight = (-MOVESPEED);
+		}
+		else
+		{
+			good++;                                           //both distance tests passed
+		}		
+		// check to see if car is completely stable and ready to accept a signal
+		if (good < 2)
+		{
+			P2_2=1;
+			P2_1=0; // yellow
+			P2_0=1;
+			//ET1 = 0;
+		}		
+		else
+		{
+			pwmLeft=pwmRight=0;
+			P2_2=1;
+			P2_1=1; // blue
+			P2_0=0;
+			//ET1 = 1;
+		}
 	}		
-	else
-	{
-		P2_2=1;
-		P2_1=1; // blue
-		P2_0=0;
-		ET1 = 1;
-	}
-			
 	return;
 }
 
@@ -421,6 +404,9 @@ void uTurn()
 	pwmRight = (-TURNSPEED);
 	wait1s();
 	wait1s();
+	P2_2=1;
+	P2_1=1; // blue
+	P2_0=0;
 	
 	pwmLeft = pwmRight = 0;
 	return;
@@ -538,7 +524,7 @@ unsigned int GetADC(unsigned char channel)
 		
 	return adc;
 }
-
+//for the instruction reception
 void wait_bit_time()
 {
 	_asm	

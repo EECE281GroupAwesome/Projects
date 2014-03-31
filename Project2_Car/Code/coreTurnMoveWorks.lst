@@ -1,0 +1,1926 @@
+0000              1   ;--------------------------------------------------------
+0000              2   ; File Created by C51
+0000              3   ; Version 1.0.0 #1034 (Dec 12 2012) (MSVC)
+0000              4   ; This file was generated Mon Mar 31 12:33:30 2014
+0000              5   ;--------------------------------------------------------
+                  5   $name coreTurnMoveWorks
+                  6   $optc51 --model-small
+0000              8            R_DSEG    segment data
+0000              9            R_CSEG    segment code
+0000             10            R_BSEG    segment bit
+0000             11            R_XSEG    segment xdata
+0000             12            R_PSEG    segment xdata
+0000             13            R_ISEG    segment idata
+0000             14            R_OSEG    segment data overlay
+0000             15            BIT_BANK  segment data overlay
+0000             16            R_HOME    segment code
+0000             17            R_GSINIT  segment code
+0000             18            R_IXSEG   segment xdata
+0000             19            R_CONST   segment code
+0000             20            R_XINIT   segment code
+0000             21            R_DINIT   segment code
+0000             22   
+0000             23   ;--------------------------------------------------------
+0000             24   ; Public variables in this module
+0000             25   ;--------------------------------------------------------
+0000             26            public _PRESETS
+0000             27            public _NSTAGES
+0000             28            public _DISTANCEBUFFER
+0000             29            public _TURNSPEED
+0000             30            public _MOVESPEED
+0000             31            public _main
+0000             32            public __c51_external_startup
+0000             33            public _beaconSignal
+0000             34            public _pwmCounter
+0000             35            public _Stage
+0000             36            public _good
+0000             37            public _gotInst
+0000             38            public _instruction
+0000             39            public _tempTurn
+0000             40            public _tempR
+0000             41            public _tempL
+0000             42            public _distanceRight
+0000             43            public _distanceLeft
+0000             44            public _pwmRightTemp
+0000             45            public _pwmLeftTemp
+0000             46            public _rightSensor
+0000             47            public _leftSensor
+0000             48            public _tether
+0000             49            public _direction
+0000             50            public _pwmRight
+0000             51            public _pwmLeft
+0000             52            public _distCount
+0000             53            public _pwmCount
+0000             54            public _ANGLEBUFFER
+0000             55            public _getDistance
+0000             56            public _moveCar
+0000             57            public _uTurn
+0000             58            public _parallelPark
+0000             59            public _getSig
+0000             60            public _wait1s
+0000             61            public _waiths
+0000             62            public _SPIWrite
+0000             63            public _GetADC
+0000             64            public _wait_bit_time
+0000             65            public _wait_one_and_half_bit_time
+0000             66   ;--------------------------------------------------------
+0000             67   ; Special Function Registers
+0000             68   ;--------------------------------------------------------
+0000             69   _ACC            DATA 0xe0
+0000             70   _B              DATA 0xf0
+0000             71   _PSW            DATA 0xd0
+0000             72   _SP             DATA 0x81
+0000             73   _SPX            DATA 0xef
+0000             74   _DPL            DATA 0x82
+0000             75   _DPH            DATA 0x83
+0000             76   _DPLB           DATA 0xd4
+0000             77   _DPHB           DATA 0xd5
+0000             78   _PAGE           DATA 0xf6
+0000             79   _AX             DATA 0xe1
+0000             80   _BX             DATA 0xf7
+0000             81   _DSPR           DATA 0xe2
+0000             82   _FIRD           DATA 0xe3
+0000             83   _MACL           DATA 0xe4
+0000             84   _MACH           DATA 0xe5
+0000             85   _PCON           DATA 0x87
+0000             86   _AUXR           DATA 0x8e
+0000             87   _AUXR1          DATA 0xa2
+0000             88   _DPCF           DATA 0xa1
+0000             89   _CKRL           DATA 0x97
+0000             90   _CKCKON0        DATA 0x8f
+0000             91   _CKCKON1        DATA 0xaf
+0000             92   _CKSEL          DATA 0x85
+0000             93   _CLKREG         DATA 0xae
+0000             94   _OSCCON         DATA 0x85
+0000             95   _IE             DATA 0xa8
+0000             96   _IEN0           DATA 0xa8
+0000             97   _IEN1           DATA 0xb1
+0000             98   _IPH0           DATA 0xb7
+0000             99   _IP             DATA 0xb8
+0000            100   _IPL0           DATA 0xb8
+0000            101   _IPH1           DATA 0xb3
+0000            102   _IPL1           DATA 0xb2
+0000            103   _P0             DATA 0x80
+0000            104   _P1             DATA 0x90
+0000            105   _P2             DATA 0xa0
+0000            106   _P3             DATA 0xb0
+0000            107   _P4             DATA 0xc0
+0000            108   _P0M0           DATA 0xe6
+0000            109   _P0M1           DATA 0xe7
+0000            110   _P1M0           DATA 0xd6
+0000            111   _P1M1           DATA 0xd7
+0000            112   _P2M0           DATA 0xce
+0000            113   _P2M1           DATA 0xcf
+0000            114   _P3M0           DATA 0xc6
+0000            115   _P3M1           DATA 0xc7
+0000            116   _P4M0           DATA 0xbe
+0000            117   _P4M1           DATA 0xbf
+0000            118   _SCON           DATA 0x98
+0000            119   _SBUF           DATA 0x99
+0000            120   _SADEN          DATA 0xb9
+0000            121   _SADDR          DATA 0xa9
+0000            122   _BDRCON         DATA 0x9b
+0000            123   _BRL            DATA 0x9a
+0000            124   _TCON           DATA 0x88
+0000            125   _TMOD           DATA 0x89
+0000            126   _TCONB          DATA 0x91
+0000            127   _TL0            DATA 0x8a
+0000            128   _TH0            DATA 0x8c
+0000            129   _TL1            DATA 0x8b
+0000            130   _TH1            DATA 0x8d
+0000            131   _RL0            DATA 0xf2
+0000            132   _RH0            DATA 0xf4
+0000            133   _RL1            DATA 0xf3
+0000            134   _RH1            DATA 0xf5
+0000            135   _WDTRST         DATA 0xa6
+0000            136   _WDTPRG         DATA 0xa7
+0000            137   _T2CON          DATA 0xc8
+0000            138   _T2MOD          DATA 0xc9
+0000            139   _RCAP2H         DATA 0xcb
+0000            140   _RCAP2L         DATA 0xca
+0000            141   _TH2            DATA 0xcd
+0000            142   _TL2            DATA 0xcc
+0000            143   _SPCON          DATA 0xc3
+0000            144   _SPSTA          DATA 0xc4
+0000            145   _SPDAT          DATA 0xc5
+0000            146   _SSCON          DATA 0x93
+0000            147   _SSCS           DATA 0x94
+0000            148   _SSDAT          DATA 0x95
+0000            149   _SSADR          DATA 0x96
+0000            150   _KBLS           DATA 0x9c
+0000            151   _KBE            DATA 0x9d
+0000            152   _KBF            DATA 0x9e
+0000            153   _KBMOD          DATA 0x9f
+0000            154   _BMSEL          DATA 0x92
+0000            155   _FCON           DATA 0xd2
+0000            156   _EECON          DATA 0xd2
+0000            157   _ACSRA          DATA 0xa3
+0000            158   _ACSRB          DATA 0xab
+0000            159   _AREF           DATA 0xbd
+0000            160   _DADC           DATA 0xa4
+0000            161   _DADI           DATA 0xa5
+0000            162   _DADL           DATA 0xac
+0000            163   _DADH           DATA 0xad
+0000            164   _CCON           DATA 0xd8
+0000            165   _CMOD           DATA 0xd9
+0000            166   _CL             DATA 0xe9
+0000            167   _CH             DATA 0xf9
+0000            168   _CCAPM0         DATA 0xda
+0000            169   _CCAPM1         DATA 0xdb
+0000            170   _CCAPM2         DATA 0xdc
+0000            171   _CCAPM3         DATA 0xdd
+0000            172   _CCAPM4         DATA 0xde
+0000            173   _CCAP0H         DATA 0xfa
+0000            174   _CCAP1H         DATA 0xfb
+0000            175   _CCAP2H         DATA 0xfc
+0000            176   _CCAP3H         DATA 0xfd
+0000            177   _CCAP4H         DATA 0xfe
+0000            178   _CCAP0L         DATA 0xea
+0000            179   _CCAP1L         DATA 0xeb
+0000            180   _CCAP2L         DATA 0xec
+0000            181   _CCAP3L         DATA 0xed
+0000            182   _CCAP4L         DATA 0xee
+0000            183   ;--------------------------------------------------------
+0000            184   ; special function bits
+0000            185   ;--------------------------------------------------------
+0000            186   _ACC_0          BIT 0xe0
+0000            187   _ACC_1          BIT 0xe1
+0000            188   _ACC_2          BIT 0xe2
+0000            189   _ACC_3          BIT 0xe3
+0000            190   _ACC_4          BIT 0xe4
+0000            191   _ACC_5          BIT 0xe5
+0000            192   _ACC_6          BIT 0xe6
+0000            193   _ACC_7          BIT 0xe7
+0000            194   _B_0            BIT 0xf0
+0000            195   _B_1            BIT 0xf1
+0000            196   _B_2            BIT 0xf2
+0000            197   _B_3            BIT 0xf3
+0000            198   _B_4            BIT 0xf4
+0000            199   _B_5            BIT 0xf5
+0000            200   _B_6            BIT 0xf6
+0000            201   _B_7            BIT 0xf7
+0000            202   _P              BIT 0xd0
+0000            203   _F1             BIT 0xd1
+0000            204   _OV             BIT 0xd2
+0000            205   _RS0            BIT 0xd3
+0000            206   _RS1            BIT 0xd4
+0000            207   _F0             BIT 0xd5
+0000            208   _AC             BIT 0xd6
+0000            209   _CY             BIT 0xd7
+0000            210   _EX0            BIT 0xa8
+0000            211   _ET0            BIT 0xa9
+0000            212   _EX1            BIT 0xaa
+0000            213   _ET1            BIT 0xab
+0000            214   _ES             BIT 0xac
+0000            215   _ET2            BIT 0xad
+0000            216   _EC             BIT 0xae
+0000            217   _EA             BIT 0xaf
+0000            218   _PX0            BIT 0xb8
+0000            219   _PT0            BIT 0xb9
+0000            220   _PX1            BIT 0xba
+0000            221   _PT1            BIT 0xbb
+0000            222   _PS             BIT 0xbc
+0000            223   _PT2            BIT 0xbd
+0000            224   _IP0D           BIT 0xbf
+0000            225   _PPCL           BIT 0xbe
+0000            226   _PT2L           BIT 0xbd
+0000            227   _PLS            BIT 0xbc
+0000            228   _PT1L           BIT 0xbb
+0000            229   _PX1L           BIT 0xba
+0000            230   _PT0L           BIT 0xb9
+0000            231   _PX0L           BIT 0xb8
+0000            232   _P0_0           BIT 0x80
+0000            233   _P0_1           BIT 0x81
+0000            234   _P0_2           BIT 0x82
+0000            235   _P0_3           BIT 0x83
+0000            236   _P0_4           BIT 0x84
+0000            237   _P0_5           BIT 0x85
+0000            238   _P0_6           BIT 0x86
+0000            239   _P0_7           BIT 0x87
+0000            240   _P1_0           BIT 0x90
+0000            241   _P1_1           BIT 0x91
+0000            242   _P1_2           BIT 0x92
+0000            243   _P1_3           BIT 0x93
+0000            244   _P1_4           BIT 0x94
+0000            245   _P1_5           BIT 0x95
+0000            246   _P1_6           BIT 0x96
+0000            247   _P1_7           BIT 0x97
+0000            248   _P2_0           BIT 0xa0
+0000            249   _P2_1           BIT 0xa1
+0000            250   _P2_2           BIT 0xa2
+0000            251   _P2_3           BIT 0xa3
+0000            252   _P2_4           BIT 0xa4
+0000            253   _P2_5           BIT 0xa5
+0000            254   _P2_6           BIT 0xa6
+0000            255   _P2_7           BIT 0xa7
+0000            256   _P3_0           BIT 0xb0
+0000            257   _P3_1           BIT 0xb1
+0000            258   _P3_2           BIT 0xb2
+0000            259   _P3_3           BIT 0xb3
+0000            260   _P3_4           BIT 0xb4
+0000            261   _P3_5           BIT 0xb5
+0000            262   _P3_6           BIT 0xb6
+0000            263   _P3_7           BIT 0xb7
+0000            264   _RXD            BIT 0xb0
+0000            265   _TXD            BIT 0xb1
+0000            266   _INT0           BIT 0xb2
+0000            267   _INT1           BIT 0xb3
+0000            268   _T0             BIT 0xb4
+0000            269   _T1             BIT 0xb5
+0000            270   _WR             BIT 0xb6
+0000            271   _RD             BIT 0xb7
+0000            272   _P4_0           BIT 0xc0
+0000            273   _P4_1           BIT 0xc1
+0000            274   _P4_2           BIT 0xc2
+0000            275   _P4_3           BIT 0xc3
+0000            276   _P4_4           BIT 0xc4
+0000            277   _P4_5           BIT 0xc5
+0000            278   _P4_6           BIT 0xc6
+0000            279   _P4_7           BIT 0xc7
+0000            280   _RI             BIT 0x98
+0000            281   _TI             BIT 0x99
+0000            282   _RB8            BIT 0x9a
+0000            283   _TB8            BIT 0x9b
+0000            284   _REN            BIT 0x9c
+0000            285   _SM2            BIT 0x9d
+0000            286   _SM1            BIT 0x9e
+0000            287   _SM0            BIT 0x9f
+0000            288   _IT0            BIT 0x88
+0000            289   _IE0            BIT 0x89
+0000            290   _IT1            BIT 0x8a
+0000            291   _IE1            BIT 0x8b
+0000            292   _TR0            BIT 0x8c
+0000            293   _TF0            BIT 0x8d
+0000            294   _TR1            BIT 0x8e
+0000            295   _TF1            BIT 0x8f
+0000            296   _CP_RL2         BIT 0xc8
+0000            297   _C_T2           BIT 0xc9
+0000            298   _TR2            BIT 0xca
+0000            299   _EXEN2          BIT 0xcb
+0000            300   _TCLK           BIT 0xcc
+0000            301   _RCLK           BIT 0xcd
+0000            302   _EXF2           BIT 0xce
+0000            303   _TF2            BIT 0xcf
+0000            304   _CF             BIT 0xdf
+0000            305   _CR             BIT 0xde
+0000            306   _CCF4           BIT 0xdc
+0000            307   _CCF3           BIT 0xdb
+0000            308   _CCF2           BIT 0xda
+0000            309   _CCF1           BIT 0xd9
+0000            310   _CCF0           BIT 0xd8
+0000            311   ;--------------------------------------------------------
+0000            312   ; overlayable register banks
+0000            313   ;--------------------------------------------------------
+0000            314            rbank0 segment data overlay
+0000            315   ;--------------------------------------------------------
+0000            316   ; overlayable bit register bank
+0000            317   ;--------------------------------------------------------
+0000            318            rseg BIT_BANK
+0000            319   bits:
+0000            320            ds 1
+0001            321            b0 equ  bits.0 
+0001            322            b1 equ  bits.1 
+0001            323            b2 equ  bits.2 
+0001            324            b3 equ  bits.3 
+0001            325            b4 equ  bits.4 
+0001            326            b5 equ  bits.5 
+0001            327            b6 equ  bits.6 
+0001            328            b7 equ  bits.7 
+0001            329   ;--------------------------------------------------------
+0001            330   ; internal ram data
+0001            331   ;--------------------------------------------------------
+0000            332            rseg R_DSEG
+0000            333   _ANGLEBUFFER:
+0000            334            ds 4
+0004            335   _pwmCount:
+0004            336            ds 2
+0006            337   _distCount:
+0006            338            ds 2
+0008            339   _pwmLeft:
+0008            340            ds 2
+000A            341   _pwmRight:
+000A            342            ds 2
+000C            343   _direction:
+000C            344            ds 2
+000E            345   _tether:
+000E            346            ds 2
+0010            347   _leftSensor:
+0010            348            ds 2
+0012            349   _rightSensor:
+0012            350            ds 2
+0014            351   _pwmLeftTemp:
+0014            352            ds 2
+0016            353   _pwmRightTemp:
+0016            354            ds 2
+0018            355   _distanceLeft:
+0018            356            ds 2
+001A            357   _distanceRight:
+001A            358            ds 2
+001C            359   _tempL:
+001C            360            ds 2
+001E            361   _tempR:
+001E            362            ds 2
+0020            363   _tempTurn:
+0020            364            ds 2
+0022            365   _instruction:
+0022            366            ds 2
+0024            367   _gotInst:
+0024            368            ds 2
+0026            369   _good:
+0026            370            ds 2
+0028            371   _Stage:
+0028            372            ds 2
+002A            373   _moveCar_sloc0_1_0:
+002A            374            ds 4
+002E            375   ;--------------------------------------------------------
+002E            376   ; overlayable items in internal ram 
+002E            377   ;--------------------------------------------------------
+0000            378            rseg    R_OSEG
+0000            379   ;--------------------------------------------------------
+0000            380   ; indirectly addressable internal ram data
+0000            381   ;--------------------------------------------------------
+0000            382            rseg R_ISEG
+0000            383   ;--------------------------------------------------------
+0000            384   ; absolute internal ram data
+0000            385   ;--------------------------------------------------------
+0000            386            DSEG
+0000            387   ;--------------------------------------------------------
+0000            388   ; bit data
+0000            389   ;--------------------------------------------------------
+0000            390            rseg R_BSEG
+0000            391   _pwmCounter_sloc0_1_0:
+0000            392            DBIT    1
+0001            393   ;--------------------------------------------------------
+0001            394   ; paged external ram data
+0001            395   ;--------------------------------------------------------
+0000            396            rseg R_PSEG
+0000            397   ;--------------------------------------------------------
+0000            398   ; external ram data
+0000            399   ;--------------------------------------------------------
+0000            400            rseg R_XSEG
+0000            401   ;--------------------------------------------------------
+0000            402   ; absolute external ram data
+0000            403   ;--------------------------------------------------------
+0000            404            XSEG
+0000            405   ;--------------------------------------------------------
+0000            406   ; external initialized ram data
+0000            407   ;--------------------------------------------------------
+0000            408            rseg R_IXSEG
+0000            409            rseg R_HOME
+0000            410            rseg R_GSINIT
+0000            411            rseg R_CSEG
+0000            412   ;--------------------------------------------------------
+0000            413   ; Reset entry point and interrupt vectors
+0000            414   ;--------------------------------------------------------
+0000            415            CSEG at 0x0000
+0000 020100     416            ljmp    _crt0
+000B            417            CSEG at 0x000b
+000B 020100     418            ljmp    _pwmCounter
+001B            419            CSEG at 0x001b
+001B 020100     420            ljmp    _beaconSignal
+001E            421   ;--------------------------------------------------------
+001E            422   ; global & static initialisations
+001E            423   ;--------------------------------------------------------
+0000            424            rseg R_HOME
+0000            425            rseg R_GSINIT
+0000            426            rseg R_GSINIT
+0000            427   ;--------------------------------------------------------
+0000            428   ; data variables initialization
+0000            429   ;--------------------------------------------------------
+0000            430            rseg R_DINIT
+0000            431   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:66: float ANGLEBUFFER = 20;
+0000 75B000     432            mov     _ANGLEBUFFER,#0x00
+0003 75B100     433            mov     (_ANGLEBUFFER + 1),#0x00
+0006 75B2A0     434            mov     (_ANGLEBUFFER + 2),#0xA0
+0009 75B341     435            mov     (_ANGLEBUFFER + 3),#0x41
+000C            436   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:73: volatile unsigned int pwmCount = 0;
+000C E4         437            clr     a
+000D F570       438            mov     _pwmCount,a
+000F F571       439            mov     (_pwmCount + 1),a
+0011            440   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:74: volatile unsigned int distCount = 0;
+0011 E4         441            clr     a
+0012 F530       442            mov     _distCount,a
+0014 F531       443            mov     (_distCount + 1),a
+0016            444   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:79: volatile unsigned int leftSensor = 0;
+0016 E4         445            clr     a
+0017 F5F0       446            mov     _leftSensor,a
+0019 F5F1       447            mov     (_leftSensor + 1),a
+001B            448   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:80: volatile unsigned int rightSensor = 0;
+001B E4         449            clr     a
+001C F5B0       450            mov     _rightSensor,a
+001E F5B1       451            mov     (_rightSensor + 1),a
+0020            452   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:81: volatile int pwmLeftTemp = 0;
+0020 E4         453            clr     a
+0021 F570       454            mov     _pwmLeftTemp,a
+0023 F571       455            mov     (_pwmLeftTemp + 1),a
+0025            456   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:82: volatile int pwmRightTemp = 0;
+0025 E4         457            clr     a
+0026 F530       458            mov     _pwmRightTemp,a
+0028 F531       459            mov     (_pwmRightTemp + 1),a
+002A            460            ; The linker places a 'ret' at the end of segment R_DINIT.
+002A            461   ;--------------------------------------------------------
+002A            462   ; code
+002A            463   ;--------------------------------------------------------
+0000            464            rseg R_CSEG
+0000            465   ;------------------------------------------------------------
+0000            466   ;Allocation info for local variables in function 'pwmCounter'
+0000            467   ;------------------------------------------------------------
+0000            468   ;------------------------------------------------------------
+0000            469   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:116: void pwmCounter() interrupt 1
+0000            470   ;        -----------------------------------------
+0000            471   ;         function pwmCounter
+0000            472   ;        -----------------------------------------
+0000            473   _pwmCounter:
+0000            474            using   0
+0000 C0C0       475            push    bits
+0002 C0E0       476            push    acc
+0004 C0F0       477            push    b
+0006 C082       478            push    dpl
+0008 C083       479            push    dph
+000A C002       480            push    (0+2)
+000C C003       481            push    (0+3)
+000E C004       482            push    (0+4)
+0010 C005       483            push    (0+5)
+0012 C006       484            push    (0+6)
+0014 C007       485            push    (0+7)
+0016 C000       486            push    (0+0)
+0018 C001       487            push    (0+1)
+001A C0D0       488            push    psw
+001C 75D000     489            mov     psw,#0x00
+001F            490   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:118: if(++pwmCount > 99)
+001F 7401       491            mov     a,#0x01
+0021 2570       492            add     a,_pwmCount
+0023 F570       493            mov     _pwmCount,a
+0025 E4         494            clr     a
+0026 3571       495            addc    a,(_pwmCount + 1)
+0028 F571       496            mov     (_pwmCount + 1),a
+002A C3         497            clr     c
+002B 7463       498            mov     a,#0x63
+002D 9570       499            subb    a,_pwmCount
+002F E4         500            clr     a
+0030 9571       501            subb    a,(_pwmCount + 1)
+0032 5001       502            jnc     L002002?
+0034            503   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:120: pwmCount = 0;
+0034 E4         504            clr     a
+0035 F570       505            mov     _pwmCount,a
+0037 F571       506            mov     (_pwmCount + 1),a
+0039            507   L002002?:
+0039            508   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:124: if (++distCount > 999)
+0039 7401       509            mov     a,#0x01
+003B 2530       510            add     a,_distCount
+003D F530       511            mov     _distCount,a
+003F E4         512            clr     a
+0040 3531       513            addc    a,(_distCount + 1)
+0042 F531       514            mov     (_distCount + 1),a
+0044 C3         515            clr     c
+0045 74E7       516            mov     a,#0xE7
+0047 9530       517            subb    a,_distCount
+0049 7403       518            mov     a,#0x03
+004B 9531       519            subb    a,(_distCount + 1)
+004D 5001       520            jnc     L002004?
+004F            521   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:126: distCount = 0;       
+004F E4         522            clr     a
+0050 F530       523            mov     _distCount,a
+0052 F531       524            mov     (_distCount + 1),a
+0054            525   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:127: Stage = 6;
+0054 75F006     526            mov     _Stage,#0x06
+0057 E4         527            clr     a
+0058 F5F1       528            mov     (_Stage + 1),a
+005A            529   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:128: printf("DL %3d - DR %3d - Stage %3d(%d) - Inst %d\r", distanceLeft, distanceRight, PRESETS[Stage], Stage, instruction);
+005A E5F0       530            mov     a,_Stage
+005C 25E0       531            add     a,acc
+005E FA         532            mov     r2,a
+005F E5F1       533            mov     a,(_Stage + 1)
+0061 33         534            rlc     a
+0062 FB         535            mov     r3,a
+0063 EA         536            mov     a,r2
+0064 24B0       537            add     a,#_PRESETS
+0066 F582       538            mov     dpl,a
+0068 EB         539            mov     a,r3
+0069 3412       540            addc    a,#(_PRESETS >> 8)
+006B F583       541            mov     dph,a
+006D E4         542            clr     a
+006E 93         543            movc    a,@a+dptr
+006F FA         544            mov     r2,a
+0070 A3         545            inc     dptr
+0071 E4         546            clr     a
+0072 93         547            movc    a,@a+dptr
+0073 FB         548            mov     r3,a
+0074 C0B0       549            push    _instruction
+0076 C0B1       550            push    (_instruction + 1)
+0078 C0F0       551            push    _Stage
+007A C0F1       552            push    (_Stage + 1)
+007C C002       553            push    ar2
+007E C003       554            push    ar3
+0080 C0B0       555            push    _distanceRight
+0082 C0B1       556            push    (_distanceRight + 1)
+0084 C0F0       557            push    _distanceLeft
+0086 C0F1       558            push    (_distanceLeft + 1)
+0088 7460       559            mov     a,#__str_0
+008A C0E0       560            push    acc
+008C 7489       561            mov     a,#(__str_0 >> 8)
+008E C0E0       562            push    acc
+0090 7480       563            mov     a,#0x80
+0092 C0E0       564            push    acc
+0094 120100     565            lcall   _printf
+0097 E581       566            mov     a,sp
+0099 24F3       567            add     a,#0xf3
+009B F581       568            mov     sp,a
+009D            569   L002004?:
+009D            570   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:132: if(pwmLeft > 0)
+009D C3         571            clr     c
+009E E4         572            clr     a
+009F 95F0       573            subb    a,_pwmLeft
+00A1 E4         574            clr     a
+00A2 6480       575            xrl     a,#0x80
+00A4 85F1F0     576            mov     b,(_pwmLeft + 1)
+00A7 63F080     577            xrl     b,#0x80
+00AA 95F0       578            subb    a,b
+00AC 5001       579            jnc     L002011?
+00AE            580   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:134: P0_1 = (pwmLeft > pwmCount) ? 0:1;
+00AE AAF0       581            mov     r2,_pwmLeft
+00B0 ABF1       582            mov     r3,(_pwmLeft + 1)
+00B2 C3         583            clr     c
+00B3 E570       584            mov     a,_pwmCount
+00B5 9A         585            subb    a,r2
+00B6 E571       586            mov     a,(_pwmCount + 1)
+00B8 9B         587            subb    a,r3
+00B9 9220       588            mov  _pwmCounter_sloc0_1_0,c
+00BB B3         589            cpl     c
+00BC 9281       590            mov     _P0_1,c
+00BE            591   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:135: P0_0 = 1;
+00BE D280       592            setb    _P0_0
+00C0 8001       593            sjmp    L002012?
+00C2            594   L002011?:
+00C2            595   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:137: else if(pwmLeft < 0)
+00C2 E5F1       596            mov     a,(_pwmLeft + 1)
+00C4 30E7A0     597            jnb     acc.7,L002008?
+00C7            598   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:140: P0_0 = ((-1) * pwmLeft > pwmCount) ? 0:1;
+00C7 C3         599            clr     c
+00C8 E4         600            clr     a
+00C9 95F0       601            subb    a,_pwmLeft
+00CB FA         602            mov     r2,a
+00CC E4         603            clr     a
+00CD 95F1       604            subb    a,(_pwmLeft + 1)
+00CF FB         605            mov     r3,a
+00D0 C3         606            clr     c
+00D1 E570       607            mov     a,_pwmCount
+00D3 9A         608            subb    a,r2
+00D4 E571       609            mov     a,(_pwmCount + 1)
+00D6 9B         610            subb    a,r3
+00D7 9220       611            mov  _pwmCounter_sloc0_1_0,c
+00D9 B3         612            cpl     c
+00DA 9280       613            mov     _P0_0,c
+00DC            614   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:141: P0_1 = 1;
+00DC D281       615            setb    _P0_1
+00DE 8001       616            sjmp    L002012?
+00E0            617   L002008?:
+00E0            618   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:143: else if(pwmLeft == 0)
+00E0 E5F0       619            mov     a,_pwmLeft
+00E2 45F1       620            orl     a,(_pwmLeft + 1)
+00E4 7001       621            jnz     L002012?
+00E6            622   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:145: P0_1 = P0_0 = 1;
+00E6 D280       623            setb    _P0_0
+00E8 A280       624            mov     c,_P0_0
+00EA 9281       625            mov     _P0_1,c
+00EC            626   L002012?:
+00EC            627   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:149: if(pwmRight > 0)
+00EC C3         628            clr     c
+00ED E4         629            clr     a
+00EE 95B0       630            subb    a,_pwmRight
+00F0 E4         631            clr     a
+00F1 6480       632            xrl     a,#0x80
+00F3 85B1F0     633            mov     b,(_pwmRight + 1)
+00F6 63F080     634            xrl     b,#0x80
+00F9 95F0       635            subb    a,b
+00FB 5001       636            jnc     L002019?
+00FD            637   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:151: P0_4 = (pwmRight > pwmCount) ? 0:1;
+00FD AAB0       638            mov     r2,_pwmRight
+00FF ABB1       639            mov     r3,(_pwmRight + 1)
+0101 C3         640            clr     c
+0102 E570       641            mov     a,_pwmCount
+0104 9A         642            subb    a,r2
+0105 E571       643            mov     a,(_pwmCount + 1)
+0107 9B         644            subb    a,r3
+0108 9220       645            mov  _pwmCounter_sloc0_1_0,c
+010A B3         646            cpl     c
+010B 9284       647            mov     _P0_4,c
+010D            648   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:152: P0_3 = 1;
+010D D283       649            setb    _P0_3
+010F 8001       650            sjmp    L002021?
+0111            651   L002019?:
+0111            652   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:154: else if(pwmRight < 0)
+0111 E5B1       653            mov     a,(_pwmRight + 1)
+0113 30E760     654            jnb     acc.7,L002016?
+0116            655   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:157: P0_3 = ((-1) * pwmRight > pwmCount) ? 0:1;
+0116 C3         656            clr     c
+0117 E4         657            clr     a
+0118 95B0       658            subb    a,_pwmRight
+011A FA         659            mov     r2,a
+011B E4         660            clr     a
+011C 95B1       661            subb    a,(_pwmRight + 1)
+011E FB         662            mov     r3,a
+011F C3         663            clr     c
+0120 E570       664            mov     a,_pwmCount
+0122 9A         665            subb    a,r2
+0123 E571       666            mov     a,(_pwmCount + 1)
+0125 9B         667            subb    a,r3
+0126 9220       668            mov  _pwmCounter_sloc0_1_0,c
+0128 B3         669            cpl     c
+0129 9283       670            mov     _P0_3,c
+012B            671   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:158: P0_4 = 1;
+012B D284       672            setb    _P0_4
+012D 8001       673            sjmp    L002021?
+012F            674   L002016?:
+012F            675   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:160: else if(pwmRight == 0)
+012F E5B0       676            mov     a,_pwmRight
+0131 45B1       677            orl     a,(_pwmRight + 1)
+0133 7001       678            jnz     L002021?
+0135            679   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:162: P0_4 = P0_3 = 1;
+0135 D283       680            setb    _P0_3
+0137 A283       681            mov     c,_P0_3
+0139 9284       682            mov     _P0_4,c
+013B            683   L002021?:
+013B D0D0       684            pop     psw
+013D D001       685            pop     (0+1)
+013F D000       686            pop     (0+0)
+0141 D007       687            pop     (0+7)
+0143 D006       688            pop     (0+6)
+0145 D005       689            pop     (0+5)
+0147 D004       690            pop     (0+4)
+0149 D003       691            pop     (0+3)
+014B D002       692            pop     (0+2)
+014D D083       693            pop     dph
+014F D082       694            pop     dpl
+0151 D0F0       695            pop     b
+0153 D0E0       696            pop     acc
+0155 D0C0       697            pop     bits
+0157 32         698            reti
+0158            699   ;------------------------------------------------------------
+0158            700   ;Allocation info for local variables in function 'beaconSignal'
+0158            701   ;------------------------------------------------------------
+0158            702   ;------------------------------------------------------------
+0158            703   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:167: void beaconSignal() interrupt 3
+0158            704   ;        -----------------------------------------
+0158            705   ;         function beaconSignal
+0158            706   ;        -----------------------------------------
+0158            707   _beaconSignal:
+0158 C0C0       708            push    bits
+015A C0E0       709            push    acc
+015C C0F0       710            push    b
+015E C082       711            push    dpl
+0160 C083       712            push    dph
+0162 C002       713            push    (0+2)
+0164 C003       714            push    (0+3)
+0166 C004       715            push    (0+4)
+0168 C005       716            push    (0+5)
+016A C006       717            push    (0+6)
+016C C007       718            push    (0+7)
+016E C000       719            push    (0+0)
+0170 C001       720            push    (0+1)
+0172 C0D0       721            push    psw
+0174 75D000     722            mov     psw,#0x00
+0177            723   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:169: if (GetADC(0) < 10) 
+0177 758200     724            mov     dpl,#0x00
+017A 120100     725            lcall   _GetADC
+017D AA82       726            mov     r2,dpl
+017F AB83       727            mov     r3,dph
+0181 C3         728            clr     c
+0182 EA         729            mov     a,r2
+0183 940A       730            subb    a,#0x0A
+0185 EB         731            mov     a,r3
+0186 9400       732            subb    a,#0x00
+0188 5001       733            jnc     L003006?
+018A            734   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:171: pwmLeft = pwmRight = 0;
+018A E4         735            clr     a
+018B F5B0       736            mov     _pwmRight,a
+018D F5B1       737            mov     (_pwmRight + 1),a
+018F F5F0       738            mov     _pwmLeft,a
+0191 F5F1       739            mov     (_pwmLeft + 1),a
+0193            740   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:173: ET0 = 0;
+0193 C2A9       741            clr     _ET0
+0195            742   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:174: while(GetADC(0) < 10);
+0195            743   L003001?:
+0195 758200     744            mov     dpl,#0x00
+0198 120100     745            lcall   _GetADC
+019B AA82       746            mov     r2,dpl
+019D AB83       747            mov     r3,dph
+019F C3         748            clr     c
+01A0 EA         749            mov     a,r2
+01A1 940A       750            subb    a,#0x0A
+01A3 EB         751            mov     a,r3
+01A4 9400       752            subb    a,#0x00
+01A6 4001       753            jc      L003001?
+01A8            754   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:175: instruction = getSig();
+01A8 120100     755            lcall   _getSig
+01AB 8582B0     756            mov     _instruction,dpl
+01AE 8583B1     757            mov     (_instruction + 1),dph
+01B1            758   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:176: ET0 =  1;
+01B1 D2A9       759            setb    _ET0
+01B3            760   L003006?:
+01B3 D0D0       761            pop     psw
+01B5 D001       762            pop     (0+1)
+01B7 D000       763            pop     (0+0)
+01B9 D007       764            pop     (0+7)
+01BB D006       765            pop     (0+6)
+01BD D005       766            pop     (0+5)
+01BF D004       767            pop     (0+4)
+01C1 D003       768            pop     (0+3)
+01C3 D002       769            pop     (0+2)
+01C5 D083       770            pop     dph
+01C7 D082       771            pop     dpl
+01C9 D0F0       772            pop     b
+01CB D0E0       773            pop     acc
+01CD D0C0       774            pop     bits
+01CF 32         775            reti
+01D0            776   ;------------------------------------------------------------
+01D0            777   ;Allocation info for local variables in function '_c51_external_startup'
+01D0            778   ;------------------------------------------------------------
+01D0            779   ;------------------------------------------------------------
+01D0            780   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:182: unsigned char _c51_external_startup(void)
+01D0            781   ;        -----------------------------------------
+01D0            782   ;         function _c51_external_startup
+01D0            783   ;        -----------------------------------------
+01D0            784   __c51_external_startup:
+01D0            785   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:185: P0M0 = 0;    P0M1 = 0;
+01D0 75E600     786            mov     _P0M0,#0x00
+01D3 75E700     787            mov     _P0M1,#0x00
+01D6            788   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:186: P1M0 = 0;    P1M1 = 0;
+01D6 75D600     789            mov     _P1M0,#0x00
+01D9 75D700     790            mov     _P1M1,#0x00
+01DC            791   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:187: P2M0 = 0;    P2M1 = 0;
+01DC 75CE00     792            mov     _P2M0,#0x00
+01DF 75CF00     793            mov     _P2M1,#0x00
+01E2            794   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:188: P3M0 = 0;    P3M1 = 0;
+01E2 75C600     795            mov     _P3M0,#0x00
+01E5 75C700     796            mov     _P3M1,#0x00
+01E8            797   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:189: AUXR = 0B_0001_0001; // 1152 bytes of internal XDATA, P4.4 is a general purpose I/O
+01E8 758E11     798            mov     _AUXR,#0x11
+01EB            799   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:190: P4M0 = 0;    P4M1 = 0;
+01EB 75BE00     800            mov     _P4M0,#0x00
+01EE 75BF00     801            mov     _P4M1,#0x00
+01F1            802   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:194: PCON |= 0x80;
+01F1 438780     803            orl     _PCON,#0x80
+01F4            804   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:195: SCON = 0x52;
+01F4 759852     805            mov     _SCON,#0x52
+01F7            806   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:196: BDRCON = 0;
+01F7 759B00     807            mov     _BDRCON,#0x00
+01FA            808   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:197: BRL = BRG_VAL;
+01FA 759AFA     809            mov     _BRL,#0xFA
+01FD            810   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:198: BDRCON = BRR | TBCK | RBCK | SPD;
+01FD 759B1E     811            mov     _BDRCON,#0x1E
+0200            812   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:200: TMOD = 0B_0001_0001;         // Timer 0 as 16-bit timer      
+0200 758911     813            mov     _TMOD,#0x11
+0203            814   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:201: TH0 = RH0 = TIMER0_RELOAD_VALUE / 0x100;
+0203 75F4FF     815            mov     _RH0,#0xFF
+0206 758CFF     816            mov     _TH0,#0xFF
+0209            817   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:202: TL0 = RL0 = TIMER0_RELOAD_VALUE % 0x100;
+0209 75F248     818            mov     _RL0,#0x48
+020C 758A48     819            mov     _TL0,#0x48
+020F            820   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:203: TH1 = RH1 = TIMER1_RELOAD_VALUE / 0x100;
+020F 75F5FE     821            mov     _RH1,#0xFE
+0212 758DFE     822            mov     _TH1,#0xFE
+0215            823   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:204: TL1 = RL1 = TIMER1_RELOAD_VALUE % 0x100;
+0215 75F390     824            mov     _RL1,#0x90
+0218 758B90     825            mov     _TL1,#0x90
+021B            826   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:205: TR0 = 1;
+021B D28C       827            setb    _TR0
+021D            828   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:206: TR1 = 0;
+021D C28E       829            clr     _TR1
+021F            830   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:207: ET0 = 1;     // Enable timer 0 interrupt
+021F D2A9       831            setb    _ET0
+0221            832   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:208: EA = 1;      // Enable global interrupts
+0221 D2AF       833            setb    _EA
+0223            834   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:210: tether = 0;
+0223 E4         835            clr     a
+0224 F530       836            mov     _tether,a
+0226 F531       837            mov     (_tether + 1),a
+0228            838   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:211: direction = 1;
+0228 757001     839            mov     _direction,#0x01
+022B E4         840            clr     a
+022C F571       841            mov     (_direction + 1),a
+022E            842   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:212: P2_2 = 1;
+022E D2A2       843            setb    _P2_2
+0230            844   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:213: P2_1 = 1;
+0230 D2A1       845            setb    _P2_1
+0232            846   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:214: P2_0 = 1;
+0232 D2A0       847            setb    _P2_0
+0234            848   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:215: printf(CLEAR_SCREEN);
+0234 7420       849            mov     a,#__str_1
+0236 C0E0       850            push    acc
+0238 748C       851            mov     a,#(__str_1 >> 8)
+023A C0E0       852            push    acc
+023C 7480       853            mov     a,#0x80
+023E C0E0       854            push    acc
+0240 120100     855            lcall   _printf
+0243 1581       856            dec     sp
+0245 1581       857            dec     sp
+0247 1581       858            dec     sp
+0249            859   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:216: return 0;
+0249 758200     860            mov     dpl,#0x00
+024C 22         861            ret
+024D            862   ;------------------------------------------------------------
+024D            863   ;Allocation info for local variables in function 'main'
+024D            864   ;------------------------------------------------------------
+024D            865   ;------------------------------------------------------------
+024D            866   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:220: int main()
+024D            867   ;        -----------------------------------------
+024D            868   ;         function main
+024D            869   ;        -----------------------------------------
+024D            870   _main:
+024D            871   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:223: pwmLeft = 0;
+024D            872   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:224: pwmRight = 0;
+024D            873   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:225: instruction = 0;
+024D E4         874            clr     a
+024E F5F0       875            mov     _pwmLeft,a
+0250 F5F1       876            mov     (_pwmLeft + 1),a
+0252 F5B0       877            mov     _pwmRight,a
+0254 F5B1       878            mov     (_pwmRight + 1),a
+0256 F5B0       879            mov     _instruction,a
+0258 F5B1       880            mov     (_instruction + 1),a
+025A            881   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:230: while (instruction == 0)
+025A            882   L005001?:
+025A E5B0       883            mov     a,_instruction
+025C 45B1       884            orl     a,(_instruction + 1)
+025E 7001       885            jnz     L005001?
+0260            886   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:232: moveCar();
+0260 120100     887            lcall   _moveCar
+0263            888   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:281: return 0;
+0263 8001       889            sjmp    L005001?
+0265            890   ;------------------------------------------------------------
+0265            891   ;Allocation info for local variables in function 'getDistance'
+0265            892   ;------------------------------------------------------------
+0265            893   ;------------------------------------------------------------
+0265            894   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:292: void getDistance() 
+0265            895   ;        -----------------------------------------
+0265            896   ;         function getDistance
+0265            897   ;        -----------------------------------------
+0265            898   _getDistance:
+0265            899   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:294: EA = 0;
+0265 C2AF       900            clr     _EA
+0267            901   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:295: tempL = GetADC(1);
+0267 758201     902            mov     dpl,#0x01
+026A 120100     903            lcall   _GetADC
+026D 858270     904            mov     _tempL,dpl
+0270 858371     905            mov     (_tempL + 1),dph
+0273            906   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:296: if (tempL > 10)
+0273 C3         907            clr     c
+0274 740A       908            mov     a,#0x0A
+0276 9570       909            subb    a,_tempL
+0278 E4         910            clr     a
+0279 6480       911            xrl     a,#0x80
+027B 8571F0     912            mov     b,(_tempL + 1)
+027E 63F080     913            xrl     b,#0x80
+0281 95F0       914            subb    a,b
+0283 5001       915            jnc     L006002?
+0285            916   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:298: distanceLeft = tempL;
+0285 8570F0     917            mov     _distanceLeft,_tempL
+0288 8571F1     918            mov     (_distanceLeft + 1),(_tempL + 1)
+028B            919   L006002?:
+028B            920   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:301: tempR = GetADC(0);
+028B 758200     921            mov     dpl,#0x00
+028E 120100     922            lcall   _GetADC
+0291 858230     923            mov     _tempR,dpl
+0294 858331     924            mov     (_tempR + 1),dph
+0297            925   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:302: if (tempR > 13 && tempR < 250)
+0297 C3         926            clr     c
+0298 740D       927            mov     a,#0x0D
+029A 9530       928            subb    a,_tempR
+029C E4         929            clr     a
+029D 6480       930            xrl     a,#0x80
+029F 8531F0     931            mov     b,(_tempR + 1)
+02A2 63F080     932            xrl     b,#0x80
+02A5 95F0       933            subb    a,b
+02A7 5001       934            jnc     L006006?
+02A9 C3         935            clr     c
+02AA E530       936            mov     a,_tempR
+02AC 94FA       937            subb    a,#0xFA
+02AE E531       938            mov     a,(_tempR + 1)
+02B0 6480       939            xrl     a,#0x80
+02B2 9480       940            subb    a,#0x80
+02B4 5001       941            jnc     L006006?
+02B6            942   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:304: distanceRight = tempR * 1.15;
+02B6 853082     943            mov     dpl,_tempR
+02B9 853183     944            mov     dph,(_tempR + 1)
+02BC 120100     945            lcall   ___sint2fs
+02BF AA82       946            mov     r2,dpl
+02C1 AB83       947            mov     r3,dph
+02C3 ACF0       948            mov     r4,b
+02C5 FD         949            mov     r5,a
+02C6 C002       950            push    ar2
+02C8 C003       951            push    ar3
+02CA C004       952            push    ar4
+02CC C005       953            push    ar5
+02CE 903333     954            mov     dptr,#0x3333
+02D1 75F093     955            mov     b,#0x93
+02D4 743F       956            mov     a,#0x3F
+02D6 120100     957            lcall   ___fsmul
+02D9 AA82       958            mov     r2,dpl
+02DB AB83       959            mov     r3,dph
+02DD ACF0       960            mov     r4,b
+02DF FD         961            mov     r5,a
+02E0 E581       962            mov     a,sp
+02E2 24FC       963            add     a,#0xfc
+02E4 F581       964            mov     sp,a
+02E6 8A82       965            mov     dpl,r2
+02E8 8B83       966            mov     dph,r3
+02EA 8CF0       967            mov     b,r4
+02EC ED         968            mov     a,r5
+02ED 120100     969            lcall   ___fs2sint
+02F0 8582B0     970            mov     _distanceRight,dpl
+02F3 8583B1     971            mov     (_distanceRight + 1),dph
+02F6            972   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:305: ANGLEBUFFER = 7;
+02F6 75B000     973            mov     _ANGLEBUFFER,#0x00
+02F9 75B100     974            mov     (_ANGLEBUFFER + 1),#0x00
+02FC 75B2E0     975            mov     (_ANGLEBUFFER + 2),#0xE0
+02FF 75B340     976            mov     (_ANGLEBUFFER + 3),#0x40
+0302 8001       977            sjmp    L006007?
+0304            978   L006006?:
+0304            979   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:307: else if(tempR >= 250)
+0304 C3         980            clr     c
+0305 E530       981            mov     a,_tempR
+0307 94FA       982            subb    a,#0xFA
+0309 E531       983            mov     a,(_tempR + 1)
+030B 6480       984            xrl     a,#0x80
+030D 9480       985            subb    a,#0x80
+030F 4001       986            jc      L006007?
+0311            987   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:309: distanceRight = tempR * 1.05;
+0311 853082     988            mov     dpl,_tempR
+0314 853183     989            mov     dph,(_tempR + 1)
+0317 120100     990            lcall   ___sint2fs
+031A AA82       991            mov     r2,dpl
+031C AB83       992            mov     r3,dph
+031E ACF0       993            mov     r4,b
+0320 FD         994            mov     r5,a
+0321 C002       995            push    ar2
+0323 C003       996            push    ar3
+0325 C004       997            push    ar4
+0327 C005       998            push    ar5
+0329 906666     999            mov     dptr,#0x6666
+032C 75F086    1000            mov     b,#0x86
+032F 743F      1001            mov     a,#0x3F
+0331 120100    1002            lcall   ___fsmul
+0334 AA82      1003            mov     r2,dpl
+0336 AB83      1004            mov     r3,dph
+0338 ACF0      1005            mov     r4,b
+033A FD        1006            mov     r5,a
+033B E581      1007            mov     a,sp
+033D 24FC      1008            add     a,#0xfc
+033F F581      1009            mov     sp,a
+0341 8A82      1010            mov     dpl,r2
+0343 8B83      1011            mov     dph,r3
+0345 8CF0      1012            mov     b,r4
+0347 ED        1013            mov     a,r5
+0348 120100    1014            lcall   ___fs2sint
+034B 8582B0    1015            mov     _distanceRight,dpl
+034E 8583B1    1016            mov     (_distanceRight + 1),dph
+0351           1017   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:310: ANGLEBUFFER = 10;
+0351 75B000    1018            mov     _ANGLEBUFFER,#0x00
+0354 75B100    1019            mov     (_ANGLEBUFFER + 1),#0x00
+0357 75B220    1020            mov     (_ANGLEBUFFER + 2),#0x20
+035A 75B341    1021            mov     (_ANGLEBUFFER + 3),#0x41
+035D           1022   L006007?:
+035D           1023   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:312: EA = 1;
+035D D2AF      1024            setb    _EA
+035F 22        1025            ret
+0360           1026   ;------------------------------------------------------------
+0360           1027   ;Allocation info for local variables in function 'moveCar'
+0360           1028   ;------------------------------------------------------------
+0360           1029   ;sloc0                     Allocated with name '_moveCar_sloc0_1_0'
+0360           1030   ;------------------------------------------------------------
+0360           1031   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:320: void moveCar()
+0360           1032   ;        -----------------------------------------
+0360           1033   ;         function moveCar
+0360           1034   ;        -----------------------------------------
+0360           1035   _moveCar:
+0360           1036   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:332: good = 0;
+0360 E4        1037            clr     a
+0361 F530      1038            mov     _good,a
+0363 F531      1039            mov     (_good + 1),a
+0365           1040   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:334: getDistance();
+0365 120100    1041            lcall   _getDistance
+0368           1042   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:335: if(distanceLeft==0 && distanceRight==0)
+0368 E5F0      1043            mov     a,_distanceLeft
+036A 45F1      1044            orl     a,(_distanceLeft + 1)
+036C 7001      1045            jnz     L007017?
+036E E5B0      1046            mov     a,_distanceRight
+0370 45B1      1047            orl     a,(_distanceRight + 1)
+0372           1048   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:337: pwmLeft=pwmRight=0;
+0372 7001      1049            jnz     L007017?
+0374 F5B0      1050            mov     _pwmRight,a
+0376 F5B1      1051            mov     (_pwmRight + 1),a
+0378 F5F0      1052            mov     _pwmLeft,a
+037A F5F1      1053            mov     (_pwmLeft + 1),a
+037C           1054   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:338: P2_2=0;
+037C C2A2      1055            clr     _P2_2
+037E           1056   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:339: P2_1=1;
+037E D2A1      1057            setb    _P2_1
+0380           1058   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:340: P2_0=1;
+0380 D2A0      1059            setb    _P2_0
+0382 22        1060            ret
+0383           1061   L007017?:
+0383           1062   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:345: if(distanceRight > (distanceLeft+ANGLEBUFFER))
+0383 85F082    1063            mov     dpl,_distanceLeft
+0386 85F183    1064            mov     dph,(_distanceLeft + 1)
+0389 120100    1065            lcall   ___sint2fs
+038C AA82      1066            mov     r2,dpl
+038E AB83      1067            mov     r3,dph
+0390 ACF0      1068            mov     r4,b
+0392 FD        1069            mov     r5,a
+0393 C0B0      1070            push    _ANGLEBUFFER
+0395 C0B1      1071            push    (_ANGLEBUFFER + 1)
+0397 C0B2      1072            push    (_ANGLEBUFFER + 2)
+0399 C0B3      1073            push    (_ANGLEBUFFER + 3)
+039B 8A82      1074            mov     dpl,r2
+039D 8B83      1075            mov     dph,r3
+039F 8CF0      1076            mov     b,r4
+03A1 ED        1077            mov     a,r5
+03A2 120100    1078            lcall   ___fsadd
+03A5 AA82      1079            mov     r2,dpl
+03A7 AB83      1080            mov     r3,dph
+03A9 ACF0      1081            mov     r4,b
+03AB FD        1082            mov     r5,a
+03AC E581      1083            mov     a,sp
+03AE 24FC      1084            add     a,#0xfc
+03B0 F581      1085            mov     sp,a
+03B2 85B082    1086            mov     dpl,_distanceRight
+03B5 85B183    1087            mov     dph,(_distanceRight + 1)
+03B8 C002      1088            push    ar2
+03BA C003      1089            push    ar3
+03BC C004      1090            push    ar4
+03BE C005      1091            push    ar5
+03C0 120100    1092            lcall   ___sint2fs
+03C3 120100    1093            lcall   ___fsgt
+03C6 AA82      1094            mov     r2,dpl
+03C8 E581      1095            mov     a,sp
+03CA 24FC      1096            add     a,#0xfc
+03CC F581      1097            mov     sp,a
+03CE EA        1098            mov     a,r2
+03CF 6001      1099            jz      L007005?
+03D1           1100   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:347: pwmLeft = (-TURNSPEED);
+03D1 901370    1101            mov     dptr,#_TURNSPEED
+03D4 E4        1102            clr     a
+03D5 93        1103            movc    a,@a+dptr
+03D6 FA        1104            mov     r2,a
+03D7 7401      1105            mov     a,#0x01
+03D9 93        1106            movc    a,@a+dptr
+03DA FB        1107            mov     r3,a
+03DB C3        1108            clr     c
+03DC E4        1109            clr     a
+03DD 9A        1110            subb    a,r2
+03DE F5F0      1111            mov     _pwmLeft,a
+03E0 E4        1112            clr     a
+03E1 9B        1113            subb    a,r3
+03E2 F5F1      1114            mov     (_pwmLeft + 1),a
+03E4           1115   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:348: pwmRight= (TURNSPEED);
+03E4 8AB0      1116            mov     _pwmRight,r2
+03E6 8BB1      1117            mov     (_pwmRight + 1),r3
+03E8 020100    1118            ljmp    L007006?
+03EB           1119   L007005?:
+03EB           1120   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:350: else if(distanceLeft > (distanceRight+ANGLEBUFFER))
+03EB 85B082    1121            mov     dpl,_distanceRight
+03EE 85B183    1122            mov     dph,(_distanceRight + 1)
+03F1 120100    1123            lcall   ___sint2fs
+03F4 AA82      1124            mov     r2,dpl
+03F6 AB83      1125            mov     r3,dph
+03F8 ACF0      1126            mov     r4,b
+03FA FD        1127            mov     r5,a
+03FB C0B0      1128            push    _ANGLEBUFFER
+03FD C0B1      1129            push    (_ANGLEBUFFER + 1)
+03FF C0B2      1130            push    (_ANGLEBUFFER + 2)
+0401 C0B3      1131            push    (_ANGLEBUFFER + 3)
+0403 8A82      1132            mov     dpl,r2
+0405 8B83      1133            mov     dph,r3
+0407 8CF0      1134            mov     b,r4
+0409 ED        1135            mov     a,r5
+040A 120100    1136            lcall   ___fsadd
+040D AA82      1137            mov     r2,dpl
+040F AB83      1138            mov     r3,dph
+0411 ACF0      1139            mov     r4,b
+0413 FD        1140            mov     r5,a
+0414 E581      1141            mov     a,sp
+0416 24FC      1142            add     a,#0xfc
+0418 F581      1143            mov     sp,a
+041A 85F082    1144            mov     dpl,_distanceLeft
+041D 85F183    1145            mov     dph,(_distanceLeft + 1)
+0420 C002      1146            push    ar2
+0422 C003      1147            push    ar3
+0424 C004      1148            push    ar4
+0426 C005      1149            push    ar5
+0428 120100    1150            lcall   ___sint2fs
+042B 120100    1151            lcall   ___fsgt
+042E AA82      1152            mov     r2,dpl
+0430 E581      1153            mov     a,sp
+0432 24FC      1154            add     a,#0xfc
+0434 F581      1155            mov     sp,a
+0436 EA        1156            mov     a,r2
+0437 6001      1157            jz      L007002?
+0439           1158   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:352: pwmLeft = (TURNSPEED);
+0439 901370    1159            mov     dptr,#_TURNSPEED
+043C E4        1160            clr     a
+043D 93        1161            movc    a,@a+dptr
+043E FA        1162            mov     r2,a
+043F 7401      1163            mov     a,#0x01
+0441 93        1164            movc    a,@a+dptr
+0442 FB        1165            mov     r3,a
+0443 8AF0      1166            mov     _pwmLeft,r2
+0445 8BF1      1167            mov     (_pwmLeft + 1),r3
+0447           1168   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:353: pwmRight = (-TURNSPEED);
+0447 C3        1169            clr     c
+0448 E4        1170            clr     a
+0449 9A        1171            subb    a,r2
+044A F5B0      1172            mov     _pwmRight,a
+044C E4        1173            clr     a
+044D 9B        1174            subb    a,r3
+044E F5B1      1175            mov     (_pwmRight + 1),a
+0450 8001      1176            sjmp    L007006?
+0452           1177   L007002?:
+0452           1178   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:357: good++;
+0452 7401      1179            mov     a,#0x01
+0454 2530      1180            add     a,_good
+0456 F530      1181            mov     _good,a
+0458 E4        1182            clr     a
+0459 3531      1183            addc    a,(_good + 1)
+045B F531      1184            mov     (_good + 1),a
+045D           1185   L007006?:
+045D           1186   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:360: getDistance();
+045D 120100    1187            lcall   _getDistance
+0460           1188   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:362: if ((distanceRight+DISTANCEBUFFER) < PRESETS[Stage])
+0460 901330    1189            mov     dptr,#_DISTANCEBUFFER
+0463 E4        1190            clr     a
+0464 93        1191            movc    a,@a+dptr
+0465 FA        1192            mov     r2,a
+0466 7401      1193            mov     a,#0x01
+0468 93        1194            movc    a,@a+dptr
+0469 FB        1195            mov     r3,a
+046A 7402      1196            mov     a,#0x02
+046C 93        1197            movc    a,@a+dptr
+046D FC        1198            mov     r4,a
+046E 7403      1199            mov     a,#0x03
+0470 93        1200            movc    a,@a+dptr
+0471 FD        1201            mov     r5,a
+0472 85B082    1202            mov     dpl,_distanceRight
+0475 85B183    1203            mov     dph,(_distanceRight + 1)
+0478 C002      1204            push    ar2
+047A C003      1205            push    ar3
+047C C004      1206            push    ar4
+047E C005      1207            push    ar5
+0480 120100    1208            lcall   ___sint2fs
+0483 AE82      1209            mov     r6,dpl
+0485 AF83      1210            mov     r7,dph
+0487 A8F0      1211            mov     r0,b
+0489 F9        1212            mov     r1,a
+048A D005      1213            pop     ar5
+048C D004      1214            pop     ar4
+048E D003      1215            pop     ar3
+0490 D002      1216            pop     ar2
+0492 C002      1217            push    ar2
+0494 C003      1218            push    ar3
+0496 C004      1219            push    ar4
+0498 C005      1220            push    ar5
+049A C002      1221            push    ar2
+049C C003      1222            push    ar3
+049E C004      1223            push    ar4
+04A0 C005      1224            push    ar5
+04A2 8E82      1225            mov     dpl,r6
+04A4 8F83      1226            mov     dph,r7
+04A6 88F0      1227            mov     b,r0
+04A8 E9        1228            mov     a,r1
+04A9 120100    1229            lcall   ___fsadd
+04AC 8582D0    1230            mov     _moveCar_sloc0_1_0,dpl
+04AF 8583D1    1231            mov     (_moveCar_sloc0_1_0 + 1),dph
+04B2 85F0D2    1232            mov     (_moveCar_sloc0_1_0 + 2),b
+04B5 F5D3      1233            mov     (_moveCar_sloc0_1_0 + 3),a
+04B7 E581      1234            mov     a,sp
+04B9 24FC      1235            add     a,#0xfc
+04BB F581      1236            mov     sp,a
+04BD E5F0      1237            mov     a,_Stage
+04BF 25E0      1238            add     a,acc
+04C1 FE        1239            mov     r6,a
+04C2 E5F1      1240            mov     a,(_Stage + 1)
+04C4 33        1241            rlc     a
+04C5 FF        1242            mov     r7,a
+04C6 EE        1243            mov     a,r6
+04C7 24B0      1244            add     a,#_PRESETS
+04C9 F582      1245            mov     dpl,a
+04CB EF        1246            mov     a,r7
+04CC 3412      1247            addc    a,#(_PRESETS >> 8)
+04CE F583      1248            mov     dph,a
+04D0 E4        1249            clr     a
+04D1 93        1250            movc    a,@a+dptr
+04D2 FE        1251            mov     r6,a
+04D3 A3        1252            inc     dptr
+04D4 E4        1253            clr     a
+04D5 93        1254            movc    a,@a+dptr
+04D6 FF        1255            mov     r7,a
+04D7 8E82      1256            mov     dpl,r6
+04D9 8F83      1257            mov     dph,r7
+04DB 120100    1258            lcall   ___sint2fs
+04DE AE82      1259            mov     r6,dpl
+04E0 AF83      1260            mov     r7,dph
+04E2 A8F0      1261            mov     r0,b
+04E4 F9        1262            mov     r1,a
+04E5 C006      1263            push    ar6
+04E7 C007      1264            push    ar7
+04E9 C000      1265            push    ar0
+04EB C001      1266            push    ar1
+04ED 85D082    1267            mov     dpl,_moveCar_sloc0_1_0
+04F0 85D183    1268            mov     dph,(_moveCar_sloc0_1_0 + 1)
+04F3 85D2F0    1269            mov     b,(_moveCar_sloc0_1_0 + 2)
+04F6 E5D3      1270            mov     a,(_moveCar_sloc0_1_0 + 3)
+04F8 120100    1271            lcall   ___fslt
+04FB AE82      1272            mov     r6,dpl
+04FD E581      1273            mov     a,sp
+04FF 24FC      1274            add     a,#0xfc
+0501 F581      1275            mov     sp,a
+0503 D005      1276            pop     ar5
+0505 D004      1277            pop     ar4
+0507 D003      1278            pop     ar3
+0509 D002      1279            pop     ar2
+050B EE        1280            mov     a,r6
+050C 6001      1281            jz      L007011?
+050E           1282   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:364: pwmLeft = (MOVESPEED);
+050E 9013B0    1283            mov     dptr,#_MOVESPEED
+0511 E4        1284            clr     a
+0512 93        1285            movc    a,@a+dptr
+0513 FE        1286            mov     r6,a
+0514 7401      1287            mov     a,#0x01
+0516 93        1288            movc    a,@a+dptr
+0517 FF        1289            mov     r7,a
+0518 8EF0      1290            mov     _pwmLeft,r6
+051A 8FF1      1291            mov     (_pwmLeft + 1),r7
+051C           1292   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:365: pwmRight = (MOVESPEED);
+051C 8EB0      1293            mov     _pwmRight,r6
+051E 8FB1      1294            mov     (_pwmRight + 1),r7
+0520 020100    1295            ljmp    L007012?
+0523           1296   L007011?:
+0523           1297   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:368: else if (distanceRight > (PRESETS[Stage]+DISTANCEBUFFER))
+0523 E5F0      1298            mov     a,_Stage
+0525 25E0      1299            add     a,acc
+0527 FE        1300            mov     r6,a
+0528 E5F1      1301            mov     a,(_Stage + 1)
+052A 33        1302            rlc     a
+052B FF        1303            mov     r7,a
+052C EE        1304            mov     a,r6
+052D 24B0      1305            add     a,#_PRESETS
+052F F582      1306            mov     dpl,a
+0531 EF        1307            mov     a,r7
+0532 3412      1308            addc    a,#(_PRESETS >> 8)
+0534 F583      1309            mov     dph,a
+0536 E4        1310            clr     a
+0537 93        1311            movc    a,@a+dptr
+0538 FE        1312            mov     r6,a
+0539 A3        1313            inc     dptr
+053A E4        1314            clr     a
+053B 93        1315            movc    a,@a+dptr
+053C FF        1316            mov     r7,a
+053D 8E82      1317            mov     dpl,r6
+053F 8F83      1318            mov     dph,r7
+0541 C002      1319            push    ar2
+0543 C003      1320            push    ar3
+0545 C004      1321            push    ar4
+0547 C005      1322            push    ar5
+0549 120100    1323            lcall   ___sint2fs
+054C 120100    1324            lcall   ___fsadd
+054F AA82      1325            mov     r2,dpl
+0551 AB83      1326            mov     r3,dph
+0553 ACF0      1327            mov     r4,b
+0555 FD        1328            mov     r5,a
+0556 E581      1329            mov     a,sp
+0558 24FC      1330            add     a,#0xfc
+055A F581      1331            mov     sp,a
+055C 85B082    1332            mov     dpl,_distanceRight
+055F 85B183    1333            mov     dph,(_distanceRight + 1)
+0562 C002      1334            push    ar2
+0564 C003      1335            push    ar3
+0566 C004      1336            push    ar4
+0568 C005      1337            push    ar5
+056A 120100    1338            lcall   ___sint2fs
+056D 120100    1339            lcall   ___fsgt
+0570 AA82      1340            mov     r2,dpl
+0572 E581      1341            mov     a,sp
+0574 24FC      1342            add     a,#0xfc
+0576 F581      1343            mov     sp,a
+0578 EA        1344            mov     a,r2
+0579 6001      1345            jz      L007008?
+057B           1346   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:370: pwmLeft = (-MOVESPEED);
+057B 9013B0    1347            mov     dptr,#_MOVESPEED
+057E E4        1348            clr     a
+057F 93        1349            movc    a,@a+dptr
+0580 FA        1350            mov     r2,a
+0581 7401      1351            mov     a,#0x01
+0583 93        1352            movc    a,@a+dptr
+0584 FB        1353            mov     r3,a
+0585 C3        1354            clr     c
+0586 E4        1355            clr     a
+0587 9A        1356            subb    a,r2
+0588 FA        1357            mov     r2,a
+0589 E4        1358            clr     a
+058A 9B        1359            subb    a,r3
+058B FB        1360            mov     r3,a
+058C 8AF0      1361            mov     _pwmLeft,r2
+058E 8BF1      1362            mov     (_pwmLeft + 1),r3
+0590           1363   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:371: pwmRight = (-MOVESPEED);
+0590 8AB0      1364            mov     _pwmRight,r2
+0592 8BB1      1365            mov     (_pwmRight + 1),r3
+0594 8001      1366            sjmp    L007012?
+0596           1367   L007008?:
+0596           1368   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:375: good++;
+0596 7401      1369            mov     a,#0x01
+0598 2530      1370            add     a,_good
+059A F530      1371            mov     _good,a
+059C E4        1372            clr     a
+059D 3531      1373            addc    a,(_good + 1)
+059F F531      1374            mov     (_good + 1),a
+05A1           1375   L007012?:
+05A1           1376   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:378: if (good < 2)
+05A1 C3        1377            clr     c
+05A2 E530      1378            mov     a,_good
+05A4 9402      1379            subb    a,#0x02
+05A6 E531      1380            mov     a,(_good + 1)
+05A8 6480      1381            xrl     a,#0x80
+05AA 9480      1382            subb    a,#0x80
+05AC 5001      1383            jnc     L007014?
+05AE           1384   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:380: P2_2=1;
+05AE D2A2      1385            setb    _P2_2
+05B0           1386   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:381: P2_1=0; // yellow
+05B0 C2A1      1387            clr     _P2_1
+05B2           1388   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:382: P2_0=1;
+05B2 D2A0      1389            setb    _P2_0
+05B4 22        1390            ret
+05B5           1391   L007014?:
+05B5           1392   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:387: P2_2=1;
+05B5 D2A2      1393            setb    _P2_2
+05B7           1394   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:388: P2_1=1; // blue
+05B7 D2A1      1395            setb    _P2_1
+05B9           1396   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:389: P2_0=0;
+05B9 C2A0      1397            clr     _P2_0
+05BB           1398   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:393: return;
+05BB 22        1399            ret
+05BC           1400   ;------------------------------------------------------------
+05BC           1401   ;Allocation info for local variables in function 'uTurn'
+05BC           1402   ;------------------------------------------------------------
+05BC           1403   ;------------------------------------------------------------
+05BC           1404   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:397: void uTurn()
+05BC           1405   ;        -----------------------------------------
+05BC           1406   ;         function uTurn
+05BC           1407   ;        -----------------------------------------
+05BC           1408   _uTurn:
+05BC           1409   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:399: P2_2=1;
+05BC D2A2      1410            setb    _P2_2
+05BE           1411   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:400: P2_1=0; // yellow
+05BE C2A1      1412            clr     _P2_1
+05C0           1413   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:401: P2_0=1;
+05C0 D2A0      1414            setb    _P2_0
+05C2           1415   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:403: pwmLeft = TURNSPEED;
+05C2 901370    1416            mov     dptr,#_TURNSPEED
+05C5 E4        1417            clr     a
+05C6 93        1418            movc    a,@a+dptr
+05C7 FA        1419            mov     r2,a
+05C8 7401      1420            mov     a,#0x01
+05CA 93        1421            movc    a,@a+dptr
+05CB FB        1422            mov     r3,a
+05CC 8AF0      1423            mov     _pwmLeft,r2
+05CE 8BF1      1424            mov     (_pwmLeft + 1),r3
+05D0           1425   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:404: pwmRight = (-TURNSPEED);
+05D0 C3        1426            clr     c
+05D1 E4        1427            clr     a
+05D2 9A        1428            subb    a,r2
+05D3 F5B0      1429            mov     _pwmRight,a
+05D5 E4        1430            clr     a
+05D6 9B        1431            subb    a,r3
+05D7 F5B1      1432            mov     (_pwmRight + 1),a
+05D9           1433   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:405: wait1s();
+05D9 120100    1434            lcall   _wait1s
+05DC           1435   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:406: wait1s();
+05DC 120100    1436            lcall   _wait1s
+05DF           1437   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:407: P2_2=1;
+05DF D2A2      1438            setb    _P2_2
+05E1           1439   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:408: P2_1=1; // blue
+05E1 D2A1      1440            setb    _P2_1
+05E3           1441   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:409: P2_0=0;
+05E3 C2A0      1442            clr     _P2_0
+05E5           1443   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:411: pwmLeft = pwmRight = 0;
+05E5 E4        1444            clr     a
+05E6 F5B0      1445            mov     _pwmRight,a
+05E8 F5B1      1446            mov     (_pwmRight + 1),a
+05EA F5F0      1447            mov     _pwmLeft,a
+05EC F5F1      1448            mov     (_pwmLeft + 1),a
+05EE           1449   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:412: return;
+05EE 22        1450            ret
+05EF           1451   ;------------------------------------------------------------
+05EF           1452   ;Allocation info for local variables in function 'parallelPark'
+05EF           1453   ;------------------------------------------------------------
+05EF           1454   ;------------------------------------------------------------
+05EF           1455   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:416: void parallelPark()
+05EF           1456   ;        -----------------------------------------
+05EF           1457   ;         function parallelPark
+05EF           1458   ;        -----------------------------------------
+05EF           1459   _parallelPark:
+05EF           1460   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:418: P2_2=1;
+05EF D2A2      1461            setb    _P2_2
+05F1           1462   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:419: P2_1=0; // yellow
+05F1 C2A1      1463            clr     _P2_1
+05F3           1464   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:420: P2_0=1;
+05F3 D2A0      1465            setb    _P2_0
+05F5           1466   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:423: pwmLeft = pwmRight = (-MOVESPEED);
+05F5 9013B0    1467            mov     dptr,#_MOVESPEED
+05F8 E4        1468            clr     a
+05F9 93        1469            movc    a,@a+dptr
+05FA FA        1470            mov     r2,a
+05FB 7401      1471            mov     a,#0x01
+05FD 93        1472            movc    a,@a+dptr
+05FE FB        1473            mov     r3,a
+05FF C3        1474            clr     c
+0600 E4        1475            clr     a
+0601 9A        1476            subb    a,r2
+0602 FA        1477            mov     r2,a
+0603 E4        1478            clr     a
+0604 9B        1479            subb    a,r3
+0605 FB        1480            mov     r3,a
+0606 8AB0      1481            mov     _pwmRight,r2
+0608 8BB1      1482            mov     (_pwmRight + 1),r3
+060A 8AF0      1483            mov     _pwmLeft,r2
+060C 8BF1      1484            mov     (_pwmLeft + 1),r3
+060E           1485   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:424: waiths();
+060E 120100    1486            lcall   _waiths
+0611           1487   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:427: pwmLeft = (-TURNSPEED);
+0611 901370    1488            mov     dptr,#_TURNSPEED
+0614 E4        1489            clr     a
+0615 93        1490            movc    a,@a+dptr
+0616 FA        1491            mov     r2,a
+0617 7401      1492            mov     a,#0x01
+0619 93        1493            movc    a,@a+dptr
+061A FB        1494            mov     r3,a
+061B C3        1495            clr     c
+061C E4        1496            clr     a
+061D 9A        1497            subb    a,r2
+061E F5F0      1498            mov     _pwmLeft,a
+0620 E4        1499            clr     a
+0621 9B        1500            subb    a,r3
+0622 F5F1      1501            mov     (_pwmLeft + 1),a
+0624           1502   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:428: pwmRight = TURNSPEED;
+0624 8AB0      1503            mov     _pwmRight,r2
+0626 8BB1      1504            mov     (_pwmRight + 1),r3
+0628           1505   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:429: waiths();
+0628 120100    1506            lcall   _waiths
+062B           1507   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:432: pwmLeft = pwmRight = (-MOVESPEED);
+062B 9013B0    1508            mov     dptr,#_MOVESPEED
+062E E4        1509            clr     a
+062F 93        1510            movc    a,@a+dptr
+0630 FA        1511            mov     r2,a
+0631 7401      1512            mov     a,#0x01
+0633 93        1513            movc    a,@a+dptr
+0634 FB        1514            mov     r3,a
+0635 C3        1515            clr     c
+0636 E4        1516            clr     a
+0637 9A        1517            subb    a,r2
+0638 FA        1518            mov     r2,a
+0639 E4        1519            clr     a
+063A 9B        1520            subb    a,r3
+063B FB        1521            mov     r3,a
+063C 8AB0      1522            mov     _pwmRight,r2
+063E 8BB1      1523            mov     (_pwmRight + 1),r3
+0640 8AF0      1524            mov     _pwmLeft,r2
+0642 8BF1      1525            mov     (_pwmLeft + 1),r3
+0644           1526   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:433: waiths();
+0644 120100    1527            lcall   _waiths
+0647           1528   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:436: pwmLeft = TURNSPEED;
+0647 901370    1529            mov     dptr,#_TURNSPEED
+064A E4        1530            clr     a
+064B 93        1531            movc    a,@a+dptr
+064C FA        1532            mov     r2,a
+064D 7401      1533            mov     a,#0x01
+064F 93        1534            movc    a,@a+dptr
+0650 FB        1535            mov     r3,a
+0651 8AF0      1536            mov     _pwmLeft,r2
+0653 8BF1      1537            mov     (_pwmLeft + 1),r3
+0655           1538   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:437: pwmRight = (-TURNSPEED);
+0655 C3        1539            clr     c
+0656 E4        1540            clr     a
+0657 9A        1541            subb    a,r2
+0658 F5B0      1542            mov     _pwmRight,a
+065A E4        1543            clr     a
+065B 9B        1544            subb    a,r3
+065C F5B1      1545            mov     (_pwmRight + 1),a
+065E           1546   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:438: waiths();
+065E 120100    1547            lcall   _waiths
+0661           1548   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:441: pwmLeft = pwmRight = (-MOVESPEED);
+0661 9013B0    1549            mov     dptr,#_MOVESPEED
+0664 E4        1550            clr     a
+0665 93        1551            movc    a,@a+dptr
+0666 FA        1552            mov     r2,a
+0667 7401      1553            mov     a,#0x01
+0669 93        1554            movc    a,@a+dptr
+066A FB        1555            mov     r3,a
+066B C3        1556            clr     c
+066C E4        1557            clr     a
+066D 9A        1558            subb    a,r2
+066E FA        1559            mov     r2,a
+066F E4        1560            clr     a
+0670 9B        1561            subb    a,r3
+0671 FB        1562            mov     r3,a
+0672 8AB0      1563            mov     _pwmRight,r2
+0674 8BB1      1564            mov     (_pwmRight + 1),r3
+0676 8AF0      1565            mov     _pwmLeft,r2
+0678 8BF1      1566            mov     (_pwmLeft + 1),r3
+067A           1567   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:442: waiths();
+067A 020100    1568            ljmp    _waiths
+067D           1569   ;------------------------------------------------------------
+067D           1570   ;Allocation info for local variables in function 'getSig'
+067D           1571   ;------------------------------------------------------------
+067D           1572   ;j                         Allocated to registers r4 r5 
+067D           1573   ;val                       Allocated to registers r2 r3 
+067D           1574   ;v                         Allocated to registers r6 r7 r0 r1 
+067D           1575   ;------------------------------------------------------------
+067D           1576   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:446: unsigned int getSig()
+067D           1577   ;        -----------------------------------------
+067D           1578   ;         function getSig
+067D           1579   ;        -----------------------------------------
+067D           1580   _getSig:
+067D           1581   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:452: val = 0;
+067D 7A00      1582            mov     r2,#0x00
+067F 7B00      1583            mov     r3,#0x00
+0681           1584   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:453: wait_one_and_half_bit_time();
+0681 C002      1585            push    ar2
+0683 C003      1586            push    ar3
+0685 120100    1587            lcall   _wait_one_and_half_bit_time
+0688 D003      1588            pop     ar3
+068A D002      1589            pop     ar2
+068C           1590   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:456: for (j = 0; j < 3; j++) {
+068C 7C00      1591            mov     r4,#0x00
+068E 7D00      1592            mov     r5,#0x00
+0690           1593   L010001?:
+0690 C3        1594            clr     c
+0691 EC        1595            mov     a,r4
+0692 9403      1596            subb    a,#0x03
+0694 ED        1597            mov     a,r5
+0695 9400      1598            subb    a,#0x00
+0697 5001      1599            jnc     L010004?
+0699           1600   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:457: v = GetADC(0);
+0699 758200    1601            mov     dpl,#0x00
+069C C002      1602            push    ar2
+069E C003      1603            push    ar3
+06A0 C004      1604            push    ar4
+06A2 C005      1605            push    ar5
+06A4 120100    1606            lcall   _GetADC
+06A7 120100    1607            lcall   ___uint2fs
+06AA AE82      1608            mov     r6,dpl
+06AC AF83      1609            mov     r7,dph
+06AE A8F0      1610            mov     r0,b
+06B0 F9        1611            mov     r1,a
+06B1           1612   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:458: val |= (v > 10) ? (0x01 << j) : 0x00;
+06B1 E4        1613            clr     a
+06B2 C0E0      1614            push    acc
+06B4 C0E0      1615            push    acc
+06B6 7420      1616            mov     a,#0x20
+06B8 C0E0      1617            push    acc
+06BA 7441      1618            mov     a,#0x41
+06BC C0E0      1619            push    acc
+06BE 8E82      1620            mov     dpl,r6
+06C0 8F83      1621            mov     dph,r7
+06C2 88F0      1622            mov     b,r0
+06C4 E9        1623            mov     a,r1
+06C5 120100    1624            lcall   ___fsgt
+06C8 AE82      1625            mov     r6,dpl
+06CA E581      1626            mov     a,sp
+06CC 24FC      1627            add     a,#0xfc
+06CE F581      1628            mov     sp,a
+06D0 D005      1629            pop     ar5
+06D2 D004      1630            pop     ar4
+06D4 D003      1631            pop     ar3
+06D6 D002      1632            pop     ar2
+06D8 EE        1633            mov     a,r6
+06D9 6001      1634            jz      L010007?
+06DB 8CF0      1635            mov     b,r4
+06DD 05F0      1636            inc     b
+06DF 7E01      1637            mov     r6,#0x01
+06E1 7F00      1638            mov     r7,#0x00
+06E3 8001      1639            sjmp    L010016?
+06E5           1640   L010015?:
+06E5 EE        1641            mov     a,r6
+06E6 2E        1642            add     a,r6
+06E7 FE        1643            mov     r6,a
+06E8 EF        1644            mov     a,r7
+06E9 33        1645            rlc     a
+06EA FF        1646            mov     r7,a
+06EB           1647   L010016?:
+06EB D5F028    1648            djnz    b,L010015?
+06EE 8001      1649            sjmp    L010008?
+06F0           1650   L010007?:
+06F0 7E00      1651            mov     r6,#0x00
+06F2 7F00      1652            mov     r7,#0x00
+06F4           1653   L010008?:
+06F4 EE        1654            mov     a,r6
+06F5 4202      1655            orl     ar2,a
+06F7 EF        1656            mov     a,r7
+06F8 4203      1657            orl     ar3,a
+06FA           1658   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:459: wait_bit_time();
+06FA C002      1659            push    ar2
+06FC C003      1660            push    ar3
+06FE C004      1661            push    ar4
+0700 C005      1662            push    ar5
+0702 120100    1663            lcall   _wait_bit_time
+0705 D005      1664            pop     ar5
+0707 D004      1665            pop     ar4
+0709 D003      1666            pop     ar3
+070B D002      1667            pop     ar2
+070D           1668   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:456: for (j = 0; j < 3; j++) {
+070D 0C        1669            inc     r4
+070E BC00A8    1670            cjne    r4,#0x00,L010017?
+0711 0D        1671            inc     r5
+0712           1672   L010017?:
+0712 020100    1673            ljmp    L010001?
+0715           1674   L010004?:
+0715           1675   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:462: return val;
+0715 8A82      1676            mov     dpl,r2
+0717 8B83      1677            mov     dph,r3
+0719 22        1678            ret
+071A           1679   ;------------------------------------------------------------
+071A           1680   ;Allocation info for local variables in function 'wait1s'
+071A           1681   ;------------------------------------------------------------
+071A           1682   ;------------------------------------------------------------
+071A           1683   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:466: void wait1s()
+071A           1684   ;        -----------------------------------------
+071A           1685   ;         function wait1s
+071A           1686   ;        -----------------------------------------
+071A           1687   _wait1s:
+071A           1688   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:478: _endasm;
+071A           1689            
+071A           1690     ;For a 22.1184MHz crystal one machine cycle
+071A           1691     ;takes 12/22.1184MHz=0.5425347us
+071A 7A0A      1692                 mov R2, #10
+071C           1693             L3:
+071C 79B4      1694            mov R1, #180
+071E           1695             L2:
+071E 78B4      1696            mov R0, #180
+0720           1697             L1:
+0720 D868      1698            djnz R0, L1 ; 2 machine cycles-> 2*0.5425347us*184=200us
+0722 D928      1699                 djnz R1, L2 ; 200us*250=0.05s
+0724 DAE8      1700                 djnz R2, L3 ; 0.05s*20=1s
+0726 22        1701                 ret
+0727           1702                
+0727 22        1703            ret
+0728           1704   ;------------------------------------------------------------
+0728           1705   ;Allocation info for local variables in function 'waiths'
+0728           1706   ;------------------------------------------------------------
+0728           1707   ;------------------------------------------------------------
+0728           1708   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:482: void waiths()
+0728           1709   ;        -----------------------------------------
+0728           1710   ;         function waiths
+0728           1711   ;        -----------------------------------------
+0728           1712   _waiths:
+0728           1713   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:494: _endasm;
+0728           1714            
+0728           1715     ;For a 22.1184MHz crystal one machine cycle
+0728           1716     ;takes 12/22.1184MHz=0.5425347us
+0728 7A0A      1717                 mov R2, #10
+072A           1718             E3:
+072A 795A      1719            mov R1, #90
+072C           1720             E2:
+072C 78B4      1721            mov R0, #180
+072E           1722             E1:
+072E D828      1723            djnz R0, E1 ; 2 machine cycles-> 2*0.5425347us*184=200us
+0730 D9E8      1724                 djnz R1, E2 ; 200us*250=0.05s
+0732 DAA8      1725                 djnz R2, E3 ; 0.05s*20=1s
+0734 22        1726                 ret
+0735           1727                
+0735 22        1728            ret
+0736           1729   ;------------------------------------------------------------
+0736           1730   ;Allocation info for local variables in function 'SPIWrite'
+0736           1731   ;------------------------------------------------------------
+0736           1732   ;value                     Allocated to registers r2 
+0736           1733   ;------------------------------------------------------------
+0736           1734   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:498: void SPIWrite(unsigned char value)
+0736           1735   ;        -----------------------------------------
+0736           1736   ;         function SPIWrite
+0736           1737   ;        -----------------------------------------
+0736           1738   _SPIWrite:
+0736 AA82      1739            mov     r2,dpl
+0738           1740   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:500: SPSTA&=(~SPIF); // Clear the SPIF flag in SPSTA
+0738 53C47F    1741            anl     _SPSTA,#0x7F
+073B           1742   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:501: SPDAT=value;
+073B 8AC5      1743            mov     _SPDAT,r2
+073D           1744   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:502: while((SPSTA & SPIF)!=SPIF); //Wait for transmission to end
+073D           1745   L013001?:
+073D 7480      1746            mov     a,#0x80
+073F 55C4      1747            anl     a,_SPSTA
+0741 FA        1748            mov     r2,a
+0742 BA8068    1749            cjne    r2,#0x80,L013001?
+0745 22        1750            ret
+0746           1751   ;------------------------------------------------------------
+0746           1752   ;Allocation info for local variables in function 'GetADC'
+0746           1753   ;------------------------------------------------------------
+0746           1754   ;channel                   Allocated to registers r2 
+0746           1755   ;adc                       Allocated to registers r2 r3 
+0746           1756   ;------------------------------------------------------------
+0746           1757   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:506: unsigned int GetADC(unsigned char channel)
+0746           1758   ;        -----------------------------------------
+0746           1759   ;         function GetADC
+0746           1760   ;        -----------------------------------------
+0746           1761   _GetADC:
+0746 AA82      1762            mov     r2,dpl
+0748           1763   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:511: SPCON&=(~SPEN); // Disable SPI
+0748 53C3BF    1764            anl     _SPCON,#0xBF
+074B           1765   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:512: SPCON=MSTR|CPOL|CPHA|SPR1|SPR0|SSDIS;
+074B 75C33F    1766            mov     _SPCON,#0x3F
+074E           1767   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:513: SPCON|=SPEN; // Enable SPI
+074E 43C340    1768            orl     _SPCON,#0x40
+0751           1769   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:515: P1_4=0; // Activate the MCP3004 ADC.
+0751 C294      1770            clr     _P1_4
+0753           1771   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:516: SPIWrite(channel|0x18);      // Send start bit, single/diff* bit, D2, D1, and D0 bits.
+0753 7418      1772            mov     a,#0x18
+0755 4A        1773            orl     a,r2
+0756 F582      1774            mov     dpl,a
+0758 120100    1775            lcall   _SPIWrite
+075B           1776   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:517: for(adc=0; adc<10; adc++); // Wait for S/H to setup
+075B 7A0A      1777            mov     r2,#0x0A
+075D 7B00      1778            mov     r3,#0x00
+075F           1779   L014003?:
+075F 1A        1780            dec     r2
+0760 BAFFE8    1781            cjne    r2,#0xff,L014009?
+0763 1B        1782            dec     r3
+0764           1783   L014009?:
+0764 EA        1784            mov     a,r2
+0765 4B        1785            orl     a,r3
+0766 7001      1786            jnz     L014003?
+0768           1787   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:518: SPIWrite(0x55); // Read bits 9 down to 4
+0768 758255    1788            mov     dpl,#0x55
+076B 120100    1789            lcall   _SPIWrite
+076E           1790   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:519: adc=((SPDAT&0x3f)*0x100);
+076E 743F      1791            mov     a,#0x3F
+0770 55C5      1792            anl     a,_SPDAT
+0772 FB        1793            mov     r3,a
+0773 7A00      1794            mov     r2,#0x00
+0775           1795   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:520: SPIWrite(0x55);// Read bits 3 down to 0
+0775 758255    1796            mov     dpl,#0x55
+0778 C002      1797            push    ar2
+077A C003      1798            push    ar3
+077C 120100    1799            lcall   _SPIWrite
+077F D003      1800            pop     ar3
+0781 D002      1801            pop     ar2
+0783           1802   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:521: P1_4=1; // Deactivate the MCP3004 ADC.
+0783 D294      1803            setb    _P1_4
+0785           1804   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:522: adc+=(SPDAT&0xf0); // SPDR contains the low part of the result. 
+0785 74F0      1805            mov     a,#0xF0
+0787 55C5      1806            anl     a,_SPDAT
+0789 FC        1807            mov     r4,a
+078A 7D00      1808            mov     r5,#0x00
+078C EC        1809            mov     a,r4
+078D 2A        1810            add     a,r2
+078E FA        1811            mov     r2,a
+078F ED        1812            mov     a,r5
+0790 3B        1813            addc    a,r3
+0791           1814   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:523: adc>>=4;
+0791 C4        1815            swap    a
+0792 CA        1816            xch     a,r2
+0793 C4        1817            swap    a
+0794 540F      1818            anl     a,#0x0f
+0796 6A        1819            xrl     a,r2
+0797 CA        1820            xch     a,r2
+0798 540F      1821            anl     a,#0x0f
+079A CA        1822            xch     a,r2
+079B 6A        1823            xrl     a,r2
+079C CA        1824            xch     a,r2
+079D           1825   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:525: return adc;
+079D 8A82      1826            mov     dpl,r2
+079F F583      1827            mov     dph,a
+07A1 22        1828            ret
+07A2           1829   ;------------------------------------------------------------
+07A2           1830   ;Allocation info for local variables in function 'wait_bit_time'
+07A2           1831   ;------------------------------------------------------------
+07A2           1832   ;------------------------------------------------------------
+07A2           1833   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:528: void wait_bit_time()
+07A2           1834   ;        -----------------------------------------
+07A2           1835   ;         function wait_bit_time
+07A2           1836   ;        -----------------------------------------
+07A2           1837   _wait_bit_time:
+07A2           1838   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:540: _endasm;
+07A2           1839            
+07A2           1840     ;For a 22.1184MHz crystal one machine cycle
+07A2           1841     ;takes 12/22.1184MHz=0.5425347us
+07A2 7A02      1842                 mov R2, #2
+07A4           1843             K3:
+07A4 79F8      1844            mov R1, #248
+07A6           1845             K2:
+07A6 78B8      1846            mov R0, #184
+07A8           1847             K1:
+07A8 D8A8      1848            djnz R0, K1 ; 2 machine cycKes-> 2*0.5425347us*184=200us
+07AA D968      1849                 djnz R1, K2 ; 200us*250=0.05s
+07AC DA28      1850                 djnz R2, K3 ; 0.05s*20=1s
+07AE 22        1851                 ret
+07AF           1852                
+07AF 22        1853            ret
+07B0           1854   ;------------------------------------------------------------
+07B0           1855   ;Allocation info for local variables in function 'wait_one_and_half_bit_time'
+07B0           1856   ;------------------------------------------------------------
+07B0           1857   ;------------------------------------------------------------
+07B0           1858   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:543: void wait_one_and_half_bit_time()
+07B0           1859   ;        -----------------------------------------
+07B0           1860   ;         function wait_one_and_half_bit_time
+07B0           1861   ;        -----------------------------------------
+07B0           1862   _wait_one_and_half_bit_time:
+07B0           1863   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\coreTurnMoveWorks.c:555: _endasm;
+07B0           1864            
+07B0           1865     ;For a 22.1184MHz crystal one machine cycle
+07B0           1866     ;takes 12/22.1184MHz=0.5425347us
+07B0 7A03      1867                 mov R2, #3
+07B2           1868             J3:
+07B2 79F8      1869            mov R1, #248
+07B4           1870             J2:
+07B4 78B8      1871            mov R0, #184
+07B6           1872             J1:
+07B6 D868      1873            djnz R0, J1 ; 2 machine cycJes-> 2*0.5425347us*184=200us
+07B8 D928      1874                 djnz R1, J2 ; 200us*250=0.05s
+07BA DAE8      1875                 djnz R2, J3 ; 0.05s*20=1s
+07BC 22        1876                 ret
+07BD           1877                
+07BD 22        1878            ret
+07BE           1879            rseg R_CSEG
+07BE           1880   
+0000           1881            rseg R_XINIT
+0000           1882   
+0000           1883            rseg R_CONST
+0000           1884   _MOVESPEED:
+0000 5000      1885            db 0x50,0x00    ;  80
+0002           1886   _TURNSPEED:
+0002 6400      1887            db 0x64,0x00    ;  100
+0004           1888   _DISTANCEBUFFER:
+0004 0000A041  1889            db 0x00,0x00,0xA0,0x41  ;  2.000000e+001
+0008           1890   _NSTAGES:
+0008 0C00      1891            db 0x0C,0x00    ;  12
+000A           1892   _PRESETS:
+000A 5802      1893            db 0x58,0x02    ;  600
+000C 2602      1894            db 0x26,0x02    ;  550
+000E F401      1895            db 0xF4,0x01    ;  500
+0010 C201      1896            db 0xC2,0x01    ;  450
+0012 9001      1897            db 0x90,0x01    ;  400
+0014 5E01      1898            db 0x5E,0x01    ;  350
+0016 2C01      1899            db 0x2C,0x01    ;  300
+0018 FA00      1900            db 0xFA,0x00    ;  250
+001A C800      1901            db 0xC8,0x00    ;  200
+001C 9600      1902            db 0x96,0x00    ;  150
+001E 6400      1903            db 0x64,0x00    ;  100
+0020 3200      1904            db 0x32,0x00    ;  50
+0022           1905   __str_0:
+0022 444C2025  1906            db 'DL %3d - DR %3d - Stage %3d(%d) - Inst %d'
+     3364202D
+     20445220
+     25336420
+     2D205374
+     61676520
+     25336428
+     25642920
+     2D20496E
+     73742025
+     64
+004B 0D        1907            db 0x0D
+004C 00        1908            db 0x00
+004D           1909   __str_1:
+004D 1B        1910            db 0x1B
+004E 5B324A    1911            db '[2J'
+0051 00        1912            db 0x00
+0052           1913   
+001E           1914            CSEG
+001E           1915   
+001E           1916   end

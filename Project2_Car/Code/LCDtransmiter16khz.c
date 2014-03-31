@@ -28,14 +28,18 @@
 #define H8 0x80
 #define H9 0x90
 
+//H Bridge
+#define GRN_H_BRIDGE P3_6
+#define ORG_H_BRIDGE P3_7
+
 // Rotary
-#define rot_a P2_3   //P1_2 white
-#define rot_b P2_4  //P1_3 grey
-#define TX_button P2_5 //P1_1 green
+#define ROT_A P2_3   //P1_2 white
+#define ROT_B P2_4  //P1_3 grey
+#define TX_BUTTON P2_5 //P1_1 green
 
 // LCD Ports
-#define LCD_EN P2_1
-#define LCD_RS P2_2
+#define LCD_EN P3_2
+#define LCD_RS P3_3
 #define LCD_DATA P1
 
 //LCD constants
@@ -71,8 +75,8 @@ unsigned char _c51_external_startup(void)
 	AUXR=0B_0001_0001; // 1152 bytes of internal XDATA, P4.4 is a general purpose I/O
 	P4M0=0;	P4M1=0;
 	
-	P3M0 &= 0B_1111_0011;
-	P3M1 |= 0B_0000_1100;
+	P3M0 &= 0B_0011_1111;
+	P3M1 |= 0B_1100_0000;
     Init_LCD();
     /*
     // Initialize the serial port and baud rate generator
@@ -246,8 +250,8 @@ void pwmcounter (void) interrupt 1
 {
 	if ( txon )
 	{
-		P3_2 = !P3_2;
-		P3_3 = !P3_3;
+		GRN_H_BRIDGE = !GRN_H_BRIDGE;
+		ORG_H_BRIDGE = !ORG_H_BRIDGE;
 	}
 }
 	
@@ -276,8 +280,8 @@ void main (void)
 	//unsigned char LCD_string[BUFFER] = "LCD Msg"; 
  
 	int selected_command = 0;
-	P3_2 = 0;
-	P3_3 = 1;
+	GRN_H_BRIDGE = 0;
+	ORG_H_BRIDGE = 1;
 	
 
 	
@@ -290,14 +294,14 @@ void main (void)
 		//LCD_write(0x55);
 		//while(1);
 		last_rot = this_rot;            
-        this_rot = (rot_b << 1) | rot_a;   
+        this_rot = (ROT_B << 1) | ROT_A;   
         selected_command += check_rotary(this_rot, last_rot); 
 		selected_command %= 10;
 		if(selected_command < 0) selected_command = 7;
 		else if ( selected_command > 7 ) selected_command = 0; 
 				
 	 	HEX = hex_array[selected_command];
-		if( !TX_button ) tx_byte(selected_command); 
+		if( !TX_BUTTON ) tx_byte(selected_command); 
 		
 	}	
 	

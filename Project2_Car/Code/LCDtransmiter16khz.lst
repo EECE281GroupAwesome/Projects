@@ -1,0 +1,1258 @@
+0000              1   ;--------------------------------------------------------
+0000              2   ; File Created by C51
+0000              3   ; Version 1.0.0 #1034 (Dec 12 2012) (MSVC)
+0000              4   ; This file was generated Mon Mar 31 13:34:08 2014
+0000              5   ;--------------------------------------------------------
+                  5   $name LCDtransmiter16khz
+                  6   $optc51 --model-small
+0000              8            R_DSEG    segment data
+0000              9            R_CSEG    segment code
+0000             10            R_BSEG    segment bit
+0000             11            R_XSEG    segment xdata
+0000             12            R_PSEG    segment xdata
+0000             13            R_ISEG    segment idata
+0000             14            R_OSEG    segment data overlay
+0000             15            BIT_BANK  segment data overlay
+0000             16            R_HOME    segment code
+0000             17            R_GSINIT  segment code
+0000             18            R_IXSEG   segment xdata
+0000             19            R_CONST   segment code
+0000             20            R_XINIT   segment code
+0000             21            R_DINIT   segment code
+0000             22   
+0000             23   ;--------------------------------------------------------
+0000             24   ; Public variables in this module
+0000             25   ;--------------------------------------------------------
+0000             26            public _check_rotary_PARM_2
+0000             27            public _hex_array
+0000             28            public _main
+0000             29            public _tx_byte
+0000             30            public _pwmcounter
+0000             31            public __c51_external_startup
+0000             32            public _txon
+0000             33            public _last_rot
+0000             34            public _this_rot
+0000             35            public _EN_delay
+0000             36            public _wait1s
+0000             37            public _LCD_command
+0000             38            public _LCD_write
+0000             39            public _Init_LCD
+0000             40            public _LCD_delay
+0000             41            public _LCD_state
+0000             42            public _wait_bit_time
+0000             43            public _check_rotary
+0000             44   ;--------------------------------------------------------
+0000             45   ; Special Function Registers
+0000             46   ;--------------------------------------------------------
+0000             47   _ACC            DATA 0xe0
+0000             48   _B              DATA 0xf0
+0000             49   _PSW            DATA 0xd0
+0000             50   _SP             DATA 0x81
+0000             51   _SPX            DATA 0xef
+0000             52   _DPL            DATA 0x82
+0000             53   _DPH            DATA 0x83
+0000             54   _DPLB           DATA 0xd4
+0000             55   _DPHB           DATA 0xd5
+0000             56   _PAGE           DATA 0xf6
+0000             57   _AX             DATA 0xe1
+0000             58   _BX             DATA 0xf7
+0000             59   _DSPR           DATA 0xe2
+0000             60   _FIRD           DATA 0xe3
+0000             61   _MACL           DATA 0xe4
+0000             62   _MACH           DATA 0xe5
+0000             63   _PCON           DATA 0x87
+0000             64   _AUXR           DATA 0x8e
+0000             65   _AUXR1          DATA 0xa2
+0000             66   _DPCF           DATA 0xa1
+0000             67   _CKRL           DATA 0x97
+0000             68   _CKCKON0        DATA 0x8f
+0000             69   _CKCKON1        DATA 0xaf
+0000             70   _CKSEL          DATA 0x85
+0000             71   _CLKREG         DATA 0xae
+0000             72   _OSCCON         DATA 0x85
+0000             73   _IE             DATA 0xa8
+0000             74   _IEN0           DATA 0xa8
+0000             75   _IEN1           DATA 0xb1
+0000             76   _IPH0           DATA 0xb7
+0000             77   _IP             DATA 0xb8
+0000             78   _IPL0           DATA 0xb8
+0000             79   _IPH1           DATA 0xb3
+0000             80   _IPL1           DATA 0xb2
+0000             81   _P0             DATA 0x80
+0000             82   _P1             DATA 0x90
+0000             83   _P2             DATA 0xa0
+0000             84   _P3             DATA 0xb0
+0000             85   _P4             DATA 0xc0
+0000             86   _P0M0           DATA 0xe6
+0000             87   _P0M1           DATA 0xe7
+0000             88   _P1M0           DATA 0xd6
+0000             89   _P1M1           DATA 0xd7
+0000             90   _P2M0           DATA 0xce
+0000             91   _P2M1           DATA 0xcf
+0000             92   _P3M0           DATA 0xc6
+0000             93   _P3M1           DATA 0xc7
+0000             94   _P4M0           DATA 0xbe
+0000             95   _P4M1           DATA 0xbf
+0000             96   _SCON           DATA 0x98
+0000             97   _SBUF           DATA 0x99
+0000             98   _SADEN          DATA 0xb9
+0000             99   _SADDR          DATA 0xa9
+0000            100   _BDRCON         DATA 0x9b
+0000            101   _BRL            DATA 0x9a
+0000            102   _TCON           DATA 0x88
+0000            103   _TMOD           DATA 0x89
+0000            104   _TCONB          DATA 0x91
+0000            105   _TL0            DATA 0x8a
+0000            106   _TH0            DATA 0x8c
+0000            107   _TL1            DATA 0x8b
+0000            108   _TH1            DATA 0x8d
+0000            109   _RL0            DATA 0xf2
+0000            110   _RH0            DATA 0xf4
+0000            111   _RL1            DATA 0xf3
+0000            112   _RH1            DATA 0xf5
+0000            113   _WDTRST         DATA 0xa6
+0000            114   _WDTPRG         DATA 0xa7
+0000            115   _T2CON          DATA 0xc8
+0000            116   _T2MOD          DATA 0xc9
+0000            117   _RCAP2H         DATA 0xcb
+0000            118   _RCAP2L         DATA 0xca
+0000            119   _TH2            DATA 0xcd
+0000            120   _TL2            DATA 0xcc
+0000            121   _SPCON          DATA 0xc3
+0000            122   _SPSTA          DATA 0xc4
+0000            123   _SPDAT          DATA 0xc5
+0000            124   _SSCON          DATA 0x93
+0000            125   _SSCS           DATA 0x94
+0000            126   _SSDAT          DATA 0x95
+0000            127   _SSADR          DATA 0x96
+0000            128   _KBLS           DATA 0x9c
+0000            129   _KBE            DATA 0x9d
+0000            130   _KBF            DATA 0x9e
+0000            131   _KBMOD          DATA 0x9f
+0000            132   _BMSEL          DATA 0x92
+0000            133   _FCON           DATA 0xd2
+0000            134   _EECON          DATA 0xd2
+0000            135   _ACSRA          DATA 0xa3
+0000            136   _ACSRB          DATA 0xab
+0000            137   _AREF           DATA 0xbd
+0000            138   _DADC           DATA 0xa4
+0000            139   _DADI           DATA 0xa5
+0000            140   _DADL           DATA 0xac
+0000            141   _DADH           DATA 0xad
+0000            142   _CCON           DATA 0xd8
+0000            143   _CMOD           DATA 0xd9
+0000            144   _CL             DATA 0xe9
+0000            145   _CH             DATA 0xf9
+0000            146   _CCAPM0         DATA 0xda
+0000            147   _CCAPM1         DATA 0xdb
+0000            148   _CCAPM2         DATA 0xdc
+0000            149   _CCAPM3         DATA 0xdd
+0000            150   _CCAPM4         DATA 0xde
+0000            151   _CCAP0H         DATA 0xfa
+0000            152   _CCAP1H         DATA 0xfb
+0000            153   _CCAP2H         DATA 0xfc
+0000            154   _CCAP3H         DATA 0xfd
+0000            155   _CCAP4H         DATA 0xfe
+0000            156   _CCAP0L         DATA 0xea
+0000            157   _CCAP1L         DATA 0xeb
+0000            158   _CCAP2L         DATA 0xec
+0000            159   _CCAP3L         DATA 0xed
+0000            160   _CCAP4L         DATA 0xee
+0000            161   ;--------------------------------------------------------
+0000            162   ; special function bits
+0000            163   ;--------------------------------------------------------
+0000            164   _ACC_0          BIT 0xe0
+0000            165   _ACC_1          BIT 0xe1
+0000            166   _ACC_2          BIT 0xe2
+0000            167   _ACC_3          BIT 0xe3
+0000            168   _ACC_4          BIT 0xe4
+0000            169   _ACC_5          BIT 0xe5
+0000            170   _ACC_6          BIT 0xe6
+0000            171   _ACC_7          BIT 0xe7
+0000            172   _B_0            BIT 0xf0
+0000            173   _B_1            BIT 0xf1
+0000            174   _B_2            BIT 0xf2
+0000            175   _B_3            BIT 0xf3
+0000            176   _B_4            BIT 0xf4
+0000            177   _B_5            BIT 0xf5
+0000            178   _B_6            BIT 0xf6
+0000            179   _B_7            BIT 0xf7
+0000            180   _P              BIT 0xd0
+0000            181   _F1             BIT 0xd1
+0000            182   _OV             BIT 0xd2
+0000            183   _RS0            BIT 0xd3
+0000            184   _RS1            BIT 0xd4
+0000            185   _F0             BIT 0xd5
+0000            186   _AC             BIT 0xd6
+0000            187   _CY             BIT 0xd7
+0000            188   _EX0            BIT 0xa8
+0000            189   _ET0            BIT 0xa9
+0000            190   _EX1            BIT 0xaa
+0000            191   _ET1            BIT 0xab
+0000            192   _ES             BIT 0xac
+0000            193   _ET2            BIT 0xad
+0000            194   _EC             BIT 0xae
+0000            195   _EA             BIT 0xaf
+0000            196   _PX0            BIT 0xb8
+0000            197   _PT0            BIT 0xb9
+0000            198   _PX1            BIT 0xba
+0000            199   _PT1            BIT 0xbb
+0000            200   _PS             BIT 0xbc
+0000            201   _PT2            BIT 0xbd
+0000            202   _IP0D           BIT 0xbf
+0000            203   _PPCL           BIT 0xbe
+0000            204   _PT2L           BIT 0xbd
+0000            205   _PLS            BIT 0xbc
+0000            206   _PT1L           BIT 0xbb
+0000            207   _PX1L           BIT 0xba
+0000            208   _PT0L           BIT 0xb9
+0000            209   _PX0L           BIT 0xb8
+0000            210   _P0_0           BIT 0x80
+0000            211   _P0_1           BIT 0x81
+0000            212   _P0_2           BIT 0x82
+0000            213   _P0_3           BIT 0x83
+0000            214   _P0_4           BIT 0x84
+0000            215   _P0_5           BIT 0x85
+0000            216   _P0_6           BIT 0x86
+0000            217   _P0_7           BIT 0x87
+0000            218   _P1_0           BIT 0x90
+0000            219   _P1_1           BIT 0x91
+0000            220   _P1_2           BIT 0x92
+0000            221   _P1_3           BIT 0x93
+0000            222   _P1_4           BIT 0x94
+0000            223   _P1_5           BIT 0x95
+0000            224   _P1_6           BIT 0x96
+0000            225   _P1_7           BIT 0x97
+0000            226   _P2_0           BIT 0xa0
+0000            227   _P2_1           BIT 0xa1
+0000            228   _P2_2           BIT 0xa2
+0000            229   _P2_3           BIT 0xa3
+0000            230   _P2_4           BIT 0xa4
+0000            231   _P2_5           BIT 0xa5
+0000            232   _P2_6           BIT 0xa6
+0000            233   _P2_7           BIT 0xa7
+0000            234   _P3_0           BIT 0xb0
+0000            235   _P3_1           BIT 0xb1
+0000            236   _P3_2           BIT 0xb2
+0000            237   _P3_3           BIT 0xb3
+0000            238   _P3_4           BIT 0xb4
+0000            239   _P3_5           BIT 0xb5
+0000            240   _P3_6           BIT 0xb6
+0000            241   _P3_7           BIT 0xb7
+0000            242   _RXD            BIT 0xb0
+0000            243   _TXD            BIT 0xb1
+0000            244   _INT0           BIT 0xb2
+0000            245   _INT1           BIT 0xb3
+0000            246   _T0             BIT 0xb4
+0000            247   _T1             BIT 0xb5
+0000            248   _WR             BIT 0xb6
+0000            249   _RD             BIT 0xb7
+0000            250   _P4_0           BIT 0xc0
+0000            251   _P4_1           BIT 0xc1
+0000            252   _P4_2           BIT 0xc2
+0000            253   _P4_3           BIT 0xc3
+0000            254   _P4_4           BIT 0xc4
+0000            255   _P4_5           BIT 0xc5
+0000            256   _P4_6           BIT 0xc6
+0000            257   _P4_7           BIT 0xc7
+0000            258   _RI             BIT 0x98
+0000            259   _TI             BIT 0x99
+0000            260   _RB8            BIT 0x9a
+0000            261   _TB8            BIT 0x9b
+0000            262   _REN            BIT 0x9c
+0000            263   _SM2            BIT 0x9d
+0000            264   _SM1            BIT 0x9e
+0000            265   _SM0            BIT 0x9f
+0000            266   _IT0            BIT 0x88
+0000            267   _IE0            BIT 0x89
+0000            268   _IT1            BIT 0x8a
+0000            269   _IE1            BIT 0x8b
+0000            270   _TR0            BIT 0x8c
+0000            271   _TF0            BIT 0x8d
+0000            272   _TR1            BIT 0x8e
+0000            273   _TF1            BIT 0x8f
+0000            274   _CP_RL2         BIT 0xc8
+0000            275   _C_T2           BIT 0xc9
+0000            276   _TR2            BIT 0xca
+0000            277   _EXEN2          BIT 0xcb
+0000            278   _TCLK           BIT 0xcc
+0000            279   _RCLK           BIT 0xcd
+0000            280   _EXF2           BIT 0xce
+0000            281   _TF2            BIT 0xcf
+0000            282   _CF             BIT 0xdf
+0000            283   _CR             BIT 0xde
+0000            284   _CCF4           BIT 0xdc
+0000            285   _CCF3           BIT 0xdb
+0000            286   _CCF2           BIT 0xda
+0000            287   _CCF1           BIT 0xd9
+0000            288   _CCF0           BIT 0xd8
+0000            289   ;--------------------------------------------------------
+0000            290   ; overlayable register banks
+0000            291   ;--------------------------------------------------------
+0000            292            rbank0 segment data overlay
+0000            293   ;--------------------------------------------------------
+0000            294   ; internal ram data
+0000            295   ;--------------------------------------------------------
+0000            296            rseg R_DSEG
+0000            297   _this_rot:
+0000            298            ds 2
+0002            299   _last_rot:
+0002            300            ds 2
+0004            301   _LCD_state_LCD_string_1_85:
+0004            302            ds 16
+0014            303   ;--------------------------------------------------------
+0014            304   ; overlayable items in internal ram 
+0014            305   ;--------------------------------------------------------
+0000            306            rseg    R_OSEG
+0000            307   _check_rotary_PARM_2:
+0000            308            ds 2
+0002            309   ;--------------------------------------------------------
+0002            310   ; indirectly addressable internal ram data
+0002            311   ;--------------------------------------------------------
+0000            312            rseg R_ISEG
+0000            313   ;--------------------------------------------------------
+0000            314   ; absolute internal ram data
+0000            315   ;--------------------------------------------------------
+0000            316            DSEG
+0000            317   ;--------------------------------------------------------
+0000            318   ; bit data
+0000            319   ;--------------------------------------------------------
+0000            320            rseg R_BSEG
+0000            321   _txon:
+0000            322            DBIT    1
+0001            323   ;--------------------------------------------------------
+0001            324   ; paged external ram data
+0001            325   ;--------------------------------------------------------
+0000            326            rseg R_PSEG
+0000            327   ;--------------------------------------------------------
+0000            328   ; external ram data
+0000            329   ;--------------------------------------------------------
+0000            330            rseg R_XSEG
+0000            331   ;--------------------------------------------------------
+0000            332   ; absolute external ram data
+0000            333   ;--------------------------------------------------------
+0000            334            XSEG
+0000            335   ;--------------------------------------------------------
+0000            336   ; external initialized ram data
+0000            337   ;--------------------------------------------------------
+0000            338            rseg R_IXSEG
+0000            339            rseg R_HOME
+0000            340            rseg R_GSINIT
+0000            341            rseg R_CSEG
+0000            342   ;--------------------------------------------------------
+0000            343   ; Reset entry point and interrupt vectors
+0000            344   ;--------------------------------------------------------
+0000            345            CSEG at 0x0000
+0000 020100     346            ljmp    _crt0
+000B            347            CSEG at 0x000b
+000B 020100     348            ljmp    _pwmcounter
+000E            349   ;--------------------------------------------------------
+000E            350   ; global & static initialisations
+000E            351   ;--------------------------------------------------------
+0000            352            rseg R_HOME
+0000            353            rseg R_GSINIT
+0000            354            rseg R_GSINIT
+0000            355   ;--------------------------------------------------------
+0000            356   ; data variables initialization
+0000            357   ;--------------------------------------------------------
+0000            358            rseg R_DINIT
+0000            359   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:109: unsigned int this_rot = 0, last_rot = 0;
+0000 E4         360            clr     a
+0001 F5D0       361            mov     _this_rot,a
+0003 F5D1       362            mov     (_this_rot + 1),a
+0005            363   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:109: code unsigned short hex_array[] = {H0, H1, H2, H3, H4, H5, H6, H7, H8, H9};
+0005 E4         364            clr     a
+0006 F590       365            mov     _last_rot,a
+0008 F591       366            mov     (_last_rot + 1),a
+000A            367   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:62: volatile bit txon = 1; 
+000A D250       368            setb    _txon
+000C            369            ; The linker places a 'ret' at the end of segment R_DINIT.
+000C            370   ;--------------------------------------------------------
+000C            371   ; code
+000C            372   ;--------------------------------------------------------
+0000            373            rseg R_CSEG
+0000            374   ;------------------------------------------------------------
+0000            375   ;Allocation info for local variables in function '_c51_external_startup'
+0000            376   ;------------------------------------------------------------
+0000            377   ;------------------------------------------------------------
+0000            378   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:68: unsigned char _c51_external_startup(void)
+0000            379   ;        -----------------------------------------
+0000            380   ;         function _c51_external_startup
+0000            381   ;        -----------------------------------------
+0000            382   __c51_external_startup:
+0000            383            using   0
+0000            384   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:71: P0M0=0;      P0M1=0;
+0000 75E600     385            mov     _P0M0,#0x00
+0003 75E700     386            mov     _P0M1,#0x00
+0006            387   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:72: P1M0=0;      P1M1=1;
+0006 75D600     388            mov     _P1M0,#0x00
+0009 75D701     389            mov     _P1M1,#0x01
+000C            390   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:73: P2M0=0;      P2M1=0;
+000C 75CE00     391            mov     _P2M0,#0x00
+000F 75CF00     392            mov     _P2M1,#0x00
+0012            393   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:74: P3M0=0;      P3M1=0;
+0012 75C600     394            mov     _P3M0,#0x00
+0015 75C700     395            mov     _P3M1,#0x00
+0018            396   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:75: AUXR=0B_0001_0001; // 1152 bytes of internal XDATA, P4.4 is a general purpose I/O
+0018 758E11     397            mov     _AUXR,#0x11
+001B            398   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:76: P4M0=0;      P4M1=0;
+001B 75BE00     399            mov     _P4M0,#0x00
+001E 75BF00     400            mov     _P4M1,#0x00
+0021            401   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:78: P3M0 &= 0B_0011_1111;
+0021 53C63F     402            anl     _P3M0,#0x3F
+0024            403   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:79: P3M1 |= 0B_1100_0000;
+0024 43C7C0     404            orl     _P3M1,#0xC0
+0027            405   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:80: Init_LCD();
+0027 120100     406            lcall   _Init_LCD
+002A            407   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:90: TR0=0; // Stop timer 0
+002A C28C       408            clr     _TR0
+002C            409   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:91: TMOD=0x01; // 16-bit timer
+002C 758901     410            mov     _TMOD,#0x01
+002F            411   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:96: TH0=RH0=TIMER0_RELOAD_VALUE/0x100;
+002F 75F4FF     412            mov     _RH0,#0xFF
+0032 758CFF     413            mov     _TH0,#0xFF
+0035            414   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:97: TL0=RL0=TIMER0_RELOAD_VALUE%0x100;
+0035 75F2C4     415            mov     _RL0,#0xC4
+0038 758AC4     416            mov     _TL0,#0xC4
+003B            417   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:98: TR0=1;// Start timer 0 (bit 4 in TCON)
+003B D28C       418            setb    _TR0
+003D            419   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:99: ET0=1; // Enable timer 0 interrupt
+003D D2A9       420            setb    _ET0
+003F            421   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:100: EA=1;  // Enable global interrupts
+003F D2AF       422            setb    _EA
+0041            423   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:104: return 0;
+0041 758200     424            mov     dpl,#0x00
+0044 22         425            ret
+0045            426   ;------------------------------------------------------------
+0045            427   ;Allocation info for local variables in function 'EN_delay'
+0045            428   ;------------------------------------------------------------
+0045            429   ;------------------------------------------------------------
+0045            430   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:112: void EN_delay (void) 
+0045            431   ;        -----------------------------------------
+0045            432   ;         function EN_delay
+0045            433   ;        -----------------------------------------
+0045            434   _EN_delay:
+0045            435   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:121: _endasm;
+0045            436            
+0045 00         437             nop
+0046 00         438             nop
+0047 00         439             nop
+0048 00         440             nop
+0049 00         441             nop
+004A 00         442             nop
+004B            443             
+004B 22         444            ret
+004C            445   ;------------------------------------------------------------
+004C            446   ;Allocation info for local variables in function 'wait1s'
+004C            447   ;------------------------------------------------------------
+004C            448   ;------------------------------------------------------------
+004C            449   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:123: void wait1s (void)
+004C            450   ;        -----------------------------------------
+004C            451   ;         function wait1s
+004C            452   ;        -----------------------------------------
+004C            453   _wait1s:
+004C            454   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:135: _endasm;
+004C            455            
+004C            456     ;For a 22.1184MHz crystal one machine cycle
+004C            457     ;takes 12/22.1184MHz=0.5425347us
+004C 7A14       458                 mov R2, #20
+004E            459             G3:
+004E 79F8       460            mov R1, #248
+0050            461             G2:
+0050 78B8       462            mov R0, #184
+0052            463             G1:
+0052 D898       464            djnz R0, G1 ; 2 machine cycles-> 2*0.5425347us*184=200us
+0054 D958       465                 djnz R1, G2 ; 200us*250=0.05s
+0056 DA18       466                 djnz R2, G3 ; 0.05s*20=1s
+0058 22         467                 ret
+0059            468                
+0059 22         469            ret
+005A            470   ;------------------------------------------------------------
+005A            471   ;Allocation info for local variables in function 'LCD_command'
+005A            472   ;------------------------------------------------------------
+005A            473   ;cmd                       Allocated to registers r2 
+005A            474   ;------------------------------------------------------------
+005A            475   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:138: void LCD_command(unsigned char cmd)
+005A            476   ;        -----------------------------------------
+005A            477   ;         function LCD_command
+005A            478   ;        -----------------------------------------
+005A            479   _LCD_command:
+005A AA82       480            mov     r2,dpl
+005C            481   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:140: LCD_delay(); 
+005C C002       482            push    ar2
+005E 120100     483            lcall   _LCD_delay
+0061 D002       484            pop     ar2
+0063            485   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:141: LCD_DATA = cmd;
+0063 8A90       486            mov     _P1,r2
+0065            487   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:142: LCD_RS = 0;
+0065 C2B3       488            clr     _P3_3
+0067            489   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:143: LCD_EN = 1;
+0067 D2B2       490            setb    _P3_2
+0069            491   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:144: EN_delay();
+0069 120100     492            lcall   _EN_delay
+006C            493   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:145: LCD_EN = 0;
+006C C2B2       494            clr     _P3_2
+006E            495   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:146: LCD_delay();
+006E 020100     496            ljmp    _LCD_delay
+0071            497   ;------------------------------------------------------------
+0071            498   ;Allocation info for local variables in function 'LCD_write'
+0071            499   ;------------------------------------------------------------
+0071            500   ;character                 Allocated to registers r2 
+0071            501   ;------------------------------------------------------------
+0071            502   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:149: void LCD_write(unsigned char character)
+0071            503   ;        -----------------------------------------
+0071            504   ;         function LCD_write
+0071            505   ;        -----------------------------------------
+0071            506   _LCD_write:
+0071 AA82       507            mov     r2,dpl
+0073            508   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:151: LCD_delay();
+0073 C002       509            push    ar2
+0075 120100     510            lcall   _LCD_delay
+0078 D002       511            pop     ar2
+007A            512   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:152: LCD_DATA = character;
+007A 8A90       513            mov     _P1,r2
+007C            514   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:153: LCD_RS = 1;
+007C D2B3       515            setb    _P3_3
+007E            516   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:154: LCD_EN = 1;
+007E D2B2       517            setb    _P3_2
+0080            518   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:155: EN_delay();
+0080 120100     519            lcall   _EN_delay
+0083            520   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:156: LCD_EN = 0;
+0083 C2B2       521            clr     _P3_2
+0085            522   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:157: LCD_delay();
+0085 020100     523            ljmp    _LCD_delay
+0088            524   ;------------------------------------------------------------
+0088            525   ;Allocation info for local variables in function 'Init_LCD'
+0088            526   ;------------------------------------------------------------
+0088            527   ;------------------------------------------------------------
+0088            528   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:160: void Init_LCD ()
+0088            529   ;        -----------------------------------------
+0088            530   ;         function Init_LCD
+0088            531   ;        -----------------------------------------
+0088            532   _Init_LCD:
+0088            533   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:162: LCD_delay();
+0088 120100     534            lcall   _LCD_delay
+008B            535   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:165: LCD_EN=0;
+008B C2B2       536            clr     _P3_2
+008D            537   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:167: LCD_command(0x0c);
+008D 75820C     538            mov     dpl,#0x0C
+0090 120100     539            lcall   _LCD_command
+0093            540   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:168: LCD_command(0x38); 
+0093 758238     541            mov     dpl,#0x38
+0096 120100     542            lcall   _LCD_command
+0099            543   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:169: LCD_command(Clear); //clears screen 
+0099 758201     544            mov     dpl,#0x01
+009C 120100     545            lcall   _LCD_command
+009F            546   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:170: EN_delay();
+009F 120100     547            lcall   _EN_delay
+00A2            548   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:171: LCD_command(Line1); // moves cursor to line 1
+00A2 758280     549            mov     dpl,#0x80
+00A5 120100     550            lcall   _LCD_command
+00A8            551   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:172: LCD_delay();        
+00A8 020100     552            ljmp    _LCD_delay
+00AB            553   ;------------------------------------------------------------
+00AB            554   ;Allocation info for local variables in function 'LCD_delay'
+00AB            555   ;------------------------------------------------------------
+00AB            556   ;------------------------------------------------------------
+00AB            557   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:175: void LCD_delay (void)
+00AB            558   ;        -----------------------------------------
+00AB            559   ;         function LCD_delay
+00AB            560   ;        -----------------------------------------
+00AB            561   _LCD_delay:
+00AB            562   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:187: _endasm;
+00AB            563            
+00AB            564     ;For a 22.1184MHz crystal one machine cycle
+00AB            565     ;takes 12/22.1184MHz=0.5425347us
+00AB            566            
+00AB            567             J3:
+00AB 7C01       568            mov R4, #1
+00AD            569             J2:
+00AD 7BB8       570            mov R3, #184 ;184
+00AF            571             J1:
+00AF DB58       572            djnz R3, J1 ; 2 machine cycles-> 2*0.5425347us*184=200us
+00B1 DC18       573                 djnz R4, J2 ; 200us*250=0.05s
+00B3            574            
+00B3 22         575                 ret
+00B4            576                
+00B4 22         577            ret
+00B5            578   ;------------------------------------------------------------
+00B5            579   ;Allocation info for local variables in function 'LCD_state'
+00B5            580   ;------------------------------------------------------------
+00B5            581   ;selected_command          Allocated to registers r2 r3 
+00B5            582   ;LCD_string                Allocated with name '_LCD_state_LCD_string_1_85'
+00B5            583   ;LCD_length                Allocated to registers r4 r5 
+00B5            584   ;i                         Allocated to registers r2 r3 
+00B5            585   ;------------------------------------------------------------
+00B5            586   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:190: void LCD_state(int selected_command )
+00B5            587   ;        -----------------------------------------
+00B5            588   ;         function LCD_state
+00B5            589   ;        -----------------------------------------
+00B5            590   _LCD_state:
+00B5 AA82       591            mov     r2,dpl
+00B7 AB83       592            mov     r3,dph
+00B9            593   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:192: unsigned char LCD_string[BUFFER] = "LCD Msg 0";
+00B9 75584C     594            mov     _LCD_state_LCD_string_1_85,#0x4C
+00BC 755943     595            mov     (_LCD_state_LCD_string_1_85 + 0x0001),#0x43
+00BF 755A44     596            mov     (_LCD_state_LCD_string_1_85 + 0x0002),#0x44
+00C2 755B20     597            mov     (_LCD_state_LCD_string_1_85 + 0x0003),#0x20
+00C5 755C4D     598            mov     (_LCD_state_LCD_string_1_85 + 0x0004),#0x4D
+00C8 755D73     599            mov     (_LCD_state_LCD_string_1_85 + 0x0005),#0x73
+00CB 755E67     600            mov     (_LCD_state_LCD_string_1_85 + 0x0006),#0x67
+00CE 755F20     601            mov     (_LCD_state_LCD_string_1_85 + 0x0007),#0x20
+00D1 756030     602            mov     (_LCD_state_LCD_string_1_85 + 0x0008),#0x30
+00D4 756100     603            mov     (_LCD_state_LCD_string_1_85 + 0x0009),#0x00
+00D7            604   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:193: unsigned int LCD_length = strlen(LCD_string); 
+00D7 907E58     605            mov     dptr,#_LCD_state_LCD_string_1_85
+00DA 75F040     606            mov     b,#0x40
+00DD C002       607            push    ar2
+00DF C003       608            push    ar3
+00E1 120100     609            lcall   _strlen
+00E4 D003       610            pop     ar3
+00E6 D002       611            pop     ar2
+00E8            612   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:207: if ( selected_command == 0 ) 
+00E8 EA         613            mov     a,r2
+00E9 4B         614            orl     a,r3
+00EA 7001       615            jnz     L009020?
+00EC            616   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:208: LCD_length = sprintf( LCD_string ,"LCD Msg 0");
+00EC 7498       617            mov     a,#__str_1
+00EE C0E0       618            push    acc
+00F0 7481       619            mov     a,#(__str_1 >> 8)
+00F2 C0E0       620            push    acc
+00F4 7480       621            mov     a,#0x80
+00F6 C0E0       622            push    acc
+00F8 7458       623            mov     a,#_LCD_state_LCD_string_1_85
+00FA C0E0       624            push    acc
+00FC 747E       625            mov     a,#(_LCD_state_LCD_string_1_85 >> 8)
+00FE C0E0       626            push    acc
+0100 7440       627            mov     a,#0x40
+0102 C0E0       628            push    acc
+0104 120100     629            lcall   _sprintf
+0107 AC82       630            mov     r4,dpl
+0109 AD83       631            mov     r5,dph
+010B E581       632            mov     a,sp
+010D 24FA       633            add     a,#0xfa
+010F F581       634            mov     sp,a
+0111 020100     635            ljmp    L009036?
+0114            636   L009020?:
+0114            637   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:210: else if ( selected_command == 1 ) 
+0114 BA01D8     638            cjne    r2,#0x01,L009017?
+0117 BB00D8     639            cjne    r3,#0x00,L009017?
+011A            640   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:211: LCD_length = sprintf( LCD_string ,"LCD Msg 1");
+011A 7418       641            mov     a,#__str_2
+011C C0E0       642            push    acc
+011E 7483       643            mov     a,#(__str_2 >> 8)
+0120 C0E0       644            push    acc
+0122 7480       645            mov     a,#0x80
+0124 C0E0       646            push    acc
+0126 7458       647            mov     a,#_LCD_state_LCD_string_1_85
+0128 C0E0       648            push    acc
+012A 747E       649            mov     a,#(_LCD_state_LCD_string_1_85 >> 8)
+012C C0E0       650            push    acc
+012E 7440       651            mov     a,#0x40
+0130 C0E0       652            push    acc
+0132 120100     653            lcall   _sprintf
+0135 AC82       654            mov     r4,dpl
+0137 AD83       655            mov     r5,dph
+0139 E581       656            mov     a,sp
+013B 24FA       657            add     a,#0xfa
+013D F581       658            mov     sp,a
+013F 020100     659            ljmp    L009036?
+0142            660   L009017?:
+0142            661   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:213: else if ( selected_command == 2 ) 
+0142 BA0258     662            cjne    r2,#0x02,L009014?
+0145 BB0058     663            cjne    r3,#0x00,L009014?
+0148            664   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:214: LCD_length = sprintf( LCD_string ,"LCD Msg 2");
+0148 7498       665            mov     a,#__str_3
+014A C0E0       666            push    acc
+014C 7483       667            mov     a,#(__str_3 >> 8)
+014E C0E0       668            push    acc
+0150 7480       669            mov     a,#0x80
+0152 C0E0       670            push    acc
+0154 7458       671            mov     a,#_LCD_state_LCD_string_1_85
+0156 C0E0       672            push    acc
+0158 747E       673            mov     a,#(_LCD_state_LCD_string_1_85 >> 8)
+015A C0E0       674            push    acc
+015C 7440       675            mov     a,#0x40
+015E C0E0       676            push    acc
+0160 120100     677            lcall   _sprintf
+0163 AC82       678            mov     r4,dpl
+0165 AD83       679            mov     r5,dph
+0167 E581       680            mov     a,sp
+0169 24FA       681            add     a,#0xfa
+016B F581       682            mov     sp,a
+016D 020100     683            ljmp    L009036?
+0170            684   L009014?:
+0170            685   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:216: else if ( selected_command == 3 ) 
+0170 BA03D8     686            cjne    r2,#0x03,L009011?
+0173 BB00D8     687            cjne    r3,#0x00,L009011?
+0176            688   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:217: LCD_length = sprintf( LCD_string ,"LCD Msg 3");
+0176 7418       689            mov     a,#__str_4
+0178 C0E0       690            push    acc
+017A 7484       691            mov     a,#(__str_4 >> 8)
+017C C0E0       692            push    acc
+017E 7480       693            mov     a,#0x80
+0180 C0E0       694            push    acc
+0182 7458       695            mov     a,#_LCD_state_LCD_string_1_85
+0184 C0E0       696            push    acc
+0186 747E       697            mov     a,#(_LCD_state_LCD_string_1_85 >> 8)
+0188 C0E0       698            push    acc
+018A 7440       699            mov     a,#0x40
+018C C0E0       700            push    acc
+018E 120100     701            lcall   _sprintf
+0191 AC82       702            mov     r4,dpl
+0193 AD83       703            mov     r5,dph
+0195 E581       704            mov     a,sp
+0197 24FA       705            add     a,#0xfa
+0199 F581       706            mov     sp,a
+019B 020100     707            ljmp    L009036?
+019E            708   L009011?:
+019E            709   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:219: else if ( selected_command == 4 )  
+019E BA0458     710            cjne    r2,#0x04,L009008?
+01A1 BB0058     711            cjne    r3,#0x00,L009008?
+01A4            712   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:220: LCD_length = sprintf( LCD_string ,"LCD Msg 4");
+01A4 7498       713            mov     a,#__str_5
+01A6 C0E0       714            push    acc
+01A8 7484       715            mov     a,#(__str_5 >> 8)
+01AA C0E0       716            push    acc
+01AC 7480       717            mov     a,#0x80
+01AE C0E0       718            push    acc
+01B0 7458       719            mov     a,#_LCD_state_LCD_string_1_85
+01B2 C0E0       720            push    acc
+01B4 747E       721            mov     a,#(_LCD_state_LCD_string_1_85 >> 8)
+01B6 C0E0       722            push    acc
+01B8 7440       723            mov     a,#0x40
+01BA C0E0       724            push    acc
+01BC 120100     725            lcall   _sprintf
+01BF AC82       726            mov     r4,dpl
+01C1 AD83       727            mov     r5,dph
+01C3 E581       728            mov     a,sp
+01C5 24FA       729            add     a,#0xfa
+01C7 F581       730            mov     sp,a
+01C9 020100     731            ljmp    L009036?
+01CC            732   L009008?:
+01CC            733   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:222: else if ( selected_command == 5 ) 
+01CC BA05D8     734            cjne    r2,#0x05,L009005?
+01CF BB00D8     735            cjne    r3,#0x00,L009005?
+01D2            736   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:223: LCD_length = sprintf( LCD_string ,"LCD Msg 5");
+01D2 7418       737            mov     a,#__str_6
+01D4 C0E0       738            push    acc
+01D6 7485       739            mov     a,#(__str_6 >> 8)
+01D8 C0E0       740            push    acc
+01DA 7480       741            mov     a,#0x80
+01DC C0E0       742            push    acc
+01DE 7458       743            mov     a,#_LCD_state_LCD_string_1_85
+01E0 C0E0       744            push    acc
+01E2 747E       745            mov     a,#(_LCD_state_LCD_string_1_85 >> 8)
+01E4 C0E0       746            push    acc
+01E6 7440       747            mov     a,#0x40
+01E8 C0E0       748            push    acc
+01EA 120100     749            lcall   _sprintf
+01ED AC82       750            mov     r4,dpl
+01EF AD83       751            mov     r5,dph
+01F1 E581       752            mov     a,sp
+01F3 24FA       753            add     a,#0xfa
+01F5 F581       754            mov     sp,a
+01F7 8001       755            sjmp    L009036?
+01F9            756   L009005?:
+01F9            757   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:225: else if ( selected_command == 6 ) 
+01F9 BA0658     758            cjne    r2,#0x06,L009002?
+01FC BB0058     759            cjne    r3,#0x00,L009002?
+01FF            760   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:226: LCD_length = sprintf( LCD_string ,"LCD Msg 6");
+01FF 7498       761            mov     a,#__str_7
+0201 C0E0       762            push    acc
+0203 7485       763            mov     a,#(__str_7 >> 8)
+0205 C0E0       764            push    acc
+0207 7480       765            mov     a,#0x80
+0209 C0E0       766            push    acc
+020B 7458       767            mov     a,#_LCD_state_LCD_string_1_85
+020D C0E0       768            push    acc
+020F 747E       769            mov     a,#(_LCD_state_LCD_string_1_85 >> 8)
+0211 C0E0       770            push    acc
+0213 7440       771            mov     a,#0x40
+0215 C0E0       772            push    acc
+0217 120100     773            lcall   _sprintf
+021A AC82       774            mov     r4,dpl
+021C AD83       775            mov     r5,dph
+021E E581       776            mov     a,sp
+0220 24FA       777            add     a,#0xfa
+0222 F581       778            mov     sp,a
+0224 8001       779            sjmp    L009036?
+0226            780   L009002?:
+0226            781   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:229: LCD_length = sprintf( LCD_string ,"LCD Msg 7");
+0226 74D8       782            mov     a,#__str_8
+0228 C0E0       783            push    acc
+022A 7485       784            mov     a,#(__str_8 >> 8)
+022C C0E0       785            push    acc
+022E 7480       786            mov     a,#0x80
+0230 C0E0       787            push    acc
+0232 7458       788            mov     a,#_LCD_state_LCD_string_1_85
+0234 C0E0       789            push    acc
+0236 747E       790            mov     a,#(_LCD_state_LCD_string_1_85 >> 8)
+0238 C0E0       791            push    acc
+023A 7440       792            mov     a,#0x40
+023C C0E0       793            push    acc
+023E 120100     794            lcall   _sprintf
+0241 AC82       795            mov     r4,dpl
+0243 AD83       796            mov     r5,dph
+0245 E581       797            mov     a,sp
+0247 24FA       798            add     a,#0xfa
+0249 F581       799            mov     sp,a
+024B            800   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:231: for( i = 0; i < LCD_length; i++ ) LCD_write(LCD_string[i]);
+024B            801   L009036?:
+024B 7A00       802            mov     r2,#0x00
+024D 7B00       803            mov     r3,#0x00
+024F            804   L009022?:
+024F 8A06       805            mov     ar6,r2
+0251 8B07       806            mov     ar7,r3
+0253 C3         807            clr     c
+0254 EE         808            mov     a,r6
+0255 9C         809            subb    a,r4
+0256 EF         810            mov     a,r7
+0257 9D         811            subb    a,r5
+0258 5001       812            jnc     L009026?
+025A EA         813            mov     a,r2
+025B 2458       814            add     a,#_LCD_state_LCD_string_1_85
+025D F8         815            mov     r0,a
+025E 8682       816            mov     dpl,@r0
+0260 C002       817            push    ar2
+0262 C003       818            push    ar3
+0264 C004       819            push    ar4
+0266 C005       820            push    ar5
+0268 120100     821            lcall   _LCD_write
+026B D005       822            pop     ar5
+026D D004       823            pop     ar4
+026F D003       824            pop     ar3
+0271 D002       825            pop     ar2
+0273 0A         826            inc     r2
+0274 BA0018     827            cjne    r2,#0x00,L009022?
+0277 0B         828            inc     r3
+0278 8001       829            sjmp    L009022?
+027A            830   L009026?:
+027A 22         831            ret
+027B            832   ;------------------------------------------------------------
+027B            833   ;Allocation info for local variables in function 'wait_bit_time'
+027B            834   ;------------------------------------------------------------
+027B            835   ;------------------------------------------------------------
+027B            836   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:234: void wait_bit_time (void)
+027B            837   ;        -----------------------------------------
+027B            838   ;         function wait_bit_time
+027B            839   ;        -----------------------------------------
+027B            840   _wait_bit_time:
+027B            841   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:246: _endasm;
+027B            842            
+027B            843     ;For a 22.1184MHz crystal one machine cycle
+027B            844     ;takes 12/22.1184MHz=0.5425347us
+027B 7A02       845                 mov R2, #2
+027D            846             L3:
+027D 79F8       847            mov R1, #248
+027F            848             L2:
+027F 78B8       849            mov R0, #184
+0281            850             L1:
+0281 D818       851            djnz R0, L1 ; 2 machine cycles-> 2*0.5425347us*184=200us
+0283 D9D8       852                 djnz R1, L2 ; 200us*250=0.05s
+0285 DA98       853                 djnz R2, L3 ; 0.05s*20=1s
+0287 22         854                 ret
+0288            855                
+0288 22         856            ret
+0289            857   ;------------------------------------------------------------
+0289            858   ;Allocation info for local variables in function 'pwmcounter'
+0289            859   ;------------------------------------------------------------
+0289            860   ;------------------------------------------------------------
+0289            861   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:249: void pwmcounter (void) interrupt 1
+0289            862   ;        -----------------------------------------
+0289            863   ;         function pwmcounter
+0289            864   ;        -----------------------------------------
+0289            865   _pwmcounter:
+0289            866   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:251: if ( txon )
+0289 305058     867            jnb     _txon,L011003?
+028C            868   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:253: GRN_H_BRIDGE = !GRN_H_BRIDGE;
+028C B2B6       869            cpl     _P3_6
+028E            870   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:254: ORG_H_BRIDGE = !ORG_H_BRIDGE;
+028E B2B7       871            cpl     _P3_7
+0290            872   L011003?:
+0290 32         873            reti
+0291            874   ;        eliminated unneeded push/pop psw
+0291            875   ;        eliminated unneeded push/pop dpl
+0291            876   ;        eliminated unneeded push/pop dph
+0291            877   ;        eliminated unneeded push/pop b
+0291            878   ;        eliminated unneeded push/pop acc
+0291            879   ;------------------------------------------------------------
+0291            880   ;Allocation info for local variables in function 'tx_byte'
+0291            881   ;------------------------------------------------------------
+0291            882   ;val                       Allocated to registers r2 
+0291            883   ;j                         Allocated to registers r3 
+0291            884   ;------------------------------------------------------------
+0291            885   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:258: void tx_byte ( unsigned char val )
+0291            886   ;        -----------------------------------------
+0291            887   ;         function tx_byte
+0291            888   ;        -----------------------------------------
+0291            889   _tx_byte:
+0291 AA82       890            mov     r2,dpl
+0293            891   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:262: txon=0;
+0293 C250       892            clr     _txon
+0295            893   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:263: wait_bit_time();
+0295 C002       894            push    ar2
+0297 120100     895            lcall   _wait_bit_time
+029A            896   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:264: txon = 1; 
+029A D250       897            setb    _txon
+029C            898   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:265: wait_bit_time();
+029C 120100     899            lcall   _wait_bit_time
+029F D002       900            pop     ar2
+02A1            901   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:266: for (j=0; j<3; j++)
+02A1 7B00       902            mov     r3,#0x00
+02A3            903   L012001?:
+02A3 BB03D8     904            cjne    r3,#0x03,L012010?
+02A6            905   L012010?:
+02A6 5001       906            jnc     L012004?
+02A8            907   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:268: txon=val&(0x01<<j)?1:0;
+02A8 8BF0       908            mov     b,r3
+02AA 05F0       909            inc     b
+02AC 7C01       910            mov     r4,#0x01
+02AE 7D00       911            mov     r5,#0x00
+02B0 8001       912            sjmp    L012013?
+02B2            913   L012012?:
+02B2 EC         914            mov     a,r4
+02B3 2C         915            add     a,r4
+02B4 FC         916            mov     r4,a
+02B5 ED         917            mov     a,r5
+02B6 33         918            rlc     a
+02B7 FD         919            mov     r5,a
+02B8            920   L012013?:
+02B8 D5F098     921            djnz    b,L012012?
+02BB 8A06       922            mov     ar6,r2
+02BD 7F00       923            mov     r7,#0x00
+02BF EE         924            mov     a,r6
+02C0 5204       925            anl     ar4,a
+02C2 EF         926            mov     a,r7
+02C3 5205       927            anl     ar5,a
+02C5 EC         928            mov     a,r4
+02C6 4D         929            orl     a,r5
+02C7 24FF       930            add     a,#0xff
+02C9 9250       931            mov     _txon,c
+02CB            932   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:269: wait_bit_time();
+02CB C002       933            push    ar2
+02CD C003       934            push    ar3
+02CF 120100     935            lcall   _wait_bit_time
+02D2 D003       936            pop     ar3
+02D4 D002       937            pop     ar2
+02D6            938   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:266: for (j=0; j<3; j++)
+02D6 0B         939            inc     r3
+02D7 8001       940            sjmp    L012001?
+02D9            941   L012004?:
+02D9            942   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:271: txon=1;
+02D9 D250       943            setb    _txon
+02DB            944   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:273: wait_bit_time();
+02DB 120100     945            lcall   _wait_bit_time
+02DE            946   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:274: wait_bit_time();
+02DE 020100     947            ljmp    _wait_bit_time
+02E1            948   ;------------------------------------------------------------
+02E1            949   ;Allocation info for local variables in function 'main'
+02E1            950   ;------------------------------------------------------------
+02E1            951   ;selected_command          Allocated to registers r2 r3 
+02E1            952   ;------------------------------------------------------------
+02E1            953   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:277: void main (void)
+02E1            954   ;        -----------------------------------------
+02E1            955   ;         function main
+02E1            956   ;        -----------------------------------------
+02E1            957   _main:
+02E1            958   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:282: int selected_command = 0;
+02E1 7A00       959            mov     r2,#0x00
+02E3 7B00       960            mov     r3,#0x00
+02E5            961   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:283: GRN_H_BRIDGE = 0;
+02E5 C2B6       962            clr     _P3_6
+02E7            963   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:284: ORG_H_BRIDGE = 1;
+02E7 D2B7       964            setb    _P3_7
+02E9            965   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:288: while(1)
+02E9            966   L013009?:
+02E9            967   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:292: LCD_command(Line1);
+02E9 758280     968            mov     dpl,#0x80
+02EC C002       969            push    ar2
+02EE C003       970            push    ar3
+02F0 120100     971            lcall   _LCD_command
+02F3 D003       972            pop     ar3
+02F5 D002       973            pop     ar2
+02F7            974   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:293: LCD_state(selected_command);
+02F7 8A82       975            mov     dpl,r2
+02F9 8B83       976            mov     dph,r3
+02FB C002       977            push    ar2
+02FD C003       978            push    ar3
+02FF 120100     979            lcall   _LCD_state
+0302            980   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:296: last_rot = this_rot;            
+0302 85D090     981            mov     _last_rot,_this_rot
+0305 85D191     982            mov     (_last_rot + 1),(_this_rot + 1)
+0308            983   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:297: this_rot = (ROT_B << 1) | ROT_A;   
+0308 A2A4       984            mov     c,_P2_4
+030A E4         985            clr     a
+030B 33         986            rlc     a
+030C FC         987            mov     r4,a
+030D E4         988            clr     a
+030E CC         989            xch     a,r4
+030F 25E0       990            add     a,acc
+0311 CC         991            xch     a,r4
+0312 33         992            rlc     a
+0313 FD         993            mov     r5,a
+0314 A2A3       994            mov     c,_P2_3
+0316 E4         995            clr     a
+0317 33         996            rlc     a
+0318 7F00       997            mov     r7,#0x00
+031A 4C         998            orl     a,r4
+031B F5D0       999            mov     _this_rot,a
+031D EF        1000            mov     a,r7
+031E 4D        1001            orl     a,r5
+031F F5D1      1002            mov     (_this_rot + 1),a
+0321           1003   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:298: selected_command += check_rotary(this_rot, last_rot); 
+0321 8590C0    1004            mov     _check_rotary_PARM_2,_last_rot
+0324 8591C1    1005            mov     (_check_rotary_PARM_2 + 1),(_last_rot + 1)
+0327 85D082    1006            mov     dpl,_this_rot
+032A 85D183    1007            mov     dph,(_this_rot + 1)
+032D 120100    1008            lcall   _check_rotary
+0330 AC82      1009            mov     r4,dpl
+0332 AD83      1010            mov     r5,dph
+0334 D003      1011            pop     ar3
+0336 D002      1012            pop     ar2
+0338 EC        1013            mov     a,r4
+0339 2A        1014            add     a,r2
+033A FA        1015            mov     r2,a
+033B ED        1016            mov     a,r5
+033C 3B        1017            addc    a,r3
+033D FB        1018            mov     r3,a
+033E           1019   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:299: selected_command %= 10;
+033E 75000A    1020            mov     __modsint_PARM_2,#0x0A
+0341 E4        1021            clr     a
+0342 F501      1022            mov     (__modsint_PARM_2 + 1),a
+0344 8A82      1023            mov     dpl,r2
+0346 8B83      1024            mov     dph,r3
+0348 120100    1025            lcall   __modsint
+034B AA82      1026            mov     r2,dpl
+034D           1027   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:300: if(selected_command < 0) selected_command = 7;
+034D E583      1028            mov     a,dph
+034F FB        1029            mov     r3,a
+0350 30E7A8    1030            jnb     acc.7,L013004?
+0353 7A07      1031            mov     r2,#0x07
+0355 7B00      1032            mov     r3,#0x00
+0357 8001      1033            sjmp    L013005?
+0359           1034   L013004?:
+0359           1035   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:301: else if ( selected_command > 7 ) selected_command = 0; 
+0359 C3        1036            clr     c
+035A 7407      1037            mov     a,#0x07
+035C 9A        1038            subb    a,r2
+035D E4        1039            clr     a
+035E 6480      1040            xrl     a,#0x80
+0360 8BF0      1041            mov     b,r3
+0362 63F080    1042            xrl     b,#0x80
+0365 95F0      1043            subb    a,b
+0367 5001      1044            jnc     L013005?
+0369 7A00      1045            mov     r2,#0x00
+036B 7B00      1046            mov     r3,#0x00
+036D           1047   L013005?:
+036D           1048   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:303: HEX = hex_array[selected_command];
+036D 8A04      1049            mov     ar4,r2
+036F EB        1050            mov     a,r3
+0370 CC        1051            xch     a,r4
+0371 25E0      1052            add     a,acc
+0373 CC        1053            xch     a,r4
+0374 33        1054            rlc     a
+0375 FD        1055            mov     r5,a
+0376 EC        1056            mov     a,r4
+0377 2400      1057            add     a,#_hex_array
+0379 F582      1058            mov     dpl,a
+037B ED        1059            mov     a,r5
+037C 3413      1060            addc    a,#(_hex_array >> 8)
+037E F583      1061            mov     dph,a
+0380 E4        1062            clr     a
+0381 93        1063            movc    a,@a+dptr
+0382 FC        1064            mov     r4,a
+0383 A3        1065            inc     dptr
+0384 E4        1066            clr     a
+0385 93        1067            movc    a,@a+dptr
+0386 FD        1068            mov     r5,a
+0387 8C80      1069            mov     _P0,r4
+0389           1070   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:304: if( !TX_BUTTON ) tx_byte(selected_command); 
+0389 30A528    1071            jnb     _P2_5,L013019?
+038C 020100    1072            ljmp    L013009?
+038F           1073   L013019?:
+038F 8A82      1074            mov     dpl,r2
+0391 C002      1075            push    ar2
+0393 C003      1076            push    ar3
+0395 120100    1077            lcall   _tx_byte
+0398 D003      1078            pop     ar3
+039A D002      1079            pop     ar2
+039C 020100    1080            ljmp    L013009?
+039F           1081   ;------------------------------------------------------------
+039F           1082   ;Allocation info for local variables in function 'check_rotary'
+039F           1083   ;------------------------------------------------------------
+039F           1084   ;last_rot                  Allocated with name '_check_rotary_PARM_2'
+039F           1085   ;this_rot                  Allocated to registers r2 r3 
+039F           1086   ;------------------------------------------------------------
+039F           1087   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:310: signed short check_rotary(unsigned int this_rot, unsigned int last_rot){ 
+039F           1088   ;        -----------------------------------------
+039F           1089   ;         function check_rotary
+039F           1090   ;        -----------------------------------------
+039F           1091   _check_rotary:
+039F AA82      1092            mov     r2,dpl
+03A1 AB83      1093            mov     r3,dph
+03A3           1094   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:312: if(this_rot != last_rot){ 
+03A3 EA        1095            mov     a,r2
+03A4 B5C068    1096            cjne    a,_check_rotary_PARM_2,L014053?
+03A7 EB        1097            mov     a,r3
+03A8 B5C168    1098            cjne    a,(_check_rotary_PARM_2 + 1),L014053?
+03AB 020100    1099            ljmp    L014033?
+03AE           1100   L014053?:
+03AE           1101   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:314: if(last_rot == 0 && this_rot == 2){return -1;} 
+03AE E5C0      1102            mov     a,_check_rotary_PARM_2
+03B0 45C1      1103            orl     a,(_check_rotary_PARM_2 + 1)
+03B2 7001      1104            jnz     L014029?
+03B4 BA02E8    1105            cjne    r2,#0x02,L014029?
+03B7 BB00E8    1106            cjne    r3,#0x00,L014029?
+03BA 90FFFF    1107            mov     dptr,#0xFFFF
+03BD 22        1108            ret
+03BE           1109   L014029?:
+03BE           1110   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:315: else if(last_rot == 2 && this_rot == 3){return -1;} 
+03BE 7402      1111            mov     a,#0x02
+03C0 B5C028    1112            cjne    a,_check_rotary_PARM_2,L014057?
+03C3 E4        1113            clr     a
+03C4 B5C128    1114            cjne    a,(_check_rotary_PARM_2 + 1),L014057?
+03C7 7401      1115            mov     a,#0x01
+03C9 8001      1116            sjmp    L014058?
+03CB           1117   L014057?:
+03CB E4        1118            clr     a
+03CC           1119   L014058?:
+03CC FC        1120            mov     r4,a
+03CD 6001      1121            jz      L014025?
+03CF BA03A8    1122            cjne    r2,#0x03,L014025?
+03D2 BB00A8    1123            cjne    r3,#0x00,L014025?
+03D5 90FFFF    1124            mov     dptr,#0xFFFF
+03D8 22        1125            ret
+03D9           1126   L014025?:
+03D9           1127   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:316: else if(last_rot == 3 && this_rot == 1){return -1;} 
+03D9 7403      1128            mov     a,#0x03
+03DB B5C0E8    1129            cjne    a,_check_rotary_PARM_2,L014062?
+03DE E4        1130            clr     a
+03DF B5C1E8    1131            cjne    a,(_check_rotary_PARM_2 + 1),L014062?
+03E2 7401      1132            mov     a,#0x01
+03E4 8001      1133            sjmp    L014063?
+03E6           1134   L014062?:
+03E6 E4        1135            clr     a
+03E7           1136   L014063?:
+03E7 FD        1137            mov     r5,a
+03E8 6001      1138            jz      L014021?
+03EA BA0168    1139            cjne    r2,#0x01,L014021?
+03ED BB0068    1140            cjne    r3,#0x00,L014021?
+03F0 90FFFF    1141            mov     dptr,#0xFFFF
+03F3 22        1142            ret
+03F4           1143   L014021?:
+03F4           1144   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:317: else if(last_rot == 1 && this_rot == 0){return -1;} 
+03F4 7401      1145            mov     a,#0x01
+03F6 B5C0A8    1146            cjne    a,_check_rotary_PARM_2,L014067?
+03F9 E4        1147            clr     a
+03FA B5C1A8    1148            cjne    a,(_check_rotary_PARM_2 + 1),L014067?
+03FD 7401      1149            mov     a,#0x01
+03FF 8001      1150            sjmp    L014068?
+0401           1151   L014067?:
+0401 E4        1152            clr     a
+0402           1153   L014068?:
+0402 FE        1154            mov     r6,a
+0403 6001      1155            jz      L014017?
+0405 EA        1156            mov     a,r2
+0406 4B        1157            orl     a,r3
+0407 7001      1158            jnz     L014017?
+0409 90FFFF    1159            mov     dptr,#0xFFFF
+040C 22        1160            ret
+040D           1161   L014017?:
+040D           1162   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:318: else if(last_rot == 0 && this_rot == 1){return 1;} 
+040D E5C0      1163            mov     a,_check_rotary_PARM_2
+040F 45C1      1164            orl     a,(_check_rotary_PARM_2 + 1)
+0411 7001      1165            jnz     L014013?
+0413 BA0168    1166            cjne    r2,#0x01,L014013?
+0416 BB0068    1167            cjne    r3,#0x00,L014013?
+0419 900001    1168            mov     dptr,#0x0001
+041C 22        1169            ret
+041D           1170   L014013?:
+041D           1171   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:319: else if(last_rot == 1 && this_rot == 3){return 1;} 
+041D EE        1172            mov     a,r6
+041E 6001      1173            jz      L014009?
+0420 BA03A8    1174            cjne    r2,#0x03,L014009?
+0423 BB00A8    1175            cjne    r3,#0x00,L014009?
+0426 900001    1176            mov     dptr,#0x0001
+0429 22        1177            ret
+042A           1178   L014009?:
+042A           1179   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:320: else if(last_rot == 3 && this_rot == 2){return 1;} 
+042A ED        1180            mov     a,r5
+042B 6001      1181            jz      L014005?
+042D BA02E8    1182            cjne    r2,#0x02,L014005?
+0430 BB00E8    1183            cjne    r3,#0x00,L014005?
+0433 900001    1184            mov     dptr,#0x0001
+0436 22        1185            ret
+0437           1186   L014005?:
+0437           1187   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:321: else if(last_rot == 2 && this_rot == 0){return 1;} 
+0437 EC        1188            mov     a,r4
+0438 6001      1189            jz      L014033?
+043A EA        1190            mov     a,r2
+043B 4B        1191            orl     a,r3
+043C 7001      1192            jnz     L014033?
+043E 900001    1193            mov     dptr,#0x0001
+0441           1194   ;        C:\Users\q9x8\Documents\GitHub\Projects\Project2_Car\Code\LCDtransmiter16khz.c:324: return 0; 
+0441 22        1195            ret
+0442           1196   L014033?:
+0442 900000    1197            mov     dptr,#0x0000
+0445 22        1198            ret
+0446           1199            rseg R_CSEG
+0446           1200   
+0000           1201            rseg R_XINIT
+0000           1202   
+0000           1203            rseg R_CONST
+0000           1204   _hex_array:
+0000 C000      1205            db 0xC0,0x00    ; 192
+0002 F900      1206            db 0xF9,0x00    ; 249
+0004 A400      1207            db 0xA4,0x00    ; 164
+0006 B000      1208            db 0xB0,0x00    ; 176
+0008 9900      1209            db 0x99,0x00    ; 153
+000A 9200      1210            db 0x92,0x00    ; 146
+000C 8200      1211            db 0x82,0x00    ; 130
+000E F800      1212            db 0xF8,0x00    ; 248
+0010 8000      1213            db 0x80,0x00    ; 128
+0012 9000      1214            db 0x90,0x00    ; 144
+0014           1215   __str_1:
+0014 4C434420  1216            db 'LCD Msg 0'
+     4D736720
+     30
+001D 00        1217            db 0x00
+001E           1218   __str_2:
+001E 4C434420  1219            db 'LCD Msg 1'
+     4D736720
+     31
+0027 00        1220            db 0x00
+0028           1221   __str_3:
+0028 4C434420  1222            db 'LCD Msg 2'
+     4D736720
+     32
+0031 00        1223            db 0x00
+0032           1224   __str_4:
+0032 4C434420  1225            db 'LCD Msg 3'
+     4D736720
+     33
+003B 00        1226            db 0x00
+003C           1227   __str_5:
+003C 4C434420  1228            db 'LCD Msg 4'
+     4D736720
+     34
+0045 00        1229            db 0x00
+0046           1230   __str_6:
+0046 4C434420  1231            db 'LCD Msg 5'
+     4D736720
+     35
+004F 00        1232            db 0x00
+0050           1233   __str_7:
+0050 4C434420  1234            db 'LCD Msg 6'
+     4D736720
+     36
+0059 00        1235            db 0x00
+005A           1236   __str_8:
+005A 4C434420  1237            db 'LCD Msg 7'
+     4D736720
+     37
+0063 00        1238            db 0x00
+0064           1239   
+000E           1240            CSEG
+000E           1241   
+000E           1242   end
