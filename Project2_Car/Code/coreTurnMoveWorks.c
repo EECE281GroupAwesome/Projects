@@ -58,12 +58,12 @@
 //---Global Variables---
 
 // speed to move and turn
-const int MOVESPEED = 80; 
-const int TURNSPEED = 100;
+const int MOVESPEED = 50; 
+const int TURNSPEED = 50;
 
 // buffers of error for aligning and distance
-const float DISTANCEBUFFER = 20;
-float ANGLEBUFFER = 20;
+const float DISTANCEBUFFER = 30;
+float ANGLEBUFFER = 30;
 
 // preset distances
 const int NSTAGES=12;
@@ -97,7 +97,7 @@ volatile int good;
 volatile unsigned int Stage;
 
 //---Function Prototypes---
-
+void breakTether();
 void getDistance();							// get distance using sensors
 void moveCar();								// turn and move back and forwards
 void uTurn();								// turn 180 degrees
@@ -121,12 +121,11 @@ void pwmCounter() interrupt 1
 	}	
 	
 	// getprint stuff ever .1secc
-	//if (++distCount > 999)
-	//{
-	//	distCount = 0;	
-	//	Stage = 6;
-	//	printf("DL %3d - DR %3d - Stage %3d(%d) - Inst %d\r", distanceLeft, distanceRight, PRESETS[Stage], Stage, instruction);
-	//}
+	if (++distCount > 999)
+	{
+		distCount = 0;	
+		printf("DL %3d - DR %3d - Stage %3d(%d) - Inst %d\r", distanceLeft, distanceRight, PRESETS[Stage], Stage, instruction);
+	}
 	
 	//Left wheel
 	if(pwmLeft > 0) //forwards
@@ -166,14 +165,16 @@ void pwmCounter() interrupt 1
 // recieve signals from beacon using ET1
 void beaconSignal() interrupt 3
 {
-	if (GetADC(0) < 10) 
+	if (GetADC(1) < 20) 
 	{
 		pwmLeft = pwmRight = 0;
-		
 		ET0 = 0;                   //make sure pwm doesnt fuck anything up
-		while(GetADC(0) < 10);
+		while(GetADC(1) < 35);
 		instruction = getSig();
-		ET0 =  1;
+		if(instruction==0)
+			instruction=(-1);
+		printf("\nGot the inst: %d\n", instruction);
+		ET0 = 1;
 	}
 }		
 
@@ -203,8 +204,9 @@ unsigned char _c51_external_startup(void)
 	TH1 = RH1 = TIMER1_RELOAD_VALUE / 0x100;
 	TL1 = RL1 = TIMER1_RELOAD_VALUE % 0x100;
 	TR0 = 1;
-	TR1 = 0;
+	TR1 = 1;
 	ET0 = 1;	// Enable timer 0 interrupt
+	ET1 = 0;
 	EA = 1; 	// Enable global interrupts
 	
 	tether = 0;
@@ -219,11 +221,11 @@ unsigned char _c51_external_startup(void)
 //---MAIN---
 int main()
 {	
-
 	pwmLeft = 0;
 	pwmRight = 0;
+	Stage = 6;
 	instruction = 0;
-	
+	breakTether();
 	while (1)
 	{	
 		//stay on tether until instruction is read
@@ -231,19 +233,19 @@ int main()
 		{	
 			moveCar();
 		}
-		/*
+		ET1 = 0;
 		//get instruction and go back to tether
 		if(instruction==1)                        //move forward
 		{
 			if(Stage!=0)
 				Stage--;
-			printf("\nMove forwrds");
+			printf("\nMove forwrds\n");
 		}
 		else if(instruction==2)                  //move backwards
 		{
 			if(Stage!=NSTAGES)
 				Stage++;
-			printf("\n Move back");	
+			printf("\nMove back\n");	
 		}
 		else if(instruction==3)                  //uturn
 		{
@@ -252,34 +254,57 @@ int main()
 		}
 		else if(instruction==4)                  //parralell park
 		{
+			printf("\nParked");
 			//park
 		}
 		else if(instruction==5)
 		{
-			int i;
-			//break tether	
-			instruction=0;
-			while(instruction!=5);
-			
-			//re-initiate tether at current distance
-			for(i=0;i<NSTAGES;i++)
-			{
-				if(distanceLeft>PRESETS[i]-3 && distanceLeft<PRESETS[i]+3)
-				{
-					Stage=i;
-				}
-			}
+			breakTether();
+		}
+		else if (instruction == 7)
+		{
+			//nothin
 		}
 		else
 		{
 			P2_2=0;
 			P2_1=1;
 			P2_0=1;
-		}*/
+		}
+		instruction = 0;
 	}
 	return 0;
 }
-
+void breakTether()
+{
+	int i;
+	pwmRight = pwmLeft = 0;
+	ET0 = 0;
+	//break tether	
+	instruction=0;
+	ET1 = 1;
+	
+	P2_2 = 0;
+	P2_1 = 1;
+	P2_0 = 1;
+	while(instruction!=5);
+	ET1 = 0;
+	P2_2 = 1;
+	P2_1 = 0;
+	P2_0 = 1;
+	
+	//re-initiate tether at current distance
+	getDistance();
+	ET1 = 0;
+	for(i=0;i<NSTAGES;i++)
+	{
+		if(distanceLeft>PRESETS[i]-25 && distanceLeft<PRESETS[i]+25)
+		{
+			Stage=i;
+		}
+	}
+	ET0 = 1;
+}
 //---Function Implementations---
 
 /*	getDistance(): calculates the linear distance from the beacon using peak detectors
@@ -291,23 +316,11 @@ int main()
 void getDistance() 
 {
 	EA = 0;                                     //make sure pwm doesnt fuck anything up
-	tempL = GetADC(1);                     
-	if (tempL > 10)                             //toss away very low reads and keep old
-	{
+	tempL = GetADC(1); 
 		distanceLeft = tempL;
-	}
 		
 	tempR = GetADC(0);                          //handle bad inductor angle with some offset
-	if (tempR > 13 && tempR < 250)
-	{
-		distanceRight = tempR * 1.15;
-		ANGLEBUFFER = 7;
-	}
-	else if(tempR >= 250)
-	{
-		distanceRight = tempR * 1.05;
-		ANGLEBUFFER = 10;
-	}	
+		distanceRight = tempR;
 	EA = 1;
 }
 
@@ -330,8 +343,8 @@ void moveCar()
 	
 	good = 0;
 	
-	getDistance();                                          //if there is no wave, turn on red and sit tight
-	if(distanceLeft==0 && distanceRight==0)
+	getDistance();                                   //if there is no wave, turn on red and sit tight or saturation
+	if((distanceLeft<20) || (distanceRight<30) || (distanceRight>535))
 	{
 		pwmLeft=pwmRight=0;
 		P2_2=0;
@@ -344,7 +357,7 @@ void moveCar()
 		if(distanceRight > (distanceLeft+ANGLEBUFFER))
 		{
 			pwmLeft = (-TURNSPEED);
-			pwmRight= (TURNSPEED);
+			pwmRight= (TURNSPEED);	
 		}
 		else if(distanceLeft > (distanceRight+ANGLEBUFFER))
 		{
@@ -353,9 +366,9 @@ void moveCar()
 		}
 		else
 		{
-			good++;                                        //both angle tests passed 
-		}
-		
+			good++; 
+		} 
+		/*                                      //both angle tests passed 		
 		getDistance();
 		//move forward if too far and aligned
 		if ((distanceRight+DISTANCEBUFFER) < PRESETS[Stage])
@@ -372,22 +385,24 @@ void moveCar()
 		else
 		{
 			good++;                                           //both distance tests passed
-		}		
+		}
+		*/		
 		// check to see if car is completely stable and ready to accept a signal
-		if (good < 2)
+		if (good < 1)
 		{
 			P2_2=1;
 			P2_1=0; // yellow
 			P2_0=1;
-			//ET1 = 0;
+			ET1 = 0;
 		}		
-		else
+		else if (instruction==0 && good==1)
 		{
+			
 			pwmLeft=pwmRight=0;
 			P2_2=1;
 			P2_1=1; // blue
 			P2_0=0;
-			//ET1 = 1;
+			ET1 = 1;
 		}
 	}		
 	return;
@@ -451,11 +466,10 @@ unsigned int getSig()
 	// skip the start bit
 	val = 0;
 	wait_one_and_half_bit_time();
-	
 	// take in a signal LSB first
 	for (j = 0; j < 3; j++) {
 		v = GetADC(0);
-		val |= (v > 10) ? (0x01 << j) : 0x00;
+		val |= (v > 30) ? (0x01 << j) : 0x00;
 		wait_bit_time();
 	}
 	
@@ -547,7 +561,7 @@ void wait_one_and_half_bit_time()
 		;takes 12/22.1184MHz=0.5425347us
 	    mov R2, #3
 	J3:	mov R1, #248
-	J2:	mov R0, #184
+	J2:	mov R0, #249 ;184
 	J1:	djnz R0, J1 ; 2 machine cycJes-> 2*0.5425347us*184=200us
 	    djnz R1, J2 ; 200us*250=0.05s
 	    djnz R2, J3 ; 0.05s*20=1s
